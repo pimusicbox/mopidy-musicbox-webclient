@@ -1,0 +1,169 @@
+/*@navbarBackground: green;
+@navbarBackgroundHighlight: green;
+@navbarLinkColor: white;
+@navbarLinkColorHover: white;
+
+.navbar .nav {
+    height: @navbarHeight;
+}
+.navbar .nav > li > a {
+    padding: (@navbarHeight - 20)/2 10px ((@navbarHeight - 20)/2 + 1);
+}
+.navbar .brand {
+    padding: (((@navbarHeight - 20) / 2) * 0.8) 20px (((@navbarHeight - 20) / 2) * 1.2);
+}
+*/
+
+.content {
+    display: none;
+}
+
+.menutext {
+    vertical-align:bottom;
+}
+
+#trackslider {
+    width:90%; 
+}
+
+#slidercontainer {
+   margin-left: 2%; width:95%;
+   margin-top: 5px;
+   margin-bottom: 5px;
+}
+
+#mainmenu a {
+    margin-right: 5px;
+    display: inline;
+}
+
+.menutext a:hover {
+    text-decoration: none;
+    text-underline-position: 0;
+}
+
+#controlbt {
+    margin-left: 5px;
+    width: 90px;
+    height: 30px;
+}
+
+#playpause {
+    width: 150px;
+    height: 200px;
+}
+
+a.name, a.album, a.artist {
+    display: block;
+    height: 100%;
+}
+
+body {
+    padding-top: 80px;
+}
+
+@media (max-width: 979px) {
+  body {
+    padding-top: 0px;
+  }
+  .btsquare {
+    display: block;
+  }
+}
+
+@media (min-width: 979px) {
+  .btsquare {
+    display: inline;
+  }
+}
+
+.nobreak, .btsquare {
+    display: inline;
+}
+
+#allresultloader {
+    display: none;
+} 
+
+#playlistslist li {
+    padding: 5px;
+    list-style-type:none;
+}
+
+#playlistslist li:nth-of-type(odd) {
+  background-color:#444;
+} 
+
+#playlistslist li:nth-of-type(even) {
+  background-color:#333;
+} 
+
+
+#volumecontainer {
+    margin-top: 3px;
+}
+
+.sidebar-nav {
+    padding: 9px 0;
+}
+.sidebar-nav li {
+    margin-top: 20px;
+}
+
+
+#searchresults {
+    display: none;
+}
+
+.resultrow:hover  {
+    background-color: #555 !important;
+    
+}
+.brand {
+    margin-right: 20px;
+}
+.nav img {
+    margin-top: 16px;
+}
+
+.navbar, .navbar-inner, .container {
+    padding: 0px;
+    margin: 0px;
+}
+
+div {
+   /* border: 1px solid #444; */
+}
+
+.breakafter {
+    margin-right: 15px;
+}
+
+.content {
+    /*visibility:hidden;
+     /*display:none;*/
+}
+
+#songinfo {
+   overflow: hidden;
+  margin-left: auto ;
+  margin-right: auto ;
+  margin-top: 5px;
+}
+
+#infoname {
+    font: bold;
+    color: #ddd;
+    font-size:14px;
+    text-shadow:1px 1px #555;
+}
+
+#infoartist {
+    color: #aaa;
+    font-size:11px;
+    text-shadow:1px 1px #333;
+}
+
+#playlistpane {
+    visibility:hidden;
+}

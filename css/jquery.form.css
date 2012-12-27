@@ -1,0 +1,214 @@
+﻿/********************************
+ * FORM
+ * jquery.form.css
+ ********************************/
+
+
+/* normalize */
+form{
+    margin:0;
+    padding:0;
+}
+
+    /********************************
+     * Normal elements
+     ********************************/
+		
+	form label.required:after{
+	    content:" *";
+	}
+
+
+/*********************************
+ * error message
+ *********************************/
+    input.invalid{
+    	outline:1px solid gold;
+	}
+
+    div.errormsg{
+        padding:5px;
+        position:absolute;
+        display:inline-block;
+        color:black;
+        font-size:14px;
+        margin:0;
+        margin-left:10px;
+        font-weight:normal;
+        background-color:white;
+        border:1px solid black;
+        border-radius:5px;
+        box-shadow:5px 5px 5px rgba(0,0,0,0.5);
+        z-index:1;
+    }
+		div.errormsg:before,div.errormsg:after{
+			position:absolute;
+			left:-10px;
+			bottom:5px;
+			content:" ";
+			width:0;
+			height:0;
+			padding:0;
+			border:10px solid transparent;
+			border-width:8px 10px;
+			border-right-color:inherit;
+			border-left-width:0;
+		}
+		div.errormsg:after{
+			border-right-color:white;
+			left:-8px;
+		}
+
+	input.invalid + div.errormsg{
+
+	}
+
+/*************************
+ * Placeholder
+ *************************/
+   	input.placeholder,
+   	textarea.placeholder{
+   		color:#bbb;
+	}
+
+/*************************
+ * type.range
+ *************************/
+	input.range{
+		padding-bottom:-20px;
+		border:0;
+		cursor:pointer;
+		color:transparent;	
+	background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA+kAAAAeCAYAAABQQl9DAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADscAAA7HATiSL3YAAAO9SURBVHhe7d0xbttAEAVQKmlTBCl8AQcQYMG5i3MTnkQQoKvEN1GhQpFvEANJI5MUQ6pJxXUZzOwTwMrN/DcLGB+iyKbxIUCAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBP4JrGAQIECAAAEC8QT2+33fdd3Hdyb/1bbtl3jpTEyAAAECBOoVUNLr3b3kBAgQIBBYYLvdjt+fnhYTXC6X1x/Pz91U0u8CxzQ6AQIECBCoTuBDdYkFJkCAAAECSQSGYWiWrn76mw8BAgQIECAQT0BJj7czExMgQIAAgZvAXMSXrrm8+xAgQIAAAQLxBJT0eDszMQECBAgQuAkMfb98KelOCQECBAgQCCmgpIdcm6EJECBAgMBU0gu3u1+VdEeEAAECBAiEFFDSQ67N0AQIECBAoFzSh+sVEQECBAgQIBBQQEkPuDQjEyBAgACBWaCfbndfuoaug0SAAAECBAgEFFDSAy7NyAQIECBAYBYoPt3dN+kOCQECBAgQCCmgpIdcm6EJECBAgIDfpDsDBAgQIEAgo4CSnnGrMhEgQIBAFQKlV7B5T3oVR0BIAgQIEEgooKQnXKpIBAgQIFCHQPHp7m53r+MQSEmAAAEC6QRWu91uvPpHnm6xAhEgQIBAfoFvj4+LIS9vb83xeMyPICEBAgQIEEgmsNput+Nms0kWSxwCBAgQIJBb4HA4NJuHh8WQ8+3up9OpWa/XuSGkI0CAAAECyQTmkv57yvQpWS5xCBAgQIBAeoFSAe+mb9J/ns/pDQQkQIAAAQLZBFbZAslDgAABAgRqEJjvhPt6f78Ydfq9+uv55aVr2/auBg8ZCRAgQIBAFgEPjsuySTkIECBAoDqB0oPj5r/5ECBAgAABAvEElPR4OzMxAQIECBC4CZRewTZ4KKxTQoAAAQIEQgoo6SHXZmgCBAgQINA0pW/S+75HRIAAAQIECAQUUNIDLs3IBAgQIEBgFvCedOeAAAECBAjkE1DS8+1UIgIECBCoRGCYvi0vXZUwiEmAAAECBFIJKOmp1ikMAQIECNQk4DfpNW1bVgIECBCoRUBJr2XTchIgQIBAOgFPd0+3UoEIECBAgECjpDsEBAgQIEAgqMD8cLilyyvYgi7V2AQIECBQvYCSXv0RAECAAAECUQU83T3q5sxNgAABAgSWBZR0p4MAAQIECAQVcLt70MUZmwABAgQIFASUdMeDAAECBAjEFPjzzivYPo/jOMSMZmoCBAgQIECAAAECBAgQIECAAAECBAgQIPCfBf4CXCs3jGOIZn4AAAAASUVORK5CYII=) no-repeat center center;
+	}
+
+
+/*************************
+ * input.number 
+ *************************/
+	input.number{
+		margin-right:0;
+		padding-right: 22px;
+	}
+	span.number{
+		margin-right: 32px;
+		margin-left: -20px;
+		display:inline-block;
+		vertical-align:middle;
+	   -moz-user-select: -moz-none;
+	   -khtml-user-select: none;
+	   -webkit-user-select: none;
+	   user-select: none;
+   	}
+		span.number span{
+			border:10px solid transparent;
+			border-width:10px 5px;
+			display:block;
+			width:0;
+			height:0;
+			margin:2px;
+			border-bottom-width:0;
+			border-bottom-color:#555555;
+			border-top-color:#555555;
+		}
+		span.number span:hover{
+			border-bottom-color:black;
+			border-top-color:black;
+		}
+		span.number :first-child{
+			border-bottom-width:10px;
+			border-top-width:0;
+		}
+
+
+/*************************
+ * Calendar
+ *************************/
+	div.calendar{
+		display:inline-block;
+		color:white;
+	}
+		div.calendar div{
+			background:blue;
+			position:absolute;
+			width:auto;
+			box-shadow:0 0 10px black;
+			border-radius:5px;
+		}
+			div.calendar table{
+			    border-collapse: collapse;
+			    border-spacing: 0;
+			    margin-bottom: 20px;
+			    width:100%;
+				width:auto;
+				margin:10px;
+			}
+				div.calendar table caption{
+					background:inherit;
+					width:inherit;
+					text-align:center;
+					margin-bottom:10px;
+				}
+					div.calendar table caption .current{
+						margin:0;
+						text-align:center;
+						display:inline-block;
+						box-sizing:border-box;
+						-moz-box-sizing:border-box;
+						font-weight:bold;
+					}
+					div.calendar table caption a{
+						float:left;
+						text-align:left;
+					}
+					div.calendar table caption span + a{
+						float:right;
+						text-align:right;
+					}
+				div.calendar table th,
+				div.calendar table td{
+					text-align:center;
+					border: 1px solid #99CCFF;
+					border: 1px solid rgba(255,255,255,0.3);
+					padding:0;
+				}
+				div.calendar table td{
+					padding:0 6px;
+				}
+				div.calendar td.selected{
+					background:#99CCFF;
+				}
+
+					div.calendar a{
+						color:inherit;
+						text-decoration:none;
+					}
+
+/*************************
+ * Datalist
+ *************************/
+div.datalist{
+	display:none;
+	position:absolute;
+	background-color:white;
+	border:1px solid gray;
+}
+input.datalist + div.datalist{
+	display:block;
+}
+	div.datalist ul{
+		margin:5px;
+		padding:0;
+	}
+		div.datalist ul li{
+			list-style:none;
+			padding:5px;
+		}
+		div.datalist ul li:hover, 
+		div.datalist ul li.hover{
+			text-decoration:underline;
+			background-color:#efefef;
+		}
+datalist select{
+	display:none;
+}

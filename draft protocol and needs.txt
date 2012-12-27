@@ -1,0 +1,92 @@
+Mopidiy Webservices Protocol
+
+- events
+- nested playlists
+- coverart
+- playlist edit
+
+Optional
+- people
+- 'artistpedia'
+- toplists artist
+
+----
+
+Protocol
+Base: socketio
+
+Events to mopidy (client generated):
+------------------------------------
+
+SetPlay
+Toggles play status. Arguments: none, true or false (true=play, none toggles)
+
+Previoustrack/nexttreck
+Argument: none
+
+Loadtracks:
+Loads tracks into the current playlist. Arguments: an uri of a playlist, album, search, artist. Or a custom list of track-uris
+
+Playuri
+Plays track in playlist, continues to next track if there is one. Argument: track-uri
+
+Seek 
+Goto a position in the current track. Argument: time (in seconds)
+
+SetVolume
+Argument: 0-100
+
+SetMute
+Toggles mute status. Arguments: none, true or false (true=mute, none toggles)
+
+Getartist/getplaylist/getalbum
+Returns a list of tracks, including names, etc. Argument: uri
+
+Getplaylists
+Returns a nested list of playlists of the user, with names and uris, playlist-folders
+
+Getservicedata
+Returns data of the current service (spotify, rdio, whatever). Returns: serviceid, service name, logo, username
+
+Getcurrentplaylist
+Returns a list of the currently loaded playlist (complete)
+
+Getcurrentplaylisturi
+Returns an uri of the currently loaded playlist, or none if its a custom list
+
+Getcurrenttrack
+Returns trackdata of current track
+
+Getstatus
+Returns array of statusses of play, mute, currenttrack, position, volume, shuffle, repeat
+
+Getfavoritesongs
+Returns a list of starred songs
+
+Getfavoritealbums
+Returns a list of starred albums (needs workaround for spotify)
+
+Getfavoriteartists
+Returns a list of starred artists (needs workaround for spotify)
+
+Getnewalbums
+Returns a list of what's news albums
+
+Setshuffle/setrepeat
+Toggles shuffle/repeat status. Arguments: none, true or false (true=on, none toggles)
+
+Search
+Returns a list of tracks. Arguments: keywords, method (none=all, album, artist, track)
+
+Events from Mopidy to client:
+-----------------------------
+Currenttrackupdated
+Volumeupdated
+Playstatusupdated
+PlaylistUpdated
+MessageUser
+SearchResults
+AlbumResults
+ArtistResults
+PLaylistResults
+UserPlaylistsResults
