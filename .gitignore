@@ -1,0 +1,16 @@
+.DS_store
+*.pyc
+*.swp
+.coverage
+.idea
+.noseids
+.tox
+MANIFEST
+build/
+cover/
+coverage.xml
+dist/
+docs/_build/
+mopidy.log*
+node_modules/
+nosetests.xml
