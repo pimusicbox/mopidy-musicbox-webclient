@@ -55,9 +55,18 @@ function setSongInfo(data) {
         }
     }
     $("#trackslider").attr("max", data["length"]);
-    console.log('max: ' + data["length"]);
     $("#infoartist").html(artists);
     $("#songlength").html(timeFromSeconds(data["length"] / 1000));
+    
+    $('#currenttable tr .name').each(  
+        function() {
+          console.log(this.className);
+          this.className = "name";
+          if(this.id == data["uri"]) {
+             this.className += ' currenttrack';
+//             this.parentNode.parentNode.style.marginLeft="20px";
+          }
+        } );
 }
 
 function setPlayState(nwplay) {
@@ -187,7 +196,7 @@ function setShuffle(nwshuffle) {
 
 function doPrevious() {
 // if position > one second -> go to begin, else go to previous track
-   if (currentposition > 1000) {
+   if (currentposition > 5000) {
         doSeekPos(0);
    } else { 
        mopidy.playback.previous();
@@ -255,6 +264,16 @@ function setPosition(pos) {
     $("#songelapsed").html(timeFromSeconds(currentposition / 1000));     
 }
 
+function resetSong() {
+    pauseTimer();
+    setPlayState(false);
+    setPosition(0);
+    $("#infoname").html('');
+    $("#trackslider").attr("max", '');
+    $("#infoartist").html('');
+    $("#songlength").html('0:00');
+}
+
 //update everything as if reloaded
 function updateStatusOfAll() {
     mopidy.playback.getCurrentTrack().then(currentTrackResults, console.error);  
@@ -290,11 +309,24 @@ function initSocketevents() {
         getPlaylists();
     });
 
+    mopidy.on("event:playbackStateChanged", function (data) {
+        switch (data["new_state"]){
+            case "stopped": 
+                resetSong();
+                break;
+            case "playing": 
+                mopidy.playback.getTimePosition().then(currentPositionResults, console.error);
+                resumeTimer();
+                setPlayState(true);
+                break;
+        }
+    });
+
     mopidy.on("event:tracklistChanged", function (data) {
         getCurrentPlaylist();
     });
 
-    mopidy.on("event:trackPlaybackStopped", function (data) {
+/*    mopidy.on("event:trackPlaybackStopped", function (data) {
         pauseTimer();
         setPlayState(false);
     });
@@ -309,7 +341,7 @@ function initSocketevents() {
         resumeTimer();
         setPlayState(true);
     });
-
+*/
     mopidy.on("event:seeked", function (data) {
         setPosition(parseInt(data["time_position"]));
     });
@@ -368,6 +400,7 @@ $(document).ready(function() {
         switchContent(divid, uri);
     });
 
+    resetSong();
     //TODO
     //setVolume(50);
    
@@ -415,10 +448,10 @@ $(document).ready(function() {
         if (location.hash.length < 2) {
              switchContent("playlists");
         }
-          
+  
   initgui = false;
 //update gui every x seconds from mopdidy
-  setInterval(updateStatusOfAll, 5000);
+//  setInterval(updateStatusOfAll, 5000);
 });
 
 function backbt() {

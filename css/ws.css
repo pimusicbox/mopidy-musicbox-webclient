@@ -1,35 +1,36 @@
 /*@navbarBackground: green;
-@navbarBackgroundHighlight: green;
-@navbarLinkColor: white;
-@navbarLinkColorHover: white;
+ @navbarBackgroundHighlight: green;
+ @navbarLinkColor: white;
+ @navbarLinkColorHover: white;
 
-.navbar .nav {
-    height: @navbarHeight;
-}
-.navbar .nav > li > a {
-    padding: (@navbarHeight - 20)/2 10px ((@navbarHeight - 20)/2 + 1);
-}
-.navbar .brand {
-    padding: (((@navbarHeight - 20) / 2) * 0.8) 20px (((@navbarHeight - 20) / 2) * 1.2);
-}
-*/
+ .navbar .nav {
+ height: @navbarHeight;
+ }
+ .navbar .nav > li > a {
+ padding: (@navbarHeight - 20)/2 10px ((@navbarHeight - 20)/2 + 1);
+ }
+ .navbar .brand {
+ padding: (((@navbarHeight - 20) / 2) * 0.8) 20px (((@navbarHeight - 20) / 2) * 1.2);
+ }
+ */
 
 .content {
     display: none;
 }
 
 .menutext {
-    vertical-align:bottom;
+    vertical-align: bottom;
 }
 
 #trackslider {
-    width:90%; 
+    width: 90%;
 }
 
 #slidercontainer {
-   margin-left: 2%; width:95%;
-   margin-top: 5px;
-   margin-bottom: 5px;
+    margin-left: 2%;
+    width: 95%;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #mainmenu a {
@@ -63,41 +64,40 @@ body {
 }
 
 @media (max-width: 979px) {
-  body {
-    padding-top: 0px;
-  }
-  .btsquare {
-    display: block;
-  }
+    body {
+        padding-top: 0px;
+    }
+    .btsquare {
+        display: block;
+    }
 }
 
 @media (min-width: 979px) {
-  .btsquare {
-    display: inline;
-  }
+    .btsquare {
+        display: inline;
+    }
 }
 
 .nobreak, .btsquare {
     display: inline;
 }
 
-#allresultloader {
+#allresultloader, .loader {
     display: none;
-} 
+}
 
 #playlistslist li {
     padding: 5px;
-    list-style-type:none;
+    list-style-type: none;
 }
 
 #playlistslist li:nth-of-type(odd) {
-  background-color:#444;
-} 
+    background-color: #444;
+}
 
 #playlistslist li:nth-of-type(even) {
-  background-color:#333;
-} 
-
+    background-color: #333;
+}
 
 #volumecontainer {
     margin-top: 3px;
@@ -110,14 +110,12 @@ body {
     margin-top: 20px;
 }
 
-
 #searchresults {
     display: none;
 }
 
-.resultrow:hover  {
+.resultrow:hover {
     background-color: #555 !important;
-    
 }
 .brand {
     margin-right: 20px;
@@ -132,7 +130,7 @@ body {
 }
 
 div {
-   /* border: 1px solid #444; */
+    /* border: 1px solid #444; */
 }
 
 .breakafter {
@@ -144,26 +142,33 @@ div {
      /*display:none;*/
 }
 
+.currenttrack {
+    font-weight: bold;
+    background-image: url('../img/icons/play_alt_16x16.png');
+    background-repeat:no-repeat;
+    padding-left: 20px;
+}
+
 #songinfo {
-   overflow: hidden;
-  margin-left: auto ;
-  margin-right: auto ;
-  margin-top: 5px;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
 }
 
 #infoname {
     font: bold;
     color: #ddd;
-    font-size:14px;
-    text-shadow:1px 1px #555;
+    font-size: 14px;
+    text-shadow: 1px 1px #555;
 }
 
 #infoartist {
     color: #aaa;
-    font-size:11px;
-    text-shadow:1px 1px #333;
+    font-size: 11px;
+    text-shadow: 1px 1px #333;
 }
 
 #playlistpane {
-    visibility:hidden;
+    visibility: hidden;
 }
