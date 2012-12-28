@@ -44,6 +44,19 @@ function showalbum(uri) {
     switchContent('albums', uri);
     return false;
 }
+
+function resetSong() {
+    pauseTimer();
+    setPlayState(false);
+    setPosition(0);
+    data = new Object;
+    data["name"] = '';
+    data["artists"] = '';
+    data["length"] = 0;
+    data["uri"] = '';
+    setSongInfo(data);
+}
+
 function setSongInfo(data) {
     console.log(data);
     $("#infoname").html(data["name"]);
@@ -60,7 +73,7 @@ function setSongInfo(data) {
     
     $('#currenttable tr .name').each(  
         function() {
-          console.log(this.className);
+          //console.log(this.className);
           this.className = "name";
           if(this.id == data["uri"]) {
              this.className += ' currenttrack';
@@ -262,16 +275,6 @@ function setPosition(pos) {
     $("#trackslider").attr("value", currentposition);
     initgui = oldval;
     $("#songelapsed").html(timeFromSeconds(currentposition / 1000));     
-}
-
-function resetSong() {
-    pauseTimer();
-    setPlayState(false);
-    setPosition(0);
-    $("#infoname").html('');
-    $("#trackslider").attr("max", '');
-    $("#infoartist").html('');
-    $("#songlength").html('0:00');
 }
 
 //update everything as if reloaded
