@@ -30,7 +30,7 @@
 		<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		<script type="text/javascript" src="/mopidy/mopidy.min.js"></script>
+		<script type="text/javascript" src="/mopidy/mopidy.js"></script>
 
 	</head>
 
@@ -73,10 +73,10 @@
 -->
 						</div>
 	
-						<div id="songinfo" class="nav nav-collapse span4">
-							<span id="infoname"></span>
+						<div id="songinfo" class="nav nav-collapse span5" onclick="expandSonginfo();">
+							<span  class="nav nav-collapse span5" id="infoname"></span>
 							<br/>
-							<span id="infoartist"></span>
+							<span  class="nav nav-collapse span5" id="infoartist"></span>
 							<br/>
 						</div>					
 
@@ -254,13 +254,15 @@
 		<script src="js/bootstrap-typeahead.js"></script>
 
 		<script src="js/jquery.ba-hashchange.min.js"></script>
+		<script src="js/jquery.truncate.min.js"></script>
 
-                <!-- Import WS JavaScript Libraries. -->
-  <!--              <script type="text/javascript" src="js/swfobject.js"></script>
-                <script type="text/javascript" src="js/web_socket.js"></script>
-  -->
 		<script src="js/functionsvars.js"></script>
 		<script src="js/ws.js"></script>
+		<script src="js/gui.js"></script>
+
+	</body>
+</html>
+script src="js/ws.js"></script>
 		<script src="js/gui.js"></script>
 
 	</body>

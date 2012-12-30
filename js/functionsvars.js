@@ -23,6 +23,10 @@ var seekTimer;
 var initgui = true;
 var currentpos = 0;
 
+var artistshtml = '';
+var artiststext = '';
+var songname = '';
+
 //array of cached playlists (not only user-playlists, also search, artist, album-playlists)
 var playlists = '';
 var currentplaylist;

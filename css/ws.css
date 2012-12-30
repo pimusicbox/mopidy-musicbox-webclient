@@ -150,20 +150,22 @@ div {
 }
 
 #songinfo {
-    overflow: hidden;
-    margin-left: auto;
-    margin-right: auto;
+    overflow: hidden; 
     margin-top: 5px;
+/*    border: 1px solid white; */
 }
 
 #infoname {
+    overflow: hidden; 
     font: bold;
     color: #ddd;
     font-size: 14px;
     text-shadow: 1px 1px #555;
+/*    border: 1px solid white;  */
 }
 
 #infoartist {
+    overflow: hidden; 
     color: #aaa;
     font-size: 11px;
     text-shadow: 1px 1px #333;
