@@ -35,7 +35,32 @@
 	</head>
 
 	<body>
-
+    <div id="offlinemodal" class="modal hide fade">
+		<div class="modal-header">
+			<h3>Offline</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<img src="img/loader.gif" id="offlinemodalloader" class="loader" />
+				Cannot connect to the server... <br/>Please wait.
+				<br/><br/>
+			</p>
+		</div>
+	</div>
+    
+    <div id="loadingmodal" class="modal hide fade">
+		<div class="modal-header">
+			<h3>Loading data...</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<img src="img/loader.gif" id="loadingmodalloader" class="loader" />
+				Getting data from the server... <br/>Please wait.
+				<br/><br/>
+			</p>
+		</div>
+	</div>
+    
 		<div class="navbar navbar-inverse navbar-fixed-top">
 	       <div class="navbar-inner">
     		    <div class="container-fluid">
@@ -143,7 +168,7 @@
 
 				<div class="span11 content" id="albumspane">
 					<div class="row-fluid">
-						<div class="span4">
+						<div>
 						    <h4>Album</h4>
 						    <h3 id="h_albumname"></h3>
 						    <h5 id="h_albumartist"></h5>
@@ -168,7 +193,7 @@
 
 				<div class="span11 content" id="artistspane">
 					<div class="row-fluid">
-						<div class="span4">
+						<div>
 							<h4>Artist</h4>
 							<h3 id="h_artistname"></h3>
 							<p>

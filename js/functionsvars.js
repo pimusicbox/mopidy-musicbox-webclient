@@ -43,13 +43,10 @@ SEARCH_ALBUM_TABLE = '#albumresulttable';
 SEARCH_ARTIST_TABLE = '#artistresulttable';
 SEARCH_TRACK_TABLE = '#trackresulttable';
 
-WEB_SOCKET_SWF_LOCATION = "/static/WebSocketMain.swf";
-WEB_SOCKET_DEBUG = true;
-
-//process updated playlist to gui
+//A hack to find the name of the first artist of a playlist. this is not yet returned by mopidy
+//does not work wel with multiple artists of course
 function getArtist(pl) {
         for (var i = 0; i < pl.length; i++) {
-            var child = '<tr class="resultrow"><td><a href="#" class="name" id="' + pl[i]["uri"] + '">' + pl[i]["name"] + "</a></td><td>";
             for (var j = 0; j < pl[i]["artists"].length; j++) {
                 if (pl[i]["artists"][j]["name"] != '') {
                         return pl[i]["artists"][j]["name"];
@@ -58,7 +55,7 @@ function getArtist(pl) {
         };
 }
 
-//process updated playlist to gui
+//A hack to find the first album of a playlist. this is not yet returned by mopidy
 function getAlbum(pl) {
         for (var i = 0; i < pl.length; i++) {
             if(pl[i]["album"]["name"] != '') {

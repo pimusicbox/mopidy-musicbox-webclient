@@ -83,6 +83,7 @@ function handleGetplaylists(resultArr) {
     $('#playlistslist').empty();
     $('#playlistslist').html(tmp);
     $('#playlistsloader').hide();
+    $("#loadingmodal").modal('hide');
 }
 
 //process results of a returned playlist
@@ -166,6 +167,7 @@ function handleAlbumResults(resultArr) {
     customTracklists[resultArr["uri"]] = resultArr;
     playlisttotable(resultArr, ALBUM_TABLE, resultArr["uri"]);
     $('#h_albumname').html(getAlbum(resultArr));
+    //$('#h_albumartist').html('<a href="#" onclick="return showartist(this.id, uri)" id="' + resultArr["uri"] + '">' + getArtist(resultArr) + '</a>');
     $('#h_albumartist').html(getArtist(resultArr));
     $('#albumsloader').hide();
 }

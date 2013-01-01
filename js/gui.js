@@ -314,6 +314,8 @@ function updateStatusOfAll() {
 
 function initSocketevents() {
     mopidy.on("state:online", function () {
+        $("#offlinemodal").modal('hide');
+        $("#loadingmodal").modal('show');
         getCurrentPlaylist();
         updateStatusOfAll();
         getPlaylists();
@@ -322,6 +324,7 @@ function initSocketevents() {
 
     mopidy.on("state:offline", function () {
         resetSong();
+        $("#offlinemodal").modal('show');
     });
 
     mopidy.on("event:trackPlaybackStarted", function (data) {
@@ -452,6 +455,7 @@ $(document).ready(function() {
                 case 'playlists':
                     break;
                 case 'search':
+                    $("div.searchpane input").focus();
                     if (customTracklists['allresultscache'] == '') { initSearch( $('#searchinput').val() ); }
                     break;
                 case 'artists':
