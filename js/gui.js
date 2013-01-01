@@ -66,7 +66,7 @@ function resizeSonginfo () {
 
     $("#infoartist").html(artistshtml);
 
-    if( (artiststext.length > 68) || ( data["name"].length > 90)) {
+    if( (artiststext.length > 90) || ( songname.length > 60)) {
         $("#infoartist").html(artiststext);
         //bug in truncate?
         var spanwidth = $("#infoartist").width() - 1;
