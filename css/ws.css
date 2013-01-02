@@ -59,6 +59,9 @@ a.name, a.album, a.artist {
     height: 100%;
 }
 
+
+
+
 body {
     padding-top: 80px;
 }
@@ -138,8 +141,7 @@ div {
 }
 
 .content {
-    /*visibility:hidden;
-     /*display:none;*/
+    display:none;
 }
 
 .currenttrack {

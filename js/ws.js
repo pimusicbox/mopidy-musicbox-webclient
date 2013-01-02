@@ -8,8 +8,8 @@
 //play uri, update playlist to player if needed
 function playtrack(uri, playlisturi) {
     trackslist = new Array();
-    console.log('play uri:' + uri);
-    console.log('playlist uri:' + playlisturi);
+//    console.log('play uri:' + uri);
+//    console.log('playlist uri:' + playlisturi);
     var track;
         switchContent('current', uri);
         tracks = getTracksFromUri(playlisturi);
@@ -27,7 +27,7 @@ function playtrack(uri, playlisturi) {
          }
      }
     // console.log(pl.tracks);
-     console.log(track);
+    console.log(track);
 
     mopidy.playback.stop(true); 
      for (var i = 0; i < track; i++) {
@@ -74,7 +74,7 @@ function handleGetplaylists(resultArr) {
     /*<p><ul><li>Donec id elit non mi porta</li><li>Gravida at eget metus. Fusce dapibus.</li><li>Tellus ac cursus commodo</li></p>
      <p><a class="btn" href="#">More &raquo;</a></p>
      */
-    if (resultArr == '') { return; } 
+    if ((!resultArr) || (resultArr == '') ) { return; } 
     playlists = resultArr;
     tmp = '';
     for (var i = 0; i < playlists.length; i++) {
@@ -100,7 +100,7 @@ function handlePlaylist(resultArr) {
 function handleCurrentPlaylist(resultArr) {
     currentplaylist = resultArr;
     playlisttotable(resultArr, CURRENT_PLAYLIST_TABLE);
-    //$("#result").html(resultArr);
+    mopidy.playback.getCurrentTrack().then(currentTrackResults, console.error);
 }
 
 function handleSearchResults(resultArr) {

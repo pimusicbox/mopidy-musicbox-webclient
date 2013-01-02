@@ -76,7 +76,7 @@ function resizeSonginfo () {
 }
 
 function setSongInfo(data) {
-    console.log(data);
+    //console.log(data);
 
     artistshtml = '';
     artiststext = '';
@@ -286,6 +286,8 @@ function triggerPos() {
 }
 
 function getPlaylists() {
+//    d = new Date();
+//    console.log('Getplaylists: ' +  d.getMilliseconds() );
     mopidy.playlists.getPlaylists().then(handleGetplaylists, console.error);
 }
 
@@ -329,8 +331,8 @@ function initSocketevents() {
     });
 
     mopidy.on("event:trackPlaybackStarted", function (data) {
-        setSongInfo(data.tl_track.track);
         mopidy.playback.getTimePosition().then(currentPositionResults, console.error);
+        setSongInfo(data.tl_track.track);
         setPlayState(true);  
         initTimer();
     });
