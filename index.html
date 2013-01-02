@@ -4,90 +4,83 @@
 		<meta http-equiv="imagetoolbar" content="no" />
 		<meta content="true" name="MSSmartTagsPreventParsing" />
 		<meta http-equiv="X-UA-Compatible" content="IE=9" />
-
- <meta name = "viewport" content = "width=device-width, initial-scale = 1.0, user-scalable = no" /> 
+		<meta name = "viewport" content = "width=device-width, initial-scale = 1.0, user-scalable = no" />
 		<!-- <meta name="viewport" content="width=device-width, user-scalable=no"> -->
 		<!--		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> -->
-
-	<!--	<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 		<link rel="apple-touch-icon" href="img/icons/headphones_32x28.png" />
-		
-<script src="js/html5slider.js"></script>
-
+		<script src="js/html5slider.js"></script>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-
 		<meta charset="utf-8">
 		<title>Mopidy</title>
 		<meta name="description" content="">
 		<meta name="author" content="Wouter van Wijk">
-		<meta name="copyright" content="(c) 2012 Wouter van Wijk" />
+		<meta name="copyright" content="(c) 2012/2013 Wouter van Wijk" />
 		<!-- Styles -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/bootstrap-responsive.css" rel="stylesheet">
 		<link href="css/ws.css" rel="stylesheet">
-
-		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-		<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
 		<script type="text/javascript" src="/mopidy/mopidy.js"></script>
-
 	</head>
 
-	<body>    
+	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top">
-	       <div class="navbar-inner">
-    		    <div class="container-fluid">
-<a type="button" class="btn btn-navbar" style="margin-left: 5px" data-toggle="collapse" data-target=".nav-collapse">
-            <img src="img/icons/arrow_down_16x16.png" /></a>
-            			<div class="nav pull-right" id="mainmenu">
-							<a href="#playlists"><img src="img/icons/list_nested_24x21.png" /><div class="nav-collapse menutext nobreak hidden-phone"> Playlists</div></a> 
-							<a href="#current"><img src="img/icons/list_24x21.png" /><div class="nav-collapse nobreak menutext hidden-phone"> Queue</div></a> 
-							<a href="#search"><img src="img/icons/magnifying_glass_24x24.png" /><div class="nav-collapse nobreak menutext hidden-phone"> Search</div></a>
-						</div>
-						<div id="controlbt" class="nav span2">
-							<span><a href="#" onclick="doPrevious(); return false"><img src="img/icons/first_16x16.png" alt="Previous Track" /></a></span>
-							<span id="playpause"><a href="#" onclick="doPlayPause(); return false"><img src="img/icons/pause_18x24.png" style="margin-top: 8px;" alt="Play" id="playbt" /></a></span>
-							<span><a href="#" onclick="doNext(); return false"><img src="img/icons/last_16x16.png" alt="Next Track" class="breakafter" /></a></span>
-						</div>
-						<div class="nav nav-collapse span2">
-									<a href="#" onclick="doShuffle(); return false"><img src="img/icons/loop_alt2_16x14.png" alt="" id="shufflebt" /></a>
-									<a href="#" onclick="doRepeat(); return false"><img src="img/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
-									<a href="#" onclick="doMute(); return false;"><img id="mutebt" src="img/icons/volume_16x12.png" alt="" /></a>
-<!--									<a href="#plus" class="dropdown-toggle" data-toggle="dropdown"><img src="img/icons/plus_12x12.png" alt="" /></a>
-									<ul class="dropdown-menu">
-										<li>
-											<a href="#buttonGroups">Add to playlist</a>
-										</li>
-										<li>
-											<a href="#buttonDropdowns">Favorite Song</a>
-										</li>
-										<li>
-											<a href="#buttonDropdowns">Favorite Album</a>
-										</li>
-										<li>
-											<a href="#buttonDropdowns">Favorite Artist</a>
-										</li>
-									</ul>
--->
-						</div>
-	
-						<div id="songinfo" class="nav nav-collapse span5" onclick="expandSonginfo();">
-							<span  class="nav nav-collapse span5" id="infoname"></span>
-							<br/>
-							<span  class="nav nav-collapse span5" id="infoartist"></span>
-							<br/>
-						</div>					
-
-
-						<!-- songinfo -->
-
-			</div><!-- /container -->
-					<div class="nav-collapse" id="slidercontainer">
-							<span id="songelapsed">0:00</span>
-							<input id="trackslider" type="range" onmousedown="pauseTimer();" onchange="doSeekPos(this.value);" class="nobreak" />
-							<span id="songlength" class="pull-right">0:00</span>
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					<a type="button" class="btn btn-navbar" style="margin-left: 5px" data-toggle="collapse" data-target=".nav-collapse"> <img src="img/icons/arrow_down_16x16.png" /></a>
+					<div class="nav pull-right" id="mainmenu">
+						<a href="#playlists"><img src="img/icons/list_nested_24x21.png" />
+						<div class="nav-collapse menutext nobreak hidden-phone">
+							Playlists
+						</div></a>
+						<a href="#current"><img src="img/icons/list_24x21.png" />
+						<div class="nav-collapse nobreak menutext hidden-phone">
+							Queue
+						</div></a>
+						<a href="#search"><img src="img/icons/magnifying_glass_24x24.png" />
+						<div class="nav-collapse nobreak menutext hidden-phone">
+							Search
+						</div></a>
 					</div>
+					<div id="controlbt" class="nav span2">
+						<span><a href="#" onclick="doPrevious(); return false"><img src="img/icons/first_16x16.png" alt="Previous Track" /></a></span>
+						<span id="playpause"><a href="#" onclick="doPlayPause(); return false"><img src="img/icons/pause_18x24.png" alt="Play" id="playbt" /></a></span>
+						<span><a href="#" onclick="doNext(); return false"><img src="img/icons/last_16x16.png" alt="Next Track" class="breakafter" /></a></span>
+					</div>
+					<div class="nav nav-collapse span2">
+						<a href="#" onclick="doRandom(); return false"><img src="img/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
+						<a href="#" onclick="doRepeat(); return false"><img src="img/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
+						<a href="#" onclick="doMute(); return false;"><img id="mutebt" src="img/icons/volume_16x12.png" alt="" /></a>
+						<!--									<a href="#plus" class="dropdown-toggle" data-toggle="dropdown"><img src="img/icons/plus_12x12.png" alt="" /></a>
+						<ul class="dropdown-menu">
+						<li>
+						<a href="#buttonGroups">Add to playlist</a>
+						</li>
+						<li>
+						<a href="#buttonDropdowns">Favorite Song</a>
+						</li>
+						<li>
+						<a href="#buttonDropdowns">Favorite Album</a>
+						</li>
+						<li>
+						<a href="#buttonDropdowns">Favorite Artist</a>
+						</li>
+						</ul>
+						-->
+					</div>
+
+					<div id="songinfo" class="nav nav-collapse span5" onclick="expandSonginfo();">
+						<span  class="nav nav-collapse span5" id="infoname"></span>
+						<br/>
+						<span  class="nav nav-collapse span5" id="infoartist"></span>
+						<br/>
+					</div>
+
+				</div><!-- /container -->
+				<div class="nav-collapse" id="slidercontainer">
+					<span id="songelapsed">0:00</span>
+					<input id="trackslider" type="range" onmousedown="pauseTimer();" onchange="doSeekPos(this.value);" class="nobreak" />
+					<span id="songlength" class="pull-right">0:00</span>
+				</div>
 
 			</div><!-- /.navbar-inner -->
 		</div><!-- /.navbar -->
@@ -143,9 +136,9 @@
 				<div class="span11 content" id="albumspane">
 					<div class="row-fluid">
 						<div>
-						    <h4>Album</h4>
-						    <h3 id="h_albumname"></h3>
-						    <h5 id="h_albumartist"></h5>
+							<h4>Album</h4>
+							<h3 id="h_albumname"></h3>
+							<h5 id="h_albumartist"></h5>
 							<p>
 								<ul id="albumslist"></ul>
 							</p>
@@ -194,8 +187,8 @@
 						<input id="searchinput" onkeypress="return searchPressed(event.keyCode);" type="text" class="search-query" placeholder="Search..." />
 					</form>
 
-    			     <img src="img/loader.gif" id="allresultloader" class= "loader" />
-						
+					<img src="img/loader.gif" id="allresultloader" class= "loader" />
+
 					<div id="searchresults">
 						<div class="span5" id="searchartists">
 							<h4>Artists</h4>
@@ -205,58 +198,62 @@
 						</div>
 						<div class="span5" id="searchalbums">
 							<h4>Albums</h4>
-								<table class="table table-striped">
-									<tbody id="albumresulttable"></tbody>
-								</table>
+							<table class="table table-striped">
+								<tbody id="albumresulttable"></tbody>
+							</table>
 						</div>
-						<div class="span10" style="text-align: center" id="expandsearch"><a href="#" onclick="toggleSearch(); return false;"><img src="img/icons/arrow_down_16x16.png"></a></div>
+						<div class="span10" style="text-align: center" id="expandsearch">
+							<a href="#" onclick="toggleSearch(); return false;"><img src="img/icons/arrow_down_16x16.png"></a>
+						</div>
 						<div class="span11" id="searchtracks">
 							<h4>Tracks</h4>
-									<table class="table table-striped">
-										<thead>
-											<tr>
-												<th>Title</th>
-												<th>Artist</th>
-												<th>Album</th>
-												<th>Length</th>
-											</tr>
-										</thead>
-										<tbody id="trackresulttable"></tbody>
-									</table>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Title</th>
+										<th>Artist</th>
+										<th>Album</th>
+										<th>Length</th>
+									</tr>
+								</thead>
+								<tbody id="trackresulttable"></tbody>
+							</table>
 						</div>
 					</div>
-				</div>		<!-- search div -->
+				</div>
+				<!-- search div -->
 
 			</div><!--/row fluid-->
 		</div><!--/.fluid-container-->
 
-    <div id="offlinemodal" class="modal hide fade">
-		<div class="modal-header">
-			<h3>Offline</h3>
+		<div id="offlinemodal" class="modal hide fade">
+			<div class="modal-header">
+				<h3>Offline</h3>
+			</div>
+			<div class="modal-body">
+				<p>
+					Cannot connect to the server. Please wait...
+					<br/>
+					<br/>
+				</p>
+			</div>
 		</div>
-		<div class="modal-body">
-			<p>
-				<img src="img/loader.gif" id="offlinemodalloader" class="loader" />
-				Cannot connect to the server... <br/>Please wait.
-				<br/><br/>
-			</p>
+
+		<div id="loadingmodal" class="modal hide fade">
+			<div class="modal-header">
+				<h3>Loading data...</h3>
+			</div>
+			<div class="modal-body">
+				<p>
+					Getting data from the server. Please wait...
+					<br/>
+					<br/>
+					This could take a while (Too much of a while actually. Will be fixed...)
+					<br/>
+					<br/>
+				</p>
+			</div>
 		</div>
-	</div>
-    
-    <div id="loadingmodal" class="modal hide fade">
-		<div class="modal-header">
-			<h3>Loading data...</h3>
-		</div>
-		<div class="modal-body">
-			<p>
-				<img src="img/loader.gif" id="loadingmodalloader" class="loader" />
-				Getting data from the server... <br/><br/>
-				Please wait.<br/><br/>
-				This could take a while (Too much of a while actually. Will be fixed...)
-				<br/><br/>
-			</p>
-		</div>
-	</div>
 
 		<!-- Le javascript
 		================================================== -->

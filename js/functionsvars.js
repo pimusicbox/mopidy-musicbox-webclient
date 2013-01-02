@@ -14,7 +14,7 @@ var socket;
 
 //values for controls
 var play = false;
-var shuffle;
+var random;
 var repeat;
 var currentVolume = -1;
 var muteVolume = -1;
@@ -46,24 +46,23 @@ SEARCH_TRACK_TABLE = '#trackresulttable';
 //A hack to find the name of the first artist of a playlist. this is not yet returned by mopidy
 //does not work wel with multiple artists of course
 function getArtist(pl) {
-        for (var i = 0; i < pl.length; i++) {
-            for (var j = 0; j < pl[i]["artists"].length; j++) {
-                if (pl[i]["artists"][j]["name"] != '') {
-                        return pl[i]["artists"][j]["name"];
-                }
+    for (var i = 0; i < pl.length; i++) {
+        for (var j = 0; j < pl[i]["artists"].length; j++) {
+            if (pl[i]["artists"][j]["name"] != '') {
+                return pl[i]["artists"][j]["name"];
             }
-        };
+        }
+    };
 }
 
 //A hack to find the first album of a playlist. this is not yet returned by mopidy
 function getAlbum(pl) {
-        for (var i = 0; i < pl.length; i++) {
-            if(pl[i]["album"]["name"] != '') {
-               return pl[i]["album"]["name"];
-            }
-        };
+    for (var i = 0; i < pl.length; i++) {
+        if (pl[i]["album"]["name"] != '') {
+            return pl[i]["album"]["name"];
+        }
+    };
 }
-
 
 //process updated playlist to gui
 function playlisttotable(pl, table, uri) {
@@ -77,18 +76,18 @@ function playlisttotable(pl, table, uri) {
     tmp = '';
     $(table).empty();
 
-//   console.log(pl.length);
-   //console.log(pl);
-        for (var i = 0; i < pl.length; i++) {
-         //   console.log(pl[i]);
-            var child = '<tr class="resultrow"><td><a href="#" class="name" id="' + pl[i]["uri"] + '">' + pl[i]["name"] + "</a></td><td>";
-            for (var j = 0; j < pl[i]["artists"].length; j++) {
-                //console.log(j);
-                child += '<a href="#" class="artist" id="' + pl[i]["artists"][j]["uri"] + '">' + pl[i]["artists"][j]["name"] + "</a>";
-            }
-            child += '</td><td><a href="#" class="album" id="' + pl[i]["album"]["uri"] + '">' + pl[i]["album"]["name"] + '</a></td><td><a href="#" class="time" id="' + pl[i]["uri"] + '">' + timeFromSeconds(pl[i]["length"] / 1000) + '</a></td></tr>';
-            tmp += child;
-        };
+    //   console.log(pl.length);
+    //console.log(pl);
+    for (var i = 0; i < pl.length; i++) {
+        //   console.log(pl[i]);
+        var child = '<tr class="resultrow"><td><a href="#" class="name" id="' + pl[i]["uri"] + '">' + pl[i]["name"] + "</a></td><td>";
+        for (var j = 0; j < pl[i]["artists"].length; j++) {
+            //console.log(j);
+            child += '<a href="#" class="artist" id="' + pl[i]["artists"][j]["uri"] + '">' + pl[i]["artists"][j]["name"] + "</a>";
+        }
+        child += '</td><td><a href="#" class="album" id="' + pl[i]["album"]["uri"] + '">' + pl[i]["album"]["name"] + '</a></td><td><a href="#" class="time" id="' + pl[i]["uri"] + '">' + timeFromSeconds(pl[i]["length"] / 1000) + '</a></td></tr>';
+        tmp += child;
+    };
     $(table).html(tmp);
     $(table).attr('data', uri);
     //set click handlers
@@ -103,27 +102,25 @@ function playlisttotable(pl, table, uri) {
     });
 }
 
-
-
 function getPlaylistFromUri(uri) {
-     for (var i = 0; i < playlists.length; i++) {
-         if(playlists[i]["uri"] == uri) {
-             return playlists[i];
-         }
-     }
+    for (var i = 0; i < playlists.length; i++) {
+        if (playlists[i]["uri"] == uri) {
+            return playlists[i];
+        }
+    }
 
-         if(customPlaylists[uri]) {
-             return customPlaylists[uri];
-         }
+    if (customPlaylists[uri]) {
+        return customPlaylists[uri];
+    }
 }
 
 function getTracksFromUri(uri) {
-     pl = getPlaylistFromUri(uri);
-     if(pl) {
-         return pl.tracks;
-     } else if (customTracklists[uri]) {
-         return customTracklists[uri];
-     }
+    pl = getPlaylistFromUri(uri);
+    if (pl) {
+        return pl.tracks;
+    } else if (customTracklists[uri]) {
+        return customTracklists[uri];
+    }
 }
 
 //convert time to human readable format
