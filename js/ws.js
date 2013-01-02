@@ -74,6 +74,7 @@ function handleGetplaylists(resultArr) {
     /*<p><ul><li>Donec id elit non mi porta</li><li>Gravida at eget metus. Fusce dapibus.</li><li>Tellus ac cursus commodo</li></p>
      <p><a class="btn" href="#">More &raquo;</a></p>
      */
+    if (resultArr == '') { return; } 
     playlists = resultArr;
     tmp = '';
     for (var i = 0; i < playlists.length; i++) {

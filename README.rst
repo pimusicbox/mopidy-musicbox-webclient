@@ -7,6 +7,8 @@ Mopidy is a music server which can play music from `Spotify
 
 This is a responsive html/js/css client for Mopidy. Responsive, so it works on desktop and mobile browsers.
 
+Note: this is under heavy development!
+
 Installation
 
 To install Mopidy, check out

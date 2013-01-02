@@ -314,12 +314,13 @@ function updateStatusOfAll() {
 
 function initSocketevents() {
     mopidy.on("state:online", function () {
+        $(window).hashchange();
         $("#offlinemodal").modal('hide');
         $("#loadingmodal").modal('show');
         getCurrentPlaylist();
         updateStatusOfAll();
         getPlaylists();
-        $(window).hashchange();
+        $("#loadingmodal").modal('show');
     });
 
     mopidy.on("state:offline", function () {
@@ -341,6 +342,7 @@ function initSocketevents() {
     });
 
     mopidy.on("event:playlistsLoaded", function (data) {
+        $("#loadingmodal").modal('show');
         getPlaylists();
     });
 
