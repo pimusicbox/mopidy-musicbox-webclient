@@ -283,8 +283,6 @@ function triggerPos() {
 }
 
 function getPlaylists() {
-    //    d = new Date();
-    //    console.log('Getplaylists: ' +  d.getMilliseconds() );
     mopidy.playlists.getPlaylists().then(processGetplaylists, console.error);
 }
 
@@ -329,8 +327,8 @@ function initSocketevents() {
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
         mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-        setSongInfo(data.tl_track.track);
         setPlayState(true);
+        setSongInfo(data.tl_track.track);
         initTimer();
     });
 
@@ -456,7 +454,7 @@ $(document).ready(function() {
         }
 
         // Set the page title based on the hash.
-        document.title = divid;
+        document.title = PROGRAM_NAME + ' - ' + divid;
 
         $('.content').hide();
         $('.nav li').removeClass('active');

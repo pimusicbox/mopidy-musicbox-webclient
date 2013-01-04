@@ -13,6 +13,7 @@ function playtrack(uri, playlisturi) {
     var track;
     switchContent('current', uri);
     tracks = getTracksFromUri(playlisturi);
+    console.log(tracks);
     if (tracks) {
         $(CURRENT_PLAYLIST_TABLE).empty();
         mopidy.tracklist.clear();
@@ -23,6 +24,7 @@ function playtrack(uri, playlisturi) {
     for (var i = 0; i < tracks.length; i++) {
         if (tracks[i].uri == uri) {
             track = i + 1;
+            break;
         }
     }
     console.log(track);
@@ -118,7 +120,7 @@ function processSinglePlaylist(resultArr) {
 function processCurrentPlaylist(resultArr) {
     currentplaylist = resultArr;
     playlisttotable(resultArr, CURRENT_PLAYLIST_TABLE);
-    mopidy.playback.getCurrentTrack().then(currentTrackResults, console.error);
+    mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
 }
 
 /********************************************************
@@ -129,13 +131,14 @@ function processSearchResults(resultArr) {
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
     $("#searchresults").show();
+    //get the right result
+    results = resultArr[0];
+    
 
-    playlisttotable(resultArr[1].tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
-    customTracklists['trackresultscache'] = resultArr[1].tracks;
-
-    var artists = resultArr[1].artists;
+    playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
+    customTracklists['trackresultscache'] = results.tracks;
+    var artists = results.artists;
     var child = '';
-
     for (var i = 0; i < artists.length; i++) {
         child += '<tr class="resultrow';
         if (i > 4) {
@@ -146,7 +149,7 @@ function processSearchResults(resultArr) {
     $(SEARCH_ARTIST_TABLE).html(child);
 
     child = '';
-    var albums = resultArr[1].albums;
+    var albums = results.albums;
 
     for (var i = 0; i < albums.length; i++) {
         child += '<tr class="resultrow';

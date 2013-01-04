@@ -34,6 +34,7 @@ var customPlaylists = new Array();
 var customTracklists = new Array();
 
 //constants
+PROGRAM_NAME = 'Mopidy';
 ARTIST_TABLE = '#artiststable';
 ALBUM_TABLE = '#albumstable';
 PLAYLIST_TABLE = '#playlisttable';
