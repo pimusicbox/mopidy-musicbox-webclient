@@ -14,7 +14,7 @@ Note: this client under heavy development! At the moment, initial loading is ext
 Installation
 ============
 
-To install Mopidy, check out `the installation docs <http://docs.mopidy.com/en/latest/installation/>`_, `the settings docs <http://docs.mopidy.com/en/latest/settings/>`_ and `even more detailed information <https://docs.mopidy.com/en/latest/modules/frontends/http/#http-frontend>`. 
+To install Mopidy, check out `the installation docs <http://docs.mopidy.com/en/latest/installation/>`_, `the settings docs <http://docs.mopidy.com/en/latest/settings/>`_ and `even more detailed information <https://docs.mopidy.com/en/latest/modules/frontends/http/#http-frontend>`_. 
 
 Quick install
 =============
@@ -24,11 +24,4 @@ Drop the files from this client in a folder on your Mopidy-system. Then change t
 Security
 ========
 
-As a simple security measure, the web server is by default only available
-    from localhost. To make it available from other computers, change
-    :attr:`mopidy.settings.HTTP_SERVER_HOSTNAME`. Before you do so, note that
-    the HTTP frontend does not feature any form of user authentication or
-    authorization. Anyone able to access the web server can use the full core
-    API of Mopidy. Thus, you probably only want to make the web server
-    available from your local network or place it behind a web proxy which
-    takes care or user authentication. You have been warned.
+(Note from Mopidy:) As a simple security measure, the web server is by default only available from localhost. To make it available from other computers, change :attr:`mopidy.settings.HTTP_SERVER_HOSTNAME`. Before you do so, note that the HTTP frontend does not feature any form of user authentication or authorization. Anyone able to access the web server can use the full core API of Mopidy. Thus, you probably only want to make the web server available from your local network or place it behind a web proxy which takes care or user authentication. You have been warned.
