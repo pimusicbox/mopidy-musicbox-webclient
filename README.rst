@@ -14,7 +14,7 @@ Note: this client under heavy development! At the moment, initial loading is ext
 Installation
 ============
 
-To install Mopidy, check out `the installation docs <http://docs.mopidy.com/en/latest/installation/>`_, `the settings docs <http://docs.mopidy.com/en/latest/settings/>`_ and `even more detailed information <https://docs.mopidy.com/en/latest/modules/frontends/http/#http-frontend>`_. 
+To install Mopidy, check out `the installation docs <http://docs.mopidy.com/en/latest/installation/>`_, `the settings docs <http://docs.mopidy.com/en/latest/settings/>`_ and `even more detailed information <http://docs.mopidy.com/en/latest/modules/frontends/http/#http-frontend>`_. 
 
 Quick install
 =============
