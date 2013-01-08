@@ -104,16 +104,9 @@ function playlisttotable(pl, table, uri) {
 }
 
 function getPlaylistFromUri(uri) {
-/*    for (var i = 0; i < playlists.length; i++) {
-        if (playlists[i]["uri"] == uri) {
-            return playlists[i];
-        }
-    }
-*/
     if (playlists[uri]) {
         return playlists[uri];
     }
-    
     if(customPlaylists[uri]) {
         return customPlaylists[uri];
     }
@@ -121,7 +114,6 @@ function getPlaylistFromUri(uri) {
 
 function getTracksFromUri(uri) {
     var pl = getPlaylistFromUri(uri);
-    console.log(pl);
     if (pl) {
         return pl.tracks;
     } else if (customTracklists[uri]) {
