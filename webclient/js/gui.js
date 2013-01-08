@@ -8,7 +8,7 @@ var mopidy;
 function showartist(nwuri) {
     $(ARTIST_TABLE).empty();
     //fill from cache
-    pl = getTracksFromUri(nwuri);
+    var pl = getTracksFromUri(nwuri);
     console.log(pl);
     if (pl) {
         playlisttotable(pl, ARTIST_TABLE, nwuri)
@@ -27,7 +27,7 @@ function showartist(nwuri) {
 function showalbum(uri) {
     $(ALBUM_TABLE).empty();
     //fill from cache
-    pl = getTracksFromUri(uri);
+    var pl = getTracksFromUri(uri);
     console.log(pl);
     if (pl) {
         playlisttotable(pl, ALBUM_TABLE, uri)
@@ -49,7 +49,7 @@ function resetSong() {
     pauseTimer();
     setPlayState(false);
     setPosition(0);
-    data = new Object;
+    var data = new Object;
     data["name"] = '';
     data["artists"] = '';
     data["length"] = 0;
@@ -136,23 +136,9 @@ function doPlayPause() {
     setPlayState(!play);
 }
 
-/* Show tracks of playlist */
-function setPlaylist(uri) {
-    $(PLAYLIST_TABLE).empty();
-    $('#playlisttablediv').show();
-    //     $('#playlistloader').show();
-
-    pl = getPlaylistFromUri(uri);
-
-    //console.log(pl);
-    playlisttotable(pl["tracks"], PLAYLIST_TABLE, uri);
-    $('body,html').scrollTop($("#playlistspane").offset().top - 100);
-    return false;
-}
-
 /* Initialise search */
 function searchPressed(key) {
-    value = $('#searchinput').val();
+    var value = $('#searchinput').val();
     //    console.log(value);
     //    console.log(key);
     switchContent('search');
@@ -192,10 +178,10 @@ function doMute() {
     if (muteVolume == -1) {
         $("#mutebt").attr('src', 'img/icons/volume_mute_24x18.png');
         muteVolume = currentVolume;
-        mopidy.playback.setVolume(0).then(console.log, console.log);
+        mopidy.playback.setVolume(0);
     } else {
         $("#mutebt").attr('src', 'img/icons/volume_24x18.png');
-        mopidy.playback.setVolume(muteVolume).then(console.log, console.log);
+        mopidy.playback.setVolume(muteVolume);
         muteVolume = -1;
     }
 
@@ -264,7 +250,7 @@ function doVolume(value) {
 }
 
 function doSeekPos(value) {
-    val = Math.round(value);
+    var val = Math.round(value);
     if (!initgui) {
         //set timer to not trigger it too much
         clearTimeout(seekTimer);
@@ -283,7 +269,29 @@ function triggerPos() {
 }
 
 function getPlaylists() {
-    mopidy.playlists.getPlaylists().then(processGetplaylists, console.error);
+/********************************************************
+ *  get playlists without tracks
+ ********************************************************/
+    mopidy.playlists.getPlaylists(false).then(processGetPlaylists, console.error);
+}
+
+function showTracklist(uri) {
+/********************************************************
+ * Show tracks of playlist
+ ********************************************************/
+    $(PLAYLIST_TABLE).empty();
+    $('#playlisttablediv').show();
+    $('#playlistloader').show();
+
+    var pl = getPlaylistFromUri(uri);
+    console.log (pl);
+    //load from cache
+    if (pl) {
+        playlisttotable(pl.tracks, PLAYLIST_TABLE, uri);
+        $('body,html').scrollTop($("#playlistspane").offset().top - 100);
+    }
+    mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);
+    return false;
 }
 
 function getCurrentPlaylist() {
@@ -291,7 +299,7 @@ function getCurrentPlaylist() {
 }
 
 function setPosition(pos) {
-    oldval = initgui;
+    var oldval = initgui;
     currentposition = pos;
     initgui = true;
     $("#trackslider").attr("value", currentposition);
@@ -370,7 +378,7 @@ function setVolume(value) {
 }
 
 function switchContent(divid, uri) {
-    hash = divid;
+    var hash = divid;
     if (uri) {
         hash += "/" + uri;
     }
@@ -402,10 +410,11 @@ function pauseTimer() {
 
 $(document).ready(function() {
 
-    mopidy = new Mopidy();
     // Connect to server
-    mopidy.on(console.log);
+    mopidy = new Mopidy();
     // Log all events
+    mopidy.on(function () { console.log(arguments); });
+    //initialize events
     initSocketevents();
 
     $('.content').hide();
@@ -427,8 +436,8 @@ $(document).ready(function() {
         var hash = location.hash.split("/");
 
         //remove #
-        divid = hash[0].substr(1);
-        uri = hash[1];
+        var divid = hash[0].substr(1);
+        var uri = hash[1];
 
         switch(divid) {
             case 'current':
@@ -454,7 +463,7 @@ $(document).ready(function() {
         }
 
         // Set the page title based on the hash.
-        document.title = PROGRAM_NAME + ' - ' + divid;
+        //document.title = PROGRAM_NAME + ' - ' + divid;
 
         $('.content').hide();
         $('.nav li').removeClass('active');
@@ -470,6 +479,18 @@ $(document).ready(function() {
     if (location.hash.length < 2) {
         switchContent("playlists");
     }
+    
+    // disable closing of modal boxes
+    $('#offlinemodal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+    $('#loadingmodal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+    
+    
     //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;
     //update gui every x seconds from mopdidy

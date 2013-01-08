@@ -9,7 +9,9 @@ This is a responsive html/js/css client for Mopidy. Responsive, so it works on d
 Development
 ===========
 
-Note: this client under heavy development! At the moment, initial loading is extremely slow, especially on mobile devices. As Mopidy changes, this client changes as well. It tries to follow the development-branch of Mopidy for now, so update Mopidy as you update the client.
+Note: this Git-version is under heavy development! As Mopidy changes, this client changes as well. It tries to follow the development-branch of Mopidy for now, so update Mopidy as you update the client.
+If you use older versions of Mopidy, you can try a Zip-file with the correct version.
+
 
 Installation
 ============
@@ -19,7 +21,8 @@ To install Mopidy, check out `the installation docs <http://docs.mopidy.com/en/l
 Quick install
 =============
 
-Drop the files from this client in a folder on your Mopidy-system. Then change the settings.py (in the root directory of the Mopidy code) to make it work. Add a line *mopidy.frontends.http.HttpFrontend* to the FRONTENDS section, and set the *HTTP_SERVER_STATIC_DIR* to point to the folder with the files from the web client.
+Drop the 'webclient' folder in a folder on your Mopidy-system. Then change the settings.py (in the root directory of the Mopidy code) to make it work. Add a line *mopidy.frontends.http.HttpFrontend* to the FRONTENDS section, and set the *HTTP_SERVER_STATIC_DIR* to point to the folder with the files from the web client.
+Then point your browser (modern, with websockets: recent versions of Firefox, Chrome, Opera, and maybe IE10) to the ip-address and port of your device, which you added to the settings.py. e.g. http://192.168.1.5:6680
 
 Security
 ========

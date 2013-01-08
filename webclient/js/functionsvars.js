@@ -28,7 +28,7 @@ var artiststext = '';
 var songname = '';
 
 //array of cached playlists (not only user-playlists, also search, artist, album-playlists)
-var playlists = '';
+var playlists = new Object;
 var currentplaylist;
 var customPlaylists = new Array();
 var customTracklists = new Array();
@@ -74,7 +74,7 @@ function playlisttotable(pl, table, uri) {
      <td>Length</td>
      </tr>
      */
-    tmp = '';
+    var tmp = '';
     $(table).empty();
 
     //   console.log(pl.length);
@@ -104,19 +104,24 @@ function playlisttotable(pl, table, uri) {
 }
 
 function getPlaylistFromUri(uri) {
-    for (var i = 0; i < playlists.length; i++) {
+/*    for (var i = 0; i < playlists.length; i++) {
         if (playlists[i]["uri"] == uri) {
             return playlists[i];
         }
     }
-
-    if (customPlaylists[uri]) {
+*/
+    if (playlists[uri]) {
+        return playlists[uri];
+    }
+    
+    if(customPlaylists[uri]) {
         return customPlaylists[uri];
     }
 }
 
 function getTracksFromUri(uri) {
-    pl = getPlaylistFromUri(uri);
+    var pl = getPlaylistFromUri(uri);
+    console.log(pl);
     if (pl) {
         return pl.tracks;
     } else if (customTracklists[uri]) {
@@ -126,7 +131,7 @@ function getTracksFromUri(uri) {
 
 //convert time to human readable format
 function timeFromSeconds(length) {
-    d = Number(length);
+    var d = Number(length);
     var h = Math.floor(d / 3600);
     var m = Math.floor(d % 3600 / 60);
     var s = Math.floor(d % 3600 % 60);

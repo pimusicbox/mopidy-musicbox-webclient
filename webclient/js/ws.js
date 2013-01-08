@@ -9,10 +9,10 @@
  * play an uri from a trackslist or the current playlist
  *********************************************************/
 function playtrack(uri, playlisturi) {
-    trackslist = new Array();
+    var trackslist = new Array();
     var track;
     switchContent('current', uri);
-    tracks = getTracksFromUri(playlisturi);
+    var tracks = getTracksFromUri(playlisturi);
     console.log(tracks);
     if (tracks) {
         $(CURRENT_PLAYLIST_TABLE).empty();
@@ -63,7 +63,7 @@ function processRandom(data) {
  * process results of current position
  *********************************************************/
 function processCurrentposition(data) {
-    pos = parseInt(data);
+    var pos = parseInt(data);
     setPosition(pos);
     console.log('pos:' + pos);
 }
@@ -84,17 +84,17 @@ function processPlaystate(data) {
 /********************************************************
  * process results of list of playlists of the user
  *********************************************************/
-function processGetplaylists(resultArr) {
+function processGetPlaylists(resultArr) {
     /*<p><ul><li>Donec id elit non mi porta</li><li>Gravida at eget metus. Fusce dapibus.</li><li>Tellus ac cursus commodo</li></p>
      <p><a class="btn" href="#">More &raquo;</a></p>
      */
+
     if ((!resultArr) || (resultArr == '')) {
         return;
     }
-    playlists = resultArr;
-    tmp = '';
-    for (var i = 0; i < playlists.length; i++) {
-        var child = '<li><a href="#" onclick="return setPlaylist(this.id);" id="' + playlists[i]["uri"] + '"">' + playlists[i]["name"] + '</a></li>';
+    var tmp = '';
+    for (var i = 0; i < resultArr.length; i++) {
+        var child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i]["uri"] + '"">' + resultArr[i]["name"] + '</a></li>';
         tmp += child;
     };
     $('#playlistslist').empty();
@@ -106,11 +106,14 @@ function processGetplaylists(resultArr) {
 /********************************************************
  * process results of a returned playlist
  *********************************************************/
-function processSinglePlaylist(resultArr) {
-    //cache
-    newplaylisturi = resultArr["uri"];
+function processGetTracklist(resultArr) {
+    //cache result
+    var newplaylisturi = resultArr["uri"];
     playlists[newplaylisturi] = resultArr;
-    playlisttotable(playlists[newplaylisturi], PLAYLIST_TABLE, newplaylisturi);
+    console.log(playlists[newplaylisturi]);
+    playlisttotable(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
+    
+    $('body,html').scrollTop($("#playlistspane").offset().top - 100);
     $('#playlistloader').hide();
 }
 
@@ -127,12 +130,13 @@ function processCurrentPlaylist(resultArr) {
  * process results of a search
  *********************************************************/
 function processSearchResults(resultArr) {
+    console.log(resultArr);
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
     $("#searchresults").show();
     //get the right result
-    results = resultArr[0];
+    var results = resultArr[0];
     
 
     playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
@@ -174,6 +178,7 @@ function processSearchResults(resultArr) {
  * process results of an artist lookup
  *********************************************************/
 function processArtistResults(resultArr) {
+    console.log(resultArr.uri);
     customTracklists[resultArr["uri"]] = resultArr;
     playlisttotable(resultArr, ARTIST_TABLE, resultArr["uri"]);
     $('#h_artistname').html(getArtist(resultArr));
@@ -184,6 +189,7 @@ function processArtistResults(resultArr) {
  * process results of an album lookup
  *********************************************************/
 function processAlbumResults(resultArr) {
+    console.log(resultArr.uri);
     customTracklists[resultArr["uri"]] = resultArr;
     playlisttotable(resultArr, ALBUM_TABLE, resultArr["uri"]);
     $('#h_albumname').html(getAlbum(resultArr));
