@@ -315,6 +315,8 @@ function updateStatusOfAll() {
 
     mopidy.playback.getRepeat().then(processRepeat, console.error);
     mopidy.playback.getRandom().then(processRandom, console.error);
+    
+    //TODO check offline?
 }
 
 function initSocketevents() {
