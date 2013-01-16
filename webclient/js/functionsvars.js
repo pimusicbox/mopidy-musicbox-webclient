@@ -28,7 +28,7 @@ var artiststext = '';
 var songname = '';
 
 //array of cached playlists (not only user-playlists, also search, artist, album-playlists)
-var playlists = new Object;
+var playlists = {};
 var currentplaylist;
 var customPlaylists = new Array();
 var customTracklists = new Array();
@@ -48,9 +48,9 @@ SEARCH_TRACK_TABLE = '#trackresulttable';
 //does not work wel with multiple artists of course
 function getArtist(pl) {
     for (var i = 0; i < pl.length; i++) {
-        for (var j = 0; j < pl[i]["artists"].length; j++) {
-            if (pl[i]["artists"][j]["name"] != '') {
-                return pl[i]["artists"][j]["name"];
+        for (var j = 0; j < pl[i].artists.length; j++) {
+            if (pl[i].artists[j].name != '') {
+                return pl[i].artists[j].name;
             }
         }
     };
@@ -59,8 +59,8 @@ function getArtist(pl) {
 //A hack to find the first album of a playlist. this is not yet returned by mopidy
 function getAlbum(pl) {
     for (var i = 0; i < pl.length; i++) {
-        if (pl[i]["album"]["name"] != '') {
-            return pl[i]["album"]["name"];
+        if (pl[i].album.name != '') {
+            return pl[i].album.name;
         }
     };
 }
@@ -76,17 +76,14 @@ function playlisttotable(pl, table, uri) {
      */
     var tmp = '';
     $(table).empty();
-
-    //   console.log(pl.length);
-    //console.log(pl);
     for (var i = 0; i < pl.length; i++) {
-        //   console.log(pl[i]);
-        var child = '<tr class="resultrow"><td><a href="#" class="name" id="' + pl[i]["uri"] + '">' + pl[i]["name"] + "</a></td><td>";
-        for (var j = 0; j < pl[i]["artists"].length; j++) {
+    //    console.log(pl[i]);
+        var child = '<tr class="resultrow"><td><a href="#" class="name" id="' + pl[i].uri + '">' + pl[i].name + "</a></td><td>";
+        for (var j = 0; j < pl[i].artists.length; j++) {
             //console.log(j);
-            child += '<a href="#" class="artist" id="' + pl[i]["artists"][j]["uri"] + '">' + pl[i]["artists"][j]["name"] + "</a>";
+            child += '<a href="#" class="artist" id="' + pl[i].artists[j].uri + '">' + pl[i].artists[j].name + "</a>";
         }
-        child += '</td><td><a href="#" class="album" id="' + pl[i]["album"]["uri"] + '">' + pl[i]["album"]["name"] + '</a></td><td><a href="#" class="time" id="' + pl[i]["uri"] + '">' + timeFromSeconds(pl[i]["length"] / 1000) + '</a></td></tr>';
+        child += '</td><td><a href="#" class="album" id="' + pl[i].album.uri + '">' + pl[i].album.name + '</a></td><td><a href="#" class="time" id="' + pl[i].uri + '">' + timeFromSeconds(pl[i].length / 1000) + '</a></td></tr>';
         tmp += child;
     };
     $(table).html(tmp);
@@ -100,6 +97,28 @@ function playlisttotable(pl, table, uri) {
     });
     $(table + ' .artist').click(function() {
         return showartist(this.id, uri)
+    });
+}
+
+function albumtrackstotable(pl, table, uri) {
+    /*  <tr>
+     <td>Title</td>
+     <td>Length</td>
+     </tr>
+     */
+    var tmp = '';
+    $(table).empty();
+    for (var i = 0; i < pl.length; i++) {
+    //    console.log(pl[i]);
+        var child = '<tr class="resultrow"><td><a href="#" class="name" id="' + pl[i].uri + '">' + pl[i].name + "</a></td><td>";
+        child += '</td><td><a href="#" class="time" id="' + pl[i].uri + '">' + timeFromSeconds(pl[i].length / 1000) + '</a></td></tr>';
+        tmp += child;
+    };
+    $(table).html(tmp);
+    $(table).attr('data', uri);
+    //set click handlers
+    $(table + ' .name').click(function() {
+        return playtrack(this.id, uri)
     });
 }
 

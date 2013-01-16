@@ -9,7 +9,7 @@ function showartist(nwuri) {
     $(ARTIST_TABLE).empty();
     //fill from cache
     var pl = getTracksFromUri(nwuri);
-    console.log(pl);
+    //console.log(pl);
     if (pl) {
         playlisttotable(pl, ARTIST_TABLE, nwuri)
         $('#h_artistname').html(getArtist(pl));
@@ -50,10 +50,10 @@ function resetSong() {
     setPlayState(false);
     setPosition(0);
     var data = new Object;
-    data["name"] = '';
-    data["artists"] = '';
-    data["length"] = 0;
-    data["uri"] = '';
+    data.name = '';
+    data.artists = '';
+    data.length = 0;
+    data.uri = '';
     setSongInfo(data);
 }
 
@@ -90,26 +90,26 @@ function setSongInfo(data) {
 
     artistshtml = '';
     artiststext = '';
-    songname = data["name"];
+    songname = data.name;
 
-    for (var j = 0; j < data["artists"].length; j++) {
-        artistshtml += '<a href="#" onclick="return showartist(\'' + data["artists"][j].uri + '\');">' + data["artists"][j].name + '</a>';
-        artiststext += data["artists"][j].name;
-        if (j != data["artists"].length - 1) {
+    for (var j = 0; j < data.artists.length; j++) {
+        artistshtml += '<a href="#" onclick="return showartist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
+        artiststext += data.artists[j].name;
+        if (j != data.artists.length - 1) {
             artistshtml += ', ';
             artiststext += ', ';
         }
     }
 
-    $("#trackslider").attr("max", data["length"]);
-    $("#songlength").html(timeFromSeconds(data["length"] / 1000));
+    $("#trackslider").attr("max", data.length);
+    $("#songlength").html(timeFromSeconds(data.length / 1000));
 
     resizeSonginfo();
 
     $('#currenttable tr .name').each(function() {
         //console.log(this.className);
         this.className = "name";
-        if (this.id == data["uri"]) {
+        if (this.id == data.uri) {
             this.className += ' currenttrack';
             //             this.parentNode.parentNode.style.marginLeft="20px";
         }
@@ -321,13 +321,13 @@ function updateStatusOfAll() {
 
 function initSocketevents() {
     mopidy.on("state:online", function() {
-        $(window).hashchange();
         $("#offlinemodal").modal('hide');
         $("#loadingmodal").modal('show');
         getCurrentPlaylist();
         updateStatusOfAll();
         getPlaylists();
         $("#loadingmodal").modal('show');
+        $(window).hashchange();
     });
 
     mopidy.on("state:offline", function() {
@@ -415,7 +415,7 @@ $(document).ready(function() {
     // Connect to server
     mopidy = new Mopidy();
     // Log all events
-    mopidy.on(function () { console.log(arguments); });
+    //mopidy.on(function () { console.log(arguments); });
     //initialize events
     initSocketevents();
 
@@ -440,7 +440,7 @@ $(document).ready(function() {
         //remove #
         var divid = hash[0].substr(1);
         var uri = hash[1];
-
+//        console.log(divid + ': ' + uri);
         switch(divid) {
             case 'current':
                 break;
@@ -477,7 +477,6 @@ $(document).ready(function() {
         $('#' + divid + 'pane').show();
         return false;
     });
-
     if (location.hash.length < 2) {
         switchContent("playlists");
     }
@@ -492,7 +491,7 @@ $(document).ready(function() {
         keyboard: false
     })
     
-    
+
     //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;
     //update gui every x seconds from mopdidy

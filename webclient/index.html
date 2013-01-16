@@ -105,7 +105,7 @@
 							<img src="img/loader.gif" id="playlistsloader" class="loader" />
 						</div>
 						<div class="span8" style="display: none" id="playlisttablediv">
-							<table class="table table-striped">
+							<table class="table table-bordered table-striped">
 								<thead>
 									<tr>
 										<!--	<th>#</th> -->
@@ -125,7 +125,7 @@
 
 				<div class="span11 content" id="currentpane">
 					<h4>Current Playlist</h4>
-					<table class="table table-striped">
+					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<!--	<th>#</th> -->
@@ -151,7 +151,7 @@
 							</p>
 						</div>
 					</div><!--/row-->
-					<table class="table table-striped">
+					<table class="table table-striped table-bordered">
 						<thead>
 							<tr>
 								<th>Title</th>
@@ -175,18 +175,8 @@
 							</p>
 						</div>
 					</div><!--/row-->
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Title</th>
-								<th>Artist</th>
-								<th>Album</th>
-								<th>Length</th>
-							</tr>
-						</thead>
-						<tbody id="artiststable"></tbody>
-					</table>
-					<img src="img/loader.gif" id="artistsloader" class= "loader" />
+					<div id="artiststable"></div>
+					<img src="img/loader.gif" id="artistsloader" class="loader" />
 				</div>
 
 				<div class="content" id="searchpane">
@@ -199,13 +189,13 @@
 					<div id="searchresults">
 						<div class="span5" id="searchartists">
 							<h4>Artists</h4>
-							<table class="table table-striped">
+							<table class="table table-bordered table-striped">
 								<tbody id="artistresulttable"></tbody>
 							</table>
 						</div>
 						<div class="span5" id="searchalbums">
 							<h4>Albums</h4>
-							<table class="table table-striped">
+							<table class="table table-bordered table-striped">
 								<tbody id="albumresulttable"></tbody>
 							</table>
 						</div>
@@ -214,7 +204,7 @@
 						</div>
 						<div class="span11" id="searchtracks">
 							<h4>Tracks</h4>
-							<table class="table table-striped">
+							<table class="table table-bordered table-striped">
 								<thead>
 									<tr>
 										<th>Title</th>

@@ -94,7 +94,7 @@ function processGetPlaylists(resultArr) {
     }
     var tmp = '';
     for (var i = 0; i < resultArr.length; i++) {
-        var child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i]["uri"] + '"">' + resultArr[i]["name"] + '</a></li>';
+        var child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
         tmp += child;
     };
     $('#playlistslist').empty();
@@ -108,7 +108,7 @@ function processGetPlaylists(resultArr) {
  *********************************************************/
 function processGetTracklist(resultArr) {
     //cache result
-    var newplaylisturi = resultArr["uri"];
+    var newplaylisturi = resultArr.uri;
     playlists[newplaylisturi] = resultArr;
     console.log(playlists[newplaylisturi]);
     playlisttotable(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
@@ -130,7 +130,6 @@ function processCurrentPlaylist(resultArr) {
  * process results of a search
  *********************************************************/
 function processSearchResults(resultArr) {
-    console.log(resultArr);
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
@@ -148,7 +147,7 @@ function processSearchResults(resultArr) {
         if (i > 4) {
             child += " hidden";
         }
-        child += '"><td><a href="#" onclick="return showartist(this.id, uri)" id="' + artists[i]["uri"] + '">' + artists[i]["name"] + "</a></td></tr>";
+        child += '"><td><a href="#" onclick="return showartist(this.id)" id="' + artists[i].uri + '">' + artists[i].name + "</a></td></tr>";
     }
     $(SEARCH_ARTIST_TABLE).html(child);
 
@@ -160,10 +159,10 @@ function processSearchResults(resultArr) {
         if (i > 4) {
             child += " hidden";
         }
-        child += '"><td><a href="#" onclick="return showalbum(this.id, uri)" id="' + albums[i]["uri"] + '">' + albums[i]["name"] + "</a></td><td>";
+        child += '"><td><a href="#" onclick="return showalbum(this.id)" id="' + albums[i].uri + '">' + albums[i].name + "</a></td><td>";
         for (var j = 0; j < albums[i].artists.length; j++) {
             //console.log(j);
-            child += '<a href="#" onclick="return showartist(this.id, uri)" id="' + albums[i].artists[j]["uri"] + '">' + albums[i].artists[j]["name"] + "</a>";
+            child += '<a href="#" onclick="return showartist(this.id)" id="' + albums[i].artists[j].uri + '">' + albums[i].artists[j].name + "</a>";
         }
         child += '</td></tr>';
     }
@@ -178,9 +177,35 @@ function processSearchResults(resultArr) {
  * process results of an artist lookup
  *********************************************************/
 function processArtistResults(resultArr) {
-    console.log(resultArr.uri);
-    customTracklists[resultArr["uri"]] = resultArr;
-    playlisttotable(resultArr, ARTIST_TABLE, resultArr["uri"]);
+    customTracklists[resultArr.uri] = resultArr;
+    $(ARTIST_TABLE).html('');
+    
+    //break into albums and put in tables
+    var newalbum = [];
+    var nexturi = '';
+    for (var i = 0; i < resultArr.length; i++) {
+        //console.log(i);
+        newalbum.push(resultArr[i]);
+        nexturi = '';
+        if (i < resultArr.length - 1) {
+            nexturi = resultArr[i + 1].album.uri;
+        }
+        if (resultArr[i].album.uri != nexturi) {
+            var tableid = 'art' + i;
+            var html = '<h4>' + resultArr[i].album.name + '</h4>';
+/*            for (var j = 0; j < resultArr[i].album.artists.length; j++) {
+                //console.log(j);
+                html += '<a href="#" class="artist" id="' + resultArr[i].album.artists[j].uri + '">' + resultArr[i].album.artists[j].name + "</a>";
+            }
+*/
+            html += '<table class="table table-striped"><tbody id="' + tableid + '"></tbody></table>';
+
+            $(ARTIST_TABLE).append(html);
+            albumtrackstotable(newalbum, "#" + tableid, resultArr[i].album.uri);
+            customTracklists[resultArr[i].album.uri] = newalbum;
+            newalbum = [];
+        }
+    }
     $('#h_artistname').html(getArtist(resultArr));
     $('#artistsloader').hide();
 }
@@ -189,9 +214,9 @@ function processArtistResults(resultArr) {
  * process results of an album lookup
  *********************************************************/
 function processAlbumResults(resultArr) {
-    console.log(resultArr.uri);
-    customTracklists[resultArr["uri"]] = resultArr;
-    playlisttotable(resultArr, ALBUM_TABLE, resultArr["uri"]);
+    console.log(resultArr);
+    customTracklists[resultArr.uri] = resultArr;
+    playlisttotable(resultArr, ALBUM_TABLE, resultArr.uri);
     $('#h_albumname').html(getAlbum(resultArr));
     $('#h_albumartist').html(getArtist(resultArr));
     $('#albumsloader').hide();

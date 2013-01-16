@@ -93,9 +93,17 @@ body {
     display: none;
 }
 
-.resultrow:hover {
-    background-color: #555 !important;
+.table tr:hover,
+.table th:hover,
+.table td:hover {
+        background-color: #555 !important;
 }
+
+.table th,
+.table td {
+    padding: 4px;
+}
+
 .brand {
     margin-right: 20px;
 }
