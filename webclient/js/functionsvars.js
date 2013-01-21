@@ -76,18 +76,24 @@ function playlisttotable(pl, table, uri) {
      */
     var tmp = '';
     $(table).empty();
+//    console.log(pl);
     for (var i = 0; i < pl.length; i++) {
-    //    console.log(pl[i]);
         var child = '<tr class="resultrow"><td><a href="#" class="name" id="' + pl[i].uri + '">' + pl[i].name + "</a></td><td>";
         for (var j = 0; j < pl[i].artists.length; j++) {
-            //console.log(j);
+           // console.log(j);
             child += '<a href="#" class="artist" id="' + pl[i].artists[j].uri + '">' + pl[i].artists[j].name + "</a>";
+            //stop after 3
+            if (j > 1) {
+                child += '...';
+                break;
+            }
         }
         child += '</td><td><a href="#" class="album" id="' + pl[i].album.uri + '">' + pl[i].album.name + '</a></td><td><a href="#" class="time" id="' + pl[i].uri + '">' + timeFromSeconds(pl[i].length / 1000) + '</a></td></tr>';
         tmp += child;
     };
     $(table).html(tmp);
     $(table).attr('data', uri);
+//    console.log(tmp);
     //set click handlers
     $(table + ' .name').click(function() {
         return playtrack(this.id, uri)
@@ -109,7 +115,6 @@ function albumtrackstotable(pl, table, uri) {
     var tmp = '';
     $(table).empty();
     for (var i = 0; i < pl.length; i++) {
-    //    console.log(pl[i]);
         var child = '<tr class="resultrow"><td><a href="#" class="name" id="' + pl[i].uri + '">' + pl[i].name + "</a></td><td>";
         child += '</td><td><a href="#" class="time" id="' + pl[i].uri + '">' + timeFromSeconds(pl[i].length / 1000) + '</a></td></tr>';
         tmp += child;

@@ -9,7 +9,6 @@ function showartist(nwuri) {
     $(ARTIST_TABLE).empty();
     //fill from cache
     var pl = getTracksFromUri(nwuri);
-    //console.log(pl);
     if (pl) {
         playlisttotable(pl, ARTIST_TABLE, nwuri)
         $('#h_artistname').html(getArtist(pl));
@@ -28,7 +27,6 @@ function showalbum(uri) {
     $(ALBUM_TABLE).empty();
     //fill from cache
     var pl = getTracksFromUri(uri);
-    console.log(pl);
     if (pl) {
         playlisttotable(pl, ALBUM_TABLE, uri)
         $('#h_albumname').html(getAlbum(pl));
@@ -139,28 +137,28 @@ function doPlayPause() {
 /* Initialise search */
 function searchPressed(key) {
     var value = $('#searchinput').val();
-    //    console.log(value);
-    //    console.log(key);
     switchContent('search');
 
     if (key == 13) {
-        $('#artistresultloader').show();
-        $('#allresultloader').show();
-        $('#albumresultloader').show();
-
-        $('#artistresulttable').empty();
-        $('#albumresulttable').empty();
-        $('#trackresulttable').empty();
-
-        initSearch(value);
+        initSearch();
         return false;
     }
     return true;
 }
 
 //init search
-function initSearch(value) {
+function initSearch() {
+    var value = $('#searchinput').val();
+
     if ((value.length < 100) && (value.length > 0)) {
+        $('#artistresultloader').show();
+        $('#allresultloader').show();
+        $('#albumresultloader').show();
+    
+        $('#artistresulttable').empty();
+        $('#albumresulttable').empty();
+        $('#trackresulttable').empty();
+    
         delete customTracklists['allresultscache'];
         delete customTracklists['artistresultscache'];
         delete customTracklists['albumresultscache'];
@@ -243,7 +241,6 @@ function doRepeat() {
 }
 
 function doVolume(value) {
-    console.log(value);
     if (!initgui) {
         mopidy.playback.setVolume(value);
     }
@@ -284,12 +281,17 @@ function showTracklist(uri) {
     $('#playlistloader').show();
 
     var pl = getPlaylistFromUri(uri);
-    console.log (pl);
+//    console.log (pl);
     //load from cache
     if (pl) {
         playlisttotable(pl.tracks, PLAYLIST_TABLE, uri);
-        $('body,html').scrollTop($("#playlistspane").offset().top - 100);
     }
+
+    //scroll to tracklist
+    var divtop = $("#playlisttablediv").offset().top - 80;
+    $('body,html').animate({scrollTop: divtop}, 250);
+
+    //lookup recent tracklist
     mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);
     return false;
 }
@@ -465,7 +467,7 @@ $(document).ready(function() {
         }
 
         // Set the page title based on the hash.
-        //document.title = PROGRAM_NAME + ' - ' + divid;
+        //document.title = PROGRAM_NAME;
 
         $('.content').hide();
         $('.nav li').removeClass('active');

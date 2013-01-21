@@ -14,14 +14,14 @@
 		<title>Mopidy</title>
 		<meta name="description" content="">
 		<meta name="author" content="Wouter van Wijk">
-		<meta name="copyright" content="(c) 2012/2013 Wouter van Wijk" />
+		<meta name="copyright" content="(c) 2012-2013 Wouter van Wijk" />
 		<!-- Styles -->
 		<!-- hide content because otherwise headers show up at the start, which is not pretty -->
 		<style>
             .content {
                 display: none;
             }
-		</style>		
+		</style>
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/bootstrap-responsive.css" rel="stylesheet">
 		<link href="css/ws.css" rel="stylesheet">
@@ -32,7 +32,6 @@
 		<div class="navbar navbar-inverse navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container-fluid">
-<!--					<a href="#" onclick="backbt();"> <img src="img/icons/arrow_left_alt1_24x24.png" /></a> -->
 					<a type="button" class="btn btn-navbar" style="margin-left: 5px" data-toggle="collapse" data-target=".nav-collapse"> <img src="img/icons/arrow_down_16x16.png" /></a>
 					<div class="nav pull-right" id="mainmenu">
 						<a href="#playlists"><img src="img/icons/list_nested_24x21.png" />
@@ -48,33 +47,24 @@
 							Search
 						</div></a>
 					</div>
+
+<!--					<div class="nav nav-collapse pull-left"><a href="#" onclick="backbt();"> <img src="img/icons/arrow_left_alt1_24x24.png" /></a></div> -->
+
 					<div id="controlbt" class="nav span2">
 						<span><a href="#" onclick="doPrevious(); return false"><img src="img/icons/first_16x16.png" alt="Previous Track" /></a></span>
 						<span id="playpause"><a href="#" onclick="doPlayPause(); return false"><img src="img/icons/pause_18x24.png" alt="Play" id="playbt" /></a></span>
 						<span><a href="#" onclick="doNext(); return false"><img src="img/icons/last_16x16.png" alt="Next Track" class="breakafter" /></a></span>
 					</div>
+
 					<div class="nav nav-collapse span2">
 						<a href="#" onclick="doRandom(); return false"><img src="img/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
 						<a href="#" onclick="doRepeat(); return false"><img src="img/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
-						<a href="#" onclick="doMute(); return false;"><img id="mutebt" src="img/icons/volume_16x12.png" alt="" /></a>
-						<!--									<a href="#plus" class="dropdown-toggle" data-toggle="dropdown"><img src="img/icons/plus_12x12.png" alt="" /></a>
-						<ul class="dropdown-menu">
-						<li>
-						<a href="#buttonGroups">Add to playlist</a>
-						</li>
-						<li>
-						<a href="#buttonDropdowns">Favorite Song</a>
-						</li>
-						<li>
-						<a href="#buttonDropdowns">Favorite Album</a>
-						</li>
-						<li>
-						<a href="#buttonDropdowns">Favorite Artist</a>
-						</li>
-						</ul>
-						-->
+						<a href="#" onclick="doMute(); return false;"><img id="mutebt" src="img/icons/volume_16x12.png" alt="" /></a> 
 					</div>
-
+<!--					<div class="nav nav-collapse span1">
+						<input id="volslider" type="range" max="100" onchange="doVolume(this.value);" class="nobreak" />
+					</div>
+-->
 					<div id="songinfo" class="nav nav-collapse span5" onclick="expandSonginfo();">
 						<span  class="nav nav-collapse span5" id="infoname"></span>
 						<br/>
@@ -104,8 +94,8 @@
 							</p>
 							<img src="img/loader.gif" id="playlistsloader" class="loader" />
 						</div>
-						<div class="span8" style="display: none" id="playlisttablediv">
-							<table class="table table-bordered table-striped">
+						<div class="span8" id="playlisttablediv">
+							<table id="pltable" class="table table-bordered table-striped">
 								<thead>
 									<tr>
 										<!--	<th>#</th> -->
@@ -143,7 +133,7 @@
 				<div class="span11 content" id="albumspane">
 					<div class="row-fluid">
 						<div>
-							<h4>Album</h4>
+<!--							<h4>Album</h4> -->
 							<h3 id="h_albumname"></h3>
 							<h5 id="h_albumartist"></h5>
 							<p>
@@ -168,7 +158,7 @@
 				<div class="span11 content" id="artistspane">
 					<div class="row-fluid">
 						<div>
-							<h4>Artist</h4>
+<!--							<h4>Artist</h4> -->
 							<h3 id="h_artistname"></h3>
 							<p>
 								<ul id="artistslist"></ul>
@@ -180,9 +170,12 @@
 				</div>
 
 				<div class="content" id="searchpane">
-					<form>
-						<input id="searchinput" onkeypress="return searchPressed(event.keyCode);" type="text" class="search-query" placeholder="Search..." />
-					</form>
+					<div class="input-append">
+						<input id="searchinput" class="span2" onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text">
+						<button class="btn" type="button" onclick="return initSearch(event.value);" >
+							Search!
+						</button>
+					</div>
 
 					<img src="img/loader.gif" id="allresultloader" class= "loader" />
 
@@ -223,20 +216,21 @@
 			</div><!--/row fluid-->
 		</div><!--/.fluid-container-->
 
-		<div id="offlinemodal" class="modal hide fade">
+		<div id="offlinemodal" class="modal hide">
 			<div class="modal-header">
-				<h3>Offline</h3>
+				<h3>Connecting</h3>
 			</div>
 			<div class="modal-body">
 				<p>
 					Cannot connect to the server. Please wait...
 					<br/>
 					<br/>
+					<img src="img/loader.gif" class="loader" />
 				</p>
 			</div>
 		</div>
 
-		<div id="loadingmodal" class="modal hide fade">
+		<div id="loadingmodal" class="modal hide">
 			<div class="modal-header">
 				<h3>Loading data...</h3>
 			</div>
@@ -245,6 +239,7 @@
 					Getting data from Spotify. This could take a while if you just started Mopidy. Please wait...
 					<br/>
 					<br/>
+					<img src="img/loader.gif" class="loader" />
 				</p>
 			</div>
 		</div>

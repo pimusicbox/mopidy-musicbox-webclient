@@ -29,6 +29,7 @@
 
 #controlbt {
     margin-left: 5px;
+    margin-top: -2px;
     width: 90px;
     height: 30px;
 }
@@ -82,13 +83,6 @@ body {
     margin-top: 3px;
 }
 
-.sidebar-nav {
-    padding: 9px 0;
-}
-.sidebar-nav li {
-    margin-top: 20px;
-}
-
 #searchresults {
     display: none;
 }
@@ -101,14 +95,15 @@ body {
 
 .table th,
 .table td {
-    padding: 4px;
+    padding: 6px;
 }
 
 .brand {
     margin-right: 20px;
 }
-.nav img {
-    margin-top: 16px;
+
+.nav img  {
+    padding-top: 16px;
 }
 
 .navbar, .navbar-inner, .container {
@@ -129,12 +124,6 @@ body {
     background-image: url('../img/icons/play_alt_16x16.png');
     background-repeat: no-repeat;
     padding-left: 20px;
-}
-
-#songinfo {
-    overflow: hidden;
-    margin-top: 5px;
-    /*    border: 1px solid white; */
 }
 
 #infoname {
