@@ -9,6 +9,8 @@ This is a responsive html/js/css client for Mopidy. Responsive, so it works on d
 Development
 ===========
 
+I could use some help with the javascript/html programming. Feel free to contact me!
+
 Note: this Git-version is under heavy development! As Mopidy changes, this client changes as well. It tries to follow the development-branch of Mopidy for now, so update Mopidy as you update the client.
 
 If you use an older version of Mopidy, you can try this:
