@@ -46,15 +46,15 @@
 						<div class="nav-collapse nobreak menutext hidden-phone">
 							Search
 						</div></a>
-					</div>
+					</div> 
 
-<!--					<div class="nav nav-collapse pull-left"><a href="#" onclick="backbt();"> <img src="img/icons/arrow_left_alt1_24x24.png" /></a></div> -->
-
-					<div id="controlbt" class="nav span2">
+					<div id="controlbt" class="nav">
+					    <span id="back"><a href="#" onclick="return backbt();"> <img src="img/icons/arrow_left_alt1_24x24.png" /></a></span>
 						<span><a href="#" onclick="doPrevious(); return false"><img src="img/icons/first_16x16.png" alt="Previous Track" /></a></span>
 						<span id="playpause"><a href="#" onclick="doPlayPause(); return false"><img src="img/icons/pause_18x24.png" alt="Play" id="playbt" /></a></span>
 						<span><a href="#" onclick="doNext(); return false"><img src="img/icons/last_16x16.png" alt="Next Track" class="breakafter" /></a></span>
 					</div>
+
 
 					<div class="nav nav-collapse span2">
 						<a href="#" onclick="doRandom(); return false"><img src="img/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
@@ -216,13 +216,13 @@
 			</div><!--/row fluid-->
 		</div><!--/.fluid-container-->
 
-		<div id="offlinemodal" class="modal hide">
+		<div id="offlinemodalbox" class="modal hide">
 			<div class="modal-header">
 				<h3>Connecting</h3>
 			</div>
 			<div class="modal-body">
 				<p>
-					Cannot connect to the server. Please wait...
+					Trying to reach the server. Please wait...
 					<br/>
 					<br/>
 					<img src="img/loader.gif" class="loader" />
@@ -230,7 +230,7 @@
 			</div>
 		</div>
 
-		<div id="loadingmodal" class="modal hide">
+		<div id="loadingmodalbox" class="modal hide">
 			<div class="modal-header">
 				<h3>Loading data...</h3>
 			</div>

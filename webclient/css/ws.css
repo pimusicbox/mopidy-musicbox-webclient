@@ -28,10 +28,19 @@
 }
 
 #controlbt {
-    margin-left: 5px;
     margin-top: -2px;
-    width: 90px;
     height: 30px;
+    width: 140px;
+}
+
+#controlbt img {
+    margin-left: 5px;
+}
+
+
+#back {
+    margin-left: -20px;
+    margin-right: 5px;
 }
 
 a.name, a.album, a.artist {
@@ -95,7 +104,7 @@ body {
 
 .table th,
 .table td {
-    padding: 6px;
+    padding: 8px;
 }
 
 .brand {

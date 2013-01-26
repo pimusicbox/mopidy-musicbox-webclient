@@ -1,5 +1,5 @@
 /* ==========================================================
- * bootstrap-carousel.js v2.0.4
+ * bootstrap-carousel.js v2.2.2
  * http://twitter.github.com/bootstrap/javascript.html#carousel
  * ==========================================================
  * Copyright 2012 Twitter, Inc.
@@ -29,7 +29,6 @@
   var Carousel = function (element, options) {
     this.$element = $(element)
     this.options = options
-    this.options.slide && this.slide(this.options.slide)
     this.options.pause == 'hover' && this.$element
       .on('mouseenter', $.proxy(this.pause, this))
       .on('mouseleave', $.proxy(this.cycle, this))
@@ -46,7 +45,7 @@
     }
 
   , to: function (pos) {
-      var $active = this.$element.find('.active')
+      var $active = this.$element.find('.item.active')
         , children = $active.parent().children()
         , activePos = children.index($active)
         , that = this
@@ -68,6 +67,10 @@
 
   , pause: function (e) {
       if (!e) this.paused = true
+      if (this.$element.find('.next, .prev').length && $.support.transition.end) {
+        this.$element.trigger($.support.transition.end)
+        this.cycle()
+      }
       clearInterval(this.interval)
       this.interval = null
       return this
@@ -84,19 +87,23 @@
     }
 
   , slide: function (type, next) {
-      var $active = this.$element.find('.active')
+      var $active = this.$element.find('.item.active')
         , $next = next || $active[type]()
         , isCycling = this.interval
         , direction = type == 'next' ? 'left' : 'right'
         , fallback  = type == 'next' ? 'first' : 'last'
         , that = this
-        , e = $.Event('slide')
+        , e
 
       this.sliding = true
 
       isCycling && this.pause()
 
       $next = $next.length ? $next : this.$element.find('.item')[fallback]()
+
+      e = $.Event('slide', {
+        relatedTarget: $next[0]
+      })
 
       if ($next.hasClass('active')) return
 
@@ -133,14 +140,17 @@
  /* CAROUSEL PLUGIN DEFINITION
   * ========================== */
 
+  var old = $.fn.carousel
+
   $.fn.carousel = function (option) {
     return this.each(function () {
       var $this = $(this)
         , data = $this.data('carousel')
         , options = $.extend({}, $.fn.carousel.defaults, typeof option == 'object' && option)
+        , action = typeof option == 'string' ? option : options.slide
       if (!data) $this.data('carousel', (data = new Carousel(this, options)))
       if (typeof option == 'number') data.to(option)
-      else if (typeof option == 'string' || (option = options.slide)) data[option]()
+      else if (action) data[action]()
       else if (options.interval) data.cycle()
     })
   }
@@ -153,17 +163,23 @@
   $.fn.carousel.Constructor = Carousel
 
 
+ /* CAROUSEL NO CONFLICT
+  * ==================== */
+
+  $.fn.carousel.noConflict = function () {
+    $.fn.carousel = old
+    return this
+  }
+
  /* CAROUSEL DATA-API
   * ================= */
 
-  $(function () {
-    $('body').on('click.carousel.data-api', '[data-slide]', function ( e ) {
-      var $this = $(this), href
-        , $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
-        , options = !$target.data('modal') && $.extend({}, $target.data(), $this.data())
-      $target.carousel(options)
-      e.preventDefault()
-    })
+  $(document).on('click.carousel.data-api', '[data-slide]', function (e) {
+    var $this = $(this), href
+      , $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
+      , options = $.extend({}, $target.data(), $this.data())
+    $target.carousel(options)
+    e.preventDefault()
   })
 
 }(window.jQuery);

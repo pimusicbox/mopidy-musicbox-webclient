@@ -319,6 +319,7 @@ function updateStatusOfAll() {
     mopidy.playback.getRandom().then(processRandom, console.error);
     
     //TODO check offline?
+    
 }
 
 function initSocketevents() {
@@ -479,29 +480,39 @@ $(document).ready(function() {
         $('#' + divid + 'pane').show();
         return false;
     });
+
     if (location.hash.length < 2) {
         switchContent("playlists");
     }
-    
+        
     // disable closing of modal boxes
-    $('#offlinemodal').modal({
+/*    $('#loadingmodalbox').modal({
         backdrop: 'static',
         keyboard: false
     })
-    $('#loadingmodal').modal({
+
+    $('#offlinemodalbox').modal({
         backdrop: 'static',
         keyboard: false
     })
+*/
+
+//only show backbutton if in UIWebview 
+    if( window.navigator.standalone ) {
+        $("#back").show();
+    }
+
     
 
     //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;
     //update gui every x seconds from mopdidy
-    //  setInterval(updateStatusOfAll, 5000);
+    setInterval(updateStatusOfAll, 5000);
 });
 
 function backbt() {
     history.back();
+    return false;
 }
 
 function toggleSearch() {
