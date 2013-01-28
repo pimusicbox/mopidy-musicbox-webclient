@@ -6,6 +6,7 @@
 var mopidy;
 
 function showartist(nwuri) {
+    $("#controlsmodal").modal('hide');
     $(ARTIST_TABLE).empty();
     //fill from cache
     var pl = getTracksFromUri(nwuri);
@@ -24,6 +25,7 @@ function showartist(nwuri) {
 }
 
 function showalbum(uri) {
+    $("#controlsmodal").modal('hide');
     $(ALBUM_TABLE).empty();
     //fill from cache
     var pl = getTracksFromUri(uri);
@@ -61,11 +63,8 @@ function expandSonginfo() {
 
 function resizeSonginfo() {
     $("#infoname").html(songname);
-
-    $("#infoartist").html(artistshtml);
-
-    if ((artiststext.length > 90) || (songname.length > 60)) {
-        $("#infoartist").html(artiststext);
+    if ((artiststext.length > 90) || (songname.length > 50)) {
+        $("#infoartist").html( artiststext);
         //bug in truncate?
         var spanwidth = $("#infoartist").width() - 1;
         $("#infoname").truncate({
@@ -80,15 +79,20 @@ function resizeSonginfo() {
             center : true,
             multiline : false
         });
+        $("#infoartist").html('<a href="#" onclick="showControls(); return false">' + $("#infoartist").html() + '</a>');
+    } else {
+        $("#infoartist").html(artistshtml);
     }
 }
 
 function setSongInfo(data) {
-    //console.log(data);
 
     artistshtml = '';
     artiststext = '';
     songname = data.name;
+    if (songname == '') {
+        return
+    };
 
     for (var j = 0; j < data.artists.length; j++) {
         artistshtml += '<a href="#" onclick="return showartist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
@@ -98,6 +102,17 @@ function setSongInfo(data) {
             artiststext += ', ';
         }
     }
+
+    if (data.album) {
+        $("#modalalbum").html('Album: <a href="#" onclick="return showalbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
+    }
+    $("#modalname").html(songname);
+    var arttmp = 'Artist';
+
+    if (data.artists.length > 1) {
+        arttmp += 's';
+    }
+    $("#modalartist").html(arttmp + ': ' + artistshtml);
 
     $("#trackslider").attr("max", data.length);
     $("#songlength").html(timeFromSeconds(data.length / 1000));
@@ -154,11 +169,10 @@ function initSearch() {
         $('#artistresultloader').show();
         $('#allresultloader').show();
         $('#albumresultloader').show();
-    
+
         $('#artistresulttable').empty();
         $('#albumresulttable').empty();
         $('#trackresulttable').empty();
-    
         delete customTracklists['allresultscache'];
         delete customTracklists['artistresultscache'];
         delete customTracklists['albumresultscache'];
@@ -176,10 +190,10 @@ function doMute() {
     if (muteVolume == -1) {
         $("#mutebt").attr('src', 'img/icons/volume_mute_24x18.png');
         muteVolume = currentVolume;
-        mopidy.playback.setVolume(0);
+        mopidy.playback.setVolume(0).then();
     } else {
         $("#mutebt").attr('src', 'img/icons/volume_24x18.png');
-        mopidy.playback.setVolume(muteVolume);
+        mopidy.playback.setVolume(muteVolume).then();
         muteVolume = -1;
     }
 
@@ -242,6 +256,7 @@ function doRepeat() {
 
 function doVolume(value) {
     if (!initgui) {
+        console.log('volume: ' + value);
         mopidy.playback.setVolume(value);
     }
 }
@@ -266,22 +281,22 @@ function triggerPos() {
 }
 
 function getPlaylists() {
-/********************************************************
- *  get playlists without tracks
- ********************************************************/
+    /********************************************************
+     *  get playlists without tracks
+     ********************************************************/
     mopidy.playlists.getPlaylists(false).then(processGetPlaylists, console.error);
 }
 
 function showTracklist(uri) {
-/********************************************************
- * Show tracks of playlist
- ********************************************************/
+    /********************************************************
+     * Show tracks of playlist
+     ********************************************************/
     $(PLAYLIST_TABLE).empty();
     $('#playlisttablediv').show();
     $('#playlistloader').show();
 
     var pl = getPlaylistFromUri(uri);
-//    console.log (pl);
+    //    console.log (pl);
     //load from cache
     if (pl) {
         playlisttotable(pl.tracks, PLAYLIST_TABLE, uri);
@@ -289,7 +304,9 @@ function showTracklist(uri) {
 
     //scroll to tracklist
     var divtop = $("#playlisttablediv").offset().top - 80;
-    $('body,html').animate({scrollTop: divtop}, 250);
+    $('body,html').animate({
+        scrollTop : divtop
+    }, 250);
 
     //lookup recent tracklist
     mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);
@@ -317,9 +334,11 @@ function updateStatusOfAll() {
 
     mopidy.playback.getRepeat().then(processRepeat, console.error);
     mopidy.playback.getRandom().then(processRandom, console.error);
-    
+
+    mopidy.playback.getVolume().then(processVolume, console.error);
+
     //TODO check offline?
-    
+
 }
 
 function initSocketevents() {
@@ -356,6 +375,10 @@ function initSocketevents() {
         getPlaylists();
     });
 
+    mopidy.on("event:volumeChanged", function(data) {
+        setVolume(data["volume"]);
+    });
+
     mopidy.on("event:playbackStateChanged", function(data) {
         switch (data["new_state"]) {
             case "stopped":
@@ -376,6 +399,10 @@ function initSocketevents() {
     mopidy.on("event:seeked", function(data) {
         setPosition(parseInt(data["time_position"]));
     });
+}
+
+function showControls() {
+    $("#controlsmodal").modal('show');
 }
 
 function setVolume(value) {
@@ -418,7 +445,7 @@ $(document).ready(function() {
     // Connect to server
     mopidy = new Mopidy();
     // Log all events
-    //mopidy.on(function () { console.log(arguments); });
+    mopidy.on(function () { console.log(arguments); });
     //initialize events
     initSocketevents();
 
@@ -431,8 +458,6 @@ $(document).ready(function() {
     });
 
     resetSong();
-    //TODO
-    //setVolume(50);
 
     //history
     // Bind an event to window.onhashchange that, when the hash changes, gets the
@@ -443,7 +468,7 @@ $(document).ready(function() {
         //remove #
         var divid = hash[0].substr(1);
         var uri = hash[1];
-//        console.log(divid + ': ' + uri);
+        //        console.log(divid + ': ' + uri);
         switch(divid) {
             case 'current':
                 break;
@@ -484,25 +509,22 @@ $(document).ready(function() {
     if (location.hash.length < 2) {
         switchContent("playlists");
     }
-        
+
     // disable closing of modal boxes
-/*    $('#loadingmodalbox').modal({
-        backdrop: 'static',
-        keyboard: false
+    $('#loadingmodal').modal({
+    backdrop: 'static',
+    keyboard: false
     })
 
-    $('#offlinemodalbox').modal({
-        backdrop: 'static',
-        keyboard: false
+    $('#offlinemodal').modal({
+    backdrop: 'static',
+    keyboard: false
     })
-*/
 
-//only show backbutton if in UIWebview 
-    if( window.navigator.standalone ) {
+    //only show backbutton if in UIWebview
+    if (window.navigator.standalone) {
         $("#back").show();
     }
-
-    
 
     //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;

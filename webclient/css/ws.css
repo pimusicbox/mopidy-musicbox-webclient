@@ -28,9 +28,10 @@
 }
 
 #controlbt {
-    margin-top: -2px;
+    margin-top: -5px;
     height: 30px;
-    width: 140px;
+    width: 174px;
+    left: -10px;
 }
 
 #controlbt img {
@@ -39,7 +40,6 @@
 
 
 #back {
-    margin-left: -20px;
     margin-right: 5px;
 }
 
@@ -142,6 +142,10 @@ body {
     font-size: 14px;
     text-shadow: 1px 1px #555;
     /*    border: 1px solid white;  */
+}
+
+#songinfo {
+    margin-top: 10px;
 }
 
 #infoartist {

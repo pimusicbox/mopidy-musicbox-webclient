@@ -12,7 +12,6 @@ function playtrack(uri, playlisturi) {
     var trackslist = new Array();
     var track;
     switchContent('current', uri);
-    mopidy.playback.stop(true);
     var tracks = getTracksFromUri(playlisturi);
     if (tracks) {
         $(CURRENT_PLAYLIST_TABLE).empty();
@@ -21,6 +20,7 @@ function playtrack(uri, playlisturi) {
     } else {
         tracks = currentplaylist;
     }
+    mopidy.playback.stop(true);
 
     for (var i = 0; i < tracks.length; i++) {
         if (tracks[i].uri == uri) {
@@ -28,7 +28,6 @@ function playtrack(uri, playlisturi) {
             break;
         }
     }
-    console.log(track);
     for (var i = 0; i < track; i++) {
         mopidy.playback.next();
     }
@@ -42,6 +41,14 @@ function playtrack(uri, playlisturi) {
  *********************************************************/
 function processCurrenttrack(data) {
     setSongInfo(data);
+}
+
+/********************************************************
+ * process results of volume
+ *********************************************************/
+function processVolume(data) {
+            console.log('getvolume: ' + data);
+    setVolume(data);
 }
 
 /********************************************************
@@ -110,8 +117,6 @@ function processGetTracklist(resultArr) {
     var newplaylisturi = resultArr.uri;
     playlists[newplaylisturi] = resultArr;
     playlisttotable(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
-    
-    $('body,html').scrollTop($("#playlistspane").offset().top - 100);
     $('#playlistloader').hide();
 }
 
