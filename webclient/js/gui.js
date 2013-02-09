@@ -3,46 +3,9 @@
  * do- functions interact with the server
  * show- functions do both
  */
-var mopidy;
-
-function showartist(nwuri) {
-    $("#controlsmodal").modal('hide');
-    $(ARTIST_TABLE).empty();
-    //fill from cache
-    var pl = getTracksFromUri(nwuri);
-    if (pl) {
-        playlisttotable(pl, ARTIST_TABLE, nwuri)
-        $('#h_artistname').html(getArtist(pl));
-        mopidy.library.lookup(nwuri).then(processArtistResults, console.error);
-    } else {
-        $('#h_artistname').html('');
-        $('#artistsloader').show();
-        mopidy.library.lookup(nwuri).then(processArtistResults, console.error);
-    }
-    //show
-    switchContent('artists', nwuri);
-    return false;
-}
-
-function showalbum(uri) {
-    $("#controlsmodal").modal('hide');
-    $(ALBUM_TABLE).empty();
-    //fill from cache
-    var pl = getTracksFromUri(uri);
-    if (pl) {
-        playlisttotable(pl, ALBUM_TABLE, uri)
-        $('#h_albumname').html(getAlbum(pl));
-        $('#h_albumartist').html(getArtist(pl));
-        mopidy.library.lookup(uri).then(processAlbumResults, console.error);
-    } else {
-        $('#h_albumname').html('');
-        $('#h_albumartist').html('');
-        $('#albumsloader').show();
-        mopidy.library.lookup(uri).then(processAlbumResults, console.error);
-    }
-    //show
-    switchContent('albums', uri);
-    return false;
+function showAlbumPopup() {
+    uri = $('#popupTracks').data("track");
+    showAlbum(popupData[uri].album.uri);
 }
 
 function resetSong() {
@@ -64,7 +27,7 @@ function expandSonginfo() {
 function resizeSonginfo() {
     $("#infoname").html(songname);
     if ((artiststext.length > 90) || (songname.length > 50)) {
-        $("#infoartist").html( artiststext);
+        $("#infoartist").html(artiststext);
         //bug in truncate?
         var spanwidth = $("#infoartist").width() - 1;
         $("#infoname").truncate({
@@ -79,7 +42,7 @@ function resizeSonginfo() {
             center : true,
             multiline : false
         });
-        $("#infoartist").html('<a href="#" onclick="showControls(); return false">' + $("#infoartist").html() + '</a>');
+        $("#infoartist").html('<a href="#controlsmodal" data-rel="popup">' + $("#infoartist").html() + '</a>');
     } else {
         $("#infoartist").html(artistshtml);
     }
@@ -95,7 +58,7 @@ function setSongInfo(data) {
     };
 
     for (var j = 0; j < data.artists.length; j++) {
-        artistshtml += '<a href="#" onclick="return showartist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
+        artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
         artiststext += data.artists[j].name;
         if (j != data.artists.length - 1) {
             artistshtml += ', ';
@@ -104,7 +67,7 @@ function setSongInfo(data) {
     }
 
     if (data.album) {
-        $("#modalalbum").html('Album: <a href="#" onclick="return showalbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
+        $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
     }
     $("#modalname").html(songname);
     var arttmp = 'Artist';
@@ -119,211 +82,46 @@ function setSongInfo(data) {
 
     resizeSonginfo();
 
-    $('#currenttable tr .name').each(function() {
+    $('#currenttable li').each(function() {
         //console.log(this.className);
         this.className = "name";
         if (this.id == data.uri) {
             this.className += ' currenttrack';
-            //             this.parentNode.parentNode.style.marginLeft="20px";
         }
     });
 }
 
-/* Toggle state of play button */
-function setPlayState(nwplay) {
-    if (nwplay) {
-        $("#playbt").attr('src', 'img/icons/pause_32x32.png');
+function popupTracks (listuri, trackuri) {
+    console.log('list: ' + listuri + ', track: ' + trackuri);
+    $('#popupTrackName').html(popupData[trackuri].name);
+    $('#popupAlbumName').html(popupData[trackuri].album.name);
+    var child = "";
+    if (popupData[trackuri].artists.length == 1) {
+        child += '<a href="#" onclick="showArtist(\'' +popupData[trackuri].artists[0].uri + '\');">Show Artist <span class="popupArtistName">' + popupData[trackuri].artists[0].name + '</span></a>';
+        $('#popupArtistsLi').html(child).show();
+        $('#popupArtistsDiv').hide();
     } else {
-        $("#playbt").attr('src', 'img/icons/play_alt_32x32.png');
-    }
-    play = nwplay;
-}
+        for (var j = 0; j < popupData[trackuri].artists.length; j++) {                
+                child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>';
+        }
+        console.log(child);
+        $('#popupArtistsLi').hide();
+        $('#popupArtistsLv').html(child).show();
+        $('#popupArtistsDiv').show();
+        $('#popupArtistsLv').listview("refresh");
+     }
+    
+    $('#popupTracksLv').listview('refresh');
 
-//play or pause
-function doPlayPause() {
-    if (!play) {
-        mopidy.playback.play().then();
-    } else {
-        mopidy.playback.pause().then();
-    }
-    setPlayState(!play);
-}
-
-/* Initialise search */
-function searchPressed(key) {
-    var value = $('#searchinput').val();
-    switchContent('search');
-
-    if (key == 13) {
-        initSearch();
-        return false;
-    }
-    return true;
-}
-
-//init search
-function initSearch() {
-    var value = $('#searchinput').val();
-
-    if ((value.length < 100) && (value.length > 0)) {
-        $('#artistresultloader').show();
-        $('#allresultloader').show();
-        $('#albumresultloader').show();
-
-        $('#artistresulttable').empty();
-        $('#albumresulttable').empty();
-        $('#trackresulttable').empty();
-        delete customTracklists['allresultscache'];
-        delete customTracklists['artistresultscache'];
-        delete customTracklists['albumresultscache'];
-        delete customTracklists['trackresultscache'];
-        $("#searchresults").hide();
-        mopidy.library.search({
-            any : value
-        }).then(processSearchResults, console.error);
-    }
-}
-
-function doMute() {
-    //only emit the event, not the status
-
-    if (muteVolume == -1) {
-        $("#mutebt").attr('src', 'img/icons/volume_mute_24x18.png');
-        muteVolume = currentVolume;
-        mopidy.playback.setVolume(0).then();
-    } else {
-        $("#mutebt").attr('src', 'img/icons/volume_24x18.png');
-        mopidy.playback.setVolume(muteVolume).then();
-        muteVolume = -1;
-    }
-
-}
-
-function setRepeat(nwrepeat) {
-    if (repeat == nwrepeat) {
-        return
-    }
-    if (!nwrepeat) {
-        $("#repeatbt").attr('src', 'img/icons/reload_alt_18x21.png');
-    } else {
-        $("#repeatbt").attr('src', 'img/icons/reload_18x21.png');
-    }
-    repeat = nwrepeat;
-}
-
-function setRandom(nwrandom) {
-    if (random == nwrandom) {
-        return
-    }
-    if (!nwrandom) {
-        $("#randombt").attr('src', 'img/icons/loop_alt2_24x21.png');
-    } else {
-        $("#randombt").attr('src', 'img/icons/loop_24x24.png');
-    }
-    random = nwrandom;
-}
-
-function doPrevious() {
-    // if position > one second -> go to begin, else go to previous track
-    if (currentposition > 5000) {
-        doSeekPos(0);
-    } else {
-        mopidy.playback.previous();
-    }
-}
-
-function doNext() {
-    mopidy.playback.next();
-}
-
-function doRandom() {
-    if (random == false) {
-        mopidy.playback.setRandom(true);
-    } else {
-        mopidy.playback.setRandom(false);
-    }
-    setRandom(!random);
-}
-
-function doRepeat() {
-    if (repeat == false) {
-        mopidy.playback.setRepeat(true).then();
-    } else {
-        mopidy.playback.setRepeat(false).then();
-    }
-    setRepeat(!repeat);
-}
-
-function doVolume(value) {
-    if (!initgui) {
-        console.log('volume: ' + value);
-        mopidy.playback.setVolume(value);
-    }
-}
-
-function doSeekPos(value) {
-    var val = Math.round(value);
-    if (!initgui) {
-        //set timer to not trigger it too much
-        clearTimeout(seekTimer);
-        seekTimer = setTimeout(triggerPos, 250);
-        //setPlayState(true);
-    }
-}
-
-function triggerPos() {
-    if (mopidy) {
-        mopidy.playback.seek(val);
-    }
-    if (play) {
-        resumeTimer();
-    }
-}
-
-function getPlaylists() {
-    /********************************************************
-     *  get playlists without tracks
-     ********************************************************/
-    mopidy.playlists.getPlaylists(false).then(processGetPlaylists, console.error);
-}
-
-function showTracklist(uri) {
-    /********************************************************
-     * Show tracks of playlist
-     ********************************************************/
-    $(PLAYLIST_TABLE).empty();
-    $('#playlisttablediv').show();
-    $('#playlistloader').show();
-
-    var pl = getPlaylistFromUri(uri);
-    //    console.log (pl);
-    //load from cache
-    if (pl) {
-        playlisttotable(pl.tracks, PLAYLIST_TABLE, uri);
-    }
-
-    //scroll to tracklist
-    var divtop = $("#playlisttablediv").offset().top - 80;
-    $('body,html').animate({
-        scrollTop : divtop
-    }, 250);
-
-    //lookup recent tracklist
-    mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);
+    $('#popupTracks').data("list", listuri).data("track", trackuri).popup( "open", { x: event.pageX, y: event.pageY } );
     return false;
 }
 
-function getCurrentPlaylist() {
-    mopidy.tracklist.getTracks().then(processCurrentPlaylist, console.error);
-}
-
-function setPosition(pos) {
-    var oldval = initgui;
-    currentposition = pos;
-    initgui = true;
-    $("#trackslider").attr("value", currentposition);
-    initgui = oldval;
-    $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
+function scrollToTracklist() {
+    var divtop = $("#playlisttablediv").offset().top - 15;
+    $('body,html').animate({
+        scrollTop : divtop
+    }, 250);
 }
 
 //update everything as if reloaded
@@ -341,20 +139,46 @@ function updateStatusOfAll() {
 
 }
 
+function showLoading(on) {
+    if (on) {
+        $.mobile.loading('show', {
+            text : 'Loading',
+            textVisible : true,
+            theme : 'z',
+            html : "Loading data from the server. Please wait..."
+        });
+    } else {
+        $.mobile.loading('hide');
+    }
+}
+
+function showOffline(on) {
+    if (on) {
+        $.mobile.loading('show', {
+            text : 'Offline',
+            textVisible : true,
+            theme : 'z',
+            html : "Trying to reach the server. Please wait..."
+        });
+    } else {
+        $.mobile.loading('hide');
+    }
+}
+
 function initSocketevents() {
     mopidy.on("state:online", function() {
-        $("#offlinemodal").modal('hide');
-        $("#loadingmodal").modal('show');
+        showOffline(false);
+        showLoading(true);
         getCurrentPlaylist();
         updateStatusOfAll();
         getPlaylists();
-        $("#loadingmodal").modal('show');
+        showLoading(true);
         $(window).hashchange();
     });
 
     mopidy.on("state:offline", function() {
         resetSong();
-        $("#offlinemodal").modal('show');
+        showOffline(true);
     });
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
@@ -371,7 +195,7 @@ function initSocketevents() {
     });
 
     mopidy.on("event:playlistsLoaded", function(data) {
-        $("#loadingmodal").modal('show');
+        showLoading(true);
         getPlaylists();
     });
 
@@ -401,20 +225,13 @@ function initSocketevents() {
     });
 }
 
-function showControls() {
-    $("#controlsmodal").modal('show');
-}
-
-function setVolume(value) {
-    $("#volumeslider").attr("value", value);
-}
-
 function switchContent(divid, uri) {
     var hash = divid;
     if (uri) {
-        hash += "/" + uri;
+        hash += "?" + uri;
     }
-    location.hash = hash;
+//    $.mobile.changePage("#" + hash);
+    location.hash = "#" + hash;
 }
 
 //timer function to update interface
@@ -440,35 +257,14 @@ function pauseTimer() {
 }
 
 
-$(document).ready(function() {
+//$(document).ready(function() {
+$(document).bind("pageinit", function() {
 
-    // Connect to server
-    mopidy = new Mopidy();
-    // Log all events
-    mopidy.on(function () { console.log(arguments); });
-    //initialize events
-    initSocketevents();
-
-    $('.content').hide();
-    $('.sidebar-nav a').bind('click', function(e) {
-        var divid = $(e.target).attr('href').substr(1);
-        var uri = $(divid + "table").attr('data');
-
-        switchContent(divid, uri);
-    });
-
-    resetSong();
-
-    //history
-    // Bind an event to window.onhashchange that, when the hash changes, gets the
-    // hash and adds the class "selected" to any matching nav link.
     $(window).hashchange(function() {
-        var hash = location.hash.split("/");
-
+        var hash = document.location.hash.split('?');
         //remove #
         var divid = hash[0].substr(1);
         var uri = hash[1];
-        //        console.log(divid + ': ' + uri);
         switch(divid) {
             case 'current':
                 break;
@@ -482,44 +278,41 @@ $(document).ready(function() {
                 break;
             case 'artists':
                 if (uri != '') {
-                    showartist(uri);
+                    showArtist(uri);
                 }
                 break;
             case 'albums':
                 if (uri != '') {
-                    showalbum(uri);
+                    showAlbum(uri);
                 }
                 break;
         }
 
         // Set the page title based on the hash.
         //document.title = PROGRAM_NAME;
-
-        $('.content').hide();
-        $('.nav li').removeClass('active');
-        $('#li' + divid).addClass('active');
-
-        $('#' + divid).removeClass('active');
-        $('#' + divid).addClass('active');
-
+        $('.pane').hide();
         $('#' + divid + 'pane').show();
         return false;
     });
 
+    // Connect to server
+    mopidy = new Mopidy();
+    //initialize events
+    initSocketevents();
+
+    $('.pane').hide();
+    $('.sidebar-nav a').bind('click', function(e) {
+        var divid = $(e.target).attr('href').substr(1);
+        var uri = $(divid + "table").attr('data');
+
+        switchContent(divid, uri);
+    });
+
+    resetSong();
+
     if (location.hash.length < 2) {
         switchContent("playlists");
     }
-
-    // disable closing of modal boxes
-    $('#loadingmodal').modal({
-    backdrop: 'static',
-    keyboard: false
-    })
-
-    $('#offlinemodal').modal({
-    backdrop: 'static',
-    keyboard: false
-    })
 
     //only show backbutton if in UIWebview
     if (window.navigator.standalone) {
@@ -528,16 +321,11 @@ $(document).ready(function() {
 
     //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;
+
+    // Log all events
+    mopidy.on(function() {
+        //        console.log(arguments);
+    });
     //update gui every x seconds from mopdidy
-    setInterval(updateStatusOfAll, 5000);
+    // setInterval(updateStatusOfAll, 5000);
 });
-
-function backbt() {
-    history.back();
-    return false;
-}
-
-function toggleSearch() {
-    $("#albumresulttable tr").removeClass('hidden');
-    $("#artistresulttable tr").removeClass('hidden');
-}

@@ -2,138 +2,85 @@
  *
  */
 
-.menutext {
-    vertical-align: bottom;
+/* Responsive stuff */
+
+@media all and (min-width: 50.1em) {
+    .pl-breakpoint.ui-grid-a .ui-block-a { width: 32.95%; }
+    .pl-breakpoint.ui-grid-a .ui-block-b { width: 65.92%; }
+    .pl-breakpoint.ui-grid-a .ui-block-a { clear: left; }
+    .header-breakpoint.ui-grid-b .ui-block-a { width: 19.95%; }
+    .header-breakpoint.ui-grid-b .ui-block-b { width: 39.92%; }
+    .header-breakpoint.ui-grid-b .ui-block-c { width: 39.92%; }
+    .pl-breakpoint.ui-grid-a .ui-block-a { clear: left; }
 }
 
+@media all and (max-width: 50em) {
+    .pl-breakpoint .ui-block-a, 
+    .pl-breakpoint .ui-block-b {
+        width: 100%; 
+        float:none; 
+    }
+    .header-breakpoint .ui-block-a,
+    .header-breakpoint .ui-block-b, 
+    .header-breakpoint .ui-block-c {
+        width: 100%; 
+        float:none; 
+    }
+}
+
+/* Slider */
+
 #trackslider {
-    width: 90%;
+    display: inline;
 }
 
 #slidercontainer {
-    margin-left: 2%;
-    width: 95%;
     margin-top: 5px;
     margin-bottom: 5px;
 }
+/*
+.ui-slider-track {
+    margin-left: 38px;
+    margin-right: 35px;
+}
 
-#mainmenu a {
-    margin-right: 5px;
+.ui-mobile .ui-page .ui-slider-input,
+.ui-mobile .ui-dialog .ui-slider-input {
+    display : none !important;
+}
+*/
+#songelapsed, #songlength {
+    font-size: 10px;
+    margin-top: 12px;
+}
+
+/* Controls */
+
+#controldiv {
+    height: 30px;
+    width: 175px;
+    margin-left: 10px;
     display: inline;
 }
 
-.menutext a:hover {
-    text-decoration: none;
-    text-underline-position: 0;
-}
-
-#controlbt {
-    margin-top: -5px;
-    height: 30px;
-    width: 174px;
-    left: -10px;
-}
-
-#controlbt img {
+#controldiv img {
     margin-left: 5px;
 }
 
+#previmg {
+    margin-top: -100px;
+}   
 
-#back {
+#btplaypause a img {
+    margin-top: 5px;
+}
+
+#btback {
     margin-right: 5px;
 }
 
-a.name, a.album, a.artist {
-    display: block;
-    height: 100%;
-}
 
-body {
-    padding-top: 80px;
-}
-
-@media (max-width: 979px) {
-    body {
-        padding-top: 0px;
-    }
-    .btsquare {
-        display: block;
-    }
-}
-
-@media (min-width: 979px) {
-    .btsquare {
-        display: inline;
-    }
-}
-
-.nobreak, .btsquare {
-    display: inline;
-}
-
-#allresultloader, .loader {
-    display: none;
-}
-
-#playlistslist li {
-    padding: 5px;
-    list-style-type: none;
-}
-
-#playlistslist li:nth-of-type(odd) {
-    background-color: #444;
-}
-
-#playlistslist li:nth-of-type(even) {
-    background-color: #333;
-}
-
-#volumecontainer {
-    margin-top: 3px;
-}
-
-#searchresults {
-    display: none;
-}
-
-.table tr:hover,
-.table th:hover,
-.table td:hover {
-        background-color: #555 !important;
-}
-
-.table th,
-.table td {
-    padding: 8px;
-}
-
-.brand {
-    margin-right: 20px;
-}
-
-.nav img  {
-    padding-top: 16px;
-}
-
-.navbar, .navbar-inner, .container {
-    padding: 0px;
-    margin: 0px;
-}
-
-.breakafter {
-    margin-right: 15px;
-}
-
-.content {
-    display: none;
-}
-
-.currenttrack {
-    font-weight: bold;
-    background-image: url('../img/icons/play_alt_16x16.png');
-    background-repeat: no-repeat;
-    padding-left: 20px;
-}
+/* Song information */
 
 #infoname {
     overflow: hidden;
@@ -145,7 +92,7 @@ body {
 }
 
 #songinfo {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 #infoartist {
@@ -153,8 +100,55 @@ body {
     color: #aaa;
     font-size: 11px;
     text-shadow: 1px 1px #333;
+    margin: 2px;
 }
 
-#playlistpane {
-    visibility: hidden;
+/* div */ 
+body {
+ /*   padding-top: 80px;
+/*    background-image:url('../iages/Chrisdesign_LP_Guitar_black.web.png');
+    background-attachment: fixed;
+    background-repeat:no-repeat;
+    background-position:right;
+*/
 }
+
+.nobreak, .btsquare {
+    display: inline !important;
+}
+
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
+}
+
+.hidden, #allresultloader, .loader {
+    display: none;
+}
+
+#searchresults {
+    display: none;
+}
+
+.breakafter {
+    margin-right: 15px;
+}
+
+#currentpane, #searchpane, #albumspane, #artistspane {
+    display: none;
+}
+
+/*.currenttrack {
+    font-weight: bold;
+    background-image: url('../img/icons/play_alt_16x16.png');
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}*/
+
+#popupTrackName, #popupAlbumName, .popupArtistName {
+    font-style:oblique;
+}
+
