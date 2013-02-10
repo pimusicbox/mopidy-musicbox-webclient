@@ -44,6 +44,17 @@ SEARCH_ALL_TABLE = '#allresulttable';
 SEARCH_ALBUM_TABLE = '#albumresulttable';
 SEARCH_ARTIST_TABLE = '#artistresulttable';
 SEARCH_TRACK_TABLE = '#trackresulttable';
+TRACK_TIMER = 500;
+
+/*******
+ *
+ */
+function scrollToTracklist() {
+    var divtop = $("#playlisttablediv").offset().top - 15;
+    $('body,html').animate({
+        scrollTop : divtop
+    }, 250);
+}
 
 //A hack to find the name of the first artist of a playlist. this is not yet returned by mopidy
 //does not work wel with multiple artists of course
@@ -70,7 +81,7 @@ function getAlbum(pl) {
 function playlisttotable(pl, table, uri) {
     var tmp = '';
     $(table).html('');
-    //    console.log(pl);
+
     var child = '';
     for (var i = 0; i < pl.length; i++) {
         /*        var child = '<li><a href="#" class="name" id="' + pl[i].uri + '"><h2>' + pl[i].name + "</h2></a>";
@@ -92,31 +103,31 @@ function playlisttotable(pl, table, uri) {
          tmp += child;
          */
         popupData[pl[i].uri] = pl[i];
-        
-        child ='<li><a href="#" onclick="return popupTracks(\'' + uri + '\',\'' + pl[i].uri + '\');">';
+
+        child = '<li id="' + pl[i].uri + '"><a href="#" onclick="return popupTracks(\'' + uri + '\',\'' + pl[i].uri + '\');">';
+        child += '<h1>' + pl[i].name + "</h1>";
         child += '<p>';
         child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>';
         // <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
         for (var j = 0; j < pl[i].artists.length; j++) {
             child += pl[i].artists[j].name;
+            child += (j == pl[i].artists.length - 1) ?  '' : ' / ';
             //stop after 3
             if (j > 2) {
                 child += '...';
                 break;
             }
         }
-        child += '</p>';
-        child += '<h1>' + pl[i].name + "</h1>";
+        child += ' / <em>' + pl[i].album.name + '</em></p>';
 
-        child += '<p>' + pl[i].album.name + '</p>';
+//        child += '<p>' + pl[i].album.name + '</p>';
         child += '</a></li>';
         tmp += child;
     };
-     //   console.log(tmp);
 
     $(table).html(tmp);
     $(table).attr('data', uri);
-    //    console.log(tmp);
+
     //create (for new tables)
 //    $(table).listview().trigger("create");
     //refresh
@@ -130,7 +141,8 @@ function albumtrackstotable(pl, table, uri) {
     for (var i = 0; i < pl.length; i++) {
         popupData[pl[i].uri] = pl[i];
         child = '<li><a href="#" onclick="return popupTracks(\'' + uri + '\',\'' + pl[i].uri + '\');">';
-        child += '<span style="float: right;"><p>' + timeFromSeconds(pl[i].length / 1000) + '</p></span><h1>' + pl[i].name + '</h1></a></li>';
+        child += '<p style="float:right; display: inline;">' + timeFromSeconds(pl[i].length / 1000) + 
+            '</p><h1>' + pl[i].name + '</h1></a></li>';
         tmp += child;
     };
     $(table).html(tmp);

@@ -9358,7 +9358,7 @@ $.widget( "mobile.slider", $.mobile.widget, {
 
 		var pxStep, percent,
 			control = this.element,
-			isInput = this.isToggleSwitch,
+			isInput = !this.isToggleSwitch,
 			optionElements = isInput ? [] : control.find( "option" ),
 			min =  isInput ? parseFloat( control.attr( "min" ) ) : 0,
 			max = isInput ? parseFloat( control.attr( "max" ) ) : optionElements.length - 1,
@@ -9387,11 +9387,6 @@ $.widget( "mobile.slider", $.mobile.widget, {
 				val = isInput ? parseFloat( control.val() || 0 ) : control[0].selectedIndex;
 			}
 			percent = ( parseFloat( val ) - min ) / ( max - min ) * 100;
-            console.log('pc: ' + percent);
-            console.log('val: ' + val);
-                        console.log('max: ' + max);
-                        console.log('min: ' + min);
-
 		}
 
 		if ( isNaN( percent ) ) {

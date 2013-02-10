@@ -1,6 +1,6 @@
 /*********************************
  * Search
- */
+ *********************************/
 function searchPressed(key) {
     var value = $('#searchinput').val();
     switchContent('search');
@@ -90,12 +90,10 @@ function toggleSearch() {
 
 /*********************************
  * Playlists
- */
+ *********************************/
 
 function getPlaylists() {
-    /********************************************************
-     *  get playlists without tracks
-     ********************************************************/
+    //  get playlists without tracks
     mopidy.playlists.getPlaylists(false).then(processGetPlaylists, console.error);
 }
 

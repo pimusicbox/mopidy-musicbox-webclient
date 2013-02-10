@@ -95,7 +95,7 @@ function processGetTracklist(resultArr) {
  *********************************************************/
 function processCurrentPlaylist(resultArr) {
     currentplaylist = resultArr;
-    playlisttotable(resultArr, CURRENT_PLAYLIST_TABLE);
+    playlisttotable(resultArr, CURRENT_PLAYLIST_TABLE);   
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
 }
 

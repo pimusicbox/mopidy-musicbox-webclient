@@ -2,7 +2,7 @@
  * play an uri from a trackslist or the current playlist
  *********************************************************/
 function playTrack() {
-//function playtrack(uri, playlisturi) {
+    //function playtrack(uri, playlisturi) {
     playlisturi = $('#popupTracks').data("list");
     uri = $('#popupTracks').data("track");
     //console.log(uri);
@@ -12,9 +12,9 @@ function playTrack() {
     switchContent('current', uri);
     var tracks = getTracksFromUri(playlisturi);
     if (tracks) {
-        $(CURRENT_PLAYLIST_TABLE).empty();
         mopidy.tracklist.clear();
         mopidy.tracklist.add(tracks);
+        $(CURRENT_PLAYLIST_TABLE).empty();
     } else {
         tracks = currentplaylist;
     }
@@ -34,6 +34,9 @@ function playTrack() {
     return false;
 }
 
+/**********************
+ * Buttons
+ */
 
 /* Toggle state of play button */
 function setPlayState(nwplay) {
@@ -55,20 +58,29 @@ function doPlayPause() {
     setPlayState(!play);
 }
 
-function doMute() {
-    //only emit the event, not the status
-
-    if (muteVolume == -1) {
-        $("#mutebt").attr('src', 'images/icons/volume_mute_24x18.png');
-        muteVolume = currentVolume;
-        mopidy.playback.setVolume(0).then();
+function doPrevious() {
+    // if position > 2 seconds -> go to begin, else go to previous track
+    if (currentposition > 2000) {
+        doSeekPos(0);
     } else {
-        $("#mutebt").attr('src', 'images/icons/volume_24x18.png');
-        mopidy.playback.setVolume(muteVolume).then();
-        muteVolume = -1;
+        mopidy.playback.previous();
     }
-
 }
+
+function doNext() {
+    mopidy.playback.next();
+}
+
+function backbt() {
+        $(CURRENT_PLAYLIST_TABLE).listview('refresh');
+
+    //history.back();
+    return false;
+}
+
+/***************
+ * Options
+ */
 
 function setRepeat(nwrepeat) {
     if (repeat == nwrepeat) {
@@ -94,19 +106,6 @@ function setRandom(nwrandom) {
     random = nwrandom;
 }
 
-function doPrevious() {
-    // if position > 2 seconds -> go to begin, else go to previous track
-    if (currentposition > 2000) {
-        doSeekPos(0);
-    } else {
-        mopidy.playback.previous();
-    }
-}
-
-function doNext() {
-    mopidy.playback.next();
-}
-
 function doRandom() {
     if (random == false) {
         mopidy.playback.setRandom(true);
@@ -125,17 +124,12 @@ function doRepeat() {
     setRepeat(!repeat);
 }
 
-function doVolume(value) {
-    if (!initgui) {
-        console.log('volume: ' + value);
-        mopidy.playback.setVolume(value);
-    }
-}
+/*********************
+ * Track Slider
+ *********************/
 
 function doSeekPos(value) {
     var val = $("#trackslider").val();
-    console.log('value: ' + value);
-    console.log('val: ' + val);
     val = Math.round(val);
     if (!initgui) {
         //set timer to not trigger it too much
@@ -146,6 +140,7 @@ function doSeekPos(value) {
 }
 
 function triggerPos(val) {
+    console.log(val);
     if (mopidy) {
         mopidy.playback.seek(val);
     }
@@ -163,11 +158,34 @@ function setPosition(pos) {
     $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
 }
 
+/********************
+ * Volume
+ */
+
 function setVolume(value) {
-    $("#volumeslider").attr("value", value);
+    var oldval = initgui;
+    initgui = true;
+    $("#volumeslider").val(value).slider('refresh');
+    initgui = oldval;
 }
 
-function backbt() {
-    history.back();
-    return false;
+function doVolume(value) {
+    if (!initgui) {
+        console.log('volume: ' + value);
+        mopidy.playback.setVolume(value);
+    }
+}
+
+function doMute() {
+    //only emit the event, not the status
+    if (muteVolume == -1) {
+        $("#mutebt").attr('src', 'images/icons/volume_mute_24x18.png');
+        muteVolume = currentVolume;
+        mopidy.playback.setVolume(0).then();
+    } else {
+        $("#mutebt").attr('src', 'images/icons/volume_24x18.png');
+        mopidy.playback.setVolume(muteVolume).then();
+        muteVolume = -1;
+    }
+
 }

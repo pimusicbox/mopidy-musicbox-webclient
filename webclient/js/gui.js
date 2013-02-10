@@ -3,11 +3,9 @@
  * do- functions interact with the server
  * show- functions do both
  */
-function showAlbumPopup() {
-    uri = $('#popupTracks').data("track");
-    showAlbum(popupData[uri].album.uri);
-}
-
+/********************
+ * Song Info Sreen
+ ********************/
 function resetSong() {
     pauseTimer();
     setPlayState(false);
@@ -21,7 +19,6 @@ function resetSong() {
 }
 
 function expandSonginfo() {
-
 }
 
 function resizeSonginfo() {
@@ -49,7 +46,6 @@ function resizeSonginfo() {
 }
 
 function setSongInfo(data) {
-
     artistshtml = '';
     artiststext = '';
     songname = data.name;
@@ -77,20 +73,27 @@ function setSongInfo(data) {
     }
     $("#modalartist").html(arttmp + ': ' + artistshtml);
 
+    $("#trackslider").attr("min", 0);
     $("#trackslider").attr("max", data.length);
     $("#songlength").html(timeFromSeconds(data.length / 1000));
 
     resizeSonginfo();
 
-    $('#currenttable li').each(function() {
+    $('#currenttable li').each(
+    function() {
         //console.log(this.className);
-        this.className = "name";
+        $(this).removeClass("currenttrack");
         if (this.id == data.uri) {
-            this.className += ' currenttrack';
+            $(this).addClass('currenttrack');
         }
     });
 }
 
+/***************
+ * display popup
+ * @param {Object} listuri
+ * @param {Object} trackuri
+ */
 function popupTracks (listuri, trackuri) {
     console.log('list: ' + listuri + ', track: ' + trackuri);
     $('#popupTrackName').html(popupData[trackuri].name);
@@ -117,28 +120,14 @@ function popupTracks (listuri, trackuri) {
     return false;
 }
 
-function scrollToTracklist() {
-    var divtop = $("#playlisttablediv").offset().top - 15;
-    $('body,html').animate({
-        scrollTop : divtop
-    }, 250);
+function showAlbumPopup() {
+    uri = $('#popupTracks').data("track");
+    showAlbum(popupData[uri].album.uri);
 }
 
-//update everything as if reloaded
-function updateStatusOfAll() {
-    mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
-    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-    mopidy.playback.getState().then(processPlaystate, console.error);
-
-    mopidy.playback.getRepeat().then(processRepeat, console.error);
-    mopidy.playback.getRandom().then(processRandom, console.error);
-
-    mopidy.playback.getVolume().then(processVolume, console.error);
-
-    //TODO check offline?
-
-}
-
+/*****************
+ * Modal dialogs
+ *****************/
 function showLoading(on) {
     if (on) {
         $.mobile.loading('show', {
@@ -164,6 +153,10 @@ function showOffline(on) {
         $.mobile.loading('hide');
     }
 }
+
+/*********************
+ * initialize sockets
+ *********************/
 
 function initSocketevents() {
     mopidy.on("state:online", function() {
@@ -225,30 +218,25 @@ function initSocketevents() {
     });
 }
 
-function switchContent(divid, uri) {
-    var hash = divid;
-    if (uri) {
-        hash += "?" + uri;
-    }
-//    $.mobile.changePage("#" + hash);
-    location.hash = "#" + hash;
-}
+/*******
+ * Track timer 
+ */
 
 //timer function to update interface
 function updateTimer() {
-    currentposition += 100;
+    currentposition += TRACK_TIMER;
     setPosition(currentposition);
     //    $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
 }
 
 function resumeTimer() {
     pauseTimer();
-    posTimer = setInterval(updateTimer, 100);
+    posTimer = setInterval(updateTimer, TRACK_TIMER);
 }
 
 function initTimer() {
     pauseTimer();
-    setPosition(0);
+   // setPosition(0);
     resumeTimer();
 }
 
@@ -256,7 +244,9 @@ function pauseTimer() {
     clearInterval(posTimer);
 }
 
-
+/**********************
+ * initialize software
+ **********************/
 //$(document).ready(function() {
 $(document).bind("pageinit", function() {
 
@@ -327,5 +317,31 @@ $(document).bind("pageinit", function() {
         //        console.log(arguments);
     });
     //update gui every x seconds from mopdidy
-    // setInterval(updateStatusOfAll, 5000);
+    setInterval(updateStatusOfAll, 5000);
 });
+
+/************************
+ * diverse
+ ************************/
+function switchContent(divid, uri) {
+    var hash = divid;
+    if (uri) {
+        hash += "?" + uri;
+    }
+//    $.mobile.changePage("#" + hash);
+    location.hash = "#" + hash;
+}
+
+//update everything as if reloaded
+function updateStatusOfAll() {
+    mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
+    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
+    mopidy.playback.getState().then(processPlaystate, console.error);
+
+    mopidy.playback.getRepeat().then(processRepeat, console.error);
+    mopidy.playback.getRandom().then(processRandom, console.error);
+
+    mopidy.playback.getVolume().then(processVolume, console.error);
+
+    //TODO check offline?
+}

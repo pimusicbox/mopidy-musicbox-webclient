@@ -39,12 +39,14 @@
                 <br/>
                 <div id="modalalbum"></div>
                 <div class="">
-                    <a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
+                    <p><a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
                     &nbsp; <a href="#" onclick="doRepeat(); return false"><img src="images/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
                     <br/>
                     <br/>
                     <a href="#" onclick="doMute(); return false;"><img id="mutebt" src="images/icons/volume_16x12.png" alt="" /></a>
-                    <input id="volumeslider"  data-mini="true" type="range" min="0" value="0" max="100" onchange="doVolume(this.value);" class="nobreak" />
+                    <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
+                    <input id="volumeslider" name="volumeslider" data-mini="true" type="range" min="0" value="0" max="100" onchange="doVolume(this.value);" class="nobreak" />
+                    </p>
                 </div>
                 <div class="">
                     <a href="#" class="" >Close</a>
@@ -52,7 +54,7 @@
             </div>
 
             <div data-role="popup" data-transition="pop" id="popupTracks">
-                <div data-role="collapsible-set" data-theme="c" data-content-theme="d" style="margin:0;">
+                <div data-role="collapsible-set">
                     <ul data-role="listview" data-inset="true" data-icon="false" id="popupTracksLv" style="min-width:210px;">
                         <!-- <li data-role="divider">
                         Track
@@ -96,15 +98,15 @@
                 <div id="slidercontainer" class="ui-block-c">
                     <span id="songelapsed" class="pull-left"> 0:00 </span>
                     <span id="songlength" class="pull-right"> 0:00 </span>
+                    <label for="trackslider"  class="ui-hidden-accessible">Position</label>
                     <input id="trackslider" name="trackslider" data-mini="true" type="range" onmousedown="pauseTimer();" onchange="doSeekPos(this.value);" class="nobreak" />
-
                 </div>
 
             </div><!-- /header -->
 
             <div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
                 <div class="ui-block-a">
-                    <ul id="playlistslist" data-icon="false" data-role="listview" data-filter="true"></ul>
+                    <ul id="playlistslist" data-icon="false" data-inset="true" data-role="listview" data-filter="true"></ul>
                 </div>
                 <div class="ui-block-b" id="playlisttablediv">
                     <ul data-role="listview"  data-icon="false" id="playlisttable" data-inset="true" data-filter="true"></ul>
@@ -116,7 +118,6 @@
             <div data-role="content" class="pane" id="currentpane">
                 <h4>Play Queue</h4>
                 <ul data-role="listview" data-icon="false" data-inset="true" id="currenttable"></ul>
-
                 <img src="images/loader.gif" id="currentloader" class= "loader" />
             </div>
 
