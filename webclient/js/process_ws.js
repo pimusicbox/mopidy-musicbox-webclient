@@ -74,7 +74,7 @@ function processGetPlaylists(resultArr) {
     $('#playlistslist').empty();
     $('#playlistslist').html(tmp);
     $('#playlistslist').listview('refresh');
-    $('#playlistsloader').hide();
+//    $('#playlistsloader').hide();
     showLoading(false);
 }
 
@@ -86,7 +86,8 @@ function processGetTracklist(resultArr) {
     var newplaylisturi = resultArr.uri;
     playlists[newplaylisturi] = resultArr;
     playlisttotable(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
-    $('#playlistloader').hide();
+//    $('#playlistloader').hide();
+    showLoading(false);
     scrollToTracklist();
 }
 
@@ -129,7 +130,8 @@ function processArtistResults(resultArr) {
         }
     }
     $('#h_artistname').html(getArtist(resultArr));
-    $('#artistsloader').hide();
+//    $('#artistsloader').hide();
+    showLoading(false);
 }
 
 
@@ -141,5 +143,6 @@ function processAlbumResults(resultArr) {
     albumtrackstotable(resultArr, ALBUM_TABLE, resultArr.uri);
     $('#h_albumname').html(getAlbum(resultArr));
     $('#h_albumartist').html(getArtist(resultArr));
-    $('#albumsloader').hide();
+    showLoading(false);
+//    $('#albumsloader').hide();
 }

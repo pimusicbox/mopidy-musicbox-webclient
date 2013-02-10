@@ -131,10 +131,9 @@ function showAlbumPopup() {
 function showLoading(on) {
     if (on) {
         $.mobile.loading('show', {
-            text : 'Loading',
+            text : 'Loading data from the server. Please wait...',
             textVisible : true,
-            theme : 'z',
-            html : "Loading data from the server. Please wait..."
+            theme : 'a'
         });
     } else {
         $.mobile.loading('hide');
@@ -144,10 +143,9 @@ function showLoading(on) {
 function showOffline(on) {
     if (on) {
         $.mobile.loading('show', {
-            text : 'Offline',
+            text : 'Offline - Trying to reach the server. Please wait...',
             textVisible : true,
-            theme : 'z',
-            html : "Trying to reach the server. Please wait..."
+            theme : 'a'
         });
     } else {
         $.mobile.loading('hide');
@@ -257,11 +255,14 @@ $(document).bind("pageinit", function() {
         var uri = hash[1];
         switch(divid) {
             case 'current':
+                $('#navcurrent').addClass("ui-btn-active ui-state-persist");
                 break;
             case 'playlists':
+                $('#navplaylists').addClass("ui-btn-active ui-state-persist");
                 break;
             case 'search':
-                $("div.searchpane input").focus();
+                $('#navsearch').addClass("ui-btn-active ui-state-persist");
+                $("#searchinput").focus();
                 if (customTracklists['allresultscache'] == '') {
                     initSearch($('#searchinput').val());
                 }
