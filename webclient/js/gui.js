@@ -306,7 +306,9 @@ $(document).bind("pageinit", function() {
 
     //only show backbutton if in UIWebview
     if (window.navigator.standalone) {
-        $("#back").show();
+        $("#btback").show();
+    } else {
+        $("#btback").hide();
     }
 
     //  $("#songinfo").resize(resizeSonginfo());

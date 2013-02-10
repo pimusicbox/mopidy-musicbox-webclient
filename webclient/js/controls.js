@@ -72,9 +72,7 @@ function doNext() {
 }
 
 function backbt() {
-        $(CURRENT_PLAYLIST_TABLE).listview('refresh');
-
-    //history.back();
+    history.back();
     return false;
 }
 
