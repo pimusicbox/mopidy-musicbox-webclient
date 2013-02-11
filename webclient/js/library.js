@@ -119,8 +119,13 @@ function showTracklist(uri) {
     return false;
 }
 
+/******
+ * Lookups
+ */
+
 function showArtist(nwuri) {
-    //    $( "#controlsmodal" ).popup( "close" );
+    $('#popupTracks').popup('close');
+    $('#controlsmodal').popup('close');
     $(ARTIST_TABLE).empty();
     //fill from cache
     var pl = getTracksFromUri(nwuri);
@@ -133,7 +138,8 @@ function showArtist(nwuri) {
 }
 
 function showAlbum(uri) {
-    //    $( "#controlsmodal" ).popup( "close" );
+    $('#popupTracks').popup('close');
+    $('#controlsmodal').popup('close');
     $(ALBUM_TABLE).empty();
     //fill from cache
     var pl = getTracksFromUri(uri);

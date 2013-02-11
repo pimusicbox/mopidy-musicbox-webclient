@@ -4,12 +4,12 @@
 
 /* Responsive stuff */
 
-@media all and (min-width: 50.1em) {
+@media all and (min-width: 35.1em) {
     .pl-breakpoint.ui-grid-a .ui-block-a {
         width: 32.95%;
     }
     .pl-breakpoint.ui-grid-a .ui-block-b {
-        width: 66%;
+        width: 65.2%;
     }
     .pl-breakpoint.ui-grid-a .ui-block-a {
         clear: left;
@@ -19,9 +19,11 @@
     }
     .header-breakpoint.ui-grid-b .ui-block-b {
         width: 39.92%;
+        display: block;
     }
     .header-breakpoint.ui-grid-b .ui-block-c {
         width: 39.92%;
+        display: block;
     }
     .pl-breakpoint.ui-grid-a .ui-block-a {
         clear: left;
@@ -32,6 +34,18 @@
 }
 
 @media all and (max-width: 50em) {
+    .header-breakpoint.ui-grid-b .ui-block-a {
+        width: 39.95%;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-b {
+        width: 59.92%;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-c {
+        display: none;
+    }
+}
+
+@media all and (max-width: 35em) {
     .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
         width: 100%;
         float: none;
@@ -39,6 +53,9 @@
     .header-breakpoint .ui-block-a, .header-breakpoint .ui-block-b, .header-breakpoint .ui-block-c {
         width: 100%;
         float: none;
+    }
+    .header-breakpoint .ui-block-c, .header-breakpoint .ui-block-b {
+        display: none;
     }
 }
 /* Volume Slider */
@@ -59,7 +76,7 @@
 }
 
 #slidercontainer {
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 5px;
 }
 
@@ -80,13 +97,13 @@
 /* Controls */
 #controldiv {
     height: 30px;
-    width: 180px;
-    margin-left: 2px;
+    width: 210px;
+    margin-left: -5px;
     display: inline;
 }
 
 #controldiv img {
-    margin-left: 10px;
+    margin-left: 15px;
     float: left;
 }
 
@@ -100,7 +117,6 @@
 
 #backimg {
     margin-top: 16px;
-    margin-right: 2px;
 }
 
 #controlsimg {
@@ -119,7 +135,9 @@
 }
 
 #songinfo {
-    margin-top: 5px;
+    margin-top: 10px;
+    height: 35px;
+    overflow: hidden;
 }
 
 #infoartist {
@@ -188,5 +206,9 @@ body {
 
 #popupTrackName, #popupAlbumName, .popupArtistName {
     font-style: oblique;
+}
+
+#header {
+    height: 50px !important;
 }
 

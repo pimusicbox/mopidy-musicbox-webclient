@@ -95,25 +95,40 @@ function setSongInfo(data) {
  * @param {Object} trackuri
  */
 function popupTracks (listuri, trackuri) {
-    console.log('list: ' + listuri + ', track: ' + trackuri);
+    //console.log('list: ' + listuri + ', track: ' + trackuri);
     $('#popupTrackName').html(popupData[trackuri].name);
     $('#popupAlbumName').html(popupData[trackuri].album.name);
     var child = "";
+    $('#popupArtistsLi').remove();
     if (popupData[trackuri].artists.length == 1) {
-        child += '<a href="#" onclick="showArtist(\'' +popupData[trackuri].artists[0].uri + '\');">Show Artist <span class="popupArtistName">' + popupData[trackuri].artists[0].name + '</span></a>';
-        $('#popupArtistsLi').html(child).show();
+
+        //this doesnt work
+//        child += '<a href="#" onclick="showArtist(\'' +popupData[trackuri].artists[0].uri + '\');">Show Artist <span class="popupArtistName">' + popupData[trackuri].artists[0].name + '</span></a>';
+    $('#popupTracksLv').append($('<li/>', { 'id': "popupArtistsLi"})
+        .append($('<a/>', {
+            'href': '#', 
+            'onclick': 'showArtist(\'' +popupData[trackuri].artists[0].uri + '\');',
+            'text': 'Show Artist '  
+        }).append($('<span/>', {
+            'class': 'popupArtistName',
+            'text': popupData[trackuri].artists[0].name
+        }))));
+        
         $('#popupArtistsDiv').hide();
+//        console.log(child);
+//        $('#popupArtistsLi').html(child).show();
     } else {
         for (var j = 0; j < popupData[trackuri].artists.length; j++) {                
                 child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>';
         }
-        console.log(child);
+        //console.log(child);
         $('#popupArtistsLi').hide();
         $('#popupArtistsLv').html(child).show();
         $('#popupArtistsDiv').show();
         $('#popupArtistsLv').listview("refresh");
      }
-    
+    $('#popupTracksLv') .listview().trigger("create");
+
     $('#popupTracksLv').listview('refresh');
 
     $('#popupTracks').data("list", listuri).data("track", trackuri).popup( "open", { x: event.pageX, y: event.pageY } );
@@ -131,7 +146,7 @@ function showAlbumPopup() {
 function showLoading(on) {
     if (on) {
         $.mobile.loading('show', {
-            text : 'Loading data from the server. Please wait...',
+            text : 'Loading data from ' + PROGRAM_NAME + '. Please wait...',
             textVisible : true,
             theme : 'a'
         });
@@ -143,7 +158,7 @@ function showLoading(on) {
 function showOffline(on) {
     if (on) {
         $.mobile.loading('show', {
-            text : 'Offline - Trying to reach the server. Please wait...',
+            text : 'Trying to reach ' + PROGRAM_NAME + '. Please wait...',
             textVisible : true,
             theme : 'a'
         });
@@ -242,50 +257,16 @@ function pauseTimer() {
     clearInterval(posTimer);
 }
 
+
+
 /**********************
  * initialize software
  **********************/
 //$(document).ready(function() {
 $(document).bind("pageinit", function() {
 
-    $(window).hashchange(function() {
-        var hash = document.location.hash.split('?');
-        //remove #
-        var divid = hash[0].substr(1);
-        var uri = hash[1];
-        switch(divid) {
-            case 'current':
-                $('#navcurrent').addClass("ui-btn-active ui-state-persist");
-                break;
-            case 'playlists':
-                $('#navplaylists').addClass("ui-btn-active ui-state-persist");
-                break;
-            case 'search':
-                $('#navsearch').addClass("ui-btn-active ui-state-persist");
-                $("#searchinput").focus();
-                if (customTracklists['allresultscache'] == '') {
-                    initSearch($('#searchinput').val());
-                }
-                break;
-            case 'artists':
-                if (uri != '') {
-                    showArtist(uri);
-                }
-                break;
-            case 'albums':
-                if (uri != '') {
-                    showAlbum(uri);
-                }
-                break;
-        }
-        showLoading(false);
-        // Set the page title based on the hash.
-        //document.title = PROGRAM_NAME;
-        $('.pane').hide();
-        $('#' + divid + 'pane').show();
-        return false;
-    });
-
+    $(window).hashchange();
+    
     // Connect to server
     mopidy = new Mopidy();
     //initialize events
@@ -306,15 +287,15 @@ $(document).bind("pageinit", function() {
     }
 
     //only show backbutton if in UIWebview
-/*    if (window.navigator.standalone) {
+    if (window.navigator.standalone) {
         $("#btback").show();
     } else {
         $("#btback").hide();
     }
-*/
+
     //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;
-
+    window.onhashchange = locationHashChanged;
     // Log all events
     mopidy.on(function() {
         //        console.log(arguments);
@@ -348,3 +329,45 @@ function updateStatusOfAll() {
 
     //TODO check offline?
 }
+
+function locationHashChanged() {
+        var hash = document.location.hash.split('?');
+        //remove #
+        var divid = hash[0].substr(1);
+        var uri = hash[1];
+        $('#navcurrent a').removeClass('ui-state-active ui-state-persist ui-btn-active');
+        $('#navplaylists a').removeClass('ui-state-active ui-state-persist ui-btn-active');
+        $('#navsearch a').removeClass('ui-state-active ui-state-persist ui-btn-active');
+//        alert(divid);
+        switch(divid) {
+            case 'current':
+                $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active');
+                break;
+            case 'playlists':
+                $('#navplaylists a').addClass('ui-state-active ui-state-persist ui-btn-active');
+                break;
+            case 'search':
+                $('#navsearch a').addClass( $.mobile.activeBtnClass );
+                $("#searchinput").focus();
+                if (customTracklists['allresultscache'] == '') {
+                    initSearch($('#searchinput').val());
+                }
+                break;
+            case 'artists':
+                if (uri != '') {
+                    showArtist(uri);
+                }
+                break;
+            case 'albums':
+                if (uri != '') {
+                    showAlbum(uri);
+                }
+                break;
+        }
+        showLoading(false);
+        // Set the page title based on the hash.
+        //document.title = PROGRAM_NAME;
+        $('.pane').hide();
+        $('#' + divid + 'pane').show();
+        return false;
+    }

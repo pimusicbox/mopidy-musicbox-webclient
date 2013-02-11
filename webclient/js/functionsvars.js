@@ -27,6 +27,7 @@ var popupData = {};
 var artistshtml = '';
 var artiststext = '';
 var songname = '';
+var newposition = 0;
 
 //array of cached playlists (not only user-playlists, also search, artist, album-playlists)
 var playlists = {};
@@ -44,7 +45,8 @@ SEARCH_ALL_TABLE = '#allresulttable';
 SEARCH_ALBUM_TABLE = '#albumresulttable';
 SEARCH_ARTIST_TABLE = '#artistresulttable';
 SEARCH_TRACK_TABLE = '#trackresulttable';
-TRACK_TIMER = 500;
+//update track timer, milliseconds
+TRACK_TIMER = 1000;
 
 /*******
  *

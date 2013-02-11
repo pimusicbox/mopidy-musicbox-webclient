@@ -2,6 +2,9 @@
  * play an uri from a trackslist or the current playlist
  *********************************************************/
 function playTrack() {
+    $('#popupTracks').popup('close');
+    $('#controlsmodal').popup('close');
+
     //function playtrack(uri, playlisturi) {
     playlisturi = $('#popupTracks').data("list");
     uri = $('#popupTracks').data("track");
@@ -51,9 +54,9 @@ function setPlayState(nwplay) {
 //play or pause
 function doPlay() {
     if (!play) {
-        mopidy.playback.play().then();
+        mopidy.playback.play();
     } else {
-        mopidy.playback.pause().then();
+        mopidy.playback.pause();
     }
     setPlayState(!play);
 }
@@ -128,19 +131,20 @@ function doRepeat() {
 
 function doSeekPos(value) {
     var val = $("#trackslider").val();
-    val = Math.round(val);
+    newposition = Math.round(val);
+    pauseTimer();
+    clearTimeout(seekTimer);
     if (!initgui) {
         //set timer to not trigger it too much
-        clearTimeout(seekTimer);
-        seekTimer = setTimeout(triggerPos(val), 250);
-        //setPlayState(true);
+        seekTimer = setTimeout(triggerPos, 100);
     }
 }
 
-function triggerPos(val) {
-    console.log(val);
+function triggerPos() {
+    console.log(newposition);
     if (mopidy) {
-        mopidy.playback.seek(val);
+        mopidy.playback.pause();
+        mopidy.playback.seek(newposition);
     }
     if (play) {
         resumeTimer();

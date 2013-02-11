@@ -8,9 +8,9 @@
             $(document).bind("mobileinit", function() {
                 $.extend($.mobile, {
                     ajaxEnabled : false,
-                    //                    hashListeningEnabled : false,
+                    hashListeningEnabled : false,
                     //                    linkBindingEnabled: false
-                    //                    buttonMarkup.hoverDelay: 100,
+                    //                  buttonMarkup.hoverDelay: 100,
                     //                  buttonMarkup.corners: false
                 });
             });
@@ -27,16 +27,26 @@
         <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk" />
         <link href="css/ws.css" rel="stylesheet">
         <script type="text/javascript" src="/mopidy/mopidy.js"></script>
+        <link rel="stylesheet" href="css/add2home.css">
+        <script type="text/javascript" src="js/add2home.js" charset="utf-8"></script>
     </head>
 
     <body>
         <div data-role="page" data-theme="c" id="page">
 
-            <div id="controlsmodal" data-role="popup" style="min-width:250px;">
+            <div id="controlsmodal" data-role="popup" data-theme="c" style="min-width:300px;">
                 <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
                 <h3 id="modalname"></h3>
                 <h4 id="modalartist"></h4>
                 <h4 id="modalalbum"></h4>
+                <div id="slidercontainer2">
+                    <p>
+                        <span id="songelapsed2" class="pull-left"> 0:00 </span>
+                        <span id="songlength2" class="pull-right"> 0:00 </span>
+                        <label for="trackslider2"  class="ui-hidden-accessible">Position</label>
+                        <input id="trackslider2" name="trackslider2" data-mini="true" type="range" onmousedown="pauseTimer();" onchange="doSeekPos(this.value);" class="nobreak" />
+                    </p>
+                </div>
                 <p class="">
                     <a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
                     &nbsp; <a href="#" onclick="doRepeat(); return false"><img src="images/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
@@ -48,14 +58,14 @@
                 </p>
             </div>
 
-            <div data-role="popup" data-transition="pop" id="popupTracks">
+            <div data-role="popup" data-transition="pop" data-theme="c" id="popupTracks">
                 <div data-role="collapsible-set">
                     <ul data-role="listview" data-icon="false" id="popupTracksLv">
                         <!-- <li data-role="divider">
                         Track
                         </li> -->
                         <li>
-                            <a href="#" onclick="return playTrack();">Play <span id="popupTrackName"></span></a>
+                            <a href="#" onclick="return playTrack();">Play Track <span id="popupTrackName"></span></a>
                         </li>
                         <!--                    <li>
                         <a href="#">Add tracks to bottom of queue</a>
@@ -64,7 +74,6 @@
                         <li>
                             <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>
                         </li>
-                        <li id="popupArtistsLi"></li>
                         <div data-role="collapsible" data-icon="false" data-inset="false" id="popupArtistsDiv">
                             <h2>Artists</h2>
                             <ul data-icon="false" data-inset="false" data-role="listview" id="popupArtistsLv"></ul>
@@ -74,12 +83,12 @@
                 </div>
             </div>
 
-            <div data-role="header" class="ui-grid-b header-breakpoint">
+            <div data-role="header" id="header" data-position="fixed" class="ui-grid-b header-breakpoint">
 
                 <div id="controldiv" class="ui-block-a">
                     <span id="btback"><a href="#" onclick="return backbt();"> <img  id="backimg"src="images/icons/arrow_left_alt1_24x24.png" /></a></span>
                     <span id="btprev"><a href="#" onclick="doPrevious(); return false"><img id="previmg" src="images/icons/first_16x16.png" alt="Previous Track" /></a></span>
-                    <span id="btplay"><a href="#" onclick="doPlay(); return false"><img src="pause_32x32.png" alt="Play" id="playimg" /></a></span>
+                    <span id="btplay"><a href="#" onclick="doPlay(); return false"><img src="images/icons/pause_32x32.png" alt="Play" id="playimg" /></a></span>
                     <span id="btnext"><a href="#" onclick="doNext(); return false"><img id="nextimg" src="images/icons/last_16x16.png" alt="Next Track" /></a></span>
                     <span id="btcontrols"><a href="#controlsmodal" data-rel="popup"><img src="images/icons/cog_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></a></span>
                 </div>
@@ -94,7 +103,7 @@
                     <span id="songelapsed" class="pull-left"> 0:00 </span>
                     <span id="songlength" class="pull-right"> 0:00 </span>
                     <label for="trackslider"  class="ui-hidden-accessible">Position</label>
-                    <input id="trackslider" name="trackslider" data-mini="true" type="range" onmousedown="pauseTimer();" onchange="doSeekPos(this.value);" class="nobreak" />
+                    <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" class="nobreak" />
                 </div>
 
             </div><!-- /header -->
@@ -167,26 +176,17 @@
             </div>
             <!-- search div -->
 
-            <div data-role="footer" data-id="foo1" data-position="fixed">
-                <div data-role="navbar">
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="left">
                     <ul>
                         <li id="navplaylists">
-                            <a href="#playlists" onclick="switchContent('playlists' ); return false;"><img src="images/icons/list_nested_24x21.png" />
-                            <div class="nav-collapse menutext nobreak hidden-phone">
-                                Playlists
-                            </div></a>
+                            <a href="#playlists" onclick="switchContent('playlists' ); return false;"><img src="images/icons/list_nested_24x21.png" /> Playlists </a>
                         </li>
                         <li id="navcurrent">
-                            <a href="#current" onclick="switchContent('current' ); return false;"><img src="images/icons/list_24x21.png" />
-                            <div class="nav-collapse nobreak menutext hidden-phone">
-                                Queue
-                            </div></a>
+                            <a href="#current" onclick="switchContent('current' ); return false;"><img src="images/icons/list_24x21.png" /> Queue </a>
                         </li>
                         <li id="navsearch">
-                            <a href="#search" onclick="switchContent('search' ); return false;"  ><img src="images/icons/magnifying_glass_24x24.png" />
-                            <div class="nav-collapse nobreak menutext hidden-phone">
-                                Search
-                            </div></a>
+                            <a href="#search" onclick="switchContent('search' ); return false;"  ><img src="images/icons/magnifying_glass_24x24.png" /> Search </a>
                         </li>
                     </ul>
                 </div><!-- /navbar -->
