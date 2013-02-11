@@ -40,6 +40,8 @@ function processSearchResults(resultArr) {
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
     //get the right result
+    // 0 = raspberry 1 = dev. 
+//    var results = resultArr[0];
     var results = resultArr[1];
     var tracks = (results.tracks) ? results.tracks : '';
     customTracklists['trackresultscache'] = tracks;
