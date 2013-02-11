@@ -39,13 +39,18 @@ function processSearchResults(resultArr) {
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
-    $("#searchresults").show();
     //get the right result
     var results = resultArr[1];
     var tracks = (results.tracks) ? results.tracks : '';
     customTracklists['trackresultscache'] = tracks;
     var artists = (results.artists) ? results.artists : '';
     var albums = (results.albums) ? results.albums : '';
+    if ((tracks == '') && (artists == '') && (albums == '') ) {
+        alert('No results');
+        showLoading(false);
+        return false;
+    }
+    $("#searchresults").show();
     var child = '';
     for (var i = 0; i < artists.length; i++) {
         child += '<li class="resultrow';
@@ -76,8 +81,7 @@ function processSearchResults(resultArr) {
 
     $('#expandsearch').show();
     playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
-            showLoading(false);
-//    $('#allresultloader').hide();
+    showLoading(false);
 }
 
 function toggleSearch() {
@@ -98,13 +102,13 @@ function getCurrentPlaylist() {
     mopidy.tracklist.getTracks().then(processCurrentPlaylist, console.error);
 }
 
+/********************************************************
+ * Show tracks of playlist
+ ********************************************************/
 function showTracklist(uri) {
-    /********************************************************
-     * Show tracks of playlist
-     ********************************************************/
     $(PLAYLIST_TABLE).empty();
     $('#playlisttablediv').show();
-//    $('#playlistloader').show();
+    //    $('#playlistloader').show();
     showLoading(true);
 
     var pl = getPlaylistFromUri(uri);
@@ -131,7 +135,7 @@ function showArtist(nwuri) {
     var pl = getTracksFromUri(nwuri);
     $('#h_artistname').html('');
     showLoading(true);
-//    $('#artistsloader').show();
+    //    $('#artistsloader').show();
     mopidy.library.lookup(nwuri).then(processArtistResults, console.error);
     switchContent('artists', nwuri);
     return false;
@@ -152,7 +156,7 @@ function showAlbum(uri) {
         $('#h_albumname').html('');
         $('#h_albumartist').html('');
         showLoading(true);
-//        $('#albumsloader').show();
+        //        $('#albumsloader').show();
         mopidy.library.lookup(uri).then(processAlbumResults, console.error);
     }
     //show

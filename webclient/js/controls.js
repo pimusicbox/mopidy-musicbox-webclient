@@ -132,22 +132,20 @@ function doRepeat() {
 function doSeekPos(value) {
     var val = $("#trackslider").val();
     newposition = Math.round(val);
-    pauseTimer();
     clearTimeout(seekTimer);
     if (!initgui) {
+        pauseTimer();
         //set timer to not trigger it too much
-        seekTimer = setTimeout(triggerPos, 100);
+        mopidy.playback.pause();
+        seekTimer = setTimeout(triggerPos, 250);
     }
 }
 
 function triggerPos() {
     console.log(newposition);
     if (mopidy) {
-        mopidy.playback.pause();
         mopidy.playback.seek(newposition);
-    }
-    if (play) {
-        resumeTimer();
+        mopidy.playback.resume();
     }
 }
 

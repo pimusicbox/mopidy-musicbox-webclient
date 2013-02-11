@@ -1,8 +1,11 @@
-/*
- *
+/*****
+ * Mopidy Webclient CSS 
+ * (c)
  */
 
-/* Responsive stuff */
+/****************************
+ *  Responsive stuff 
+ ****************************/
 
 @media all and (min-width: 35.1em) {
     .pl-breakpoint.ui-grid-a .ui-block-a {
@@ -48,17 +51,20 @@
 @media all and (max-width: 35em) {
     .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
         width: 100%;
-        float: none;
+        float:inherit;
     }
-    .header-breakpoint .ui-block-a, .header-breakpoint .ui-block-b, .header-breakpoint .ui-block-c {
+    .header-breakpoint .ui-block-a {
+        float:inherit;
         width: 100%;
-        float: none;
     }
     .header-breakpoint .ui-block-c, .header-breakpoint .ui-block-b {
         display: none;
+        width: 0;
     }
 }
-/* Volume Slider */
+/************************
+ *  Volume Slider 
+ ***********************/
 #mutebt {
     float: left;
     margin-left: 8px;
@@ -69,7 +75,9 @@
     display: inline;
 }
 
-/* Track Slider */
+/***********************
+ *  Track Slider 
+ ***********************/
 
 #trackslider {
     display: inline;
@@ -94,7 +102,9 @@
     margin-top: 12px;
 }
 
-/* Controls */
+/***********************************
+ * Controls 
+ * *********************************/
 #controldiv {
     height: 30px;
     width: 210px;
@@ -103,7 +113,7 @@
 }
 
 #controldiv img {
-    margin-left: 15px;
+    margin-left: 20px;
     float: left;
 }
 
@@ -187,7 +197,7 @@ body {
 }
 
 .currenttrack {
-    background-image: url('../img/icons/play_alt_16x16.png');
+    background-image: url('../images/icons/play_alt_16x16.png');
     background-repeat: no-repeat;
     background-color: #fff;
     background-position: 4px center;

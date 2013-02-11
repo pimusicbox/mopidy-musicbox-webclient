@@ -94,7 +94,8 @@ function setSongInfo(data) {
  * @param {Object} listuri
  * @param {Object} trackuri
  */
-function popupTracks (listuri, trackuri) {
+function popupTracks (e, listuri, trackuri) {
+    if (!e) var e = window.event;
     //console.log('list: ' + listuri + ', track: ' + trackuri);
     $('#popupTrackName').html(popupData[trackuri].name);
     $('#popupAlbumName').html(popupData[trackuri].album.name);
@@ -131,7 +132,7 @@ function popupTracks (listuri, trackuri) {
 
     $('#popupTracksLv').listview('refresh');
 
-    $('#popupTracks').data("list", listuri).data("track", trackuri).popup( "open", { x: event.pageX, y: event.pageY } );
+    $('#popupTracks').data("list", listuri).data("track", trackuri).popup("open", { x: e.pageX, y: e.pageY } );
     return false;
 }
 

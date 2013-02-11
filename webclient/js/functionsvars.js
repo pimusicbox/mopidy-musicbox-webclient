@@ -106,7 +106,7 @@ function playlisttotable(pl, table, uri) {
          */
         popupData[pl[i].uri] = pl[i];
 
-        child = '<li id="' + pl[i].uri + '"><a href="#" onclick="return popupTracks(\'' + uri + '\',\'' + pl[i].uri + '\');">';
+        child = '<li id="' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
         child += '<h1>' + pl[i].name + "</h1>";
         child += '<p>';
         child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>';
@@ -142,7 +142,7 @@ function albumtrackstotable(pl, table, uri) {
     var child = '';
     for (var i = 0; i < pl.length; i++) {
         popupData[pl[i].uri] = pl[i];
-        child = '<li><a href="#" onclick="return popupTracks(\'' + uri + '\',\'' + pl[i].uri + '\');">';
+        child = '<li><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
         child += '<p style="float:right; display: inline;">' + timeFromSeconds(pl[i].length / 1000) + 
             '</p><h1>' + pl[i].name + '</h1></a></li>';
         tmp += child;
