@@ -32,30 +32,25 @@
     <body>
         <div data-role="page" data-theme="c" id="page">
 
-            <div id="controlsmodal" data-role="popup">
+            <div id="controlsmodal" data-role="popup" style="min-width:250px;">
                 <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-                <h5 id="modalname"></h5>
-                <div id="modalartist"></div>
-                <br/>
-                <div id="modalalbum"></div>
-                <div class="">
-                    <p><a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
+                <h3 id="modalname"></h3>
+                <h4 id="modalartist"></h4>
+                <h4 id="modalalbum"></h4>
+                <p class="">
+                    <a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
                     &nbsp; <a href="#" onclick="doRepeat(); return false"><img src="images/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
-                    <br/>
-                    <br/>
-                    <a href="#" onclick="doMute(); return false;"><img id="mutebt" src="images/icons/volume_16x12.png" alt="" /></a>
-                    <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
-                    <input id="volumeslider" name="volumeslider" data-mini="true" type="range" min="0" value="0" max="100" onchange="doVolume(this.value);" class="nobreak" />
-                    </p>
-                </div>
-                <div class="">
-                    <a href="#" class="" >Close</a>
-                </div>
+                    <div>
+                        <a href="#" onclick="doMute(); return false;"><img id="mutebt" src="images/icons/volume_16x12.png" alt="" /></a>
+                        <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
+                        <input id="volumeslider" name="volumeslider" data-mini="true" type="range" min="0" value="0" max="100" onchange="doVolume(this.value);" />
+                    </div>
+                </p>
             </div>
 
             <div data-role="popup" data-transition="pop" id="popupTracks">
                 <div data-role="collapsible-set">
-                    <ul data-role="listview" data-inset="true" data-icon="false" id="popupTracksLv" style="min-width:210px;">
+                    <ul data-role="listview" data-icon="false" id="popupTracksLv">
                         <!-- <li data-role="divider">
                         Track
                         </li> -->
@@ -82,11 +77,11 @@
             <div data-role="header" class="ui-grid-b header-breakpoint">
 
                 <div id="controldiv" class="ui-block-a">
-                    <span id="btback"><a href="#" onclick="return backbt();"> <img src="images/icons/arrow_left_alt1_24x24.png" /></a></span>
-                    <span id="btprev"><a href="#" onclick="doPrevious(); return false"><img src="images/icons/first_16x16.png" alt="Previous Track" /></a></span>
-                    <span id="btplaypause"><a href="#" onclick="doPlayPause(); return false"><img src="images/icons/pause_18x24.png" alt="Play" id="playbt" /></a></span>
-                    <span id="btnext"><a href="#" onclick="doNext(); return false"><img src="images/icons/last_16x16.png" alt="Next Track" /></a></span>
-                    <span id="btcontrols"><a href="#controlsmodal" data-rel="popup"><img src="images/icons/cog_24x24.png" alt="More controls" class="breakafter" /></a></span>
+                    <span id="btback"><a href="#" onclick="return backbt();"> <img  id="backimg"src="images/icons/arrow_left_alt1_24x24.png" /></a></span>
+                    <span id="btprev"><a href="#" onclick="doPrevious(); return false"><img id="previmg" src="images/icons/first_16x16.png" alt="Previous Track" /></a></span>
+                    <span id="btplay"><a href="#" onclick="doPlay(); return false"><img src="pause_32x32.png" alt="Play" id="playimg" /></a></span>
+                    <span id="btnext"><a href="#" onclick="doNext(); return false"><img id="nextimg" src="images/icons/last_16x16.png" alt="Next Track" /></a></span>
+                    <span id="btcontrols"><a href="#controlsmodal" data-rel="popup"><img src="images/icons/cog_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></a></span>
                 </div>
 
                 <div id="songinfo" class=" ui-block-b" onclick="expandSonginfo();">

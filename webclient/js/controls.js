@@ -41,15 +41,15 @@ function playTrack() {
 /* Toggle state of play button */
 function setPlayState(nwplay) {
     if (nwplay) {
-        $("#playbt").attr('src', 'images/icons/pause_32x32.png');
+        $("#playimg").attr('src', 'images/icons/pause_32x32.png');
     } else {
-        $("#playbt").attr('src', 'images/icons/play_alt_32x32.png');
+        $("#playimg").attr('src', 'images/icons/play_alt_32x32.png');
     }
     play = nwplay;
 }
 
 //play or pause
-function doPlayPause() {
+function doPlay() {
     if (!play) {
         mopidy.playback.play().then();
     } else {

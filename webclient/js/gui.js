@@ -278,7 +278,7 @@ $(document).bind("pageinit", function() {
                 }
                 break;
         }
-
+        showLoading(false);
         // Set the page title based on the hash.
         //document.title = PROGRAM_NAME;
         $('.pane').hide();
@@ -306,12 +306,12 @@ $(document).bind("pageinit", function() {
     }
 
     //only show backbutton if in UIWebview
-    if (window.navigator.standalone) {
+/*    if (window.navigator.standalone) {
         $("#btback").show();
     } else {
         $("#btback").hide();
     }
-
+*/
     //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;
 

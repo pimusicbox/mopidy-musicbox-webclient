@@ -41,8 +41,18 @@
         float: none;
     }
 }
+/* Volume Slider */
+#mutebt {
+    float: left;
+    margin-left: 8px;
+    margin-top: 8px;
+}
 
-/* Slider */
+#volumeslider {
+    display: inline;
+}
+
+/* Track Slider */
 
 #trackslider {
     display: inline;
@@ -68,28 +78,33 @@
 }
 
 /* Controls */
-
 #controldiv {
     height: 30px;
-    width: 175px;
-    margin-left: 10px;
+    width: 180px;
+    margin-left: 2px;
     display: inline;
 }
 
 #controldiv img {
-    margin-left: 5px;
+    margin-left: 10px;
+    float: left;
 }
 
-#previmg {
-    margin-top: -100px;
+#playimg {
+    margin-top: 12px;
 }
 
-#btplaypause a img {
-    margin-top: 5px;
+#nextimg, #previmg {
+    margin-top: 20px;
 }
 
-#btback {
-    margin-right: 5px;
+#backimg {
+    margin-top: 16px;
+    margin-right: 2px;
+}
+
+#controlsimg {
+    margin-top: 16px;
 }
 
 /* Song information */
@@ -161,12 +176,7 @@ body {
     padding-left: 10px;
 }
 
-#modalartist {
-    color: #444;
-    font-size: 14px;
-}
-
-#modalartist a {
+#modalalbum a, #modalartist a {
     color: #444;
     text-decoration: none;
 }
