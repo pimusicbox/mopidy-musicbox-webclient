@@ -50,7 +50,8 @@
                 <p class="">
                     <a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
                     &nbsp; <a href="#" onclick="doRepeat(); return false"><img src="images/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
-                    <div>
+                    &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><img src="images/icons/shuffle_12x14.png" id="repeatbt" alt="" /></a>
+		<div>
                         <a href="#" onclick="doMute(); return false;"><img id="mutebt" src="images/icons/volume_16x12.png" alt="" /></a>
                         <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
                         <input id="volumeslider" name="volumeslider" data-mini="true" type="range" min="0" value="0" max="100" onchange="doVolume(this.value);" />

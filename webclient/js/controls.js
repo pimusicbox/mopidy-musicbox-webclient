@@ -125,6 +125,12 @@ function doRepeat() {
     setRepeat(!repeat);
 }
 
+function doShuffle() {
+    mopidy.tracklist.shuffle();
+    mopidy.playback.next();
+}
+
+
 /*********************
  * Track Slider
  *********************/
