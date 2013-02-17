@@ -37,6 +37,8 @@ function playTrack() {
     return false;
 }
 
+
+
 /**********************
  * Buttons
  */
@@ -151,6 +153,10 @@ function triggerPos() {
 
 function setPosition(pos) {
     var oldval = initgui;
+    if (pos > songlength) {
+        pos = songlength;
+        pauseTimer();
+    }
     currentposition = pos;
     initgui = true;
     $("#trackslider").val(currentposition).slider('refresh');
@@ -172,7 +178,7 @@ function setVolume(value) {
 function doVolume(value) {
     if (!initgui) {
         console.log('volume: ' + value);
-        mopidy.playback.setVolume(value);
+        mopidy.playback.setVolume(parseInt(value));
     }
 }
 
@@ -189,3 +195,31 @@ function doMute() {
     }
 
 }
+/*******
+ * Track timer 
+ */
+
+//timer function to update interface
+function updateTimer() {
+    currentposition += TRACK_TIMER;
+    setPosition(currentposition);
+    //    $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
+}
+
+function resumeTimer() {
+    pauseTimer();
+    posTimer = setInterval(updateTimer, TRACK_TIMER);
+}
+
+function initTimer() {
+    pauseTimer();
+   // setPosition(0);
+    resumeTimer();
+}
+
+function pauseTimer() {
+    clearInterval(posTimer);
+}
+
+
+

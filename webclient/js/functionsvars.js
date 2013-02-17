@@ -23,6 +23,7 @@ var seekTimer;
 var initgui = true;
 var currentpos = 0;
 var popupData = {};
+var songlength = 0;
 
 var artistshtml = '';
 var artiststext = '';
@@ -36,7 +37,8 @@ var customPlaylists = [];
 var customTracklists = [];
 
 //constants
-PROGRAM_NAME = 'Mopidy';
+PROGRAM_NAME = 'MusicBox';
+//PROGRAM_NAME = 'Mopidy';
 ARTIST_TABLE = '#artiststable';
 ALBUM_TABLE = '#albumstable';
 PLAYLIST_TABLE = '#playlisttable';
@@ -45,8 +47,13 @@ SEARCH_ALL_TABLE = '#allresulttable';
 SEARCH_ALBUM_TABLE = '#albumresulttable';
 SEARCH_ARTIST_TABLE = '#artistresulttable';
 SEARCH_TRACK_TABLE = '#trackresulttable';
-//update track timer, milliseconds
+
+//update track slider timer, milliseconds
 TRACK_TIMER = 1000;
+
+//check status timer, every 5 or 10 sec
+STATUS_TIMER = 10000;
+
 
 /*******
  *

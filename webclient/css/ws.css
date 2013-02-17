@@ -7,7 +7,7 @@
  *  Responsive stuff 
  ****************************/
 
-@media all and (min-width: 35.1em) {
+@media all and (min-width: 50.1em){
     .pl-breakpoint.ui-grid-a .ui-block-a {
         width: 32.95%;
     }
@@ -18,21 +18,30 @@
         clear: left;
     }
     .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 19.95%;
+        width: 21.95%;
     }
     .header-breakpoint.ui-grid-b .ui-block-b {
-        width: 39.92%;
+        width: 37.92%;
         display: block;
     }
     .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 39.92%;
+        width: 37.1%;
         display: block;
     }
     .pl-breakpoint.ui-grid-a .ui-block-a {
         clear: left;
     }
+    .srch-breakpoint.ui-grid-a .ui-block-b {
+        margin-left: 5px;
+    }
+    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
+        width: 49.5%;
+    }
     #playlisttablediv {
         margin-left: 10px;
+    }
+    #header {
+        height: 50px !important;
     }
 }
 
@@ -40,11 +49,14 @@
     .header-breakpoint.ui-grid-b .ui-block-a {
         width: 39.95%;
     }
-    .header-breakpoint.ui-grid-b .ui-block-b {
-        width: 59.92%;
-    }
     .header-breakpoint.ui-grid-b .ui-block-c {
+        width: 59%;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-b {
         display: none;
+    }
+    #header {
+        height: 50px !important;
     }
 }
 
@@ -53,13 +65,15 @@
         width: 100%;
         float:inherit;
     }
-    .header-breakpoint .ui-block-a {
-        float:inherit;
+    .header-breakpoint .ui-block-c, .header-breakpoint .ui-block-a {
         width: 100%;
     }
-    .header-breakpoint .ui-block-c, .header-breakpoint .ui-block-b {
+    .header-breakpoint .ui-block-b {
         display: none;
         width: 0;
+    }
+    #header {
+        height: 75px !important;
     }
 }
 /************************
@@ -107,7 +121,7 @@
  * *********************************/
 #controldiv {
     height: 30px;
-    width: 210px;
+    width: 230px;
     margin-left: -5px;
     display: inline;
 }
@@ -159,14 +173,6 @@
 }
 
 /* div */
-body {
-    /*   padding-top: 80px;
-     /*    background-image:url('../iages/Chrisdesign_LP_Guitar_black.web.png');
-     background-attachment: fixed;
-     background-repeat:no-repeat;
-     background-position:right;
-     */
-}
 
 .nobreak, .btsquare {
     display: inline !important;
@@ -216,9 +222,5 @@ body {
 
 #popupTrackName, #popupAlbumName, .popupArtistName {
     font-style: oblique;
-}
-
-#header {
-    height: 50px !important;
 }
 

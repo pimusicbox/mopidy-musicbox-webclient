@@ -74,6 +74,7 @@ function setSongInfo(data) {
     $("#modalartist").html(arttmp + ': ' + artistshtml);
 
     $("#trackslider").attr("min", 0);
+    songlength = data.length;
     $("#trackslider").attr("max", data.length);
     $("#songlength").html(timeFromSeconds(data.length / 1000));
 
@@ -232,39 +233,11 @@ function initSocketevents() {
     });
 }
 
-/*******
- * Track timer 
- */
-
-//timer function to update interface
-function updateTimer() {
-    currentposition += TRACK_TIMER;
-    setPosition(currentposition);
-    //    $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
-}
-
-function resumeTimer() {
-    pauseTimer();
-    posTimer = setInterval(updateTimer, TRACK_TIMER);
-}
-
-function initTimer() {
-    pauseTimer();
-   // setPosition(0);
-    resumeTimer();
-}
-
-function pauseTimer() {
-    clearInterval(posTimer);
-}
-
-
-
 /**********************
  * initialize software
  **********************/
-//$(document).ready(function() {
-$(document).bind("pageinit", function() {
+$(document).ready(function() {
+//$(document).bind("pageinit", function() {
 
     $(window).hashchange();
     
@@ -272,14 +245,6 @@ $(document).bind("pageinit", function() {
     mopidy = new Mopidy();
     //initialize events
     initSocketevents();
-
-    $('.pane').hide();
-    $('.sidebar-nav a').bind('click', function(e) {
-        var divid = $(e.target).attr('href').substr(1);
-        var uri = $(divid + "table").attr('data');
-
-        switchContent(divid, uri);
-    });
 
     resetSong();
 
@@ -291,7 +256,7 @@ $(document).bind("pageinit", function() {
     if (window.navigator.standalone) {
         $("#btback").show();
     } else {
-        $("#btback").hide();
+//        $("#btback").hide();
     }
 
     //  $("#songinfo").resize(resizeSonginfo());
@@ -299,10 +264,10 @@ $(document).bind("pageinit", function() {
     window.onhashchange = locationHashChanged;
     // Log all events
     mopidy.on(function() {
-        //        console.log(arguments);
+    //    console.log(arguments);
     });
-    //update gui every x seconds from mopdidy
-    setInterval(updateStatusOfAll, 5000);
+    //update gui status every x seconds from mopdidy
+    setInterval(updateTimer, STATUS_TIMER);
 });
 
 /************************
@@ -317,6 +282,13 @@ function switchContent(divid, uri) {
     location.hash = "#" + hash;
 }
 
+//update timer
+function updateStatusOfAll() {
+    mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
+    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
+//TODO check offline?
+}
+
 //update everything as if reloaded
 function updateStatusOfAll() {
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
@@ -327,8 +299,6 @@ function updateStatusOfAll() {
     mopidy.playback.getRandom().then(processRandom, console.error);
 
     mopidy.playback.getVolume().then(processVolume, console.error);
-
-    //TODO check offline?
 }
 
 function locationHashChanged() {
@@ -365,9 +335,8 @@ function locationHashChanged() {
                 }
                 break;
         }
-        showLoading(false);
         // Set the page title based on the hash.
-        //document.title = PROGRAM_NAME;
+        document.title = PROGRAM_NAME;
         $('.pane').hide();
         $('#' + divid + 'pane').show();
         return false;
