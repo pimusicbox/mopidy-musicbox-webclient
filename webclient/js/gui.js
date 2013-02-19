@@ -61,11 +61,13 @@ function setSongInfo(data) {
             artiststext += ', ';
         }
     }
-
+    
     if (data.album) {
         $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
     }
     $("#modalname").html(songname);
+    getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
+
     var arttmp = 'Artist';
 
     if (data.artists.length > 1) {
@@ -252,12 +254,6 @@ $(document).ready(function() {
         switchContent("playlists");
     }
 
-    //only show backbutton if in UIWebview
-    if (window.navigator.standalone) {
-        $("#btback").show();
-    } else {
-//        $("#btback").hide();
-    }
 
     //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;
@@ -266,8 +262,17 @@ $(document).ready(function() {
     mopidy.on(function() {
     //    console.log(arguments);
     });
+    
     //update gui status every x seconds from mopdidy
     setInterval(updateTimer, STATUS_TIMER);
+    
+        //only show backbutton if in UIWebview
+    if (window.navigator.standalone) {
+        $("#btback").show();
+    } else {
+        $("#btback").hide();
+    }
+
 });
 
 /************************

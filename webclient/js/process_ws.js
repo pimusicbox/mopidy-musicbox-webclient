@@ -39,14 +39,14 @@ function processRandom(data) {
 function processCurrentposition(data) {
     var pos = parseInt(data);
     setPosition(pos);
-   // console.log('pos:' + pos);
+    // console.log('pos:' + pos);
 }
 
 /********************************************************
  * process results playstate
  *********************************************************/
 function processPlaystate(data) {
-   // console.log(data);
+    // console.log(data);
     if (data == 'playing') {
         setPlayState(true);
         resumeTimer();
@@ -74,7 +74,7 @@ function processGetPlaylists(resultArr) {
     $('#playlistslist').empty();
     $('#playlistslist').html(tmp);
     $('#playlistslist').listview('refresh');
-//    $('#playlistsloader').hide();
+    //    $('#playlistsloader').hide();
     showLoading(false);
 }
 
@@ -86,9 +86,9 @@ function processGetTracklist(resultArr) {
     var newplaylisturi = resultArr.uri;
     playlists[newplaylisturi] = resultArr;
     playlisttotable(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
-//    $('#playlistloader').hide();
+    //    $('#playlistloader').hide();
     showLoading(false);
-    scrollToTracklist();
+    scrollToTop();
 }
 
 /********************************************************
@@ -96,7 +96,7 @@ function processGetTracklist(resultArr) {
  *********************************************************/
 function processCurrentPlaylist(resultArr) {
     currentplaylist = resultArr;
-    playlisttotable(resultArr, CURRENT_PLAYLIST_TABLE);   
+    playlisttotable(resultArr, CURRENT_PLAYLIST_TABLE);
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
 }
 
@@ -106,34 +106,38 @@ function processCurrentPlaylist(resultArr) {
 function processArtistResults(resultArr) {
     customTracklists[resultArr.uri] = resultArr;
     $(ARTIST_TABLE).html('');
-    
+
     //break into albums and put in tables
     var newalbum = [];
     var nexturi = '';
+    var html, tableid;
+    var artistname = getArtist(resultArr);
+
     for (var i = 0; i < resultArr.length; i++) {
         newalbum.push(resultArr[i]);
         nexturi = '';
         if (i < resultArr.length - 1) {
             nexturi = resultArr[i + 1].album.uri;
         }
-      //  console.log(i);
+        //  console.log(i);
         if (resultArr[i].album.uri != nexturi) {
-            var tableid = 'art' + i;
-            var html = '<h4>' + resultArr[i].album.name + '</h4>';
+            tableid = 'art' + i;
+            html = '<a href="#" onclick="return showAlbum(\'' + resultArr[i].album.uri + '\');"><img id="artistcover-' + i + '" class="artistcover" width="40" height="40" />';
+            html += '<h4>' + resultArr[i].album.name + '</h4></a>';
             html += '<ul data-role="listview" data-inset="true" data-icon="false" class="" id="' + tableid + '"></ul>';
             tableid = "#" + tableid;
             $(ARTIST_TABLE).append(html);
             albumtrackstotable(newalbum, tableid, resultArr[i].album.uri);
+            getCover(artistname, resultArr[i].album.name, '#artistcover-' + i, 'small');
             $(tableid).listview('refresh');
             customTracklists[resultArr[i].album.uri] = newalbum;
             newalbum = [];
         }
     }
-    $('#h_artistname').html(getArtist(resultArr));
-//    $('#artistsloader').hide();
+    $('#h_artistname, #artistpopupname').html(artistname);
+    getArtistImage(artistname, '#artistviewimage, #artistpopupimage', 'extralarge');
     showLoading(false);
 }
-
 
 /********************************************************
  * process results of an album lookup
@@ -141,8 +145,13 @@ function processArtistResults(resultArr) {
 function processAlbumResults(resultArr) {
     customTracklists[resultArr.uri] = resultArr;
     albumtrackstotable(resultArr, ALBUM_TABLE, resultArr.uri);
-    $('#h_albumname').html(getAlbum(resultArr));
-    $('#h_albumartist').html(getArtist(resultArr));
+    var albumname = getAlbum(resultArr);
+    var artistname = getArtist(resultArr);
+    $('#h_albumname').html(albumname);
+    $('#h_albumartist').html(artistname);
+    $('#coverpopupalbumname').html(albumname);
+    $('#coverpopupartist').html(artistname);
+    getCover(artistname, albumname, '#albumviewcover, #coverpopupimage', 'extralarge');
     showLoading(false);
-//    $('#albumsloader').hide();
+    //    $('#albumsloader').hide();
 }

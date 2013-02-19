@@ -1,13 +1,13 @@
 /*****
- * Mopidy Webclient CSS 
+ * Mopidy Webclient CSS
  * (c)
  */
 
 /****************************
- *  Responsive stuff 
+ *  Responsive stuff
  ****************************/
 
-@media all and (min-width: 50.1em){
+@media all and (min-width: 50.1em) {
     .pl-breakpoint.ui-grid-a .ui-block-a {
         width: 32.95%;
     }
@@ -43,6 +43,7 @@
     #header {
         height: 50px !important;
     }
+
 }
 
 @media all and (max-width: 50em) {
@@ -63,21 +64,22 @@
 @media all and (max-width: 35em) {
     .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
         width: 100%;
-        float:inherit;
     }
-    .header-breakpoint .ui-block-c, .header-breakpoint .ui-block-a {
-        width: 100%;
+    .header-breakpoint.ui-grid-b .ui-block-a {
+        width: 40%;
+        clear: left;
     }
-    .header-breakpoint .ui-block-b {
+    .header-breakpoint.ui-grid-b .ui-block-c {
+        width: 45%;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-b {
         display: none;
-        width: 0;
-    }
-    #header {
-        height: 75px !important;
     }
 }
+
+
 /************************
- *  Volume Slider 
+ *  Volume Slider
  ***********************/
 #mutebt {
     float: left;
@@ -90,11 +92,12 @@
 }
 
 /***********************
- *  Track Slider 
+ *  Track Slider
  ***********************/
 
 #trackslider {
     display: inline;
+    width: 100%;
 }
 
 #slidercontainer {
@@ -117,7 +120,7 @@
 }
 
 /***********************************
- * Controls 
+ * Controls
  * *********************************/
 #controldiv {
     height: 30px;
@@ -161,7 +164,6 @@
 #songinfo {
     margin-top: 10px;
     height: 35px;
-    overflow: hidden;
 }
 
 #infoartist {
@@ -215,12 +217,43 @@
     text-decoration: none;
 }
 
-#infoartist a {
-    color: #eee;
+#songinfo a {
     text-decoration: none;
 }
+
+#infoartist a {
+    color: #eee;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+#artistviewimage, #albumviewcover {
+    float: right;
+    heigth: 90px;
+}
+
+#infocover {
+    float: left;
+    width: 36px;
+    heigth: 36px;
+    margin-right: 5px;
+/*    border: 1px solid #666; */
+    margin-top: -3px;
+}
+
+.artistcover {
+    float: left;
+    width: 40px;
+    heigth: 40px;
+    margin-right: 3px;    
+}    
 
 #popupTrackName, #popupAlbumName, .popupArtistName {
     font-style: oblique;
 }
 
+#controlsmodal {
+    min-width:300px;
+}

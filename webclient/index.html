@@ -6,7 +6,6 @@
         <script src="js/jquery-1.8.3.js"></script>
         <script type='application/javascript' src='js/fastclick.js'></script>
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <link rel="apple-touch-startup-image" href="imgages/start.jpg" />
         <script type="text/javascript">
             $(document).bind("mobileinit", function() {
                 $.extend($.mobile, {
@@ -32,26 +31,28 @@
         <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk" />
         <link href="css/ws.css" rel="stylesheet">
         <script type="text/javascript" src="/mopidy/mopidy.js"></script>
+
         <link rel="stylesheet" href="css/add2home.css">
     </head>
 
     <body>
         <div data-role="page" data-theme="c" id="page">
 
-            <div id="controlsmodal" data-role="popup" data-theme="c" style="min-width:325px;">
+            <div id="coverpopup" data-role="popup" data-theme="c">
                 <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-                <h3 id="modalname"></h3>
-                <h4 id="modalartist"></h4>
-                <h4 id="modalalbum"></h4>
-<!--                <div id="slidercontainer2">
-                    <p>
-                        <span id="songelapsed2" class="pull-left"> 0:00 </span>
-                        <span id="songlength2" class="pull-right"> 0:00 </span>
-                        <label for="trackslider2"  class="ui-hidden-accessible">Position</label>
-                        <input id="trackslider2" name="trackslider2" data-mini="true" type="range" onmousedown="pauseTimer();" onchange="doSeekPos(this.value);" class="nobreak" />
-                    </p>
-                </div>
-    -->
+                <h3 id="coverpopupalbumname">aaa</h3>
+                <h4 id="coverpopupartist">bbb</h4>
+                <img id="coverpopupimage" src="" />
+            </div>
+            
+            <div id="artistpopup" data-role="popup" data-theme="c">
+                <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+                <h4 id="artistpopupname">bbb</h4>
+                <img id="artistpopupimage" src="" />
+            </div>
+            
+            <div id="controlsmodal" data-role="popup" data-theme="c">
+                <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
                 <p class="">
                     <a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
                     &nbsp; <a href="#" onclick="doRepeat(); return false"><img src="images/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
@@ -61,9 +62,22 @@
                         <input id="volumeslider" name="volumeslider" data-mini="true" type="range" min="0" value="0" max="100" onchange="doVolume(this.value);" />
                     </div>
                 </p>
+                <h3 id="modalname"></h3>
+                <h4 id="modalartist"></h4>
+                <h4 id="modalalbum"></h4>
+                <img id="controlspopupimage" src="" />
+                <!--                <div id="slidercontainer2">
+                <p>
+                <span id="songelapsed2" class="pull-left"> 0:00 </span>
+                <span id="songlength2" class="pull-right"> 0:00 </span>
+                <label for="trackslider2"  class="ui-hidden-accessible">Position</label>
+                <input id="trackslider2" name="trackslider2" data-mini="true" type="range" onmousedown="pauseTimer();" onchange="doSeekPos(this.value);" class="nobreak" />
+                </p>
+                </div>
+                -->
             </div>
 
-            <div data-role="popup" data-transition="pop" data-theme="c" id="popupTracks">
+            <div data-role="popup" data-transition="none" data-theme="c" id="popupTracks">
                 <div data-role="collapsible-set">
                     <ul data-role="listview" data-icon="false" id="popupTracksLv">
                         <!-- <li data-role="divider">
@@ -98,17 +112,19 @@
                     <span id="btcontrols"><a href="#controlsmodal" data-rel="popup"><img src="images/icons/cog_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></a></span>
                 </div>
 
-                <div id="songinfo" class=" ui-block-b" onclick="expandSonginfo();">
+                <div id="songinfo" class=" ui-block-b">
+                    <a href="#controlsmodal" data-rel="popup">
+                    <img id="infocover" width="36" height="36"></img>
                     <div id="infoname"></div>
                     <div id="infoartist"></div>
-                    <br/>
+                    </a>
                 </div>
 
                 <div id="slidercontainer" class="ui-block-c">
                     <span id="songelapsed" class="pull-left"> 0:00 </span>
                     <span id="songlength" class="pull-right"> 0:00 </span>
                     <label for="trackslider"  class="ui-hidden-accessible">Position</label>
-                    <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" class="nobreak" />
+                    <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
                 </div>
 
             </div><!-- /header -->
@@ -131,6 +147,7 @@
             </div>
 
             <div data-role="content" class="pane" id="albumspane">
+                <a href="#coverpopup" data-rel="popup"><img height="90" src="" id="albumviewcover" /></a>
                 <h3 id="h_albumname"></h3>
                 <h5 id="h_albumartist"></h5>
                 <ul data-role="listview" data-icon="false" data-inset="true" id="albumstable"></ul>
@@ -139,6 +156,7 @@
 
             <div data-role="content" class="pane" id="artistspane">
                 <!--                            <h4>Artist</h4> -->
+                <a href="#artistpopup" data-rel="popup"><img height="90" src="" id="artistviewimage" /></a>
                 <h3 id="h_artistname"></h3>
 
                 <!--          <ul data-role="listview" data-icon="false" id="artistslist" data-inset="true"></ul> -->
@@ -206,6 +224,14 @@
         <script src="js/library.js"></script>
         <script src="js/functionsvars.js"></script>
         <script src="js/process_ws.js"></script>
+
+                <!-- use lastfm -->
+        <script type="text/javascript" src="js/lastfm.api.md5.js"></script>
+        <script type="text/javascript" src="js/lastfm.api.js"></script>
+        <script type="text/javascript" src="js/lastfm.api.cache.js"></script>
+
+        <script src="js/lastfm.js"></script>
+
         <script src="js/gui.js"></script>
     </body>
 </html>

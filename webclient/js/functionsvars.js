@@ -58,8 +58,9 @@ STATUS_TIMER = 10000;
 /*******
  *
  */
-function scrollToTracklist() {
-    var divtop = $("#playlisttablediv").offset().top - 15;
+function scrollToTop() {
+    var divtop = 0;
+//    console.log(divtop);
     $('body,html').animate({
         scrollTop : divtop
     }, 250);
