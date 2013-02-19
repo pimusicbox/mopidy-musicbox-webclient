@@ -63,7 +63,13 @@ STATUS_TIMER = 10000;
  */
 function scrollToTop() {
     var divtop = 0;
-    //    console.log(divtop);
+    $('body,html').animate({
+        scrollTop : divtop
+    }, 250);
+}
+
+function scrollToTracklist() {
+    var divtop = $("#playlisttablediv").offset().top - 25;
     $('body,html').animate({
         scrollTop : divtop
     }, 250);
@@ -133,8 +139,6 @@ function resultsToTables(results, target, uri) {
             nexturi = results[i + 1].album.uri;
         }
         if (results[i].album.uri != nexturi) {
-            //        console.log(i);
-
             tableid = 'art' + i;
             html += '<li data-role="list-divider" data-theme="d"><a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');">';
             html += '<img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="40" height="40" />';
@@ -161,7 +165,6 @@ function resultsToTables(results, target, uri) {
             newalbum = [];
         }
     }
-    //console.log(html);
     tableid = "#" + tableid;
     $(target).html(html);
     $(target).attr('data', uri);
@@ -175,24 +178,6 @@ function playlisttotable(pl, table, uri) {
 
     var child = '';
     for (var i = 0; i < pl.length; i++) {
-        /*        var child = '<li><a href="#" class="name" id="' + pl[i].uri + '"><h2>' + pl[i].name + "</h2></a>";
-         child += '<a href="#" class="time" id="' + pl[i].uri + '"><h2 class="ui-li-aside">' + timeFromSeconds(pl[i].length / 1000) + '</h2></a>';
-         //   console.log(i);
-         child += '<h4>';
-         for (var j = 0; j < pl[i].artists.length; j++) {
-         child += '<a href="#" class="artist" id="' + pl[i].artists[j].uri + '">' + pl[i].artists[j].name + "</a>";
-         //stop after 3
-         if (j > 2) {
-         child += '...';
-         break;
-         }
-         }
-         //        child += '</a>';
-         child += ' / <a href="#" class="album" id="' + pl[i].album.uri + '">' + pl[i].album.name + '</a></h4>';
-         child += '</li>';
-         //console.log(child);
-         tmp += child;
-         */
         popupData[pl[i].uri] = pl[i];
 
         child = '<li id="' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';

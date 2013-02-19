@@ -41,14 +41,12 @@ function processRandom(data) {
 function processCurrentposition(data) {
     var pos = parseInt(data);
     setPosition(pos);
-    // console.log('pos:' + pos);
 }
 
 /********************************************************
  * process results playstate
  *********************************************************/
 function processPlaystate(data) {
-    // console.log(data);
     if (data == 'playing') {
         setPlayState(true);
         resumeTimer();
@@ -86,13 +84,12 @@ function processGetPlaylists(resultArr) {
 function processGetTracklist(resultArr) {
     //cache result
     var newplaylisturi = resultArr.uri;
-    //console.log(newplaylisturi);
     playlists[newplaylisturi] = resultArr;
     resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     //    playlisttotable(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     //    $('#playlistloader').hide();
     showLoading(false);
-    scrollToTop();
+    scrollToTracklist();
 }
 
 /********************************************************

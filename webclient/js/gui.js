@@ -99,7 +99,6 @@ function setSongInfo(data) {
 function popupTracks(e, listuri, trackuri) {
     if (!e)
         var e = window.event;
-    //console.log('list: ' + listuri + ', track: ' + trackuri);
     $('#popupTrackName').html(popupData[trackuri].name);
     $('#popupAlbumName').html(popupData[trackuri].album.name);
     var child = "";
@@ -120,13 +119,11 @@ function popupTracks(e, listuri, trackuri) {
         }))));
 
         $('#popupArtistsDiv').hide();
-        //        console.log(child);
         //        $('#popupArtistsLi').html(child).show();
     } else {
         for (var j = 0; j < popupData[trackuri].artists.length; j++) {
             child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>';
         }
-        //console.log(child);
         $('#popupArtistsLi').hide();
         $('#popupArtistsLv').html(child).show();
         $('#popupArtistsDiv').show();
@@ -273,7 +270,6 @@ $(document).ready(function() {
     window.onhashchange = locationHashChanged;
     // Log all events
     mopidy.on(function() {
-        //    console.log(arguments);
     });
 
     //update gui status every x seconds from mopdidy

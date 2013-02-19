@@ -289,8 +289,7 @@ a {
     height: 50px !important;
 }
 
-
-#controlspopupimage, #coverpopupimage, #artistpopupimage {
+#buttons, #controlspopupimage, #coverpopupimage, #artistpopupimage {
     display: block;
     margin-left: auto;
     margin-right: auto 

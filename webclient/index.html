@@ -44,29 +44,30 @@
                 <h4 id="coverpopupartist">bbb</h4>
                 <img id="coverpopupimage" src="" />
             </div>
-            
+
             <div id="artistpopup" data-role="popup" data-theme="c">
                 <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
                 <h4 id="artistpopupname">bbb</h4>
                 <img id="artistpopupimage" src="" />
             </div>
-            
+
             <div id="controlsmodal" data-role="popup" data-theme="c">
                 <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-                <p class="">
+                <p id="buttons">
                     <a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
                     &nbsp; <a href="#" onclick="doRepeat(); return false"><img src="images/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
-                    <div>
-                        <a href="#" onclick="doMute(); return false;"><img id="mutebt" src="images/icons/volume_16x12.png" alt="" /></a>
-                        <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
-                        <input id="volumeslider" name="volumeslider" data-mini="true" type="range" min="0" value="0" max="100" onchange="doVolume(this.value);" />
-                    </div>
+                    &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><img src="images/icons/fork_21x24.png" id="shufflebt" alt="" /></a>
                 </p>
+                <div>
+                    <a href="#" onclick="doMute(); return false;"><img id="mutebt" src="images/icons/volume_16x12.png" alt="" /></a>
+                    <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
+                    <input id="volumeslider" name="volumeslider" data-mini="true" type="range" min="0" value="0" max="100" onchange="doVolume(this.value);" />
+                </div>
                 <h3 id="modalname"></h3>
                 <h4 id="modalartist"></h4>
                 <h4 id="modalalbum"></h4>
                 <img id="controlspopupimage" src="" />
-                
+
             </div>
 
             <div data-role="popup" data-transition="none" data-theme="c" id="popupTracks">
@@ -79,7 +80,7 @@
                             <a href="#" onclick="return playTrack();">Play Track <span id="popupTrackName"></span></a>
                         </li>
                         <li id="liaddtobottom">
-                        <a href="#" onclick="return playTrack(true);">Add tracks to bottom of queue</a>
+                            <a href="#" onclick="return playTrack(true);">Add tracks to bottom of queue</a>
                         </li>
                         <li>
                             <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>
@@ -104,11 +105,7 @@
                 </div>
 
                 <div id="songinfo" class=" ui-block-b">
-                    <a href="#controlsmodal" data-rel="popup">
-                    <img id="infocover" width="36" height="36"></img>
-                    <div id="infoname"></div>
-                    <div id="infoartist"></div>
-                    </a>
+                    <a href="#controlsmodal" data-rel="popup"> <img id="infocover" width="36" height="36"></img> <div id="infoname"></div> <div id="infoartist"></div> </a>
                 </div>
 
                 <div id="slidercontainer" class="ui-block-c">
@@ -213,7 +210,7 @@
         <script src="js/functionsvars.js"></script>
         <script src="js/process_ws.js"></script>
 
-                <!-- use lastfm -->
+        <!-- use lastfm -->
         <script type="text/javascript" src="js/lastfm.api.md5.js"></script>
         <script type="text/javascript" src="js/lastfm.api.js"></script>
         <script type="text/javascript" src="js/lastfm.api.cache.js"></script>

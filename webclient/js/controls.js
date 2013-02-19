@@ -8,8 +8,6 @@ function playTrack(addtobottom) {
     //function playtrack(uri, playlisturi) {
     playlisturi = $('#popupTracks').data("list");
     uri = $('#popupTracks').data("track");
-    //console.log(uri);
-    //console.log(playlisturi);
     var trackslist = new Array();
     var track;
     switchContent('current', uri);
@@ -24,9 +22,11 @@ function playTrack(addtobottom) {
     } else {
         tracks = currentplaylist;
     }
-    
-    if (addtobottom) { return false;}
-    
+
+    if (addtobottom) {
+        return false;
+    }
+
     mopidy.playback.stop(true);
 
     for (var i = 0; i < tracks.length; i++) {
@@ -46,6 +46,12 @@ function playTrack(addtobottom) {
 /**********************
  * Buttons
  */
+
+function doShuffle() {
+    mopidy.playback.stop(true);
+    mopidy.tracklist.shuffle();
+    mopidy.playback.play();
+}
 
 /* Toggle state of play button */
 function setPlayState(nwplay) {
@@ -180,7 +186,6 @@ function setPosition(pos) {
 
 function setVolume(value) {
     var oldval = initgui;
-    console.log('volume: ' + value);
     initgui = true;
     $("#volumeslider").val(value).slider('refresh');
     initgui = oldval;
@@ -238,4 +243,3 @@ function initTimer() {
 function pauseTimer() {
     clearInterval(posTimer);
 }
-

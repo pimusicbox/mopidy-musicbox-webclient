@@ -114,12 +114,11 @@ function showTracklist(uri) {
     showLoading(true);
 
     var pl = getPlaylistFromUri(uri);
-    //    console.log (pl);
     //load from cache
     if (pl) {
         playlisttotable(pl.tracks, PLAYLIST_TABLE, uri);
     }
-    scrollToTop();
+    scrollToTracklist();
     //lookup recent tracklist
     mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);
     return false;
