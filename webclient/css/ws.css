@@ -266,6 +266,7 @@ a {
 }
 
 #controlsmodal {
+    max-width: 500px;
     min-width: 300px;
 }
 
@@ -286,4 +287,11 @@ a {
 
 #header {
     height: 50px !important;
+}
+
+
+#controlspopupimage, #coverpopupimage, #artistpopupimage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
 }
