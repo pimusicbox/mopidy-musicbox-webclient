@@ -36,18 +36,27 @@
         clear: left;
     }
     .srch-breakpoint.ui-grid-a .ui-block-b {
-        margin-left: 5px;
+        margin-left: .5em;
     }
     .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
-        width: 49.5%;
+        width: 49%;
     }
     #playlisttablediv {
         margin-left: 10px;
     }
+    #btcontrols {
+        display: none;
+    }
 }
 
 /* tablet etc */
-@media all and (max-width: 50em) and (min-width: 30.1em) {
+@media all and (max-width: 49.9em) and (min-width: 30.1em) {
+    .srch-breakpoint.ui-grid-a .ui-block-b {
+        margin-left: .2em;
+    }
+    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
+        width: 49.5%;
+    }
     .header-breakpoint.ui-grid-b .ui-block-a {
         width: 39.95%;
     }
@@ -61,6 +70,9 @@
 
 /* phone */
 @media all and (max-width: 30em) {
+    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
+        width: 100%;
+    }
     .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
         width: 100%;
     }
@@ -74,6 +86,10 @@
     .header-breakpoint.ui-grid-b .ui-block-b {
         display: none;
     }
+    #btcontrols {
+        display: block;
+    }
+        
 }
 
 /************************
@@ -265,7 +281,7 @@ a {
     font-style: oblique;
 }
 
-#controlsmodal {
+#controlsmodal, #artistpopup, #coverpopup {
     max-width: 500px;
     min-width: 300px;
 }
@@ -292,5 +308,9 @@ a {
 #buttons, #controlspopupimage, #coverpopupimage, #artistpopupimage {
     display: block;
     margin-left: auto;
-    margin-right: auto 
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+.playlistactive {
+    background-color: #ccc;
 }

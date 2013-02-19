@@ -43,7 +43,7 @@ function resizeSonginfo() {
         });
         $("#infoartist").html('<a href="#controlsmodal" data-rel="popup">' + $("#infoartist").html() + '</a>');
     } else {
-        $("#infoartist").html(artistshtml);
+        $("#infoartist").html(artiststext);
     }
 }
 

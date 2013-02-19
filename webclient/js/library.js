@@ -110,7 +110,6 @@ function getCurrentPlaylist() {
 function showTracklist(uri) {
     $(PLAYLIST_TABLE).empty();
     $('#playlisttablediv').show();
-    //    $('#playlistloader').show();
     showLoading(true);
 
     var pl = getPlaylistFromUri(uri);
@@ -118,6 +117,14 @@ function showTracklist(uri) {
     if (pl) {
         playlisttotable(pl.tracks, PLAYLIST_TABLE, uri);
     }
+
+    $('#playlistslist li a').each(function() {
+        $(this).removeClass("playlistactive");
+        if (this.id == uri) {
+            $(this).addClass('playlistactive');
+        }
+    });
+
     scrollToTracklist();
     //lookup recent tracklist
     mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);

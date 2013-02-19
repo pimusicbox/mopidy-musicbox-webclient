@@ -101,11 +101,12 @@
                     <span id="btprev"><a href="#" onclick="doPrevious(); return false"><img id="previmg" src="images/icons/first_24x24.png" alt="Previous Track" /></a></span>
                     <span id="btplay"><a href="#" onclick="doPlay(); return false"><img src="images/icons/pause_32x32.png" alt="Play" id="playimg" /></a></span>
                     <span id="btnext"><a href="#" onclick="doNext(); return false"><img id="nextimg" src="images/icons/last_24x24.png" alt="Next Track" /></a></span>
-                    <span id="btcontrols"><a href="#controlsmodal" data-rel="popup"><img src="images/icons/new_window_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></a></span>
+                    <span id="btcontrols"><a href="#controlsmodal" data-position-to="window" data-rel="popup"><img src="images/icons/new_window_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></a></span>
                 </div>
 
                 <div id="songinfo" class=" ui-block-b">
-                    <a href="#controlsmodal" data-rel="popup"> <img id="infocover" width="36" height="36"></img> <div id="infoname"></div> <div id="infoartist"></div> </a>
+                    <a href="#controlsmodal" data-position-to="window" data-rel="popup"> 
+                        <img id="infocover" width="36" height="36"></img> <div id="infoname"></div> <div id="infoartist"></div> </a>
                 </div>
 
                 <div id="slidercontainer" class="ui-block-c">
@@ -135,7 +136,7 @@
             </div>
 
             <div data-role="content" class="pane" id="albumspane">
-                <a href="#coverpopup" data-rel="popup"><img height="90" src="" id="albumviewcover" /></a>
+                <a href="#coverpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="albumviewcover" /></a>
                 <h3 id="h_albumname"></h3>
                 <h5 id="h_albumartist"></h5>
                 <ul data-role="listview" data-icon="false" data-inset="true" id="albumstable"></ul>
@@ -144,7 +145,7 @@
 
             <div data-role="content" class="pane" id="artistspane">
                 <!--                            <h4>Artist</h4> -->
-                <a href="#artistpopup" data-rel="popup"><img height="90" src="" id="artistviewimage" /></a>
+                <a href="#artistpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="artistviewimage" /></a>
                 <h3 id="h_artistname"></h3>
                 <ul data-role="listview" data-icon="false" data-inset="true" id="artiststable"></ul>
                 <img src="images/loader.gif" id="artistsloader" class="loader" />

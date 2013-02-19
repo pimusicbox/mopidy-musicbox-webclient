@@ -2,7 +2,7 @@
 Mopidy Browser Client
 *********************
 
-This is a responsive html/js/css client for Mopidy. Responsive, so it works on desktop and mobile browsers.
+This is a responsive html/js/css client for Mopidy. Responsive, so it works on desktop and mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
 
 `Mopidy <http://www.mopidy.com/>`_ is a music server which can play music from `Spotify <http://www.spotify.com/>`_ or from your local hard drive. 
 
