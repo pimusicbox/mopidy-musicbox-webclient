@@ -1,7 +1,7 @@
 /********************************************************
  * play an uri from a trackslist or the current playlist
  *********************************************************/
-function playTrack() {
+function playTrack(addtobottom) {
     $('#popupTracks').popup('close');
     $('#controlsmodal').popup('close');
 
@@ -14,13 +14,19 @@ function playTrack() {
     var track;
     switchContent('current', uri);
     var tracks = getTracksFromUri(playlisturi);
+
     if (tracks) {
-        mopidy.tracklist.clear();
+        if (!addtobottom) {
+            mopidy.tracklist.clear();
+        }
         mopidy.tracklist.add(tracks);
         $(CURRENT_PLAYLIST_TABLE).empty();
     } else {
         tracks = currentplaylist;
     }
+    
+    if (addtobottom) { return false;}
+    
     mopidy.playback.stop(true);
 
     for (var i = 0; i < tracks.length; i++) {
@@ -36,8 +42,6 @@ function playTrack() {
 
     return false;
 }
-
-
 
 /**********************
  * Buttons
@@ -129,6 +133,7 @@ function doRepeat() {
 
 /*********************
  * Track Slider
+ * Use a timer to prevent looping of commands
  *********************/
 
 function doSeekPos(value) {
@@ -138,20 +143,24 @@ function doSeekPos(value) {
     if (!initgui) {
         pauseTimer();
         //set timer to not trigger it too much
-        mopidy.playback.pause();
-        seekTimer = setTimeout(triggerPos, 250);
+        posChanging = true;
+        seekTimer = setTimeout(triggerPos, 200);
     }
 }
 
 function triggerPos() {
-    console.log(newposition);
     if (mopidy) {
+        mopidy.playback.stop();
         mopidy.playback.seek(newposition);
         mopidy.playback.resume();
+        posChanging = false;
     }
 }
 
 function setPosition(pos) {
+    if (posChanging) {
+        return;
+    }
     var oldval = initgui;
     if (pos > songlength) {
         pos = songlength;
@@ -165,11 +174,13 @@ function setPosition(pos) {
 }
 
 /********************
- * Volume
+ * Volume slider
+ * Use a timer to prevent looping of commands
  */
 
 function setVolume(value) {
     var oldval = initgui;
+    console.log('volume: ' + value);
     initgui = true;
     $("#volumeslider").val(value).slider('refresh');
     initgui = oldval;
@@ -177,9 +188,15 @@ function setVolume(value) {
 
 function doVolume(value) {
     if (!initgui) {
-        console.log('volume: ' + value);
+        volumeChanging = true;
+        clearInterval(volumeTimer);
+        volumeTimer = setTimeout(triggerVolume, 2000);
         mopidy.playback.setVolume(parseInt(value));
     }
+}
+
+function triggerVolume() {
+    volumeChanging = false;
 }
 
 function doMute() {
@@ -195,8 +212,9 @@ function doMute() {
     }
 
 }
+
 /*******
- * Track timer 
+ * Track timer
  */
 
 //timer function to update interface
@@ -213,13 +231,11 @@ function resumeTimer() {
 
 function initTimer() {
     pauseTimer();
-   // setPosition(0);
+    // setPosition(0);
     resumeTimer();
 }
 
 function pauseTimer() {
     clearInterval(posTimer);
 }
-
-
 

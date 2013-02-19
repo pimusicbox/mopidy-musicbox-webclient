@@ -86,10 +86,9 @@
                         <li>
                             <a href="#" onclick="return playTrack();">Play Track <span id="popupTrackName"></span></a>
                         </li>
-                        <!--                    <li>
-                        <a href="#">Add tracks to bottom of queue</a>
+                        <li id="liaddtobottom">
+                        <a href="#" onclick="return playTrack(true);">Add tracks to bottom of queue</a>
                         </li>
-                        -->
                         <li>
                             <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>
                         </li>
@@ -106,10 +105,10 @@
 
                 <div id="controldiv" class="ui-block-a">
                     <span id="btback"><a href="#" onclick="return backbt();"> <img  id="backimg"src="images/icons/arrow_left_alt1_24x24.png" /></a></span>
-                    <span id="btprev"><a href="#" onclick="doPrevious(); return false"><img id="previmg" src="images/icons/first_16x16.png" alt="Previous Track" /></a></span>
+                    <span id="btprev"><a href="#" onclick="doPrevious(); return false"><img id="previmg" src="images/icons/first_24x24.png" alt="Previous Track" /></a></span>
                     <span id="btplay"><a href="#" onclick="doPlay(); return false"><img src="images/icons/pause_32x32.png" alt="Play" id="playimg" /></a></span>
-                    <span id="btnext"><a href="#" onclick="doNext(); return false"><img id="nextimg" src="images/icons/last_16x16.png" alt="Next Track" /></a></span>
-                    <span id="btcontrols"><a href="#controlsmodal" data-rel="popup"><img src="images/icons/cog_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></a></span>
+                    <span id="btnext"><a href="#" onclick="doNext(); return false"><img id="nextimg" src="images/icons/last_24x24.png" alt="Next Track" /></a></span>
+                    <span id="btcontrols"><a href="#controlsmodal" data-rel="popup"><img src="images/icons/new_window_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></a></span>
                 </div>
 
                 <div id="songinfo" class=" ui-block-b">
@@ -134,7 +133,7 @@
                     <ul id="playlistslist" data-icon="false" data-inset="true" data-role="listview" data-filter="true"></ul>
                 </div>
                 <div class="ui-block-b" id="playlisttablediv">
-                    <ul data-role="listview"  data-icon="false" id="playlisttable" data-inset="true" data-filter="true"></ul>
+                    <ul data-role="listview" data-theme="c" data-icon="false" id="playlisttable" data-inset="true" data-filter="true"></ul>
                     <img src="images/loader.gif" id="playlistloader" class= "loader" />
                 </div>
 
@@ -142,7 +141,7 @@
 
             <div data-role="content" class="pane" id="currentpane">
                 <h4>Play Queue</h4>
-                <ul data-role="listview" data-icon="false" data-inset="true" id="currenttable"></ul>
+                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul>
                 <img src="images/loader.gif" id="currentloader" class= "loader" />
             </div>
 
@@ -158,10 +157,7 @@
                 <!--                            <h4>Artist</h4> -->
                 <a href="#artistpopup" data-rel="popup"><img height="90" src="" id="artistviewimage" /></a>
                 <h3 id="h_artistname"></h3>
-
-                <!--          <ul data-role="listview" data-icon="false" id="artistslist" data-inset="true"></ul> -->
-
-                <div id="artiststable"></div>
+                <ul data-role="listview" data-icon="false" data-inset="true" id="artiststable"></ul>
                 <img src="images/loader.gif" id="artistsloader" class="loader" />
             </div>
 

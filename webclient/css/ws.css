@@ -5,6 +5,12 @@
 
 /****************************
  *  Responsive stuff
+ *  * iphone 3 20em
+ *    landscape 30
+ * iphone 4 40em
+ *    landscape 60
+ * ipad landsc 64
+ *    portr 48
  ****************************/
 
 @media all and (min-width: 50.1em) {
@@ -18,15 +24,13 @@
         clear: left;
     }
     .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 21.95%;
+        width: 21%;
     }
     .header-breakpoint.ui-grid-b .ui-block-b {
-        width: 37.92%;
-        display: block;
+        width: 37%;
     }
     .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 37.1%;
-        display: block;
+        width: 35.1%;
     }
     .pl-breakpoint.ui-grid-a .ui-block-a {
         clear: left;
@@ -40,43 +44,37 @@
     #playlisttablediv {
         margin-left: 10px;
     }
-    #header {
-        height: 50px !important;
-    }
-
 }
 
-@media all and (max-width: 50em) {
+/* tablet etc */
+@media all and (max-width: 50em) and (min-width: 30.1em) {
     .header-breakpoint.ui-grid-b .ui-block-a {
         width: 39.95%;
     }
     .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 59%;
+        width: 50%;
     }
     .header-breakpoint.ui-grid-b .ui-block-b {
         display: none;
     }
-    #header {
-        height: 50px !important;
-    }
 }
 
-@media all and (max-width: 35em) {
+/* phone */
+@media all and (max-width: 30em) {
     .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
         width: 100%;
     }
     .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 40%;
+        width: 35%;
         clear: left;
     }
     .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 45%;
+        width: 40%;
     }
     .header-breakpoint.ui-grid-b .ui-block-b {
         display: none;
     }
 }
-
 
 /************************
  *  Volume Slider
@@ -101,7 +99,7 @@
 }
 
 #slidercontainer {
-    margin-top: 10px;
+    margin-top: 7px;
     margin-bottom: 5px;
 }
 
@@ -125,6 +123,7 @@
 #controldiv {
     height: 30px;
     width: 230px;
+    margin-top: -3px;
     margin-left: -5px;
     display: inline;
 }
@@ -139,7 +138,7 @@
 }
 
 #nextimg, #previmg {
-    margin-top: 20px;
+    margin-top: 16px;
 }
 
 #backimg {
@@ -207,9 +206,12 @@
 .currenttrack {
     background-image: url('../images/icons/play_alt_16x16.png');
     background-repeat: no-repeat;
-    background-color: #fff;
+    background-color: #eee;
     background-position: 4px center;
-    padding-left: 10px;
+}
+
+.currenttrack a {
+    margin-left: 14px;
 }
 
 #modalalbum a, #modalartist a {
@@ -229,6 +231,15 @@ a {
     text-decoration: none !important;
 }
 
+.ui-li-divider {
+    height: 37px;
+}
+
+.ui-li-divider a p {
+    color: #555 !important;
+    font-size: 120% !important;
+}
+
 #artistviewimage, #albumviewcover {
     float: right;
     heigth: 90px;
@@ -239,21 +250,40 @@ a {
     width: 36px;
     heigth: 36px;
     margin-right: 5px;
-/*    border: 1px solid #666; */
+    /*    border: 1px solid #666; */
     margin-top: -3px;
 }
 
 .artistcover {
-    float: left;
+    float: right;
     width: 40px;
     heigth: 40px;
-    margin-right: 3px;    
-}    
+    margin-right: 3px;
+}
 
 #popupTrackName, #popupAlbumName, .popupArtistName {
     font-style: oblique;
 }
 
 #controlsmodal {
-    min-width:300px;
+    min-width: 300px;
+}
+
+.pright {
+    display: inline;
+    margin-top: 4px;
+    float: right;
+}
+
+.artistname {
+    font: bold;
+}
+
+#h_artistname {
+    margin-bottom: 65px;
+    margin-top: 10px;
+}
+
+#header {
+    height: 50px !important;
 }

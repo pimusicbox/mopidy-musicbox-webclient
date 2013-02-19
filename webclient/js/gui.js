@@ -1,21 +1,23 @@
 /* gui interactions here
- * set- functions only set/update the gui elements
- * do- functions interact with the server
- * show- functions do both
- */
+* set- functions only set/update the gui elements
+* do- functions interact with the server
+* show- functions do both
+*/
 /********************
  * Song Info Sreen
  ********************/
 function resetSong() {
-    pauseTimer();
-    setPlayState(false);
-    setPosition(0);
-    var data = new Object;
-    data.name = '';
-    data.artists = '';
-    data.length = 0;
-    data.uri = '';
-    setSongInfo(data);
+    if (!posChanging) {
+        pauseTimer();
+        setPlayState(false);
+        setPosition(0);
+        var data = new Object;
+        data.name = '';
+        data.artists = '';
+        data.length = 0;
+        data.uri = '';
+        setSongInfo(data);
+    }
 }
 
 function expandSonginfo() {
@@ -61,7 +63,7 @@ function setSongInfo(data) {
             artiststext += ', ';
         }
     }
-    
+
     if (data.album) {
         $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
     }
@@ -81,10 +83,7 @@ function setSongInfo(data) {
     $("#songlength").html(timeFromSeconds(data.length / 1000));
 
     resizeSonginfo();
-
-    $('#currenttable li').each(
-    function() {
-        //console.log(this.className);
+    $('#currenttable li').each(function() {
         $(this).removeClass("currenttrack");
         if (this.id == data.uri) {
             $(this).addClass('currenttrack');
@@ -97,8 +96,9 @@ function setSongInfo(data) {
  * @param {Object} listuri
  * @param {Object} trackuri
  */
-function popupTracks (e, listuri, trackuri) {
-    if (!e) var e = window.event;
+function popupTracks(e, listuri, trackuri) {
+    if (!e)
+        var e = window.event;
     //console.log('list: ' + listuri + ', track: ' + trackuri);
     $('#popupTrackName').html(popupData[trackuri].name);
     $('#popupAlbumName').html(popupData[trackuri].album.name);
@@ -107,35 +107,47 @@ function popupTracks (e, listuri, trackuri) {
     if (popupData[trackuri].artists.length == 1) {
 
         //this doesnt work
-//        child += '<a href="#" onclick="showArtist(\'' +popupData[trackuri].artists[0].uri + '\');">Show Artist <span class="popupArtistName">' + popupData[trackuri].artists[0].name + '</span></a>';
-    $('#popupTracksLv').append($('<li/>', { 'id': "popupArtistsLi"})
-        .append($('<a/>', {
-            'href': '#', 
-            'onclick': 'showArtist(\'' +popupData[trackuri].artists[0].uri + '\');',
-            'text': 'Show Artist '  
+        //        child += '<a href="#" onclick="showArtist(\'' +popupData[trackuri].artists[0].uri + '\');">Show Artist <span class="popupArtistName">' + popupData[trackuri].artists[0].name + '</span></a>';
+        $('#popupTracksLv').append($('<li/>', {
+            'id' : "popupArtistsLi"
+        }).append($('<a/>', {
+            'href' : '#',
+            'onclick' : 'showArtist(\'' + popupData[trackuri].artists[0].uri + '\');',
+            'text' : 'Show Artist '
         }).append($('<span/>', {
-            'class': 'popupArtistName',
-            'text': popupData[trackuri].artists[0].name
+            'class' : 'popupArtistName',
+            'text' : popupData[trackuri].artists[0].name
         }))));
-        
+
         $('#popupArtistsDiv').hide();
-//        console.log(child);
-//        $('#popupArtistsLi').html(child).show();
+        //        console.log(child);
+        //        $('#popupArtistsLi').html(child).show();
     } else {
-        for (var j = 0; j < popupData[trackuri].artists.length; j++) {                
-                child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>';
+        for (var j = 0; j < popupData[trackuri].artists.length; j++) {
+            child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>';
         }
         //console.log(child);
         $('#popupArtistsLi').hide();
         $('#popupArtistsLv').html(child).show();
         $('#popupArtistsDiv').show();
         $('#popupArtistsLv').listview("refresh");
-     }
-    $('#popupTracksLv') .listview().trigger("create");
+    }
+    var hash = document.location.hash.split('?');
+    var divid = hash[0].substr(1);
+    if (divid == 'current') {
+        $("#liaddtobottom").hide();
+    } else {
+        $("#liaddtobottom").show();
+    }
+
+    $('#popupTracksLv').listview().trigger("create");
 
     $('#popupTracksLv').listview('refresh');
 
-    $('#popupTracks').data("list", listuri).data("track", trackuri).popup("open", { x: e.pageX, y: e.pageY } );
+    $('#popupTracks').data("list", listuri).data("track", trackuri).popup("open", {
+        x : e.pageX,
+        y : e.pageY
+    });
     return false;
 }
 
@@ -210,7 +222,9 @@ function initSocketevents() {
     });
 
     mopidy.on("event:volumeChanged", function(data) {
-        setVolume(data["volume"]);
+        if (!volumeChanging) {
+            setVolume(data["volume"]);
+        }
     });
 
     mopidy.on("event:playbackStateChanged", function(data) {
@@ -239,10 +253,10 @@ function initSocketevents() {
  * initialize software
  **********************/
 $(document).ready(function() {
-//$(document).bind("pageinit", function() {
+    //$(document).bind("pageinit", function() {
 
     $(window).hashchange();
-    
+
     // Connect to server
     mopidy = new Mopidy();
     //initialize events
@@ -254,19 +268,18 @@ $(document).ready(function() {
         switchContent("playlists");
     }
 
-
     //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;
     window.onhashchange = locationHashChanged;
     // Log all events
     mopidy.on(function() {
-    //    console.log(arguments);
+        //    console.log(arguments);
     });
-    
+
     //update gui status every x seconds from mopdidy
     setInterval(updateTimer, STATUS_TIMER);
-    
-        //only show backbutton if in UIWebview
+
+    //only show backbutton if in UIWebview
     if (window.navigator.standalone) {
         $("#btback").show();
     } else {
@@ -283,7 +296,7 @@ function switchContent(divid, uri) {
     if (uri) {
         hash += "?" + uri;
     }
-//    $.mobile.changePage("#" + hash);
+    //    $.mobile.changePage("#" + hash);
     location.hash = "#" + hash;
 }
 
@@ -291,7 +304,7 @@ function switchContent(divid, uri) {
 function updateStatusOfAll() {
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-//TODO check offline?
+    //TODO check offline?
 }
 
 //update everything as if reloaded
@@ -307,42 +320,42 @@ function updateStatusOfAll() {
 }
 
 function locationHashChanged() {
-        var hash = document.location.hash.split('?');
-        //remove #
-        var divid = hash[0].substr(1);
-        var uri = hash[1];
-        $('#navcurrent a').removeClass('ui-state-active ui-state-persist ui-btn-active');
-        $('#navplaylists a').removeClass('ui-state-active ui-state-persist ui-btn-active');
-        $('#navsearch a').removeClass('ui-state-active ui-state-persist ui-btn-active');
-//        alert(divid);
-        switch(divid) {
-            case 'current':
-                $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active');
-                break;
-            case 'playlists':
-                $('#navplaylists a').addClass('ui-state-active ui-state-persist ui-btn-active');
-                break;
-            case 'search':
-                $('#navsearch a').addClass( $.mobile.activeBtnClass );
-                $("#searchinput").focus();
-                if (customTracklists['allresultscache'] == '') {
-                    initSearch($('#searchinput').val());
-                }
-                break;
-            case 'artists':
-                if (uri != '') {
-                    showArtist(uri);
-                }
-                break;
-            case 'albums':
-                if (uri != '') {
-                    showAlbum(uri);
-                }
-                break;
-        }
-        // Set the page title based on the hash.
-        document.title = PROGRAM_NAME;
-        $('.pane').hide();
-        $('#' + divid + 'pane').show();
-        return false;
+    var hash = document.location.hash.split('?');
+    //remove #
+    var divid = hash[0].substr(1);
+    var uri = hash[1];
+    $('#navcurrent a').removeClass('ui-state-active ui-state-persist ui-btn-active');
+    $('#navplaylists a').removeClass('ui-state-active ui-state-persist ui-btn-active');
+    $('#navsearch a').removeClass('ui-state-active ui-state-persist ui-btn-active');
+    //        alert(divid);
+    switch(divid) {
+        case 'current':
+            $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active');
+            break;
+        case 'playlists':
+            $('#navplaylists a').addClass('ui-state-active ui-state-persist ui-btn-active');
+            break;
+        case 'search':
+            $('#navsearch a').addClass($.mobile.activeBtnClass);
+            $("#searchinput").focus();
+            if (customTracklists['allresultscache'] == '') {
+                initSearch($('#searchinput').val());
+            }
+            break;
+        case 'artists':
+            if (uri != '') {
+                showArtist(uri);
+            }
+            break;
+        case 'albums':
+            if (uri != '') {
+                showAlbum(uri);
+            }
+            break;
     }
+    // Set the page title based on the hash.
+    document.title = PROGRAM_NAME;
+    $('.pane').hide();
+    $('#' + divid + 'pane').show();
+    return false;
+}

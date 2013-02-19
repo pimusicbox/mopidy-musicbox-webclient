@@ -16,7 +16,9 @@ function processCurrenttrack(data) {
  * process results of volume
  *********************************************************/
 function processVolume(data) {
-    setVolume(data);
+    if (!volumeChanging) {
+        setVolume(data);
+    }
 }
 
 /********************************************************
@@ -84,8 +86,10 @@ function processGetPlaylists(resultArr) {
 function processGetTracklist(resultArr) {
     //cache result
     var newplaylisturi = resultArr.uri;
+    //console.log(newplaylisturi);
     playlists[newplaylisturi] = resultArr;
-    playlisttotable(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
+    resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
+    //    playlisttotable(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     //    $('#playlistloader').hide();
     showLoading(false);
     scrollToTop();
@@ -96,7 +100,7 @@ function processGetTracklist(resultArr) {
  *********************************************************/
 function processCurrentPlaylist(resultArr) {
     currentplaylist = resultArr;
-    playlisttotable(resultArr, CURRENT_PLAYLIST_TABLE);
+    resultsToTables(resultArr, CURRENT_PLAYLIST_TABLE);
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
 }
 
@@ -105,35 +109,9 @@ function processCurrentPlaylist(resultArr) {
  *********************************************************/
 function processArtistResults(resultArr) {
     customTracklists[resultArr.uri] = resultArr;
-    $(ARTIST_TABLE).html('');
 
-    //break into albums and put in tables
-    var newalbum = [];
-    var nexturi = '';
-    var html, tableid;
+    resultsToTables(resultArr, ARTIST_TABLE, resultArr.uri);
     var artistname = getArtist(resultArr);
-
-    for (var i = 0; i < resultArr.length; i++) {
-        newalbum.push(resultArr[i]);
-        nexturi = '';
-        if (i < resultArr.length - 1) {
-            nexturi = resultArr[i + 1].album.uri;
-        }
-        //  console.log(i);
-        if (resultArr[i].album.uri != nexturi) {
-            tableid = 'art' + i;
-            html = '<a href="#" onclick="return showAlbum(\'' + resultArr[i].album.uri + '\');"><img id="artistcover-' + i + '" class="artistcover" width="40" height="40" />';
-            html += '<h4>' + resultArr[i].album.name + '</h4></a>';
-            html += '<ul data-role="listview" data-inset="true" data-icon="false" class="" id="' + tableid + '"></ul>';
-            tableid = "#" + tableid;
-            $(ARTIST_TABLE).append(html);
-            albumtrackstotable(newalbum, tableid, resultArr[i].album.uri);
-            getCover(artistname, resultArr[i].album.name, '#artistcover-' + i, 'small');
-            $(tableid).listview('refresh');
-            customTracklists[resultArr[i].album.uri] = newalbum;
-            newalbum = [];
-        }
-    }
     $('#h_artistname, #artistpopupname').html(artistname);
     getArtistImage(artistname, '#artistviewimage, #artistpopupimage', 'extralarge');
     showLoading(false);
@@ -144,7 +122,7 @@ function processArtistResults(resultArr) {
  *********************************************************/
 function processAlbumResults(resultArr) {
     customTracklists[resultArr.uri] = resultArr;
-    albumtrackstotable(resultArr, ALBUM_TABLE, resultArr.uri);
+    albumTracksToTable(resultArr, ALBUM_TABLE, resultArr.uri);
     var albumname = getAlbum(resultArr);
     var artistname = getArtist(resultArr);
     $('#h_albumname').html(albumname);

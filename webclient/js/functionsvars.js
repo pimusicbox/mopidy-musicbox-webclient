@@ -18,7 +18,11 @@ var random;
 var repeat;
 var currentVolume = -1;
 var muteVolume = -1;
+var volumeChanging = false;
+var posChanging = false;
+
 var posTimer;
+var volumeTimer;
 var seekTimer;
 var initgui = true;
 var currentpos = 0;
@@ -54,13 +58,12 @@ TRACK_TIMER = 1000;
 //check status timer, every 5 or 10 sec
 STATUS_TIMER = 10000;
 
-
 /*******
  *
  */
 function scrollToTop() {
     var divtop = 0;
-//    console.log(divtop);
+    //    console.log(divtop);
     $('body,html').animate({
         scrollTop : divtop
     }, 250);
@@ -85,6 +88,84 @@ function getAlbum(pl) {
             return pl[i].album.name;
         }
     };
+}
+
+/********************************************************
+ * break up results and put them in album tables
+ *********************************************************/
+function albumTracksToTable(pl, table, uri) {
+    var tmp = '';
+    $(table).empty();
+    var child = '';
+    for (var i = 0; i < pl.length; i++) {
+        popupData[pl[i].uri] = pl[i];
+        child = '<li><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
+        child += '<p style="float:right; display: inline;">' + timeFromSeconds(pl[i].length / 1000) + '</p><h1>' + pl[i].name + '</h1></a></li>';
+        tmp += child;
+    };
+    $(table).html(tmp);
+    $(table).attr('data', uri);
+    //set click handlers
+    /*   $(table + ' .name').click(function() {
+    return playtrack(this.id, uri)
+    });*/
+    //create (for new tables)
+    $(table).listview().trigger("create");
+    //refresh
+    $(table).listview('refresh');
+}
+
+function resultsToTables(results, target, uri) {
+    $(target).html('');
+
+    //break into albums and put in tables
+    var newalbum = [];
+    var html = '';
+    var nexturi = '';
+    var tableid, j, artistname, alburi;
+    var targetmin = target.substr(1);
+    $(target).attr('data', uri);
+
+    for (var i = 0; i < results.length; i++) {
+        newalbum.push(results[i]);
+        nexturi = '';
+        if (i < results.length - 1) {
+            nexturi = results[i + 1].album.uri;
+        }
+        if (results[i].album.uri != nexturi) {
+            //        console.log(i);
+
+            tableid = 'art' + i;
+            html += '<li data-role="list-divider" data-theme="d"><a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');">';
+            html += '<img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="40" height="40" />';
+            html += '<p class="artistname">' + results[i].album.name + '</p><p>';
+            for (j = 0; j < results[i].album.artists.length; j++) {
+                html += results[i].album.artists[j].name;
+                html += (j == results[i].album.artists.length - 1) ? '' : ' / ';
+                //stop after 3
+                if (j > 2) {
+                    child += '...';
+                    break;
+                }
+            }
+            html += '</p></a></li>';
+            //            html += '<ul data-role="listview" data-inset="true" data-icon="false" class="" id="' + tableid + '"></ul>';
+            for (j = 0; j < newalbum.length; j++) {
+                popupData[newalbum[j].uri] = newalbum[j];
+                html += '<li id="' + newalbum[j].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[j].uri + '\');">';
+                html += '<p class="pright">' + timeFromSeconds(newalbum[j].length / 1000) + '</p><h1>' + newalbum[j].name + '</h1></a></li>';
+            };
+            artistname = results[i].artists[0].name;
+            getCover(artistname, results[i].album.name, target + '-cover-' + i, 'small');
+            //            customTracklists[results[i].album.uri] = newalbum;
+            newalbum = [];
+        }
+    }
+    //console.log(html);
+    tableid = "#" + tableid;
+    $(target).html(html);
+    $(target).attr('data', uri);
+    $(target).listview('refresh');
 }
 
 //process updated playlist to gui
@@ -121,7 +202,7 @@ function playlisttotable(pl, table, uri) {
         // <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
         for (var j = 0; j < pl[i].artists.length; j++) {
             child += pl[i].artists[j].name;
-            child += (j == pl[i].artists.length - 1) ?  '' : ' / ';
+            child += (j == pl[i].artists.length - 1) ? '' : ' / ';
             //stop after 3
             if (j > 2) {
                 child += '...';
@@ -130,7 +211,7 @@ function playlisttotable(pl, table, uri) {
         }
         child += ' / <em>' + pl[i].album.name + '</em></p>';
 
-//        child += '<p>' + pl[i].album.name + '</p>';
+        //        child += '<p>' + pl[i].album.name + '</p>';
         child += '</a></li>';
         tmp += child;
     };
@@ -139,30 +220,7 @@ function playlisttotable(pl, table, uri) {
     $(table).attr('data', uri);
 
     //create (for new tables)
-//    $(table).listview().trigger("create");
-    //refresh
-    $(table).listview('refresh');
-}
-
-function albumtrackstotable(pl, table, uri) {
-    var tmp = '';
-    $(table).empty();
-    var child = '';
-    for (var i = 0; i < pl.length; i++) {
-        popupData[pl[i].uri] = pl[i];
-        child = '<li><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
-        child += '<p style="float:right; display: inline;">' + timeFromSeconds(pl[i].length / 1000) + 
-            '</p><h1>' + pl[i].name + '</h1></a></li>';
-        tmp += child;
-    };
-    $(table).html(tmp);
-    $(table).attr('data', uri);
-    //set click handlers
-    /*   $(table + ' .name').click(function() {
-    return playtrack(this.id, uri)
-    });*/
-    //create (for new tables)
-    $(table).listview().trigger("create");
+    //    $(table).listview().trigger("create");
     //refresh
     $(table).listview('refresh');
 }

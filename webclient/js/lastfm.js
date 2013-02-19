@@ -23,12 +23,9 @@ $(window).load(function() {
 
 function getCover(nwartist, nwalbum, image, size) {
         $(image).attr('src', '../images/icons/cd_32x32.png');
-//        console.log(nwartist + ' - ' + nwalbum + ' - ' + image);
         lastfm.album.getInfo({artist: nwartist, album: nwalbum}, {success: function(data){
-//            console.log(data);
             for (var i = 0; i < data.album.image.length; i++) {
                 if ( data.album.image[i]['size'] == size) {
- //                   console.log(image + ' - ' + data.album.image[i]['#text']);
                     $(image).attr('src', data.album.image[i]['#text']);
                 }
             }

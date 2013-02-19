@@ -151,7 +151,7 @@ function showAlbum(uri) {
     //fill from cache
     var pl = getTracksFromUri(uri);
     if (pl) {
-        albumtrackstotable(pl, ALBUM_TABLE, uri);
+        albumTracksToTable(pl, ALBUM_TABLE, uri);
         var albumname = getAlbum(pl);
         var artistname = getArtist(pl);
         $('#h_albumname').html(albumname);
