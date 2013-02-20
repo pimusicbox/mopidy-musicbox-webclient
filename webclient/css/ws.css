@@ -13,7 +13,18 @@
  *    portr 48
  ****************************/
 
-@media all and (min-width: 50.1em) {
+@media all and (min-width: 40.1em) {
+    /*header*/
+    .header-breakpoint.ui-grid-b .ui-block-a {
+        width: 30%;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-b {
+        width: 30%;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-c {
+        width: 30.1%;
+    }
+    /*playlists*/
     .pl-breakpoint.ui-grid-a .ui-block-a {
         width: 32.95%;
     }
@@ -23,122 +34,86 @@
     .pl-breakpoint.ui-grid-a .ui-block-a {
         clear: left;
     }
-    .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 21%;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-b {
-        width: 37%;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 35.1%;
-    }
     .pl-breakpoint.ui-grid-a .ui-block-a {
         clear: left;
     }
+    #playlisttablediv {
+        margin-left: 10px;
+    }
+    /*search*/
     .srch-breakpoint.ui-grid-a .ui-block-b {
         margin-left: .5em;
     }
     .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
         width: 49%;
     }
-    #playlisttablediv {
-        margin-left: 10px;
-    }
+    /*controls*/
     #btcontrols {
         display: none;
     }
 }
 
 /* tablet etc */
-@media all and (max-width: 49.9em) and (min-width: 30.1em) {
+@media all and (min-width: 30.1em) and (max-width: 40em) {
+    /*header*/
+    .header-breakpoint.ui-grid-b .ui-block-a {
+        width: 45.95%;
+        clear: left;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-b {
+        display: none;
+        width: 0;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-c {
+        width: 40%;
+    }
+    /*search*/
     .srch-breakpoint.ui-grid-a .ui-block-b {
         margin-left: .2em;
     }
     .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
         width: 49.5%;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 39.95%;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 50%;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-b {
-        display: none;
-    }
+    }    
 }
 
 /* phone */
 @media all and (max-width: 30em) {
-    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
-        width: 100%;
-    }
-    .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
-        width: 100%;
-    }
+    /*header*/
     .header-breakpoint.ui-grid-b .ui-block-a {
         width: 35%;
         clear: left;
     }
-    .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 40%;
-    }
     .header-breakpoint.ui-grid-b .ui-block-b {
         display: none;
     }
+    .header-breakpoint.ui-grid-b .ui-block-c {
+        width: 35%;
+    }
+    /*playlists*/
+    .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
+        width: 100%;
+    }
+    /*search*/
+    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
+        width: 100%;
+    }
+    /*controls*/
     #btcontrols {
         display: block;
     }
         
 }
 
-/************************
- *  Volume Slider
- ***********************/
-#mutebt {
-    float: left;
-    margin-left: 8px;
-    margin-top: 8px;
+/***********
+ * Header & controls
+ */
+#header {
+    height: 50px !important;
 }
 
-#volumeslider {
-    display: inline;
-}
-
-/***********************
- *  Track Slider
- ***********************/
-
-#trackslider {
-    display: inline;
-    width: 100%;
-}
-
-#slidercontainer {
-    margin-top: 7px;
-    margin-bottom: 5px;
-}
-
-.ui-slider-track {
-    margin-left: 38px;
-    margin-right: 35px;
-}
-
-.ui-mobile .ui-page .ui-slider-input, .ui-mobile .ui-dialog .ui-slider-input {
-    display: none !important;
-}
-
-#songelapsed, #songlength {
-    font-size: 10px;
-    margin-top: 12px;
-}
-
-/***********************************
- * Controls
- * *********************************/
 #controldiv {
     height: 30px;
-    width: 230px;
+    width: 245px;
     margin-top: -3px;
     margin-left: -5px;
     display: inline;
@@ -165,7 +140,9 @@
     margin-top: 16px;
 }
 
-/* Song information */
+/**********************
+ *  Song information 
+ **********************/
 
 #infoname {
     overflow: hidden;
@@ -189,7 +166,167 @@
     margin: 2px;
 }
 
-/* div */
+#songinfo a {
+    text-decoration: none;
+}
+
+#infoartist a {
+    color: #eee;
+}
+
+#infocover {
+    float: left;
+    width: 36px;
+    heigth: 36px;
+    margin-right: 5px;
+    /*    border: 1px solid #666; */
+    margin-top: -3px;
+}
+
+/***********************
+ *  Track Slider
+ ***********************/
+
+#trackslider {
+    display: inline;
+    width: 100%;
+}
+
+#slidercontainer {
+    margin-top: 7px;
+    margin-bottom: 5px;
+    margin-right: 10px; 
+    float: right;
+}
+
+.ui-slider-track {
+    margin-left: 38px;
+    margin-right: 35px;
+}
+
+.ui-mobile .ui-page .ui-slider-input, .ui-mobile .ui-dialog .ui-slider-input {
+    display: none !important;
+}
+
+#songelapsed, #songlength {
+    font-size: 10px;
+    margin-top: 12px;
+}
+
+/************************
+ *  Volume Slider
+ ***********************/
+#mutebt {
+    float: left;
+    margin-left: 8px;
+    margin-top: 8px;
+}
+
+#volumeslider {
+    display: inline;
+}
+
+/***********
+ * pages, content
+ */
+
+#searchresults {
+    display: none;
+}
+
+#currentpane, #searchpane, #albumspane, #artistspane {
+    display: none;
+}
+
+#artistviewimage, #albumviewcover {
+    float: right;
+    heigth: 90px;
+}
+
+
+/*********************
+ * listviews
+ ********************/
+.ui-li-divider {
+    padding: 2px;
+    padding-top: 10px;
+    padding-left: 5px;
+}
+
+.ui-li-divider a {
+    height: 30px !important;
+}
+
+.ui-li-divider a p {
+    color: #555 !important;
+    font-size: 100% !important;
+}
+
+.albumli {
+  padding-left: 5px;
+} 
+
+.playlistactive {
+    background-color: #ccc;
+}
+
+.smalldivider {
+    heigth: 5px !important;
+}
+
+.artistcover {
+    float: right;
+    width: 30px;
+    heigth: 30px;
+    margin-right: 3px;
+}
+
+.currenttrack {
+    background-image: url('../images/icons/play_alt_16x16.png');
+    background-repeat: no-repeat;
+    background-color: #eee;
+    background-position: 4px center;
+}
+
+.currenttrack a {
+    margin-left: 14px;
+}
+
+
+/*******************
+ * Popups
+ *******************/
+#modalalbum a, #modalartist a {
+    color: #444;
+    text-decoration: none;
+}
+
+#popupTrackName, #popupAlbumName, .popupArtistName {
+    font-style: oblique;
+}
+
+#controlsmodal, #artistpopup, #coverpopup {
+    max-width: 500px;
+    min-width: 300px;
+}
+
+#h_artistname {
+    margin-bottom: 65px;
+    margin-top: 10px;
+}
+#buttons, #controlspopupimage, #coverpopupimage, #artistpopupimage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+
+/***************
+ *  common use 
+ ***************/
+a {
+    text-decoration: none !important;
+}
 
 .nobreak, .btsquare {
     display: inline !important;
@@ -207,110 +344,12 @@
     display: none;
 }
 
-#searchresults {
-    display: none;
-}
-
 .breakafter {
     margin-right: 15px;
-}
-
-#currentpane, #searchpane, #albumspane, #artistspane {
-    display: none;
-}
-
-.currenttrack {
-    background-image: url('../images/icons/play_alt_16x16.png');
-    background-repeat: no-repeat;
-    background-color: #eee;
-    background-position: 4px center;
-}
-
-.currenttrack a {
-    margin-left: 14px;
-}
-
-#modalalbum a, #modalartist a {
-    color: #444;
-    text-decoration: none;
-}
-
-#songinfo a {
-    text-decoration: none;
-}
-
-#infoartist a {
-    color: #eee;
-}
-
-a {
-    text-decoration: none !important;
-}
-
-.ui-li-divider {
-    height: 37px;
-}
-
-.ui-li-divider a p {
-    color: #555 !important;
-    font-size: 120% !important;
-}
-
-#artistviewimage, #albumviewcover {
-    float: right;
-    heigth: 90px;
-}
-
-#infocover {
-    float: left;
-    width: 36px;
-    heigth: 36px;
-    margin-right: 5px;
-    /*    border: 1px solid #666; */
-    margin-top: -3px;
-}
-
-.artistcover {
-    float: right;
-    width: 40px;
-    heigth: 40px;
-    margin-right: 3px;
-}
-
-#popupTrackName, #popupAlbumName, .popupArtistName {
-    font-style: oblique;
-}
-
-#controlsmodal, #artistpopup, #coverpopup {
-    max-width: 500px;
-    min-width: 300px;
 }
 
 .pright {
     display: inline;
     margin-top: 4px;
     float: right;
-}
-
-.artistname {
-    font: bold;
-}
-
-#h_artistname {
-    margin-bottom: 65px;
-    margin-top: 10px;
-}
-
-#header {
-    height: 50px !important;
-}
-
-#buttons, #controlspopupimage, #coverpopupimage, #artistpopupimage {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 5px;
-}
-.playlistactive {
-    background-color: #ccc;
 }

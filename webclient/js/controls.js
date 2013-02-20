@@ -74,12 +74,7 @@ function doPlay() {
 }
 
 function doPrevious() {
-    // if position > 2 seconds -> go to begin, else go to previous track
-    if (currentposition > 2000) {
-        doSeekPos(0);
-    } else {
-        mopidy.playback.previous();
-    }
+    mopidy.playback.previous();
 }
 
 function doNext() {

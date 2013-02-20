@@ -56,8 +56,9 @@ function processSearchResults(resultArr) {
     var child = '';
     for (var i = 0; i < artists.length; i++) {
         child += '<li class="resultrow';
-        if (i > 4) {
-            child += " hidden";
+        if (i > 9) {
+            break;
+            //child += " hidden";
         }
         child += '"><a href="#" onclick="return showArtist(this.id)" id="' + artists[i].uri + '">' + artists[i].name + "</a></li>";
     }
@@ -68,8 +69,9 @@ function processSearchResults(resultArr) {
 
     for (var i = 0; i < albums.length; i++) {
         child += '<li class="resultrow';
-        if (i > 4) {
-            child += " hidden";
+        if (i > 9) {
+            break;
+            //child += " hidden";
         }
         child += '"><a href="#" onclick="return showAlbum(this.id)" id="' + albums[i].uri + '">';
         child += "<h1>" + albums[i].name + "</h1><p>";

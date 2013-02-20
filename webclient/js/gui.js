@@ -25,10 +25,10 @@ function expandSonginfo() {
 
 function resizeSonginfo() {
     $("#infoname").html(songname);
-    if ((artiststext.length > 90) || (songname.length > 50)) {
+    if ((artiststext.length > 83) || (songname.length > 43)) {
         $("#infoartist").html(artiststext);
         //bug in truncate?
-        var spanwidth = $("#infoartist").width() - 1;
+        var spanwidth = $("#infoartist").width() - 38;
         $("#infoname").truncate({
             width : spanwidth,
             token : '&hellip;',
@@ -52,7 +52,7 @@ function setSongInfo(data) {
     artiststext = '';
     songname = data.name;
     if (songname == '') {
-        return
+        return;
     };
 
     for (var j = 0; j < data.artists.length; j++) {
@@ -85,7 +85,7 @@ function setSongInfo(data) {
     resizeSonginfo();
     $('#currenttable li').each(function() {
         $(this).removeClass("currenttrack");
-        if (this.id == data.uri) {
+        if (this.id == 'currenttable-' + data.uri) {
             $(this).addClass('currenttrack');
         }
     });
@@ -208,7 +208,7 @@ function initSocketevents() {
     });
 
     mopidy.on("event:trackPlaybackPaused", function(data) {
-        setSongInfo(data.tl_track.track);
+        //setSongInfo(data.tl_track.track);
         pauseTimer();
         setPlayState(false);
     });
