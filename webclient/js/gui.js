@@ -25,26 +25,22 @@ function expandSonginfo() {
 
 function resizeSonginfo() {
     $("#infoname").html(songname);
-    if ((artiststext.length > 83) || (songname.length > 43)) {
-        $("#infoartist").html(artiststext);
-        //bug in truncate?
-        var spanwidth = $("#infoartist").width() - 38;
-        $("#infoname").truncate({
-            width : spanwidth,
-            token : '&hellip;',
-            center : true,
-            multiline : false
-        });
-        $("#infoartist").truncate({
-            width : spanwidth,
-            token : '&hellip;',
-            center : true,
-            multiline : false
-        });
-        $("#infoartist").html('<a href="#controlsmodal" data-rel="popup">' + $("#infoartist").html() + '</a>');
-    } else {
-        $("#infoartist").html(artiststext);
-    }
+    $("#infoartist").html(artiststext);
+    //bug in truncate?
+    var spanwidth = $("#infoartist").width() - 38;
+    $("#infoname").truncate({
+        width : spanwidth,
+        token : '&hellip;',
+        center : true,
+        multiline : false
+    });
+    $("#infoartist").truncate({
+        width : spanwidth,
+        token : '&hellip;',
+        center : true,
+        multiline : false
+    });
+    $("#infoartist").html('<a href="#controlsmodal" data-rel="popup">' + $("#infoartist").html() + '</a>');
 }
 
 function setSongInfo(data) {
@@ -282,6 +278,9 @@ $(document).ready(function() {
         $("#btback").hide();
     }
 
+    $(window).resize(function() {
+        resizeSonginfo();
+    });
 });
 
 /************************

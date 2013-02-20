@@ -87,7 +87,7 @@
         display: none;
     }
     .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 35%;
+        width: 33%;
     }
     /*playlists*/
     .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
@@ -100,8 +100,14 @@
     /*controls*/
     #btcontrols {
         display: block;
+    }        
+}
+
+/* phone portrait */
+@media all and (max-width: 20em) {
+    .header-breakpoint.ui-grid-b .ui-block-c {
+        display: none;
     }
-        
 }
 
 /***********
@@ -150,7 +156,6 @@
     color: #ddd;
     font-size: 14px;
     text-shadow: 1px 1px #555;
-    /*    border: 1px solid white;  */
 }
 
 #songinfo {
@@ -179,7 +184,6 @@
     width: 36px;
     heigth: 36px;
     margin-right: 5px;
-    /*    border: 1px solid #666; */
     margin-top: -3px;
 }
 

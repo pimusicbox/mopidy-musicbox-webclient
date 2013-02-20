@@ -4,30 +4,32 @@
 function playTrack(addtobottom) {
     $('#popupTracks').popup('close');
     $('#controlsmodal').popup('close');
+    showLoading(true);
 
     //function playtrack(uri, playlisturi) {
     playlisturi = $('#popupTracks').data("list");
     uri = $('#popupTracks').data("track");
     var trackslist = new Array();
     var track;
-    switchContent('current', uri);
     var tracks = getTracksFromUri(playlisturi);
-
     if (tracks) {
         if (!addtobottom) {
+            mopidy.playback.stop(true);
             mopidy.tracklist.clear();
         }
         mopidy.tracklist.add(tracks);
         $(CURRENT_PLAYLIST_TABLE).empty();
     } else {
         tracks = currentplaylist;
+        mopidy.playback.stop(true);
     }
 
     if (addtobottom) {
+        showLoading(false);
         return false;
     }
 
-    mopidy.playback.stop(true);
+    switchContent('current', uri);
 
     for (var i = 0; i < tracks.length; i++) {
         if (tracks[i].uri == uri) {
@@ -39,6 +41,7 @@ function playTrack(addtobottom) {
         mopidy.playback.next();
     }
     mopidy.playback.play();
+    showLoading(false);
 
     return false;
 }

@@ -172,12 +172,13 @@ function resultsToTables(results, target, uri) {
                 }
                 html += ' / <em>' + newalbum[0].album.name + '</em></p>';
                 html += '</a></li>';
+                popupData[newalbum[0].uri] = newalbum[0];
                 newalbum = [];
 
             } else {
                 html += '<li data-role="list-divider" data-theme="d"><a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');">';
                 html += '<img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" />';
-                html += '<p>' + results[i].album.name + '</p><p>';
+                html += '<p><em>' + results[i].album.name + '</em></p><p>';
                 for ( j = 0; j < results[i].album.artists.length; j++) {
                     html += results[i].album.artists[j].name;
                     html += (j == results[i].album.artists.length - 1) ? '' : ' / ';
