@@ -247,7 +247,13 @@ function initSocketevents() {
  **********************/
 $(document).ready(function() {
     //$(document).bind("pageinit", function() {
-
+    //check for websockets
+    if(!window.WebSocket) {
+        switchContent("playlists");
+        $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>');  
+        exit;
+    }
+    
     $(window).hashchange();
 
     // Connect to server
@@ -265,8 +271,8 @@ $(document).ready(function() {
     initgui = false;
     window.onhashchange = locationHashChanged;
     // Log all events
-    mopidy.on(function() {
-    });
+    //mopidy.on(function() {
+    //});
 
     //update gui status every x seconds from mopdidy
     setInterval(updateTimer, STATUS_TIMER);
