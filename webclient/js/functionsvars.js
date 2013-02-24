@@ -32,6 +32,7 @@ var songlength = 0;
 var artistshtml = '';
 var artiststext = '';
 var songname = '';
+var songdata = '';
 var newposition = 0;
 
 //array of cached playlists (not only user-playlists, also search, artist, album-playlists)
@@ -45,7 +46,7 @@ PROGRAM_NAME = 'MusicBox';
 //PROGRAM_NAME = 'Mopidy';
 ARTIST_TABLE = '#artiststable';
 ALBUM_TABLE = '#albumstable';
-PLAYLIST_TABLE = '#playlisttable';
+PLAYLIST_TABLE = '#playlisttracks';
 CURRENT_PLAYLIST_TABLE = '#currenttable';
 SEARCH_ALL_TABLE = '#allresulttable';
 SEARCH_ALBUM_TABLE = '#albumresulttable';
@@ -69,7 +70,7 @@ function scrollToTop() {
 }
 
 function scrollToTracklist() {
-    var divtop = $("#playlisttablediv").offset().top - 25;
+    var divtop = $("#playlisttracksdiv").offset().top - 25;
     $('body,html').animate({
         scrollTop : divtop
     }, 250);
@@ -209,15 +210,15 @@ function resultsToTables(results, target, uri) {
 }
 
 //process updated playlist to gui
-function playlisttotable(pl, table, uri) {
+function playlisttotable(pl, target, uri) {
     var tmp = '';
-    $(table).html('');
-
+    $(target).html('');
+    var targetmin = target.substr(1);
     var child = '';
     for (var i = 0; i < pl.length; i++) {
         popupData[pl[i].uri] = pl[i];
 
-        child = '<li id="' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
+        child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
         child += '<h1>' + pl[i].name + "</h1>";
         child += '<p>';
         child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>';
@@ -238,13 +239,13 @@ function playlisttotable(pl, table, uri) {
         tmp += child;
     };
 
-    $(table).html(tmp);
-    $(table).attr('data', uri);
+    $(target).html(tmp);
+    $(target).attr('data', uri);
 
     //create (for new tables)
-    //    $(table).listview().trigger("create");
+    //    $(target).listview().trigger("create");
     //refresh
-    $(table).listview('refresh');
+    $(target).listview('refresh');
 }
 
 function getPlaylistFromUri(uri) {

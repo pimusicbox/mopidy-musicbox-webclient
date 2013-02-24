@@ -24,7 +24,7 @@ function expandSonginfo() {
 }
 
 function resizeSonginfo() {
-    $("#infoname").html(songname);
+    $("#infoname").html(songdata.name);
     $("#infoartist").html(artiststext);
     //bug in truncate?
     var spanwidth = $("#infoartist").width() - 38;
@@ -44,10 +44,14 @@ function resizeSonginfo() {
 }
 
 function setSongInfo(data) {
+    if (data) {
+        songdata = data;
+    } else {
+        data = songdata;
+    }
     artistshtml = '';
     artiststext = '';
-    songname = data.name;
-    if (songname == '') {
+    if (data.name == '') {
         return;
     };
 
@@ -63,7 +67,7 @@ function setSongInfo(data) {
     if (data.album) {
         $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
     }
-    $("#modalname").html(songname);
+    $("#modalname").html(data.name);
     getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
 
     var arttmp = 'Artist';
@@ -79,10 +83,35 @@ function setSongInfo(data) {
     $("#songlength").html(timeFromSeconds(data.length / 1000));
 
     resizeSonginfo();
+
     $('#currenttable li').each(function() {
         $(this).removeClass("currenttrack");
         if (this.id == 'currenttable-' + data.uri) {
             $(this).addClass('currenttrack');
+        }
+    });
+    $('#playlisttracks li').each(function() {
+        $(this).removeClass("currenttrack2");
+        if (this.id == 'playlisttracks-' + data.uri) {
+            $(this).addClass('currenttrack2');
+        }
+    });
+    $('#trackresulttable li').each(function() {
+        $(this).removeClass("currenttrack2");
+        if (this.id == 'trackresulttable-' + data.uri) {
+            $(this).addClass('currenttrack2');
+        }
+    });
+    $('#artiststable li').each(function() {
+        $(this).removeClass("currenttrack2");
+        if (this.id == 'trackresulttable-' + data.uri) {
+            $(this).addClass('currenttrack2');
+        }
+    });
+    $('#albumstable li').each(function() {
+        $(this).removeClass("currenttrack2");
+        if (this.id == 'trackresulttable-' + data.uri) {
+            $(this).addClass('currenttrack2');
         }
     });
 }
@@ -248,12 +277,12 @@ function initSocketevents() {
 $(document).ready(function() {
     //$(document).bind("pageinit", function() {
     //check for websockets
-    if(!window.WebSocket) {
+    if (!window.WebSocket) {
         switchContent("playlists");
-        $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>');  
+        $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>');
         exit;
     }
-    
+
     $(window).hashchange();
 
     // Connect to server
@@ -284,8 +313,11 @@ $(document).ready(function() {
         $("#btback").hide();
     }
 
+    $('.scroll').height($(window).height() - 100);
+
     $(window).resize(function() {
         resizeSonginfo();
+        $('.scroll').height($(window).height() - 100);
     });
 });
 

@@ -29,7 +29,7 @@ function playTrack(addtobottom) {
         return false;
     }
 
-    switchContent('current', uri);
+ //   switchContent('current', uri);
 
     for (var i = 0; i < tracks.length; i++) {
         if (tracks[i].uri == uri) {

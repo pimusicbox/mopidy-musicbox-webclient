@@ -94,7 +94,7 @@
                 </div>
             </div>
 
-            <div data-role="header" id="header" data-position="fixed" class="ui-grid-b header-breakpoint">
+            <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint">
 
                 <div id="controldiv" class="ui-block-a">
                     <span id="btback"><a href="#" onclick="return backbt();"> <img  id="backimg"src="images/icons/arrow_left_alt1_24x24.png" /></a></span>
@@ -119,11 +119,11 @@
             </div><!-- /header -->
 
             <div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
-                <div class="ui-block-a">
-                    <ul id="playlistslist" data-icon="false" data-inset="true" data-role="listview" data-filter="true"></ul>
+                <div class="ui-block-a scroll">
+                    <ul id="playlistslist" data-icon="false" data-inset="true" data-role="listview"></ul>
                 </div>
-                <div class="ui-block-b" id="playlisttablediv">
-                    <ul data-role="listview" data-theme="c" data-icon="false" id="playlisttable" data-inset="true" data-filter="true"></ul>
+                <div class="ui-block-b scroll" id="playlisttracksdiv">
+                    <ul data-role="listview" data-theme="c" data-icon="false" id="playlisttracks" data-inset="true"></ul>
                 </div>
 
             </div><!--/playlistspane-->
@@ -180,7 +180,7 @@
             </div>
             <!-- search div -->
 
-            <div data-role="footer" data-position="fixed">
+            <div data-role="footer" data-tap-toggle="false" data-position="fixed">
                 <div data-role="navbar" data-iconpos="left">
                     <ul>
                         <li id="navplaylists">

@@ -85,6 +85,7 @@ function processSearchResults(resultArr) {
 
     $('#expandsearch').show();
     playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
+    setSongInfo();
     showLoading(false);
 }
 
@@ -111,7 +112,7 @@ function getCurrentPlaylist() {
  ********************************************************/
 function showTracklist(uri) {
     $(PLAYLIST_TABLE).empty();
-    $('#playlisttablediv').show();
+    $('#playlisttracksdiv').show();
     showLoading(true);
 
     var pl = getPlaylistFromUri(uri);
