@@ -40,14 +40,14 @@ function processSearchResults(resultArr) {
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
     //get the right result
-    // 0 = older raspberry 1 = dev. 
-//    var results = resultArr[0];
+    // 0 = older raspberry 1 = dev.
+    //    var results = resultArr[0];
     var results = resultArr[1];
     var tracks = (results.tracks) ? results.tracks : '';
     customTracklists['trackresultscache'] = tracks;
     var artists = (results.artists) ? results.artists : '';
     var albums = (results.albums) ? results.albums : '';
-    if ((tracks == '') && (artists == '') && (albums == '') ) {
+    if ((tracks == '') && (artists == '') && (albums == '')) {
         alert('No results');
         showLoading(false);
         return false;
@@ -150,6 +150,7 @@ function showArtist(nwuri) {
     mopidy.library.lookup(nwuri).then(processArtistResults, console.error);
     switchContent('artists', nwuri);
     scrollToTop();
+    setSongInfo();
     return false;
 }
 
@@ -167,7 +168,7 @@ function showAlbum(uri) {
         $('#h_albumartist').html(artistname);
         $('#coverpopupalbumname').html(albumname);
         $('#coverpopupartist').html(artistname);
-        
+
         getCover(artistname, albumname, '#albumviewcover, #coverpopupimage', 'extralarge');
         mopidy.library.lookup(uri).then(processAlbumResults, console.error);
     } else {
@@ -180,6 +181,7 @@ function showAlbum(uri) {
     //show
     switchContent('albums', uri);
     scrollToTop();
+    setSongInfo();
     return false;
 }
 

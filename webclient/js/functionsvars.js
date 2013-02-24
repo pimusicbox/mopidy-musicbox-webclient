@@ -100,26 +100,27 @@ function getAlbum(pl) {
 /********************************************************
  * break up results and put them in album tables
  *********************************************************/
-function albumTracksToTable(pl, table, uri) {
+function albumTracksToTable(pl, target, uri) {
     var tmp = '';
-    $(table).empty();
+    var targetmin = target.substr(1);
+    $(target).empty();
     var child = '';
     for (var i = 0; i < pl.length; i++) {
         popupData[pl[i].uri] = pl[i];
-        child = '<li><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
+        child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
         child += '<p style="float:right; display: inline;">' + timeFromSeconds(pl[i].length / 1000) + '</p><h1>' + pl[i].name + '</h1></a></li>';
         tmp += child;
     };
-    $(table).html(tmp);
-    $(table).attr('data', uri);
+    $(target).html(tmp);
+    $(target).attr('data', uri);
     //set click handlers
     /*   $(table + ' .name').click(function() {
     return playtrack(this.id, uri)
     });*/
     //create (for new tables)
-    $(table).listview().trigger("create");
+    $(target).listview().trigger("create");
     //refresh
-    $(table).listview('refresh');
+    $(target).listview('refresh');
 }
 
 function resultsToTables(results, target, uri) {
@@ -242,8 +243,6 @@ function playlisttotable(pl, target, uri) {
     $(target).html(tmp);
     $(target).attr('data', uri);
 
-    //create (for new tables)
-    //    $(target).listview().trigger("create");
     //refresh
     $(target).listview('refresh');
 }

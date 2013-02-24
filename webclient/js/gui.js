@@ -83,7 +83,7 @@ function setSongInfo(data) {
     $("#songlength").html(timeFromSeconds(data.length / 1000));
 
     resizeSonginfo();
-
+//update styles of listviews
     $('#currenttable li').each(function() {
         $(this).removeClass("currenttrack");
         if (this.id == 'currenttable-' + data.uri) {
@@ -102,15 +102,16 @@ function setSongInfo(data) {
             $(this).addClass('currenttrack2');
         }
     });
+
     $('#artiststable li').each(function() {
         $(this).removeClass("currenttrack2");
-        if (this.id == 'trackresulttable-' + data.uri) {
+        if (this.id == 'artiststable-' + data.uri) {
             $(this).addClass('currenttrack2');
         }
     });
     $('#albumstable li').each(function() {
         $(this).removeClass("currenttrack2");
-        if (this.id == 'trackresulttable-' + data.uri) {
+        if (this.id == 'albumstable-' + data.uri) {
             $(this).addClass('currenttrack2');
         }
     });

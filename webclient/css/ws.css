@@ -79,6 +79,10 @@
     .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
         width: 49.5%;
     }
+    .scroll {
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 }
 
 /* phone */
@@ -299,7 +303,7 @@
 }
 
 .currenttrack2 {
-    background-image: url('../images/icons/play_alt_8x8.png');
+    background-image: url('../images/icons/play_alt_12x12.png');
     background-repeat: no-repeat;
     background-position: 4px center;
 }
