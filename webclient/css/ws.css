@@ -55,7 +55,6 @@
         overflow-y: scroll;
         overflow-x: hidden;
     }
-
 }
 
 /* tablet etc */
@@ -110,9 +109,11 @@
     #btcontrols {
         display: block;
     }
-    .scroll {
+    #playlistspane, .scroll {
         overflow-y: auto;
         overflow-x: auto;
+        width: 100%;
+        heigth: 100%;
     }
 }
 
@@ -120,6 +121,12 @@
 @media all and (max-width: 20em) {
     .header-breakpoint.ui-grid-b .ui-block-c {
         display: none;
+    }
+    #playlistspane, .scroll {
+        overflow-y: auto;
+        overflow-x: auto;
+        width: 100%;
+        heigth: 100%;
     }
 }
 
@@ -256,7 +263,7 @@
 }
 
 #playlistspane {
-    padding: 2px;
+    padding: 4px;
 }
 
 #artistviewimage, #albumviewcover {
@@ -267,6 +274,12 @@
 /*********************
  * listviews
  ********************/
+
+#playlistslist, #playlisttracks {
+    margin: 0 !important;
+    padding: 0 !important;
+/*    border: 1px solid blue; */
+}
 
 .ui-li-divider {
     padding: 2px;

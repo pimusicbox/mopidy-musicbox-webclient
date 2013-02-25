@@ -74,7 +74,9 @@ function processGetPlaylists(resultArr) {
     $('#playlistslist').empty();
     $('#playlistslist').html(tmp);
     $('#playlistslist').listview('refresh');
-    //    $('#playlistsloader').hide();
+    if (isMobileWebkit) {
+        playlistslistScroll.refresh();
+    }
     showLoading(false);
 }
 
@@ -89,6 +91,9 @@ function processGetTracklist(resultArr) {
     setSongInfo();
     showLoading(false);
     scrollToTracklist();
+    if (isMobileWebkit) {
+        playlisttracksScroll.refresh();
+    }
 }
 
 /********************************************************

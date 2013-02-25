@@ -35,11 +35,17 @@ var songname = '';
 var songdata = '';
 var newposition = 0;
 
+var playlisttracksScroll;
+var playlistslistScroll;
+
 //array of cached playlists (not only user-playlists, also search, artist, album-playlists)
 var playlists = {};
 var currentplaylist;
 var customPlaylists = [];
 var customTracklists = [];
+
+var ua = navigator.userAgent,
+  isMobileWebkit = /WebKit/.test(ua) && /Mobile/.test(ua);
 
 //constants
 PROGRAM_NAME = 'MusicBox';

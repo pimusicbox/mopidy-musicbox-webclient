@@ -23,7 +23,7 @@ function resetSong() {
 function expandSonginfo() {
 }
 
-function resizeSonginfo() {
+function resizeMb() {
     $("#infoname").html(songdata.name);
     $("#infoartist").html(artiststext);
     //bug in truncate?
@@ -41,6 +41,43 @@ function resizeSonginfo() {
         multiline : false
     });
     $("#infoartist").html('<a href="#controlsmodal" data-rel="popup">' + $("#infoartist").html() + '</a>');
+
+    //initialize iScroll if MobileWebkit and large window
+    if (isMobileWebkit) {
+        if ($(window).width() > 480) {
+            if (!playlistslistScroll) {
+                playlistslistScroll = new iScroll('playlistslistdiv');
+                playlisttracksScroll = new iScroll('playlisttracksdiv');
+             }
+        } else {
+            if (playlistslistScroll) {
+                playlistslistScroll.destroy();
+                playlistslistScroll = null;
+                playlisttracksScroll.destroy();
+                playlisttracksScroll = null;
+             }
+        }
+    }
+
+
+
+    //set height of playlist scrollers
+    
+    if ($(window).width() > 480) {
+        $('.scroll').height($(window).height() - 104);
+        //jqm added something which it shouldnt (at least in this case) I guess
+//        $('#playlistspane').removeClass('height').height($(window).height() - 110);
+        $('.scroll').removeClass('height').removeClass('width');
+        $('#playlistspane').removeClass('height').removeClass('width');
+    } else {
+        $('.scroll').addClass('height', '100%').addClass('width', '100%');
+        $('#playlistspane').addClass('height', '100%').addClass('width', '100%');
+    }
+
+    if (isMobileWebkit &&  ($(window).width() > 480) ) {
+        playlistslistScroll.refresh();
+        playlisttracksScroll.refresh();
+    }
 }
 
 function setSongInfo(data) {
@@ -82,8 +119,8 @@ function setSongInfo(data) {
     $("#trackslider").attr("max", data.length);
     $("#songlength").html(timeFromSeconds(data.length / 1000));
 
-    resizeSonginfo();
-//update styles of listviews
+    resizeMb();
+    //update styles of listviews
     $('#currenttable li').each(function() {
         $(this).removeClass("currenttrack");
         if (this.id == 'currenttable-' + data.uri) {
@@ -276,12 +313,10 @@ function initSocketevents() {
  * initialize software
  **********************/
 $(document).ready(function() {
-    //$(document).bind("pageinit", function() {
     //check for websockets
     if (!window.WebSocket) {
         switchContent("playlists");
-        $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>');
-        exit;
+        $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>'); exit;
     }
 
     $(window).hashchange();
@@ -297,7 +332,6 @@ $(document).ready(function() {
         switchContent("playlists");
     }
 
-    //  $("#songinfo").resize(resizeSonginfo());
     initgui = false;
     window.onhashchange = locationHashChanged;
     // Log all events
@@ -314,12 +348,14 @@ $(document).ready(function() {
         $("#btback").hide();
     }
 
-    $('.scroll').height($(window).height() - 100);
-
     $(window).resize(function() {
-        resizeSonginfo();
-        $('.scroll').height($(window).height() - 100);
+        resizeMb();
     });
+
+});
+
+$(document).bind("pageinit", function() {
+    resizeMb();
 });
 
 /************************
