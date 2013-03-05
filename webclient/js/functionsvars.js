@@ -59,6 +59,8 @@ SEARCH_ALBUM_TABLE = '#albumresulttable';
 SEARCH_ARTIST_TABLE = '#artistresulttable';
 SEARCH_TRACK_TABLE = '#trackresulttable';
 
+MAX_TABLEROWS = 50;
+
 //update track slider timer, milliseconds
 TRACK_TIMER = 1000;
 
@@ -124,9 +126,9 @@ function albumTracksToTable(pl, target, uri) {
     return playtrack(this.id, uri)
     });*/
     //create (for new tables)
-    $(target).listview().trigger("create");
+//    $(target).listview().trigger("create");
     //refresh
-    $(target).listview('refresh');
+ //   $(target).listview('refresh');
 }
 
 function resultsToTables(results, target, uri) {
@@ -164,7 +166,8 @@ function resultsToTables(results, target, uri) {
             tableid = 'art' + i;
             //render differently if only one track in the album
             if (newalbum.length == 1) {
-                html += '<li data-role="list-divider" data-theme="d" class="smalldivider"></li>';
+//                html += '<li data-role="list-divider" data-theme="d" class="smalldivider"></li>';
+                html += '<li class="smalldivider"></li>';
                 html += '<li id="' + targetmin + '-' + newalbum[0].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\');">';
                 html += '<h1>' + newalbum[0].name + "</h1>";
                 html += '<p>';
@@ -184,9 +187,9 @@ function resultsToTables(results, target, uri) {
                 newalbum = [];
 
             } else {
-                html += '<li data-role="list-divider" data-theme="d"><a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');">';
-                html += '<img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" />';
-                html += '<p><em>' + results[i].album.name + '</em></p><p>';
+                html += '<li class="albumdivider">';
+//                html += '<a href="#coverpopup" onclick="return coverPopup();" data-position-to="window" data-rel="popup"><img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /></a>';
+                html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><p><em>' + results[i].album.name + '</em></p><p>';
                 for ( j = 0; j < results[i].album.artists.length; j++) {
                     html += results[i].album.artists[j].name;
                     html += (j == results[i].album.artists.length - 1) ? '' : ' / ';
@@ -212,8 +215,9 @@ function resultsToTables(results, target, uri) {
     }
     tableid = "#" + tableid;
     $(target).html(html);
+
     $(target).attr('data', uri);
-    $(target).listview('refresh');
+//    $(target).listview('refresh');
 }
 
 //process updated playlist to gui
@@ -250,7 +254,7 @@ function playlisttotable(pl, target, uri) {
     $(target).attr('data', uri);
 
     //refresh
-    $(target).listview('refresh');
+//    $(target).listview('refresh');
 }
 
 function getPlaylistFromUri(uri) {

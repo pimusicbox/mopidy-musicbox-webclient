@@ -274,26 +274,63 @@
 /*********************
  * listviews
  ********************/
+.table li a {
+    color: #555 !important;
+    font-size: 80% !important;
+    display: block;
+    padding: 5px;
+}
+
+.table li {
+    background-color: #f0f0f0;
+    border: 1px solid #999;
+    border-bottom: 0;
+}
+
+.table {
+    list-style-type:none;
+}
+
+.table li:first-child {  
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-topright: 7px;
+    -webkit-border-top-left-radius: 7px;
+    -webkit-border-top-right-radius: 7px;
+    border-top-right-radius: 7px;
+    border-top-left-radius: 7px;
+}
+
+.table li:last-child { 
+    -moz-border-radius-bottomleft: 7px;
+    -moz-border-radius-bottomright: 7px;
+    -webkit-border-bottom-left-radius: 7px;
+    -webkit-border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-bottom: 1px solid #999;
+}
+
+.table li h1 {
+    font-size: 100% !important;
+}
+
+.albumdivider {
+        background-color: #ddd !important;
+}
+
+.smalldivider {
+    heigth: 10px !important;
+    background-color: #ddd !important;
+}
+
+#playlistslist li a {
+    padding: 5px;
+}
 
 #playlistslist, #playlisttracks {
     margin: 0 !important;
     padding: 0 !important;
 /*    border: 1px solid blue; */
-}
-
-.ui-li-divider {
-    padding: 2px;
-    padding-top: 10px;
-    padding-left: 5px;
-}
-
-.ui-li-divider a {
-    height: 30px !important;
-}
-
-.ui-li-divider a p {
-    color: #555 !important;
-    font-size: 100% !important;
 }
 
 .albumli {
@@ -302,10 +339,6 @@
 
 .playlistactive {
     background-color: #ccc;
-}
-
-.smalldivider {
-    heigth: 5px !important;
 }
 
 .artistcover {
@@ -361,6 +394,12 @@
     margin-right: auto;
     margin-bottom: 5px;
 }
+
+/*dont hide clear buttons in text input */
+.ui-input-clear-hidden {
+    display:block !important;
+}    
+  
 
 /***************
  *  common use

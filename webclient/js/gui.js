@@ -20,9 +20,6 @@ function resetSong() {
     }
 }
 
-function expandSonginfo() {
-}
-
 function resizeMb() {
     $("#infoname").html(songdata.name);
     $("#infoartist").html(artiststext);
@@ -48,25 +45,23 @@ function resizeMb() {
             if (!playlistslistScroll) {
                 playlistslistScroll = new iScroll('playlistslistdiv');
                 playlisttracksScroll = new iScroll('playlisttracksdiv');
-             }
+            }
         } else {
             if (playlistslistScroll) {
                 playlistslistScroll.destroy();
                 playlistslistScroll = null;
                 playlisttracksScroll.destroy();
                 playlisttracksScroll = null;
-             }
+            }
         }
     }
 
-
-
     //set height of playlist scrollers
-    
+
     if ($(window).width() > 480) {
         $('.scroll').height($(window).height() - 104);
         //jqm added something which it shouldnt (at least in this case) I guess
-//        $('#playlistspane').removeClass('height').height($(window).height() - 110);
+        //        $('#playlistspane').removeClass('height').height($(window).height() - 110);
         $('.scroll').removeClass('height').removeClass('width');
         $('#playlistspane').removeClass('height').removeClass('width');
     } else {
@@ -74,7 +69,7 @@ function resizeMb() {
         $('#playlistspane').addClass('height', '100%').addClass('width', '100%');
     }
 
-    if (isMobileWebkit &&  ($(window).width() > 480) ) {
+    if (isMobileWebkit && ($(window).width() > 480)) {
         playlistslistScroll.refresh();
         playlisttracksScroll.refresh();
     }
@@ -155,10 +150,12 @@ function setSongInfo(data) {
 }
 
 /***************
- * display popup
- * @param {Object} listuri
- * @param {Object} trackuri
+ * display popups
  */
+function coverPopup() {
+    
+}
+
 function popupTracks(e, listuri, trackuri) {
     if (!e)
         var e = window.event;
@@ -221,12 +218,14 @@ function showAlbumPopup() {
  *****************/
 function showLoading(on) {
     if (on) {
+        $("body").css("cursor", "progress");
         $.mobile.loading('show', {
             text : 'Loading data from ' + PROGRAM_NAME + '. Please wait...',
             textVisible : true,
             theme : 'a'
         });
     } else {
+        $("body").css("cursor", "default");
         $.mobile.loading('hide');
     }
 }
@@ -316,7 +315,8 @@ $(document).ready(function() {
     //check for websockets
     if (!window.WebSocket) {
         switchContent("playlists");
-        $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>'); exit;
+        $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>');
+        exit;
     }
 
     $(window).hashchange();
@@ -397,7 +397,9 @@ function locationHashChanged() {
     $('#navcurrent a').removeClass('ui-state-active ui-state-persist ui-btn-active');
     $('#navplaylists a').removeClass('ui-state-active ui-state-persist ui-btn-active');
     $('#navsearch a').removeClass('ui-state-active ui-state-persist ui-btn-active');
-    //        alert(divid);
+    $('.pane').hide();
+    $('#' + divid + 'pane').show();
+
     switch(divid) {
         case 'current':
             $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active');
@@ -425,7 +427,5 @@ function locationHashChanged() {
     }
     // Set the page title based on the hash.
     document.title = PROGRAM_NAME;
-    $('.pane').hide();
-    $('#' + divid + 'pane').show();
     return false;
 }

@@ -73,7 +73,7 @@ function processGetPlaylists(resultArr) {
     };
     $('#playlistslist').empty();
     $('#playlistslist').html(tmp);
-    $('#playlistslist').listview('refresh');
+ //   $('#playlistslist').listview('refresh');
     if (isMobileWebkit) {
         playlistslistScroll.refresh();
     }

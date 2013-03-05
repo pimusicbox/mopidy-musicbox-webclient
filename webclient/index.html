@@ -120,39 +120,46 @@
 
             <div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
                 <div class="ui-block-a scroll" id="playlistslistdiv">
-                    <ul id="playlistslist" data-icon="false" data-inset="true" data-role="listview"></ul>
+                    <ul id="playlistslist" class="table"></ul>
                 </div>
                 <div class="ui-block-b scroll" id="playlisttracksdiv">
-                    <ul data-role="listview" data-theme="c" data-icon="false" id="playlisttracks" data-inset="true"></ul>
+                    <ul class="table" id="playlisttracks"></ul> 
+<!--                    <ul id="playlisttracks"></ul> -->
+<!--                    <ul data-role="listview" data-theme="c" data-icon="false" id="playlisttracks" data-inset="true"></ul> -->
                 </div>
 
             </div><!--/playlistspane-->
 
             <div data-role="content" class="pane" id="currentpane">
                 <h4>Play Queue</h4>
-                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul>
+<!--                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul> 
+                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul> -->
+                <ul  class="table" id="currenttable"></ul>
             </div>
 
             <div data-role="content" class="pane" id="albumspane">
                 <a href="#coverpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="albumviewcover" /></a>
                 <h3 id="h_albumname"></h3>
                 <h5 id="h_albumartist"></h5>
-                <ul data-role="listview" data-icon="false" data-inset="true" id="albumstable"></ul>
+<!--                <ul data-role="listview" data-icon="false" data-inset="true" id="albumstable"></ul> -->
+                <ul class="table" id="albumstable"></ul>
             </div>
 
             <div data-role="content" class="pane" id="artistspane">
                 <!--                            <h4>Artist</h4> -->
                 <a href="#artistpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="artistviewimage" /></a>
                 <h3 id="h_artistname"></h3>
-                <ul data-role="listview" data-icon="false" data-inset="true" id="artiststable"></ul>
+                <ul class="table" id="artiststable"></ul>
             </div>
 
             <div data-role="content" class="pane" id="searchpane">
                 <div class="">
-                    <input id="searchinput" class="span2" onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text">
+                    <form>
+                    <input id="searchinput" class="span2" data-clear-btn="true" onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text" />
                     <button class="btn" type="button" onclick="return initSearch(event.value);" >
                         Search!
                     </button>
+                    </form>
                 </div>
 
 
@@ -160,11 +167,11 @@
                     <div class="ui-grid-a srch-breakpoint">
                         <div class="ui-block-a" id="searchartists">
                             <h4>Artists</h4>
-                            <ul class="" data-icon="false" data-role="listview" data-inset="true" id="artistresulttable"></ul>
+                            <ul class="table" id="artistresulttable"></ul>
                         </div>
                         <div class="ui-block-b" id="searchalbums">
                             <h4>Albums</h4>
-                            <ul class="" data-icon="false" data-role="listview" data-inset="true" id="albumresulttable"></ul>
+                            <ul class="table" id="albumresulttable"></ul>
                         </div>
                     </div>
                     <!-- grid a -->
@@ -174,7 +181,7 @@
                     </div>
 -->                    <div class="" id="searchtracks">
                         <h4>Tracks</h4>
-                        <ul id="trackresulttable" data-icon="false" data-inset="true" data-role="listview"></ul>
+                        <ul id="trackresulttable"  class="table"></ul>
                     </div>
                 </div>
             </div>

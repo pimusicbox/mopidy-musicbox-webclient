@@ -2,45 +2,58 @@
  * play an uri from a trackslist or the current playlist
  *********************************************************/
 function playTrack(addtobottom) {
+    showLoading(true);
     $('#popupTracks').popup('close');
     $('#controlsmodal').popup('close');
-    showLoading(true);
 
     //function playtrack(uri, playlisturi) {
     playlisturi = $('#popupTracks').data("list");
     uri = $('#popupTracks').data("track");
     var trackslist = new Array();
-    var track;
+    var track, tracksbefore, tracksafter;
     var tracks = getTracksFromUri(playlisturi);
     if (tracks) {
         if (!addtobottom) {
             mopidy.playback.stop(true);
             mopidy.tracklist.clear();
         }
-        mopidy.tracklist.add(tracks);
         $(CURRENT_PLAYLIST_TABLE).empty();
     } else {
         tracks = currentplaylist;
         mopidy.playback.stop(true);
-    }
-
-    if (addtobottom) {
+        for (var i = 0; i < tracks.length; i++) {
+            if (tracks[i].uri == uri) {
+                track = i + 1;
+                break;
+            }
+        }
+        for (var i = 0; i < track; i++) {
+            mopidy.playback.next();
+        }
+        mopidy.playback.play();
         showLoading(false);
         return false;
     }
 
- //   switchContent('current', uri);
+    if (addtobottom) {
+        mopidy.tracklist.add(tracks);
+        showLoading(false);
+        return false;
+    }
 
+// first add track to be played, then the other tracks
     for (var i = 0; i < tracks.length; i++) {
         if (tracks[i].uri == uri) {
-            track = i + 1;
+            mopidy.tracklist.add(tracks.slice(i) );
+            mopidy.playback.play();
+            mopidy.tracklist.add(tracks.slice(0, i), 0);
+            if (i<tracks.length) {
+                mopidy.tracklist.add(tracks.slice(i + 1) );
+            }
             break;
         }
     }
-    for (var i = 0; i < track; i++) {
-        mopidy.playback.next();
-    }
-    mopidy.playback.play();
+
     showLoading(false);
 
     return false;

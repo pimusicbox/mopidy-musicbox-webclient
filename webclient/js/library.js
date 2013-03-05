@@ -18,6 +18,10 @@ function initSearch() {
 
     if ((value.length < 100) && (value.length > 0)) {
         showLoading(true);
+        //hide ios/android keyboard 
+        document.activeElement.blur();
+        $("input").blur();
+
         $('#artistresulttable').empty();
         $('#albumresulttable').empty();
         $('#trackresulttable').empty();
@@ -26,6 +30,7 @@ function initSearch() {
         delete customTracklists['albumresultscache'];
         delete customTracklists['trackresultscache'];
         $("#searchresults").hide();
+
         mopidy.library.search({
             any : value
         }).then(processSearchResults, console.error);
@@ -63,7 +68,7 @@ function processSearchResults(resultArr) {
         child += '"><a href="#" onclick="return showArtist(this.id)" id="' + artists[i].uri + '">' + artists[i].name + "</a></li>";
     }
     $(SEARCH_ARTIST_TABLE).html(child);
-    $(SEARCH_ARTIST_TABLE).listview('refresh');
+//    $(SEARCH_ARTIST_TABLE).listview('refresh');
 
     child = '';
 
@@ -81,7 +86,7 @@ function processSearchResults(resultArr) {
         child += '</p></a></li>';
     }
     $(SEARCH_ALBUM_TABLE).html(child);
-    $(SEARCH_ALBUM_TABLE).listview('refresh');
+//    $(SEARCH_ALBUM_TABLE).listview('refresh');
 
     $('#expandsearch').show();
     playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
@@ -113,12 +118,13 @@ function getCurrentPlaylist() {
 function showTracklist(uri) {
     $(PLAYLIST_TABLE).empty();
     $('#playlisttracksdiv').show();
-    showLoading(true);
 
     var pl = getPlaylistFromUri(uri);
     //load from cache
     if (pl) {
         resultsToTables(pl.tracks, PLAYLIST_TABLE, uri);
+    } else {
+        showLoading(true);
     }
 
     $('#playlistslist li a').each(function() {
@@ -127,7 +133,6 @@ function showTracklist(uri) {
             $(this).addClass('playlistactive');
         }
     });
-
     scrollToTracklist();
     //lookup recent tracklist
     mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);
@@ -143,10 +148,10 @@ function showArtist(nwuri) {
     $('#controlsmodal').popup('close');
     $(ARTIST_TABLE).empty();
     //fill from cache
-    var pl = getTracksFromUri(nwuri);
+//    var pl = getTracksFromUri(nwuri);
+//TODO cache
     $('#h_artistname').html('');
     showLoading(true);
-    //    $('#artistsloader').show();
     mopidy.library.lookup(nwuri).then(processArtistResults, console.error);
     switchContent('artists', nwuri);
     scrollToTop();
@@ -168,17 +173,16 @@ function showAlbum(uri) {
         $('#h_albumartist').html(artistname);
         $('#coverpopupalbumname').html(albumname);
         $('#coverpopupartist').html(artistname);
-
+        showLoading(false);
         getCover(artistname, albumname, '#albumviewcover, #coverpopupimage', 'extralarge');
         mopidy.library.lookup(uri).then(processAlbumResults, console.error);
     } else {
+        showLoading(true);
         $('#h_albumname').html('');
         $('#h_albumartist').html('');
-        showLoading(true);
-        //        $('#albumsloader').show();
         mopidy.library.lookup(uri).then(processAlbumResults, console.error);
     }
-    //show
+    //show page
     switchContent('albums', uri);
     scrollToTop();
     setSongInfo();
