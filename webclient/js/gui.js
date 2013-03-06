@@ -59,7 +59,7 @@ function resizeMb() {
     //set height of playlist scrollers
 
     if ($(window).width() > 480) {
-        $('.scroll').height($(window).height() - 104);
+        $('.scroll').height($(window).height() - 111);
         //jqm added something which it shouldnt (at least in this case) I guess
         //        $('#playlistspane').removeClass('height').height($(window).height() - 110);
         $('.scroll').removeClass('height').removeClass('width');
@@ -340,7 +340,6 @@ $(document).ready(function() {
 
     //update gui status every x seconds from mopdidy
     setInterval(updateTimer, STATUS_TIMER);
-
     //only show backbutton if in UIWebview
     if (window.navigator.standalone) {
         $("#btback").show();

@@ -285,9 +285,11 @@
     background-color: #f0f0f0;
     border: 1px solid #999;
     border-bottom: 0;
+    padding: 0;
 }
 
 .table {
+    padding: 0;
     list-style-type:none;
 }
 
@@ -310,8 +312,8 @@
     border-bottom: 1px solid #999;
 }
 
-.table li h1 {
-    font-size: 100% !important;
+.albumdivider h1, .table li h1 {
+    font-size: 120% !important;
 }
 
 .albumdivider {
@@ -319,7 +321,8 @@
 }
 
 .smalldivider {
-    heigth: 10px !important;
+    font-size: 25% !important;
+    heigth: 5px !important;
     background-color: #ddd !important;
 }
 
@@ -361,10 +364,10 @@
 }
 
 .currenttrack2 a {
-    margin-left: 8px;
+    margin-left: 15px;
 }
 .currenttrack a {
-    margin-left: 14px;
+    margin-left: 20px;
 }
 
 /*******************
