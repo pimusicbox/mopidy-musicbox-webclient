@@ -20,10 +20,8 @@ Installation
 If you use an older version of Mopidy, you should use this version:
 `0.11.x <https://github.com/woutervanwijk/Mopidy-Webclient/archive/9d69aa7d751e5e429ec4a81edc5592d456757d96.zip>`_
 
-There is another option if you want to use 0.11 with the recent version of the webclient. You can patch the playlists.py file of core (in linux located in  /usr/share/pyshared/mopidy/core or in OSX  /Library/Python/2.7/site-packages/mopidy/core ). You can use `this patch <https://github.com/mopidy/mopidy/commit/2eb9ad710a2acf23fc037ecf992b58e9c12584d6.patch>'_ or you can manually change the function get_playlists to this:
+There is another option if you want to use 0.11 with the recent version of the webclient. You can patch the playlists.py file of core (in linux located in  /usr/share/pyshared/mopidy/core or in OSX  /Library/Python/2.7/site-packages/mopidy/core ). You can use `this patch <https://github.com/mopidy/mopidy/commit/2eb9ad710a2acf23fc037ecf992b58e9c12584d6.patch>`_ or you can manually change the function get_playlists to this:
 
-
-```python
     def get_playlists(self, include_tracks=True):
        futures = [
            b.playlists.playlists for b in self.backends.with_playlists]
@@ -32,7 +30,6 @@ There is another option if you want to use 0.11 with the recent version of the w
        if not include_tracks:
            playlists = [p.copy(tracks=[]) for p in playlists]
        return playlists
-```
 
 To install Mopidy, check out `the installation docs <http://docs.mopidy.com/en/latest/installation/>`_, `the settings docs <http://docs.mopidy.com/en/latest/settings/>`_ and `even more detailed information <http://docs.mopidy.com/en/latest/modules/frontends/http/#http-frontend>`_. 
 
