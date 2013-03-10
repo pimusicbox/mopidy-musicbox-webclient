@@ -162,12 +162,12 @@ function popupTracks(e, listuri, trackuri) {
     $('#popupTrackName').html(popupData[trackuri].name);
     $('#popupAlbumName').html(popupData[trackuri].album.name);
     var child = "";
-    $('#popupArtistsLi').remove();
+//    $('#popupArtistsLi').remove();
     if (popupData[trackuri].artists.length == 1) {
 
         //this doesnt work
         //        child += '<a href="#" onclick="showArtist(\'' +popupData[trackuri].artists[0].uri + '\');">Show Artist <span class="popupArtistName">' + popupData[trackuri].artists[0].name + '</span></a>';
-        $('#popupTracksLv').append($('<li/>', {
+ /*       $('#popupTracksLv').append($('<li/>', {
             'id' : "popupArtistsLi"
         }).append($('<a/>', {
             'href' : '#',
@@ -177,9 +177,11 @@ function popupTracks(e, listuri, trackuri) {
             'class' : 'popupArtistName',
             'text' : popupData[trackuri].artists[0].name
         }))));
-
+*/      child = '<a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'; 
+        $('#popupArtistName').html(popupData[trackuri].artists[0].name);
+        $('#popupArtistHref').attr('onclick', 'showArtist("' + popupData[trackuri].artists[0].uri + '");' );
         $('#popupArtistsDiv').hide();
-        //        $('#popupArtistsLi').html(child).show();
+        $('#popupArtistsLi').show();
     } else {
         for (var j = 0; j < popupData[trackuri].artists.length; j++) {
             child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>';
@@ -187,6 +189,7 @@ function popupTracks(e, listuri, trackuri) {
         $('#popupArtistsLi').hide();
         $('#popupArtistsLv').html(child).show();
         $('#popupArtistsDiv').show();
+        //  this makes the viewport of the window resize somehow
         $('#popupArtistsLv').listview("refresh");
     }
     var hash = document.location.hash.split('?');
@@ -196,10 +199,6 @@ function popupTracks(e, listuri, trackuri) {
     } else {
         $("#liaddtobottom").show();
     }
-
-    $('#popupTracksLv').listview().trigger("create");
-
-    $('#popupTracksLv').listview('refresh');
 
     $('#popupTracks').data("list", listuri).data("track", trackuri).popup("open", {
         x : e.pageX,

@@ -378,7 +378,7 @@
     text-decoration: none;
 }
 
-#popupTrackName, #popupAlbumName, .popupArtistName {
+#popupArtistName, #popupTrackName, #popupAlbumName, .popupArtistName {
     font-style: oblique;
 }
 
