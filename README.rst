@@ -30,6 +30,7 @@ Add a line *mopidy.frontends.http.HttpFrontend* to the FRONTENDS section of your
 Something like this:
 
 ```python
+
 FRONTENDS = (
     'mopidy.frontends.mpd.MpdFrontend',
     'mopidy.frontends.http.HttpFrontend',
@@ -39,6 +40,7 @@ FRONTENDS = (
 HTTP_SERVER_HOSTNAME = u'0.0.0.0'
 HTTP_SERVER_PORT = 6680
 HTTP_SERVER_STATIC_DIR = u'/opt/webclient'
+
 ```
 
 Then point your browser (modern, with websockets: recent versions of Firefox, Chrome, Safari and IE10) to the ip-address and port of your device, which you added to the settings.py. e.g. http://192.168.1.5:6680
