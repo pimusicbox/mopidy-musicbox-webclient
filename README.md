@@ -6,7 +6,7 @@ With Mopidy Browser Client, you can play your music on your computer (or Rapsber
 
 This is a responsive html/js/css client especially written for Mopidy, a music server. Responsive, so it works on desktop and mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
 
-`Mopidy <http://www.mopidy.com/>`_ is a music server which can play music from `Spotify <http://www.spotify.com/>`_ or from your hard drive. 
+[Mopidy](http://www.mopidy.com/) is a music server which can play music from `Spotify (http://www.spotify.com/) or from your hard drive. 
 
 Development
 ===========
@@ -17,9 +17,9 @@ Note: this Git-version is under development! As Mopidy changes, this client chan
 Installation
 ============
 
-To install Mopidy, check out `the installation docs <http://docs.mopidy.com/en/latest/installation/>`_, `the settings docs <http://docs.mopidy.com/en/latest/settings/>`_ and `even more detailed information <http://docs.mopidy.com/en/latest/modules/frontends/http/#http-frontend>`_. 
+To install Mopidy, check out [the installation docs](http://docs.mopidy.com/en/latest/installation/), [the settings docs](http://docs.mopidy.com/en/latest/settings/) and [even more detailed information](http://docs.mopidy.com/en/latest/modules/frontends/http/#http-frontend). 
 
-If you want to use the web client on a Raspberry Pi, do yourself a favor and use my custom built SD-image: `Pi MusicBox <http://www.woutervanwijk.nl/pimusicbox/>`_.
+If you want to use the web client on a Raspberry Pi, do yourself a favor and use my custom built SD-image: [Pi MusicBox](http://www.woutervanwijk.nl/pimusicbox/).
 
 Quick install
 =============
