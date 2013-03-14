@@ -29,12 +29,11 @@ Add a line *mopidy.frontends.http.HttpFrontend* to the FRONTENDS section of your
 
 Something like this:
 
-FRONTENDS = (
+FRONTENDS = ( 
     'mopidy.frontends.mpd.MpdFrontend',
     'mopidy.frontends.http.HttpFrontend',
     'mopidy.frontends.lastfm.LastfmFrontend',
-    'mopidy.frontends.mpris.MprisFrontend',
-)
+    'mopidy.frontends.mpris.MprisFrontend' )
 HTTP_SERVER_HOSTNAME = u'0.0.0.0'
 HTTP_SERVER_PORT = 6680
 HTTP_SERVER_STATIC_DIR = u'/opt/webclient'
