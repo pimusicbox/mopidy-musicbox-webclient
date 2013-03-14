@@ -27,16 +27,17 @@ Quick install
 Drop the 'webclient' folder in a folder on your Mopidy-system. Then change the settings.py (in the root directory of the Mopidy code) to make it work. 
 Add a line *mopidy.frontends.http.HttpFrontend* to the FRONTENDS section of your settings.py in the .config directory, and set the *HTTP_SERVER_STATIC_DIR* to point to the folder with the files from the web client.
 
-Something like:
-	FRONTENDS = (
-	    'mopidy.frontends.mpd.MpdFrontend',
-	    'mopidy.frontends.http.HttpFrontend',
-	    'mopidy.frontends.lastfm.LastfmFrontend',
-	    'mopidy.frontends.mpris.MprisFrontend',
-	)
-	HTTP_SERVER_HOSTNAME = u'0.0.0.0'
-	HTTP_SERVER_PORT = 6680
-	HTTP_SERVER_STATIC_DIR = u'/opt/webclient'
+Something like this:
+
+    FRONTENDS = (
+        'mopidy.frontends.mpd.MpdFrontend',
+        'mopidy.frontends.http.HttpFrontend',
+        'mopidy.frontends.lastfm.LastfmFrontend',
+        'mopidy.frontends.mpris.MprisFrontend',
+    )
+    HTTP_SERVER_HOSTNAME = u'0.0.0.0'
+    HTTP_SERVER_PORT = 6680
+    HTTP_SERVER_STATIC_DIR = u'/opt/webclient'
 
 Then point your browser (modern, with websockets: recent versions of Firefox, Chrome, Safari and IE10) to the ip-address and port of your device, which you added to the settings.py. e.g. http://192.168.1.5:6680
 
