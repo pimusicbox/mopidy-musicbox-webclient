@@ -83,7 +83,8 @@ function setSongInfo(data) {
     }
     artistshtml = '';
     artiststext = '';
-    if (data.name == '') {
+
+    if ( !data.name || (data.name == '')) {
         return;
     };
 
@@ -96,10 +97,12 @@ function setSongInfo(data) {
         }
     }
 
+
     if (data.album) {
         $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
     }
     $("#modalname").html(data.name);
+
     getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
 
     var arttmp = 'Artist';
@@ -192,9 +195,8 @@ function popupTracks(e, listuri, trackuri) {
         //  this makes the viewport of the window resize somehow
         $('#popupArtistsLv').listview("refresh");
     }
-    var hash = document.location.hash.split('?');
-    var divid = hash[0].substr(1);
-    if (divid == 'current') {
+    var hash = getHash();
+    if (hash == 'current') {
         $("#liaddtobottom").hide();
     } else {
         $("#liaddtobottom").show();
@@ -313,7 +315,7 @@ function initSocketevents() {
 $(document).ready(function() {
     //check for websockets
     if (!window.WebSocket) {
-        switchContent("playlists");
+        switchContent("current");
         $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>');
         exit;
     }
@@ -328,7 +330,7 @@ $(document).ready(function() {
     resetSong();
 
     if (location.hash.length < 2) {
-        switchContent("playlists");
+        switchContent("current");
     }
 
     initgui = false;
@@ -389,16 +391,15 @@ function updateStatusOfAll() {
 
 function locationHashChanged() {
     var hash = document.location.hash.split('?');
-    //remove #
-    var divid = hash[0].substr(1);
     var uri = hash[1];
+    
     $('#navcurrent a').removeClass('ui-state-active ui-state-persist ui-btn-active');
     $('#navplaylists a').removeClass('ui-state-active ui-state-persist ui-btn-active');
     $('#navsearch a').removeClass('ui-state-active ui-state-persist ui-btn-active');
     $('.pane').hide();
-    $('#' + divid + 'pane').show();
+    $('#' + getHash() + 'pane').show();
 
-    switch(divid) {
+    switch(hash) {
         case 'current':
             $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;

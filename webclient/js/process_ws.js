@@ -109,6 +109,7 @@ function processCurrentPlaylist(resultArr) {
  * process results of an artist lookup
  *********************************************************/
 function processArtistResults(resultArr) {
+    console.log(resultArr);
     customTracklists[resultArr.uri] = resultArr;
 
     resultsToTables(resultArr, ARTIST_TABLE, resultArr.uri);
@@ -123,6 +124,7 @@ function processArtistResults(resultArr) {
  * process results of an album lookup
  *********************************************************/
 function processAlbumResults(resultArr) {
+    console.log(resultArr);
     customTracklists[resultArr.uri] = resultArr;
     albumTracksToTable(resultArr, ALBUM_TABLE, resultArr.uri);
     var albumname = getAlbum(resultArr);

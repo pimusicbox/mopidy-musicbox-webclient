@@ -41,13 +41,14 @@ function initSearch() {
  * process results of a search
  *********************************************************/
 function processSearchResults(resultArr) {
+        console.log(resultArr);
+
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
     //get the right result
-    // 0 = older raspberry 1 = dev.
-    //    var results = resultArr[0];
-    var results = resultArr[1];
+    // 0 = mopidy 0.13 1 = mopidy 0.12.
+    var results = resultArr[0];
     var tracks = (results.tracks) ? results.tracks : '';
     customTracklists['trackresultscache'] = tracks;
     var artists = (results.artists) ? results.artists : '';

@@ -109,6 +109,7 @@ function getAlbum(pl) {
  * break up results and put them in album tables
  *********************************************************/
 function albumTracksToTable(pl, target, uri) {
+    console.log(pl);
     var tmp = '';
     var targetmin = target.substr(1);
     $(target).empty();
@@ -282,4 +283,11 @@ function timeFromSeconds(length) {
     var m = Math.floor(d % 3600 / 60);
     var s = Math.floor(d % 3600 % 60);
     return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
+}
+
+//get hash
+function getHash() {
+    var hash = document.location.hash.split('?');
+    //remove #
+    return hash[0].substr(1);
 }

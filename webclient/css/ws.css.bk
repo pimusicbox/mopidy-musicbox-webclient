@@ -131,7 +131,8 @@
 
 #controldiv {
     height: 30px;
-    width: 245px;
+/*    width: 245px; */
+    width: 200px;
     margin-top: -3px;
     margin-left: -5px;
     display: inline;
@@ -277,7 +278,7 @@
     background-color: #f0f0f0;
     border: 1px solid #999;
     border-bottom: 0;
-    padding: 0;
+    padding: 0px;
 }
 
 .table {
@@ -319,7 +320,7 @@
 }
 
 #playlistslist li a {
-    padding: 10px;
+    padding: 9px;
 }
 
 #playlistslist, #playlisttracks {
