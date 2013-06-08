@@ -41,14 +41,23 @@ function initSearch() {
  * process results of a search
  *********************************************************/
 function processSearchResults(resultArr) {
-        console.log(resultArr);
-
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
     //get the right result
-    // 0 = mopidy 0.13 1 = mopidy 0.12.
-    var results = resultArr[0];
+    //depends on versioon of mopidy: 0 = 0.14+ 1 =  0.13-
+    //    var results = resultArr[0];
+    //add complete array
+    console.log(resultArr);
+    //results = tracks from spotify
+    var results = resultArr[1];
+    //add tracks from local search
+    if (resultArr[0].tracks) {
+        console.log(resultArr[0].tracks);
+	results.tracks = resultArr[0].tracks.concat(results.tracks);
+        console.log(results);
+    }
+
     var tracks = (results.tracks) ? results.tracks : '';
     customTracklists['trackresultscache'] = tracks;
     var artists = (results.artists) ? results.artists : '';
