@@ -50,17 +50,22 @@ function processSearchResults(resultArr) {
     //add complete array
     console.log(resultArr);
     //results = tracks from spotify
-    var results = resultArr[1];
+    var results = resultArr[0];
     //add tracks from local search
-    if (resultArr[0].tracks) {
-        console.log(resultArr[0].tracks);
-	results.tracks = resultArr[0].tracks.concat(results.tracks);
-        console.log(results);
+    if (resultArr[1].tracks) {
+	results.tracks = resultArr[1].tracks.concat(results.tracks);
+    }
+    if (resultArr[1].artists) {
+	results.artists = resultArr[1].artists.concat(results.artists);
+    }
+    if (resultArr[1].albums) {
+	results.albums = resultArr[1].albums.concat(results.albums);
     }
 
     var tracks = (results.tracks) ? results.tracks : '';
     customTracklists['trackresultscache'] = tracks;
     var artists = (results.artists) ? results.artists : '';
+    console.log(artists);
     var albums = (results.albums) ? results.albums : '';
     if ((tracks == '') && (artists == '') && (albums == '')) {
         alert('No results');
@@ -79,7 +84,6 @@ function processSearchResults(resultArr) {
     }
     $(SEARCH_ARTIST_TABLE).html(child);
 //    $(SEARCH_ARTIST_TABLE).listview('refresh');
-
     child = '';
 
     for (var i = 0; i < albums.length; i++) {
@@ -99,6 +103,8 @@ function processSearchResults(resultArr) {
 //    $(SEARCH_ALBUM_TABLE).listview('refresh');
 
     $('#expandsearch').show();
+
+//console.log(results.tracks);
     playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
     setSongInfo();
     showLoading(false);
