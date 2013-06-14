@@ -19,7 +19,7 @@ function playTrack(addtobottom) {
     var tracks = getTracksFromUri(playlisturi);
     if (tracks) {
         if (!addtobottom) {
-            mopidy.tracklist.clear();
+            clearQueue();
         }
         $(CURRENT_PLAYLIST_TABLE).empty();
     } else {
@@ -39,6 +39,9 @@ function playTrack(addtobottom) {
     }
 
     if (addtobottom) {
+	if (addtobottom == 'one') {
+	    tracks.length = 1;
+	}
         mopidy.tracklist.add(tracks);
         showLoading(false);
         return false;
@@ -62,6 +65,11 @@ console.log(i);
     }
 
     showLoading(false);
+    return false;
+}
+
+function clearQueue () {
+    mopidy.tracklist.clear();
     return false;
 }
 
