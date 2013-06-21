@@ -76,48 +76,11 @@ function resizeMb() {
 }
 
 function setSongInfo(data) {
-    if (data) {
-        songdata = data;
-    } else {
-        data = songdata;
-    }
-    artistshtml = '';
-    artiststext = '';
-
-    if ( !data.name || (data.name == '')) {
+    if (!data) { return; }
+    if (data.name == '') {
         return;
     };
 
-    for (var j = 0; j < data.artists.length; j++) {
-        artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
-        artiststext += data.artists[j].name;
-        if (j != data.artists.length - 1) {
-            artistshtml += ', ';
-            artiststext += ', ';
-        }
-    }
-
-
-    if (data.album) {
-        $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
-    }
-    $("#modalname").html(data.name);
-
-    getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
-
-    var arttmp = 'Artist';
-
-    if (data.artists.length > 1) {
-        arttmp += 's';
-    }
-    $("#modalartist").html(arttmp + ': ' + artistshtml);
-
-    $("#trackslider").attr("min", 0);
-    songlength = data.length;
-    $("#trackslider").attr("max", data.length);
-    $("#songlength").html(timeFromSeconds(data.length / 1000));
-
-    resizeMb();
     //update styles of listviews
     $('#currenttable li').each(function() {
         $(this).removeClass("currenttrack");
@@ -150,6 +113,46 @@ function setSongInfo(data) {
             $(this).addClass('currenttrack2');
         }
     });
+
+    if (songdata.name == data.name) {
+	return;
+    }
+    if (data) {
+        songdata = data;
+    } else {
+        data = songdata;
+    }
+    artistshtml = '';
+    artiststext = '';
+
+    for (var j = 0; j < data.artists.length; j++) {
+        artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
+        artiststext += data.artists[j].name;
+        if (j != data.artists.length - 1) {
+            artistshtml += ', ';
+            artiststext += ', ';
+        }
+    }
+
+    if (data.album) {
+        $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
+    }
+    $("#modalname").html(data.name);
+    getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
+
+    var arttmp = 'Artist';
+
+    if (data.artists.length > 1) {
+        arttmp += 's';
+    }
+    $("#modalartist").html(arttmp + ': ' + artistshtml);
+
+    $("#trackslider").attr("min", 0);
+    songlength = data.length;
+    $("#trackslider").attr("max", data.length);
+    $("#songlength").html(timeFromSeconds(data.length / 1000));
+
+    resizeMb();
 }
 
 /***************
@@ -195,11 +198,12 @@ function popupTracks(e, listuri, trackuri) {
         //  this makes the viewport of the window resize somehow
         $('#popupArtistsLv').listview("refresh");
     }
-    var hash = getHash();
-    if (hash == 'current') {
-        $("#liaddtobottom").hide();
+    var hash = document.location.hash.split('?');
+    var divid = hash[0].substr(1);
+    if (divid == 'current') {
+        $(".addqueue").hide();
     } else {
-        $("#liaddtobottom").show();
+        $(".addqueue").show();
     }
 
     $('#popupTracks').data("list", listuri).data("track", trackuri).popup("open", {
@@ -315,7 +319,7 @@ function initSocketevents() {
 $(document).ready(function() {
     //check for websockets
     if (!window.WebSocket) {
-        switchContent("current");
+        switchContent("playlists");
         $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>');
         exit;
     }
@@ -330,7 +334,7 @@ $(document).ready(function() {
     resetSong();
 
     if (location.hash.length < 2) {
-        switchContent("current");
+        switchContent("playlists");
     }
 
     initgui = false;
@@ -371,7 +375,7 @@ function switchContent(divid, uri) {
 }
 
 //update timer
-function updateStatusOfAll() {
+function updateTimer() {
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     //TODO check offline?
@@ -391,15 +395,16 @@ function updateStatusOfAll() {
 
 function locationHashChanged() {
     var hash = document.location.hash.split('?');
+    //remove #
+    var divid = hash[0].substr(1);
     var uri = hash[1];
-    
     $('#navcurrent a').removeClass('ui-state-active ui-state-persist ui-btn-active');
     $('#navplaylists a').removeClass('ui-state-active ui-state-persist ui-btn-active');
     $('#navsearch a').removeClass('ui-state-active ui-state-persist ui-btn-active');
     $('.pane').hide();
-    $('#' + getHash() + 'pane').show();
+    $('#' + divid + 'pane').show();
 
-    switch(hash) {
+    switch(divid) {
         case 'current':
             $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;

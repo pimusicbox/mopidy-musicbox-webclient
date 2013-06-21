@@ -17,6 +17,7 @@ function playTrack(addtoqueue) {
     var trackslist = new Array();
     var track, tracksbefore, tracksafter;
     var tracks = getTracksFromUri(playlisturi);
+    console.log(tracks);
     if (tracks) {
         if (!addtoqueue) {
             clearQueue();
@@ -39,20 +40,27 @@ function playTrack(addtoqueue) {
     }
 
 //find track that was selected
-    for (var i = 0; i < tracks.length; i++) {
-        if (tracks[i].uri == uri) {
+    for (var selected = 0;  selected < tracks.length; selected++) {
+        if (tracks[selected].uri == uri) {
 	    break;
 	}
     }
 
-//options
+//find track that is playing
+    for (var playing = 0; playing < currentplaylist.length; playing++) {
+        if (currentplaylist[playing].uri == songdata.uri) {
+	    break;
+	}
+    }
+
+//switch popup options
     switch (addtoqueue) {
 	case ADD_THIS_BOTTOM:
-            mopidy.tracklist.add(tracks.slice(i, i + 1));
+            mopidy.tracklist.add(tracks.slice(selected, selected + 1));
             showLoading(false);
 	    return false;
 	case PLAY_NEXT:
-	    mopidy.tracklist.add(tracks.slice(i, i + 1), 1);
+	    mopidy.tracklist.add(tracks.slice(selected, selected + 1), playing + 1);
             showLoading(false);
 	    return false;
 	case ADD_ALL_BOTTOM:
@@ -62,15 +70,15 @@ function playTrack(addtoqueue) {
     }
 
 // play now: first add track to be played, then the other tracks
-    mopidy.tracklist.add(tracks.slice(i, i + 1) );
+    mopidy.tracklist.add(tracks.slice(selected, selected + 1) );
     mopidy.playback.play();
-    //wait 2 seconds before adding the rest to give server the time to start playing
+    //wait 1 second before adding the rest to give server the time to start playing
     setTimeout(function() {
-        mopidy.tracklist.add(tracks.slice(0, i), 0);
-	if (i < tracks.length) {
-            mopidy.tracklist.add(tracks.slice(i + 1) );
+        mopidy.tracklist.add(tracks.slice(0, selected), 0);
+	if (selected < tracks.length) {
+            mopidy.tracklist.add(tracks.slice(selected + 1) );
 	}
-    }, (2000));
+    }, (1000));
     showLoading(false);
     return false;
 }

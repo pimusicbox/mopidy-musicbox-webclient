@@ -72,13 +72,7 @@ function processGetPlaylists(resultArr) {
     };
     $('#playlistslist').empty();
     $('#playlistslist').html(tmp);
- //   $('#playlistslist').listview('refresh');
     scrollToTracklist();
-/*    if (isMobileWebkit) {
-        playlistslistScroll.refresh();
-    }
-*/
-    console.log('pl');
     showLoading(false);
 }
 
