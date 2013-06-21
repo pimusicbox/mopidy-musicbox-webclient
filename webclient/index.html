@@ -73,17 +73,20 @@
             <div data-role="popup" data-transition="none" data-theme="c" id="popupTracks">
                 <div data-role="collapsible-set">
                     <ul data-role="listview" data-icon="false" id="popupTracksLv">
-                        <!-- <li data-role="divider">
-                        Track
-                        </li> -->
-                        <li>
-                            <a href="#" onclick="return playTrack();">Play <span id="popupTrackName"></span></a>
+                        <li data-role="divider">
+                        <span id="popupTrackName"></span>
                         </li>
                         <li>
-                            <a href="#" onclick="return playTrack('one');">Add this track to bottom of queue</a>
+                            <a href="#" onclick="return playTrack();">Play Now <span id="popupTrackName"></span></a>
                         </li>
                         <li>
-                            <a href="#" onclick="return playTrack('all');">Add all tracks to bottom of queue</a>
+                            <a href="#" onclick="return playTrack(PLAY_NEXT);">Play Track Next</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="return playTrack(ADD_THIS_BOTTOM);">Add track to bottom of queue</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="return playTrack(ADD_ALL_BOTTOM);" id="liaddtobottom">Add all tracks to bottom of queue</a>
                         </li>
                         <li>
                             <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>

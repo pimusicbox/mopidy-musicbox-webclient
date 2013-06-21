@@ -59,6 +59,11 @@ SEARCH_ALBUM_TABLE = '#albumresulttable';
 SEARCH_ARTIST_TABLE = '#artistresulttable';
 SEARCH_TRACK_TABLE = '#trackresulttable';
 
+PLAY_NOW = 0;
+PLAY_NEXT = 1;
+ADD_THIS_BOTTOM = 2;
+ADD_ALL_BOTTOM = 3;
+
 MAX_TABLEROWS = 50;
 
 //update track slider timer, milliseconds
@@ -78,9 +83,13 @@ function scrollToTop() {
 }
 
 function scrollToTracklist() {
+/*    if (isMobileWebkit) {
+        playlistslistScroll.refresh();
+    }
+*/
     var divtop = $("#playlisttracksdiv").offset().top - 50;
     $('body,html').animate({
-        scrollTop : divtop
+    	scrollTop : divtop
     }, 250);
 }
 
@@ -109,7 +118,6 @@ function getAlbum(pl) {
  * break up results and put them in album tables
  *********************************************************/
 function albumTracksToTable(pl, target, uri) {
-    console.log(pl);
     var tmp = '';
     var targetmin = target.substr(1);
     $(target).empty();
@@ -283,11 +291,4 @@ function timeFromSeconds(length) {
     var m = Math.floor(d % 3600 / 60);
     var s = Math.floor(d % 3600 % 60);
     return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
-}
-
-//get hash
-function getHash() {
-    var hash = document.location.hash.split('?');
-    //remove #
-    return hash[0].substr(1);
 }
