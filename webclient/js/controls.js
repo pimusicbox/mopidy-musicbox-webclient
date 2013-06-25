@@ -17,7 +17,7 @@ function playTrack(addtoqueue) {
     var trackslist = new Array();
     var track, tracksbefore, tracksafter;
     var tracks = getTracksFromUri(playlisturi);
-    console.log(tracks);
+//    console.log(tracks);
     if (tracks) {
         if (!addtoqueue) {
             clearQueue();
