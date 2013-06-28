@@ -8,7 +8,7 @@ function playTrack(addtoqueue) {
     }
     $('#popupTracks').popup('close');
     $('#controlsmodal').popup('close');
-    showLoading(true);
+    toast('Loading...');
 
     //function playtrack(uri, playlisturi) {
     playlisturi = $('#popupTracks').data("list");
@@ -17,7 +17,6 @@ function playTrack(addtoqueue) {
     var trackslist = new Array();
     var track, tracksbefore, tracksafter;
     var tracks = getTracksFromUri(playlisturi);
-//    console.log(tracks);
     if (tracks) {
         if (!addtoqueue) {
             clearQueue();
@@ -35,7 +34,6 @@ function playTrack(addtoqueue) {
             mopidy.playback.next();
         }
         mopidy.playback.play();
-        showLoading(false);
         return false;
     }
 
@@ -57,29 +55,25 @@ function playTrack(addtoqueue) {
     switch (addtoqueue) {
 	case ADD_THIS_BOTTOM:
             mopidy.tracklist.add(tracks.slice(selected, selected + 1));
-            showLoading(false);
 	    return false;
 	case PLAY_NEXT:
 	    mopidy.tracklist.add(tracks.slice(selected, selected + 1), playing + 1);
-            showLoading(false);
 	    return false;
 	case ADD_ALL_BOTTOM:
             mopidy.tracklist.add(tracks);
-            showLoading(false);
 	    return false;
     }
 
-// play now: first add track to be played, then the other tracks
+// first add track to be played, then the other tracks
     mopidy.tracklist.add(tracks.slice(selected, selected + 1) );
-    mopidy.playback.play();
-    //wait 1 second before adding the rest to give server the time to start playing
+    //wait 1.5 second before adding the rest to give server the time to start playing
     setTimeout(function() {
         mopidy.tracklist.add(tracks.slice(0, selected), 0);
 	if (selected < tracks.length) {
             mopidy.tracklist.add(tracks.slice(selected + 1) );
 	}
-    }, (1000));
-    showLoading(false);
+    }, (1500));
+    mopidy.playback.play();
     return false;
 }
 

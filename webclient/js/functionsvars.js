@@ -292,3 +292,18 @@ function timeFromSeconds(length) {
     var s = Math.floor(d % 3600 % 60);
     return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
 }
+
+
+/******* Toast ***/
+function toast (message, delay) {
+    message = message || "Loading...";
+    delay = delay || 1000;
+    $.mobile.showPageLoadingMsg("a", message);
+    if(delay > 0) {
+        setTimeout(function(){
+            $.mobile.hidePageLoadingMsg();
+        }, delay);
+    }
+}
+
+

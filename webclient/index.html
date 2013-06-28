@@ -3,8 +3,9 @@
     <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="utf-8">
-        <link rel="stylesheet" href="css/jquery.mobile-1.3.1.css" />
+        <link rel="stylesheet" href="css/jquery.mobile-1.3.1.css" /> 
         <script src="js/jquery-1.8.3.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css" /> -->
         <script type='application/javascript' src='js/fastclick.js'></script>
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
         <script type="text/javascript">
@@ -77,7 +78,7 @@
                         <span id="popupTrackName"></span>
                         </li>
 -->                        <li>
-                            <a href="#" onclick="return playTrack();">Play <span id="popupTrackName"></span></a>
+                            <a href="#" onclick="return playTrack();">Play <span class="popupTrackName"></span></a>
                         </li>
                         <li class="addqueue">
                             <a href="#" onclick="return playTrack(PLAY_NEXT);">Play Track Next</a>
@@ -87,6 +88,30 @@
                         </li>
                         <li class="addqueue">
                             <a href="#" onclick="return playTrack(ADD_ALL_BOTTOM);" id="liaddtobottom">Add all to Bottom of Queue</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>
+                        </li>
+                        <li id="popupArtistsLi">
+                            <a href="#" onclick="showArtist()" id="popupArtistHref">Show Artist <span id="popupArtistName"></span>
+                            </a>
+                        </li>
+                        <div data-role="collapsible" data-icon="false" data-inset="false" id="popupArtistsDiv">
+                            <h2>Artists</h2>
+                            <ul data-icon="false" data-inset="false" data-role="listview" id="popupArtistsLv"></ul>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+
+            <div data-role="popup" data-transition="none" data-theme="c" id="popupQueue">
+                <div data-role="collapsible-set">
+                    <ul data-role="listview" data-icon="false" id="popupQueueLv">
+                        <li>
+                            <a href="#" onclick="return playTrack();">Play <span class="popupTrackName"></span></a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="return removeTrack();">Remove from Queue</a>
                         </li>
                         <li>
                             <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>
