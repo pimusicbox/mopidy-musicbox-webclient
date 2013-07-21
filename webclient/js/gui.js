@@ -76,45 +76,11 @@ function resizeMb() {
 }
 
 function setSongInfo(data) {
-    if (data) {
-        songdata = data;
-    } else {
-        data = songdata;
-    }
-    artistshtml = '';
-    artiststext = '';
+    if (!data) { return; }
     if (data.name == '') {
         return;
     };
 
-    for (var j = 0; j < data.artists.length; j++) {
-        artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
-        artiststext += data.artists[j].name;
-        if (j != data.artists.length - 1) {
-            artistshtml += ', ';
-            artiststext += ', ';
-        }
-    }
-
-    if (data.album) {
-        $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
-    }
-    $("#modalname").html(data.name);
-    getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
-
-    var arttmp = 'Artist';
-
-    if (data.artists.length > 1) {
-        arttmp += 's';
-    }
-    $("#modalartist").html(arttmp + ': ' + artistshtml);
-
-    $("#trackslider").attr("min", 0);
-    songlength = data.length;
-    $("#trackslider").attr("max", data.length);
-    $("#songlength").html(timeFromSeconds(data.length / 1000));
-
-    resizeMb();
     //update styles of listviews
     $('#currenttable li').each(function() {
         $(this).removeClass("currenttrack");
@@ -147,6 +113,46 @@ function setSongInfo(data) {
             $(this).addClass('currenttrack2');
         }
     });
+
+    if (songdata.name == data.name) {
+	return;
+    }
+    if (data) {
+        songdata = data;
+    } else {
+        data = songdata;
+    }
+    artistshtml = '';
+    artiststext = '';
+
+    for (var j = 0; j < data.artists.length; j++) {
+        artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
+        artiststext += data.artists[j].name;
+        if (j != data.artists.length - 1) {
+            artistshtml += ', ';
+            artiststext += ', ';
+        }
+    }
+
+    if (data.album) {
+        $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
+    }
+    $("#modalname").html(data.name);
+    getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
+
+    var arttmp = 'Artist';
+
+    if (data.artists.length > 1) {
+        arttmp += 's';
+    }
+    $("#modalartist").html(arttmp + ': ' + artistshtml);
+
+    $("#trackslider").attr("min", 0);
+    songlength = data.length;
+    $("#trackslider").attr("max", data.length);
+    $("#songlength").html(timeFromSeconds(data.length / 1000));
+
+    resizeMb();
 }
 
 /***************
@@ -195,9 +201,9 @@ function popupTracks(e, listuri, trackuri) {
     var hash = document.location.hash.split('?');
     var divid = hash[0].substr(1);
     if (divid == 'current') {
-        $("#liaddtobottom").hide();
+        $(".addqueue").hide();
     } else {
-        $("#liaddtobottom").show();
+        $(".addqueue").show();
     }
 
     $('#popupTracks').data("list", listuri).data("track", trackuri).popup("open", {
@@ -369,7 +375,7 @@ function switchContent(divid, uri) {
 }
 
 //update timer
-function updateStatusOfAll() {
+function updateTimer() {
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     //TODO check offline?

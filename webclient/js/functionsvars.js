@@ -59,6 +59,11 @@ SEARCH_ALBUM_TABLE = '#albumresulttable';
 SEARCH_ARTIST_TABLE = '#artistresulttable';
 SEARCH_TRACK_TABLE = '#trackresulttable';
 
+PLAY_NOW = 0;
+PLAY_NEXT = 1;
+ADD_THIS_BOTTOM = 2;
+ADD_ALL_BOTTOM = 3;
+
 MAX_TABLEROWS = 50;
 
 //update track slider timer, milliseconds
@@ -78,9 +83,13 @@ function scrollToTop() {
 }
 
 function scrollToTracklist() {
+/*    if (isMobileWebkit) {
+        playlistslistScroll.refresh();
+    }
+*/
     var divtop = $("#playlisttracksdiv").offset().top - 50;
     $('body,html').animate({
-        scrollTop : divtop
+    	scrollTop : divtop
     }, 250);
 }
 
@@ -283,3 +292,18 @@ function timeFromSeconds(length) {
     var s = Math.floor(d % 3600 % 60);
     return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
 }
+
+
+/******* Toast ***/
+function toast (message, delay) {
+    message = message || "Loading...";
+    delay = delay || 1000;
+    $.mobile.showPageLoadingMsg("a", message);
+    if(delay > 0) {
+        setTimeout(function(){
+            $.mobile.hidePageLoadingMsg();
+        }, delay);
+    }
+}
+
+

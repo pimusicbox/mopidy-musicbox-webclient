@@ -24,23 +24,18 @@ If you want to use the web client on a Raspberry Pi, do yourself a favor and use
 Quick install
 =============
 
-Drop the 'webclient' folder in a folder on your Mopidy-system. Then change the settings.py (in the root directory of the Mopidy code) to make it work. 
-Add a line *mopidy.frontends.http.HttpFrontend* to the FRONTENDS section of your settings.py in the .config directory, and set the *HTTP_SERVER_STATIC_DIR* to point to the folder with the files from the web client.
+Drop the 'webclient' folder in a folder on your Mopidy-system. Then change the [settings of Mopidy](http://docs.mopidy.com/en/latest/config/) to make it work. 
 
-Something like this:
-```python
-FRONTENDS = (
-    'mopidy.frontends.mpd.MpdFrontend',
-    'mopidy.frontends.http.HttpFrontend',
-    'mopidy.frontends.lastfm.LastfmFrontend',
-    'mopidy.frontends.mpris.MprisFrontend',
-)
-HTTP_SERVER_HOSTNAME = u'0.0.0.0'
-HTTP_SERVER_PORT = 6680
-HTTP_SERVER_STATIC_DIR = u'/opt/webclient'
+Example (assuming the webclient is in /opt/webclient):
+```code
+[http]
+enabled = true
+hostname = ::
+port = 6680
+static_dir = /opt/webclient
 ```
 
-Then point your browser (modern, with websockets: recent versions of Firefox, Chrome, Safari and IE10) to the ip-address and port of your device, which you added to the settings.py. e.g. http://192.168.1.5:6680
+Then point your browser (modern, with websockets: recent versions of Firefox, Chrome, Safari and IE10) to the ip-address and port of your device. e.g. http://192.168.1.5:6680
 
 Security
 ========
