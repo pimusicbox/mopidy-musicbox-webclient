@@ -130,7 +130,7 @@
 }
 
 #controldiv {
-    height: 30px;
+    height: 40px;
     width: 245px;
     margin-top: -3px;
     margin-left: -5px;
@@ -138,24 +138,25 @@
 }
 
 #controldiv img {
-    margin-left: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#controldiv span {
+    margin-left: 6px;
+    margin-top: 10px;
     float: left;
+    width: 40px;
+    height: 40px;
 }
 
 #playimg {
-    margin-top: 12px;
+    margin-top: 2px;
 }
 
-#nextimg, #previmg {
-    margin-top: 16px;
-}
-
-#backimg {
-    margin-top: 16px;
-}
-
-#controlsimg {
-    margin-top: 16px;
+#nextimg, #previmg, #backimg, #controlsimg {
+    margin-top: 6px;
 }
 
 /**********************
@@ -171,8 +172,16 @@
 }
 
 #songinfo {
-    margin-top: 10px;
-    height: 35px;
+    margin-top: 5px;
+    height: 40px;
+    padding: 5px;
+    background-color: #bbb;
+    -moz-border-radius-topleft: 2px;
+    -moz-border-radius-topright: 2px;
+    -webkit-border-top-left-radius: 2px;
+    -webkit-border-top-right-radius: 2px;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
 }
 
 #infoartist {
@@ -270,7 +279,9 @@
     color: #555 !important;
     font-size: 80% !important;
     display: block;
-    padding: 5px;
+    padding: 2px;
+    padding-right: 4px;
+    padding-left: 4px;
 }
 
 .table li {
@@ -285,6 +296,7 @@
     list-style-type:none;
 }
 
+/*
 .table li:first-child {  
     -moz-border-radius-topleft: 7px;
     -moz-border-radius-topright: 7px;
@@ -303,6 +315,25 @@
     border-bottom-right-radius: 7px;
     border-bottom: 1px solid #999;
 }
+*/
+.table li:first-child {  
+    -moz-border-radius-topleft: 2px;
+    -moz-border-radius-topright: 2px;
+    -webkit-border-top-left-radius: 2px;
+    -webkit-border-top-right-radius: 2px;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+}
+
+.table li:last-child { 
+    -moz-border-radius-bottomleft: 2px;
+    -moz-border-radius-bottomright: 2px;
+    -webkit-border-bottom-left-radius: 2px;
+    -webkit-border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom: 1px solid #999;
+}
 
 .albumdivider h1, .table li h1 {
     font-size: 120% !important;
@@ -319,7 +350,7 @@
 }
 
 #playlistslist li a {
-    padding: 10px;
+    padding: 7px;
 }
 
 #playlistslist, #playlisttracks {
@@ -341,6 +372,7 @@
     width: 30px;
     heigth: 30px;
     margin-right: 3px;
+    margin-top: 3px;
 }
 
 .currenttrack2 {
@@ -395,6 +427,12 @@
     display:block !important;
 }    
   
+/*****
+footer
+*/
+#footer img {
+    vertical-align: middle;
+}
 
 /***************
  *  common use

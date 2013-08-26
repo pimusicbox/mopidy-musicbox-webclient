@@ -236,27 +236,28 @@ function playlisttotable(pl, target, uri) {
     var targetmin = target.substr(1);
     var child = '';
     for (var i = 0; i < pl.length; i++) {
-        popupData[pl[i].uri] = pl[i];
-
-        child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
-        child += '<h1>' + pl[i].name + "</h1>";
-        child += '<p>';
-        child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>';
-        // <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
-        for (var j = 0; j < pl[i].artists.length; j++) {
-            child += pl[i].artists[j].name;
-            child += (j == pl[i].artists.length - 1) ? '' : ' / ';
-            //stop after 3
-            if (j > 2) {
-                child += '...';
-                break;
+	if (pl[i]) {
+            popupData[pl[i].uri] = pl[i];
+	    child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
+    	    child += '<h1>' + pl[i].name + "</h1>";
+            child += '<p>';
+	    child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>';
+    	    // <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
+            for (var j = 0; j < pl[i].artists.length; j++) {
+		if (pl[i].artists[j]) {
+                    child += pl[i].artists[j].name;
+    	            child += (j == pl[i].artists.length - 1) ? '' : ' / ';
+	            //stop after 3
+    	            if (j > 2) {
+	                child += '...';
+    			break;
+    	    	    }
+		}
             }
-        }
-        child += ' / <em>' + pl[i].album.name + '</em></p>';
-
-        //        child += '<p>' + pl[i].album.name + '</p>';
-        child += '</a></li>';
-        tmp += child;
+	    child += ' / <em>' + pl[i].album.name + '</em></p>';
+            child += '</a></li>';
+	    tmp += child;
+	}
     };
 
     $(target).html(tmp);

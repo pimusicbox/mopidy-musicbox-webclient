@@ -48,7 +48,6 @@ function processSearchResults(resultArr) {
     //depends on versioon of mopidy: 0 = 0.14+ 1 =  0.13-
     //    var results = resultArr[0];
     //add complete array
-    console.log(resultArr);
     //results = tracks from spotify
     var results = resultArr[0];
     //add tracks from local search
@@ -65,7 +64,6 @@ function processSearchResults(resultArr) {
     var tracks = (results.tracks) ? results.tracks : '';
     customTracklists['trackresultscache'] = tracks;
     var artists = (results.artists) ? results.artists : '';
-    console.log(artists);
     var albums = (results.albums) ? results.albums : '';
     if ((tracks == '') && (artists == '') && (albums == '')) {
         alert('No results');
@@ -80,31 +78,37 @@ function processSearchResults(resultArr) {
             break;
             //child += " hidden";
         }
-        child += '"><a href="#" onclick="return showArtist(this.id)" id="' + artists[i].uri + '">' + artists[i].name + "</a></li>";
+	if (artists[i]) {
+    	    child += '"><a href="#" onclick="return showArtist(this.id)" id="' + artists[i].uri + '">' + artists[i].name + "</a></li>";
+	}
     }
     $(SEARCH_ARTIST_TABLE).html(child);
 //    $(SEARCH_ARTIST_TABLE).listview('refresh');
     child = '';
-
+//    console.log(albums.length);
     for (var i = 0; i < albums.length; i++) {
         child += '<li class="resultrow';
         if (i > 9) {
             break;
             //child += " hidden";
         }
-        child += '"><a href="#" onclick="return showAlbum(this.id)" id="' + albums[i].uri + '">';
-        child += "<h1>" + albums[i].name + "</h1><p>";
-        for (var j = 0; j < albums[i].artists.length; j++) {
-            child += albums[i].artists[j].name + " ";
-        }
-        child += '</p></a></li>';
+	if(albums[i]) {
+            child += '"><a href="#" onclick="return showAlbum(this.id)" id="' + albums[i].uri + '">';
+	    child += "<h1>" + albums[i].name + "</h1><p>";
+    	    for (var j = 0; j < albums[i].artists.length; j++) {
+    		if (albums[i].artists[j]) {
+		    child += albums[i].artists[j].name + " ";
+    	        }
+	    }
+    	    child += '</p></a></li>';
+	}
     }
     $(SEARCH_ALBUM_TABLE).html(child);
 //    $(SEARCH_ALBUM_TABLE).listview('refresh');
 
     $('#expandsearch').show();
 
-//console.log(results.tracks);
+//    console.log(results.tracks);
     playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
     setSongInfo();
     showLoading(false);
