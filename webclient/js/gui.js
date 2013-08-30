@@ -9,6 +9,7 @@
 function resetSong() {
     if (!posChanging) {
         pauseTimer();
+
         setPlayState(false);
         setPosition(0);
         var data = new Object;
@@ -106,7 +107,7 @@ function setSongInfo(data) {
         if (this.id == 'artiststable-' + data.uri) {
             $(this).addClass('currenttrack2');
         }
-    });
+    });1
     $('#albumstable li').each(function() {
         $(this).removeClass("currenttrack2");
         if (this.id == 'albumstable-' + data.uri) {
@@ -125,33 +126,45 @@ function setSongInfo(data) {
     artistshtml = '';
     artiststext = '';
 
-    for (var j = 0; j < data.artists.length; j++) {
-        artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
-        artiststext += data.artists[j].name;
-        if (j != data.artists.length - 1) {
-            artistshtml += ', ';
-            artiststext += ', ';
-        }
-    }
 
     if (data.album) {
         $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
+        getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
     }
     $("#modalname").html(data.name);
-    getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
 
-    var arttmp = 'Artist';
-
-    if (data.artists.length > 1) {
-        arttmp += 's';
+    if (!data.length || data.length == 0) {
+        songlength = 0;
+	$("#songlength").html('');
+	pauseTimer();
+	$('#trackslider').slider('disable');
+    } else {
+        songlength = data.length;
+	$("#songlength").html(timeFromSeconds(data.length / 1000));
+        $('#trackslider').slider('enable');
     }
+
+    if(data.artists) {
+	for (var j = 0; j < data.artists.length; j++) {
+    	    artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
+    	    artiststext += data.artists[j].name;
+    	    if (j != data.artists.length - 1) {
+	        artistshtml += ', ';
+        	artiststext += ', ';
+	    }
+	}
+        var arttmp = 'Artist';
+
+	if (data.artists.length > 1) {
+    	arttmp += 's';
+	}
+    }
+
     $("#modalartist").html(arttmp + ': ' + artistshtml);
 
     $("#trackslider").attr("min", 0);
-    songlength = data.length;
     $("#trackslider").attr("max", data.length);
-    $("#songlength").html(timeFromSeconds(data.length / 1000));
-
+    
     resizeMb();
 }
 
@@ -355,7 +368,24 @@ $(document).ready(function() {
     $(window).resize(function() {
         resizeMb();
     });
-
+    initRadio();
+/*    $(document).keypress( function (event) {
+	if (event.target.tagName != 'INPUT') { 
+	    event.preventDefault();
+	    switch(event.which) {
+	        case 'p':
+    		    doPlay();
+		    break;
+		case ']':
+    		    doNext();
+		    break;
+		case '[':
+    		    doPrevious();
+		    break;
+	    }
+	}
+    });
+*/
 });
 
 $(document).bind("pageinit", function() {

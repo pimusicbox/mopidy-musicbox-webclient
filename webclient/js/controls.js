@@ -104,6 +104,7 @@ function setPlayState(nwplay) {
 
 //play or pause
 function doPlay() {
+    toast('Please wait...', 250);
     if (!play) {
         mopidy.playback.play();
     } else {
@@ -113,10 +114,12 @@ function doPlay() {
 }
 
 function doPrevious() {
+    toast('Playing previous track...');
     mopidy.playback.previous();
 }
 
 function doNext() {
+    toast('Playing next track...');
     mopidy.playback.next();
 }
 
@@ -179,20 +182,23 @@ function doRepeat() {
 function doSeekPos(value) {
     var val = $("#trackslider").val();
     newposition = Math.round(val);
-    clearTimeout(seekTimer);
     if (!initgui) {
         pauseTimer();
         //set timer to not trigger it too much
-        posChanging = true;
-        seekTimer = setTimeout(triggerPos, 200);
+        clearTimeout(seekTimer);
+	$("#songelapsed").html(timeFromSeconds(val / 1000));
+        seekTimer = setTimeout(triggerPos, 500);
     }
 }
 
 function triggerPos() {
     if (mopidy) {
-        mopidy.playback.stop();
+        posChanging = true;
+//        mopidy.playback.pause();
+//	console.log(newposition);
         mopidy.playback.seek(newposition);
-        mopidy.playback.resume();
+//        mopidy.playback.resume();
+	resumeTimer();
         posChanging = false;
     }
 }
@@ -227,15 +233,15 @@ function setVolume(value) {
 
 function doVolume(value) {
     if (!initgui) {
-        volumeChanging = true;
+        volumeChanging = value;
         clearInterval(volumeTimer);
-        volumeTimer = setTimeout(triggerVolume, 2000);
-        mopidy.playback.setVolume(parseInt(value));
+        volumeTimer = setTimeout(triggerVolume, 500);
     }
 }
 
 function triggerVolume() {
-    volumeChanging = false;
+    mopidy.playback.setVolume(parseInt(volumeChanging));
+    volumeChanging = 0;
 }
 
 function doMute() {
@@ -265,7 +271,9 @@ function updateTimer() {
 
 function resumeTimer() {
     pauseTimer();
-    posTimer = setInterval(updateTimer, TRACK_TIMER);
+    if(songlength > 0) {
+	posTimer = setInterval(updateTimer, TRACK_TIMER);
+    }
 }
 
 function initTimer() {
@@ -276,4 +284,67 @@ function initTimer() {
 
 function pauseTimer() {
     clearInterval(posTimer);
+}
+
+/*********************************
+ * Radio
+ *********************************/
+function radioPressed(key) {
+    if (key == 13) {
+        addRadioUri();
+        return false;
+    }
+    return true;
+}
+
+function addRadioUri(value) {
+    var value = value || $('#radioinput').val();
+    if (validUrl(value)) {
+        showLoading(true);
+	//stop directly, for user feedback
+	mopidy.playback.stop(true);
+        //hide ios/android keyboard
+        document.activeElement.blur();
+        $("input").blur();
+	clearQueue();
+        mopidy.tracklist.add(null,null, value );
+	//add station to list and check for doubles
+        for (var key in radioStations) {
+	    rs = radioStations[key];
+	    if (rs[1] == value) { 
+		delete radioStations[key];
+	    }
+	};
+	radioStations.unshift(['', value]);
+        mopidy.playback.play();
+	updateRadioStations();
+	showLoading(false);
+    } else {
+	toast ('No valid url!');
+    }
+    return false;
+}
+
+function updateRadioStations() {
+    var tmp = '';
+    $('#radiostationstable').empty();
+    var child = '';
+    for (var key in radioStations) {
+	var rs = radioStations[key];
+	if(rs) {
+	  name = rs[0] || rs[1];
+          child = '<li><a href="#" onclick="return addRadioUri(\'' + rs[1] + '\');">';
+          child += '<h1>' + name + '</h1></a></li>';
+          tmp += child;
+	}
+    };
+    $('#radiostationstable').html(tmp);
+}
+
+function initRadio() {
+    radioStations.push(['3FM', 'http://icecast.omroep.nl/3fm-bb-mp3']);
+    radioStations.push(['', 'http://icecast-bnr.cdp.triple-it.nl/bnr_mp3_128_03']);
+    radioStations.push(['Arrow', 'http://81.173.3.132:8082']);
+    radioStations.push(['', 'http://icecast.omroep.nl/radio1-bb-mp3']);
+    updateRadioStations();
 }
