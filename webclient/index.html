@@ -236,15 +236,18 @@
             <div data-role="content" class="pane" id="radiopane">
                 <h4>Radio</h4>
                 <div class="">
+    		    <ul id="radiostationstable" class="table"></ul>
+    		    <p>Add an url of a radio station stream that you want to listen to. The last 25 stations are saved locally (not on the server yet).
+		     You cannot use container files like M3U, ASPX or PLS (yet), you have to add the real stream 
+		     (open the container file in a text-editor to find streams).</p>
                     <form>
-                    <input id="radionameinput" placeholder="Name" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
                     <input id="radiouriinput" placeholder="Playlist URI" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
+                    <input id="radionameinput" placeholder="Name" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
                     <button class="btn" type="button" onclick="return addRadioUri();" >
                         Play / Save
                     </button>
                     </form>
                 </div>		
-                <ul id="radiostationstable" class="table"></ul>
             </div>
 
 
