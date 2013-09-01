@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/jquery.mobile-1.4.0-alpha.2.css" /> 
+        <script src="js/jquery-1.10.2.min.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css" /> -->
+        <script type='application/javascript' src='js/fastclick.js'></script>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="MusicBox">
+        <meta http-equiv="imagetoolbar" content="no" />
+        <meta content="true" name="MSSmartTagsPreventParsing" />
+
+        <meta http-equiv="cleartype" content="on">
+	
+	<!-- Tile icon for Win8 (144x144 + tile color) -->
+        <meta name="msapplication-TileImage" content="/mopidy/favicon.png">
+        <meta name="msapplication-TileColor" content="#eee">
+
+        <link rel="apple-touch-icon" href="/mopidy/favicon.png" />
+
+        <script type="text/javascript">
+            $(document).bind("mobileinit", function() {
+                $.extend($.mobile, {
+                    ajaxEnabled : false,
+                    hashListeningEnabled : false,
+                    //                    linkBindingEnabled: false
+                    //                  buttonMarkup.hoverDelay: 100,
+                    //                  buttonMarkup.corners: false
+                });
+            });
+            window.addEventListener('load', function() {
+                new FastClick(document.body);
+            }, false);
+        </script>
+        <script src="js/jquery.mobile-1.4.0-alpha.2.js"></script>
+        <meta name="description" content="MusicBox">
+        <meta name="author" content="Wouter van Wijk">
+        <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk" />
+        <link href="css/ws.css" rel="stylesheet">
+        <link href="css/jquery.mobile.iscrollview.css" rel="stylesheet">
+
+<!--        <link rel="stylesheet" href="css/add2home.css"> -->
+    </head>
+
+    <body>
+        <div data-role="page" id="page">
+
+            <div id="coverpopup" data-role="popup" data-theme="c">
+                <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+                <h3 id="coverpopupalbumname"></h3>
+                <h4 id="coverpopupartist"></h4>
+                <img id="coverpopupimage" src="" />
+            </div>
+
+            <div id="artistpopup" data-role="popup" data-theme="c">
+                <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+                <h4 id="artistpopupname">bbb</h4>
+                <img id="artistpopupimage" src="" />
+            </div>
+
+            <div id="controlsmodal" data-role="popup" data-theme="c">
+                <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+                <p id="buttons">
+                    <a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
+                    &nbsp; <a href="#" onclick="doRepeat(); return false"><img src="images/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
+                    &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><img src="images/icons/fork_21x24.png" id="shufflebt" alt="" /></a>
+                </p>
+                <div>
+                    <a href="#" onclick="doMute(); return false;"><img id="mutebt" src="images/icons/volume_16x12.png" alt="" /></a>
+                    <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
+                    <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0" value="0" max="100" onchange="doVolume(this.value);" />
+                </div>
+                <h3 id="modalname"></h3>
+                <h4 id="modalartist"></h4>
+                <h4 id="modalalbum"></h4>
+                <img id="controlspopupimage" src="" />
+
+            </div>
+
+            <div data-role="popup" data-transition="none" data-theme="c" id="popupTracks">
+                <div data-role="collapsible-set">
+                    <ul data-role="listview" data-icon="false" id="popupTracksLv">
+<!--                        <li data-role="divider">
+                        <span id="popupTrackName"></span>
+                        </li>
+-->                        <li>
+                            <a href="#" onclick="return playTrack();">Play <span class="popupTrackName"></span></a>
+                        </li>
+                        <li class="addqueue">
+                            <a href="#" onclick="return playTrack(PLAY_NEXT);">Play Track Next</a>
+                        </li>
+                        <li class="addqueue">
+                            <a href="#" onclick="return playTrack(ADD_THIS_BOTTOM);">Add Track to Bottom of Queue</a>
+                        </li>
+                        <li class="addqueue">
+                            <a href="#" onclick="return playTrack(ADD_ALL_BOTTOM);" id="liaddtobottom">Add all to Bottom of Queue</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>
+                        </li>
+                        <li id="popupArtistsLi">
+                            <a href="#" onclick="showArtist()" id="popupArtistHref">Show Artist <span id="popupArtistName"></span>
+                            </a>
+                        </li>
+                        <div data-role="collapsible" data-icon="false" data-inset="false" id="popupArtistsDiv">
+                            <h2>Artists</h2>
+                            <ul data-icon="false" data-inset="false" data-role="listview" id="popupArtistsLv"></ul>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+
+            <div data-role="popup" data-transition="none" data-theme="c" id="popupQueue">
+                <div data-role="collapsible-set">
+                    <ul data-role="listview" data-icon="false" id="popupQueueLv">
+                        <li>
+                            <a href="#" onclick="return playTrack();">Play <span class="popupTrackName"></span></a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="return removeTrack();">Remove from Queue</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>
+                        </li>
+                        <li id="popupArtistsLi">
+                            <a href="#" onclick="showArtist()" id="popupArtistHref">Show Artist <span id="popupArtistName"></span>
+                            </a>
+                        </li>
+                        <div data-role="collapsible" data-icon="false" data-inset="false" id="popupArtistsDiv">
+                            <h2>Artists</h2>
+                            <ul data-icon="false" data-inset="false" data-role="listview" id="popupArtistsLv"></ul>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+
+            <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint">
+
+                <div id="controldiv" class="ui-block-a">
+                    <a href="#" onclick="return backbt();"><span id="btback"><img  id="backimg"src="images/icons/arrow_left_alt1_24x24.png" /></span></a>
+                    <a href="#" onclick="doPrevious(); return false"><span id="btprev"><img id="previmg" src="images/icons/first_24x24.png" alt="Previous Track" /></span></a>
+                    <a href="#" onclick="doPlay(); return false"><span id="btplay"><img src="images/icons/pause_32x32.png" alt="Play" id="playimg" /></span></a>
+                    <a href="#" onclick="doNext(); return false"><span id="btnext"><img id="nextimg" src="images/icons/last_24x24.png" alt="Next Track" /></span></a>
+                    <a href="#controlsmodal" data-position-to="window" data-rel="popup"><span id="btcontrols"><img src="images/icons/new_window_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></span></a>
+                </div>
+
+                <div id="songinfo" class=" ui-block-b">
+                    <a href="#controlsmodal" data-position-to="window" data-rel="popup"> 
+                        <img id="infocover" src="images/icons/cd_32x32.png" width="36" height="36"></img> <div id="infoname"></div> <div id="infoartist"></div> </a>
+                </div>
+
+                <div id="slidercontainer" class="ui-block-c">
+                    <span id="songelapsed" class="pull-left"> 0:00 </span>
+                    <span id="songlength" class="pull-right"> 0:00 </span>
+                    <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
+                    <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
+                </div>
+
+            </div><!-- /header -->
+
+            <div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
+                <div class="ui-block-a scroll" id="playlistslistdiv">
+                    <ul id="playlistslist" class="table"></ul>
+                </div>
+                <div class="ui-block-b scroll" id="playlisttracksdiv">
+                    <ul class="table" id="playlisttracks"></ul> 
+<!--                    <ul id="playlisttracks"></ul> -->
+<!--                    <ul data-role="listview" data-theme="c" data-icon="false" id="playlisttracks" data-inset="true"></ul> -->
+                </div>
+
+            </div><!--/playlistspane-->
+
+            <div data-role="content" class="pane" id="currentpane">
+                <a style="float:right" onclick="return clearQueue();" data-role="button">Clear</a><h4>Play Queue</h4>
+<!--                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul> 
+                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul> -->
+                <ul  class="table" id="currenttable"></ul>
+            </div>
+
+            <div data-role="content" class="pane" id="albumspane">
+                <a href="#coverpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="albumviewcover" /></a>
+                <h3 id="h_albumname"></h3>
+                <h5 id="h_albumartist"></h5>
+<!--                <ul data-role="listview" data-icon="false" data-inset="true" id="albumstable"></ul> -->
+                <ul class="table" id="albumstable"></ul>
+            </div>
+
+            <div data-role="content" class="pane" id="artistspane">
+                <!--                            <h4>Artist</h4> -->
+                <a href="#artistpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="artistviewimage" /></a>
+                <h3 id="h_artistname"></h3>
+                <ul class="table" id="artiststable"></ul>
+            </div>
+
+            <div data-role="content" class="pane" id="searchpane">
+                <div class="">
+                    <form>
+                    <input id="searchinput" class="span2" data-clear-btn="true" onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text" />
+                    <button class="btn" type="button" onclick="return initSearch(event.value);" >
+                        Search!
+                    </button>
+                    </form>
+                </div>
+
+
+                <div id="searchresults">
+                    <div class="ui-grid-a srch-breakpoint">
+                        <div class="ui-block-a" id="searchartists">
+                            <h4>Artists</h4>
+                            <ul class="table" id="artistresulttable"></ul>
+                        </div>
+                        <div class="ui-block-b" id="searchalbums">
+                            <h4>Albums</h4>
+                            <ul class="table" id="albumresulttable"></ul>
+                        </div>
+                    </div>
+                    <!-- grid a -->
+
+<!--                    <div class="" style="text-align: center" id="expandsearch">
+                        <a href="#" onclick="toggleSearch(); return false;"><img src="images/icons/arrow_down_16x16.png"></a>
+                    </div>
+-->                    <div class="" id="searchtracks">
+                        <h4>Tracks</h4>
+                        <ul id="trackresulttable"  class="table"></ul>
+                    </div>
+                </div>
+            </div>
+            <!-- search div -->
+
+            <div data-role="content" class="pane" id="radiopane">
+                <h4>Radio</h4>
+                <div class="">
+		    <p>Paste an url of a radio station stream that you want to listen to. You cannot use container files like M3U, ASPX or PLS (yet), you have to add the real stream (open the container file in a text-editor to find streams).</p>
+                    <form>
+                    <input id="radionameinput" placeholder="Name" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
+                    <input id="radiouriinput" placeholder="Playlist URI" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
+                    <button class="btn" type="button" onclick="return addRadioUri();" >
+                        Play / Save
+                    </button>
+                    </form>
+                </div>		
+                <ul id="radiostationstable" class="table"></ul>
+            </div>
+
+
+            <div data-role="footer" id="footer" data-tap-toggle="false" data-position="fixed">
+                <div data-role="navbar" data-iconpos="left">
+                    <ul>
+                        <li id="navplaylists">
+                            <a href="#playlists" onclick="switchContent('playlists' ); return false;"><img src="images/icons/list_nested_24x21.png" /> Playlists </a>
+                        </li>
+                        <li id="navcurrent">
+                            <a href="#current" onclick="switchContent('current' ); return false;"><img src="images/icons/list_24x21.png" /> Queue </a>
+                        </li>
+                        <li id="navsearch">
+                            <a href="#search" onclick="switchContent('search' ); return false;"  ><img src="images/icons/magnifying_glass_24x24.png" /> Search </a>
+                        </li>
+                        <li id="navradio">
+                            <a href="#radio" onclick="switchContent('radio' ); return false;"  ><img src="images/icons/mic_18x24.png" /> Radio </a>
+                        </li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div><!-- /footer -->
+        </div>
+        <!-- content -->
+        </div><!-- /page one -->
+        <script type="text/javascript" src="/mopidy/mopidy.js"></script>
+        <script type="text/javascript" src="js/iscroll-lite.js"></script>
+<!--        <script type="text/javascript" src="js/jquery.mobile.iscrollview-closure-min.js"></script> -->  
+<script src="js/jquery.cookie.js"></script>
+        <script src="js/jquery.truncate.min.js"></script>
+<!--        <script type="text/javascript" src="js/add2home.js" charset="utf-8"></script> -->
+        <script src="js/controls.js"></script>
+        <script src="js/library.js"></script>
+        <script src="js/functionsvars.js"></script>
+        <script src="js/process_ws.js"></script>
+
+        <!-- use lastfm -->
+        <script type="text/javascript" src="js/lastfm.api.md5.js"></script>
+        <script type="text/javascript" src="js/lastfm.api.js"></script>
+        <script type="text/javascript" src="js/lastfm.api.cache.js"></script>
+
+        <script src="js/lastfm.js"></script>
+
+        <script src="js/gui.js"></script>
+    </body>
+</html>
