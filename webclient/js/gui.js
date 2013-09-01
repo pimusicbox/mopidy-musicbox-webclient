@@ -126,11 +126,22 @@ function setSongInfo(data) {
     artistshtml = '';
     artiststext = '';
 
-
+    if (validUri(data.name)) {
+        for (var key in radioStations) {
+	rs = radioStations[key];
+	if (rs && rs[1] == data.name) {
+	  data.name = (rs[0] || rs[1]) + ' [Stream]';
+	}
+    };
+    }
+    
     if (data.album) {
         $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
         getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
+    } else {
+	$("#modalalbum").html('');
     }
+
     $("#modalname").html(data.name);
 
     if (!data.length || data.length == 0) {
@@ -144,6 +155,8 @@ function setSongInfo(data) {
         $('#trackslider').slider('enable');
     }
 
+    var arttmp = '';
+    
     if(data.artists) {
 	for (var j = 0; j < data.artists.length; j++) {
     	    artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
@@ -153,14 +166,14 @@ function setSongInfo(data) {
         	artiststext += ', ';
 	    }
 	}
-        var arttmp = 'Artist';
-
+        arttmp = 'Artist';
 	if (data.artists.length > 1) {
-    	arttmp += 's';
+    	    arttmp += 's';
 	}
+	arttmp += ': ' + artistshtml;
     }
 
-    $("#modalartist").html(arttmp + ': ' + artistshtml);
+    $("#modalartist").html(arttmp);
 
     $("#trackslider").attr("min", 0);
     $("#trackslider").attr("max", data.length);
@@ -447,6 +460,9 @@ function locationHashChanged() {
             if (customTracklists['allresultscache'] == '') {
                 initSearch($('#searchinput').val());
             }
+            break;
+        case 'radio':
+            $('#navradio a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;
         case 'artists':
             if (uri != '') {

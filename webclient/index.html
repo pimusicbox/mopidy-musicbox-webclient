@@ -237,9 +237,10 @@
                 <h4>Radio</h4>
                 <div class="">
                     <form>
-                    <input id="radioinput" placeholder="Playlist URI" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
+                    <input id="radionameinput" placeholder="Name" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
+                    <input id="radiouriinput" placeholder="Playlist URI" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
                     <button class="btn" type="button" onclick="return addRadioUri();" >
-                        Play
+                        Play / Save
                     </button>
                     </form>
                 </div>		
@@ -271,7 +272,7 @@
         <script type="text/javascript" src="/mopidy/mopidy.js"></script>
         <script type="text/javascript" src="js/iscroll-lite.js"></script>
 <!--        <script type="text/javascript" src="js/jquery.mobile.iscrollview-closure-min.js"></script> -->  
-
+<script src="js/jquery.cookie.js"></script>
         <script src="js/jquery.truncate.min.js"></script>
 <!--        <script type="text/javascript" src="js/add2home.js" charset="utf-8"></script> -->
         <script src="js/controls.js"></script>

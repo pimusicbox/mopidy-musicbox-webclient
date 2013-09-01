@@ -73,6 +73,12 @@ TRACK_TIMER = 1000;
 STATUS_TIMER = 10000;
 
 var radioStations = [];
+//fill with defaults
+    radioStations.push(['NPR 24', 'http://nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3']);
+    radioStations.push(['3FM Dutch', 'http://icecast.omroep.nl/3fm-bb-mp3']);
+    radioStations.push(['BBC WorldService', 'http://vprbbc.streamguys.net:8000/vprbbc24.mp3']);
+    radioStations.push(['Arrow Jazz', 'http://81.173.3.132:8082']);
+    radioStations.push(['PBS Australia', 'http://eno.emit.com:8000/pbsfm_live_64.mp3']);
 
 /*******
  *
@@ -309,13 +315,8 @@ function toast (message, delay) {
     }
 }
 
-/* from stackoverflow */
-function validUrl(str) {
-  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-  '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-  '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-  '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-  return ( pattern.test(str) );
+// from http://dzone.com/snippets/validate-url-regexp
+function validUri(str) {
+    var regexp = /(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    return regexp.test(str);
 }

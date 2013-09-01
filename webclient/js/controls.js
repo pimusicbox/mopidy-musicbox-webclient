@@ -297,9 +297,17 @@ function radioPressed(key) {
     return true;
 }
 
-function addRadioUri(value) {
-    var value = value || $('#radioinput').val();
-    if (validUrl(value)) {
+function addRadioUri(name, uri) {
+    //value of name is based on the passing of an uri as a parameter or not
+    var name = '';
+    if (!uri) {
+	name = $('#radionameinput').val();
+    } else {
+	 $('#radionameinput').val('');
+    }
+    uri = uri || $('#radiouriinput').val();
+//    console.log( name , uri);
+    if (validUri(uri)) {
         showLoading(true);
 	//stop directly, for user feedback
 	mopidy.playback.stop(true);
@@ -307,15 +315,26 @@ function addRadioUri(value) {
         document.activeElement.blur();
         $("input").blur();
 	clearQueue();
-        mopidy.tracklist.add(null,null, value );
-	//add station to list and check for doubles
+        mopidy.tracklist.add(null,null, uri );
+	var tmpname = name || '';
+	var i = 0;
+	//add station to list and check for doubles and add no more than 25
         for (var key in radioStations) {
 	    rs = radioStations[key];
-	    if (rs[1] == value) { 
+	    if (i > 25) {
+		delete radioStations[key];
+		continue;
+	    }
+	    i++;
+	    if (rs && rs[1] == uri) {
+		tmpname = name || radioStations[key][0];
 		delete radioStations[key];
 	    }
 	};
-	radioStations.unshift(['', value]);
+	$('#radionameinput').val(tmpname);
+	$('#radiouriinput').val(uri);
+	radioStations.unshift([tmpname, uri]);
+	saveRadioStations();
         mopidy.playback.play();
 	updateRadioStations();
 	showLoading(false);
@@ -333,7 +352,7 @@ function updateRadioStations() {
 	var rs = radioStations[key];
 	if(rs) {
 	  name = rs[0] || rs[1];
-          child = '<li><a href="#" onclick="return addRadioUri(\'' + rs[1] + '\');">';
+          child = '<li><a href="#" onclick="return addRadioUri(\'' + rs[0] + '\', \'' + rs[1] + '\');">';
           child += '<h1>' + name + '</h1></a></li>';
           tmp += child;
 	}
@@ -342,9 +361,14 @@ function updateRadioStations() {
 }
 
 function initRadio() {
-    radioStations.push(['3FM', 'http://icecast.omroep.nl/3fm-bb-mp3']);
-    radioStations.push(['', 'http://icecast-bnr.cdp.triple-it.nl/bnr_mp3_128_03']);
-    radioStations.push(['Arrow', 'http://81.173.3.132:8082']);
-    radioStations.push(['', 'http://icecast.omroep.nl/radio1-bb-mp3']);
+    $.cookie.json = true;
+    tmpRS = $.cookie('radioStations');
+    radioStations = tmpRS || radioStations;
     updateRadioStations();
 }
+
+function saveRadioStations() {
+    $.cookie.json = true;
+    $.cookie('radioStations', radioStations);
+}
+
