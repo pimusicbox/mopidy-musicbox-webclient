@@ -89,6 +89,7 @@ function setSongInfo(data) {
             $(this).addClass('currenttrack');
         }
     });
+
     $('#playlisttracks li').each(function() {
         $(this).removeClass("currenttrack2");
         if (this.id == 'playlisttracks-' + data.uri) {
@@ -114,8 +115,9 @@ function setSongInfo(data) {
             $(this).addClass('currenttrack2');
         }
     });
-
-    if (songdata.name == data.name) {
+    
+    
+    if (data.name && (songdata.name == data.name)) {
 	return;
     }
     if (data) {
@@ -130,18 +132,11 @@ function setSongInfo(data) {
         for (var key in radioStations) {
 	rs = radioStations[key];
 	if (rs && rs[1] == data.name) {
-	  data.name = (rs[0] || rs[1]) + ' [Stream]';
+	  data.name = (rs[0] || rs[1]);
 	}
     };
     }
     
-    if (data.album) {
-        $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
-        getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
-    } else {
-	$("#modalalbum").html('');
-    }
-
     $("#modalname").html(data.name);
 
     if (!data.length || data.length == 0) {
@@ -173,7 +168,15 @@ function setSongInfo(data) {
 	arttmp += ': ' + artistshtml;
     }
 
-    $("#modalartist").html(arttmp);
+    if (data.album) {
+        $("#modalalbum").html('Album: <a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
+        getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
+    } else {
+	$("#modalalbum").html('');
+	$("#infocover").attr('src', '../images/icons/cd_32x32.png');
+    }
+
+        $("#modalartist").html(arttmp);
 
     $("#trackslider").attr("min", 0);
     $("#trackslider").attr("max", data.length);
@@ -191,48 +194,37 @@ function coverPopup() {
 function popupTracks(e, listuri, trackuri) {
     if (!e)
         var e = window.event;
-    $('#popupTrackName').html(popupData[trackuri].name);
-    $('#popupAlbumName').html(popupData[trackuri].album.name);
+    $('.popupTrackName').html(popupData[trackuri].name);
+    $('.popupAlbumName').html(popupData[trackuri].album.name);
     var child = "";
-//    $('#popupArtistsLi').remove();
     if (popupData[trackuri].artists.length == 1) {
-
-        //this doesnt work
-        //        child += '<a href="#" onclick="showArtist(\'' +popupData[trackuri].artists[0].uri + '\');">Show Artist <span class="popupArtistName">' + popupData[trackuri].artists[0].name + '</span></a>';
- /*       $('#popupTracksLv').append($('<li/>', {
-            'id' : "popupArtistsLi"
-        }).append($('<a/>', {
-            'href' : '#',
-            'onclick' : 'showArtist(\'' + popupData[trackuri].artists[0].uri + '\');',
-            'text' : 'Show Artist '
-        }).append($('<span/>', {
-            'class' : 'popupArtistName',
-            'text' : popupData[trackuri].artists[0].name
-        }))));
-*/      child = '<a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'; 
-        $('#popupArtistName').html(popupData[trackuri].artists[0].name);
-        $('#popupArtistHref').attr('onclick', 'showArtist("' + popupData[trackuri].artists[0].uri + '");' );
-        $('#popupArtistsDiv').hide();
-        $('#popupArtistsLi').show();
+        child = '<a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'; 
+        $('.popupArtistName').html(popupData[trackuri].artists[0].name);
+        $('.popupArtistHref').attr('onclick', 'showArtist("' + popupData[trackuri].artists[0].uri + '");' );
+        $('.popupArtistsDiv').hide();
+        $('.popupArtistsLi').show();
     } else {
         for (var j = 0; j < popupData[trackuri].artists.length; j++) {
             child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>';
         }
-        $('#popupArtistsLi').hide();
-        $('#popupArtistsLv').html(child).show();
-        $('#popupArtistsDiv').show();
+        $('.popupArtistsLi').hide();
+        $('.popupArtistsLv').html(child).show();
+        $('.popupArtistsDiv').show();
         //  this makes the viewport of the window resize somehow
-        $('#popupArtistsLv').listview("refresh");
+        $('.popupArtistsLv').listview("refresh");
     }
+
     var hash = document.location.hash.split('?');
     var divid = hash[0].substr(1);
     if (divid == 'current') {
         $(".addqueue").hide();
+	var popupName = '#popupQueue';
     } else {
         $(".addqueue").show();
+	var popupName = '#popupTracks';
     }
 
-    $('#popupTracks').data("list", listuri).data("track", trackuri).popup("open", {
+    $(popupName).data("list", listuri).data("track", trackuri).popup("open", {
         x : e.pageX,
         y : e.pageY
     });
@@ -244,35 +236,6 @@ function showAlbumPopup() {
     showAlbum(popupData[uri].album.uri);
 }
 
-/*****************
- * Modal dialogs
- *****************/
-function showLoading(on) {
-    if (on) {
-        $("body").css("cursor", "progress");
-        $.mobile.loading('show', {
-            text : 'Loading data from ' + PROGRAM_NAME + '. Please wait...',
-            textVisible : true,
-            theme : 'a'
-        });
-    } else {
-        $("body").css("cursor", "default");
-        $.mobile.loading('hide');
-    }
-}
-
-function showOffline(on) {
-    if (on) {
-        $.mobile.loading('show', {
-            text : 'Trying to reach ' + PROGRAM_NAME + '. Please wait...',
-            textVisible : true,
-            theme : 'a'
-        });
-    } else {
-        $.mobile.loading('hide');
-    }
-}
-
 /*********************
  * initialize sockets
  *********************/
@@ -280,11 +243,10 @@ function showOffline(on) {
 function initSocketevents() {
     mopidy.on("state:online", function() {
         showOffline(false);
-        showLoading(true);
         getCurrentPlaylist();
         updateStatusOfAll();
         getPlaylists();
-        showLoading(true);
+        showLoading(false);
         $(window).hashchange();
     });
 
@@ -381,24 +343,27 @@ $(document).ready(function() {
     $(window).resize(function() {
         resizeMb();
     });
-    initRadio();
-/*    $(document).keypress( function (event) {
+
+    $(document).keypress( function (event) {
+//	console.log('kp');
 	if (event.target.tagName != 'INPUT') { 
 	    event.preventDefault();
 	    switch(event.which) {
-	        case 'p':
+	        case 32:
     		    doPlay();
 		    break;
-		case ']':
+		case '>':
     		    doNext();
 		    break;
-		case '[':
+		case '<':
     		    doPrevious();
 		    break;
 	    }
+	    return true;
 	}
     });
-*/
+    initRadio();
+    
 });
 
 $(document).bind("pageinit", function() {

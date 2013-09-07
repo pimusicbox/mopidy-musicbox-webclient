@@ -42,7 +42,7 @@
         <meta name="description" content="MusicBox">
         <meta name="author" content="Wouter van Wijk">
         <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk" />
-        <link href="css/ws.css" rel="stylesheet">
+        <link href="css/webclient.css" rel="stylesheet">
         <link href="css/jquery.mobile.iscrollview.css" rel="stylesheet">
 
 <!--        <link rel="stylesheet" href="css/add2home.css"> -->
@@ -102,15 +102,15 @@
                             <a href="#" onclick="return playTrack(ADD_ALL_BOTTOM);" id="liaddtobottom">Add all to Bottom of Queue</a>
                         </li>
                         <li>
-                            <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>
+                            <a href="#" onclick="showAlbumPopup()">Show Album <span class="popupAlbumName"></span></a>
                         </li>
                         <li id="popupArtistsLi">
-                            <a href="#" onclick="showArtist()" id="popupArtistHref">Show Artist <span id="popupArtistName"></span>
+                            <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                             </a>
                         </li>
-                        <div data-role="collapsible" data-icon="false" data-inset="false" id="popupArtistsDiv">
+                        <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">
                             <h2>Artists</h2>
-                            <ul data-icon="false" data-inset="false" data-role="listview" id="popupArtistsLv"></ul>
+                            <ul data-icon="false" data-inset="false" data-role="listview" class="popupArtistsLv"></ul>
                         </div>
                     </ul>
                 </div>
@@ -120,21 +120,21 @@
                 <div data-role="collapsible-set">
                     <ul data-role="listview" data-icon="false" id="popupQueueLv">
                         <li>
-                            <a href="#" onclick="return playTrack();">Play <span class="popupTrackName"></span></a>
+                            <a href="#" onclick="return playTrackQueue();">Play <span class="popupTrackName"></span></a>
                         </li>
                         <li>
                             <a href="#" onclick="return removeTrack();">Remove from Queue</a>
                         </li>
                         <li>
-                            <a href="#" onclick="showAlbumPopup()">Show Album <span id="popupAlbumName"></span></a>
+                            <a href="#" onclick="showAlbumPopup()">Show Album <span class="popupAlbumName"></span></a>
                         </li>
                         <li id="popupArtistsLi">
-                            <a href="#" onclick="showArtist()" id="popupArtistHref">Show Artist <span id="popupArtistName"></span>
+                            <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                             </a>
                         </li>
-                        <div data-role="collapsible" data-icon="false" data-inset="false" id="popupArtistsDiv">
+                        <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">
                             <h2>Artists</h2>
-                            <ul data-icon="false" data-inset="false" data-role="listview" id="popupArtistsLv"></ul>
+                            <ul data-icon="false" data-inset="false" data-role="listview" class="popupArtistsLv"></ul>
                         </div>
                     </ul>
                 </div>
@@ -239,7 +239,8 @@
     		    <ul id="radiostationstable" class="table"></ul>
     		    <p>Add an url of a radio station stream that you want to listen to. The last 25 stations are saved locally (not on the server yet).
 		     You cannot use container files like M3U, ASPX or PLS (yet), you have to add the real stream 
-		     (open the container file in a text-editor to find streams).</p>
+		     (open the container file in a text-editor to find streams). 
+		    To find stations, use e.g. <a href="http://www.listenlive.eu/" target="_blank">Listenlive</a> or <a href="http://www.dirble.com/" target="_blank">Dirble</a>.</p>
                     <form>
                     <input id="radiouriinput" placeholder="Playlist URI" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
                     <input id="radionameinput" placeholder="Name" class="span2" data-clear-btn="true" onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text" />
@@ -255,16 +256,16 @@
                 <div data-role="navbar" data-iconpos="left">
                     <ul>
                         <li id="navplaylists">
-                            <a href="#playlists" onclick="switchContent('playlists' ); return false;"><img src="images/icons/list_nested_24x21.png" /> Playlists </a>
+                            <a href="#playlists" onclick="switchContent('playlists' ); return false;"><img src="images/icons/list_nested_24x21.png" /> <span class="navtxt">Playlists </span></a>
                         </li>
                         <li id="navcurrent">
-                            <a href="#current" onclick="switchContent('current' ); return false;"><img src="images/icons/list_24x21.png" /> Queue </a>
+                            <a href="#current" onclick="switchContent('current' ); return false;"><img src="images/icons/list_24x21.png" /> <span class="navtxt">Queue </span></a>
                         </li>
                         <li id="navsearch">
-                            <a href="#search" onclick="switchContent('search' ); return false;"  ><img src="images/icons/magnifying_glass_24x24.png" /> Search </a>
+                            <a href="#search" onclick="switchContent('search' ); return false;"  ><img src="images/icons/magnifying_glass_24x24.png" /> <span class="navtxt">Search </span></a>
                         </li>
                         <li id="navradio">
-                            <a href="#radio" onclick="switchContent('radio' ); return false;"  ><img src="images/icons/mic_18x24.png" /> Radio </a>
+                            <a href="#radio" onclick="switchContent('radio' ); return false;"  ><img src="images/icons/mic_18x24.png" />  <span class="navtxt">Radio </span></a>
                         </li>
                     </ul>
                 </div><!-- /navbar -->

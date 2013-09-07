@@ -66,8 +66,7 @@ function processSearchResults(resultArr) {
     var artists = (results.artists) ? results.artists : '';
     var albums = (results.albums) ? results.albums : '';
     if ((tracks == '') && (artists == '') && (albums == '')) {
-        alert('No results');
-        showLoading(false);
+        toast('No results', 1500, true);
         return false;
     }
     $("#searchresults").show();

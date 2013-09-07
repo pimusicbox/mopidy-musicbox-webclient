@@ -1,6 +1,6 @@
-/*****
+/*
  * Mopidy Webclient CSS
- * (c)
+ * (c) Wouter van Wijk 2012-2013
  */
 
 /****************************
@@ -80,7 +80,7 @@
     }
 }
 
-/* phone */
+/* phone landscape */
 @media all and (max-width: 30em) {
     /*header*/
     .header-breakpoint.ui-grid-b .ui-block-a {
@@ -110,8 +110,8 @@
 }
 
 /* phone portrait */
-@media all and (max-width: 20em) {
-    .header-breakpoint.ui-grid-b .ui-block-c {
+@media all and (max-width: 25em) {
+    .navtxt, .header-breakpoint.ui-grid-b .ui-block-c {
         display: none;
     }
     #playlistspane, .scroll {
@@ -402,13 +402,15 @@
     text-decoration: none;
 }
 
-#popupArtistName, #popupTrackName, #popupAlbumName, .popupArtistName {
+.popupArtistName, .popupTrackName, .popupAlbumName, .popupArtistName {
     font-style: oblique;
 }
 
 #controlsmodal, #artistpopup, #coverpopup {
     max-width: 500px;
     min-width: 300px;
+    background: white;
+    padding: 5px;
 }
 
 #h_artistname {
