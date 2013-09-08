@@ -165,30 +165,33 @@
 
 #infoname {
     overflow: hidden;
-    font: bold;
-    color: #ddd;
+    color: #646464;
     font-size: 14px;
-    text-shadow: 1px 1px #555;
+    font-weight: bold;
 }
 
 #songinfo {
-    margin-top: 5px;
-    height: 40px;
-    padding: 5px;
-    background-color: #bbb;
+    margin-top: 2px;
+    height: 44px;
+    padding: 7px;
+/*    background-color: #f0f1f0;
     -moz-border-radius-topleft: 2px;
     -moz-border-radius-topright: 2px;
     -webkit-border-top-left-radius: 2px;
     -webkit-border-top-right-radius: 2px;
     border-top-right-radius: 2px;
-    border-top-left-radius: 2px;
+    border-top-left-radius: 2px;*/
+    
+    -moz-box-shadow: inset 0 0 6px #969696;
+    -webkit-box-shadow: inset 0 0 6px #969696;
+    box-shadow: inset 0 0 6px #969696;
+    background-color: #ededed;
 }
 
 #infoartist {
     overflow: hidden;
-    color: #aaa;
+    color: #888888;
     font-size: 11px;
-    text-shadow: 1px 1px #333;
     margin: 2px;
 }
 
@@ -197,7 +200,7 @@
 }
 
 #infoartist a {
-    color: #eee;
+    color: #888888;
 }
 
 #infocover {
@@ -350,7 +353,7 @@
 }
 
 #playlistslist li a {
-    padding: 7px;
+    padding: 9px;
 }
 
 #playlistslist, #playlisttracks {
