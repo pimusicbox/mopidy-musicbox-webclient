@@ -55,16 +55,16 @@
                 <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
                 <h3 id="coverpopupalbumname"></h3>
                 <h4 id="coverpopupartist"></h4>
-                <img id="coverpopupimage" src="" />
+                <a href="#" onclick="closePopups();"><img id="coverpopupimage" src="" /></a>
             </div>
 
             <div id="artistpopup" data-role="popup" data-theme="c">
                 <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
                 <h4 id="artistpopupname">bbb</h4>
-                <img id="artistpopupimage" src="" />
+                <a href="#" onclick="closePopups();"><img id="artistpopupimage" src="" /></a>
             </div>
 
-            <div id="controlsmodal" data-role="popup" data-theme="c">
+            <div id="controlspopup" data-role="popup" data-theme="c">
                 <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
                 <p id="buttons">
                     <a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
@@ -79,7 +79,7 @@
                 <h3 id="modalname"></h3>
                 <h4 id="modalartist"></h4>
                 <h4 id="modalalbum"></h4>
-                <img id="controlspopupimage" src="" />
+                <a href="#" onclick="closePopups();"><img id="controlspopupimage" src="" /></a>
 
             </div>
 
@@ -147,11 +147,11 @@
                     <a href="#" onclick="doPrevious(); return false"><span id="btprev"><img id="previmg" src="images/icons/first_24x24.png" alt="Previous Track" /></span></a>
                     <a href="#" onclick="doPlay(); return false"><span id="btplay"><img src="images/icons/pause_32x32.png" alt="Play" id="playimg" /></span></a>
                     <a href="#" onclick="doNext(); return false"><span id="btnext"><img id="nextimg" src="images/icons/last_24x24.png" alt="Next Track" /></span></a>
-                    <a href="#controlsmodal" data-position-to="window" data-rel="popup"><span id="btcontrols"><img src="images/icons/new_window_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></span></a>
+                    <a href="#controlspopup" data-position-to="window" data-rel="popup"><span id="btcontrols"><img src="images/icons/new_window_24x24.png" id="controlsimg" alt="More controls" class="breakafter" /></span></a>
                 </div>
 
                 <div id="songinfo" class=" ui-block-b">
-                    <a href="#controlsmodal" data-position-to="window" data-rel="popup"> 
+                    <a href="#controlspopup" data-position-to="window" data-rel="popup"> 
                         <img id="infocover" src="images/icons/cd_32x32.png" width="36" height="36"></img> <div id="infoname"></div> <div id="infoartist"></div> </a>
                 </div>
 

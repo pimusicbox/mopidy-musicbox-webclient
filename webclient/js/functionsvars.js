@@ -155,17 +155,24 @@ function resultsToTables(results, target, uri) {
     $(target).attr('data', uri);
     var length = 0 || results.length;
     for ( i = 0; i < length; i++) {
-        newalbum.push(results[i]);
-        nexturi = '';
+            newalbum.push(results[i]);
+	    nexturi = '';
         if (i < length - 1) {
             nexturi = results[i + 1].album.uri;
         }
-        if (results[i].album.uri != nexturi) {
+        if (!results[i].album) {
+	    if (results[i].uri) {
+    		var name = results[i].name || results[i].uri;
+                html += '<li class="albumli"><a href="#"><h1>' + name + ' [Stream]</h1></a></li>';
+                newalbum = [];
+		    nexturi = '';
+	    }
+	} else {
+	  if (results[i].album.uri != nexturi) {
             tableid = 'art' + i;
             //render differently if only one track in the album
             if ( newalbum.length == 1 ) {
                 if (i != 0) { html += '<li class="smalldivider"> &nbsp;</li>'; }
-//                html += '<li id="' + targetmin + '-' + newalbum[0].uri + '"><a href="#" onclick="return ' + popupMenu + '(event, \'' + uri + '\',\'' + newalbum[0].uri + '\');">';
                 html += '<li id="' + targetmin + '-' + newalbum[0].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\');">';
                 html += '<h1>' + newalbum[0].name + "</h1>";
                 html += '<p>';
@@ -208,6 +215,7 @@ function resultsToTables(results, target, uri) {
                 //            customTracklists[results[i].album.uri] = newalbum;
                 newalbum = [];
             }
+	  }    
         }
     }
     tableid = "#" + tableid;

@@ -38,7 +38,7 @@ function resizeMb() {
         center : true,
         multiline : false
     });
-    $("#infoartist").html('<a href="#controlsmodal" data-rel="popup">' + $("#infoartist").html() + '</a>');
+    $("#infoartist").html('<a href="#controlspopup" data-rel="popup">' + $("#infoartist").html() + '</a>');
 
     //initialize iScroll if MobileWebkit and large window
     if (isMobileWebkit) {
@@ -187,8 +187,12 @@ function setSongInfo(data) {
 /***************
  * display popups
  */
-function coverPopup() {
-    
+function closePopups() {
+    $('#popupTracks').popup('close');
+    $('#artistpopup').popup('close');
+    $('#coverpopup').popup('close');
+    $('#popupQueue').popup('close');
+    $('#controlspopup').popup('close');
 }
 
 function popupTracks(e, listuri, trackuri) {

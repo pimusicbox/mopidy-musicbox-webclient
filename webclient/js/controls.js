@@ -8,7 +8,7 @@ function playTrack(addtoqueue) {
 	mopidy.tracklist.clear();
     }
     $('#popupTracks').popup('close');
-    $('#controlsmodal').popup('close');
+    $('#controlspopup').popup('close');
     toast('Loading...');
 
     playlisturi = $('#popupTracks').data("list");
@@ -31,7 +31,6 @@ function playTrack(addtoqueue) {
 	    break;
 	}
     }
-    console.log(selected, playing, tracks);
 
 //switch popup options
     switch (addtoqueue) {
