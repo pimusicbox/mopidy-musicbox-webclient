@@ -44,68 +44,101 @@ function processSearchResults(resultArr) {
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
-    //get the right result
-    //depends on versioon of mopidy: 0 = 0.14+ 1 =  0.13-
-    //    var results = resultArr[0];
-    //add complete array
-    console.log(resultArr);
-    //results = tracks from spotify
-    var results = resultArr[0];
-    //add tracks from local search
-    if (resultArr[1].tracks) {
-	results.tracks = resultArr[1].tracks.concat(results.tracks);
-    }
-    if (resultArr[1].artists) {
-	results.artists = resultArr[1].artists.concat(results.artists);
-    }
-    if (resultArr[1].albums) {
-	results.albums = resultArr[1].albums.concat(results.albums);
+
+    // Merge results from different backends.
+    var results = {'tracks': [], 'artists': [], 'albums': []};
+    var emptyResult = true;
+
+    console.log(resultArr, 'resultArr');
+
+    for (var i = 0; i < resultArr.length; ++i) {
+        for (var prop in results) {
+            if (resultArr[i][prop] && resultArr[i][prop].length) {
+                results[prop] = results[prop].concat(resultArr[i][prop]);
+                emptyResult = false;
+            }
+        }
     }
 
-    var tracks = (results.tracks) ? results.tracks : '';
-    customTracklists['trackresultscache'] = tracks;
-    var artists = (results.artists) ? results.artists : '';
-    console.log(artists);
-    var albums = (results.albums) ? results.albums : '';
-    if ((tracks == '') && (artists == '') && (albums == '')) {
+    customTracklists['trackresultscache'] = results.tracks;
+
+    if (emptyResult) {
         alert('No results');
         showLoading(false);
         return false;
     }
-    $("#searchresults").show();
-    var child = '';
-    for (var i = 0; i < artists.length; i++) {
-        child += '<li class="resultrow';
-        if (i > 9) {
-            break;
-            //child += " hidden";
-        }
-        child += '"><a href="#" onclick="return showArtist(this.id)" id="' + artists[i].uri + '">' + artists[i].name + "</a></li>";
-    }
-    $(SEARCH_ARTIST_TABLE).html(child);
-//    $(SEARCH_ARTIST_TABLE).listview('refresh');
-    child = '';
 
-    for (var i = 0; i < albums.length; i++) {
-        child += '<li class="resultrow';
-        if (i > 9) {
-            break;
-            //child += " hidden";
-        }
-        child += '"><a href="#" onclick="return showAlbum(this.id)" id="' + albums[i].uri + '">';
-        child += "<h1>" + albums[i].name + "</h1><p>";
-        for (var j = 0; j < albums[i].artists.length; j++) {
-            child += albums[i].artists[j].name + " ";
-        }
-        child += '</p></a></li>';
+    $("#searchresults").show();
+
+    // Returns a string where {x} in template is replaced by tokens[x].
+    function theme(template, tokens) {
+        return template.replace(/{[^}]+}/g, function(match) {
+            return tokens[match.slice(1,-1)];
+        });
     }
-    $(SEARCH_ALBUM_TABLE).html(child);
-//    $(SEARCH_ALBUM_TABLE).listview('refresh');
+
+    // 'Show more' pattern
+    var showMorePattern = '<li onclick="$(this).hide().siblings().show(); return false;"><a>Show {count} more</a></li>';
+
+    // Artist results
+    var child = '';
+    var pattern = '<li><a href="#" onclick="return showArtist(this.id)" id={id}><strong>{name}</strong></a></li>';
+    var tokens;
+
+    for (var i = 0; i < results.artists.length; i++) {
+        tokens = {
+            'id': results.artists[i].uri,
+            'name': results.artists[i].name
+        };
+
+        // Add 'Show all' item after a certain number of hits.
+        if (i == 4 && results.artists.length > 5) {
+            child += theme(showMorePattern, {'count': results.artists.length - i});
+            pattern = pattern.replace('<li>', '<li class="overflow">');
+        }
+
+        child += theme(pattern, tokens);
+    }
+
+    // Inject list items, refresh listview and hide superfluous items.
+    $(SEARCH_ARTIST_TABLE).html(child).listview('refresh').find('.overflow').hide();
+
+    // Album results
+    child = '';
+    pattern = '<li><a href="#" onclick="return showAlbum(this.id)" id="{albumId}">';
+    pattern += '<h5 data-role="heading">{albumName}</h5>';
+    pattern += '<p data-role="desc">{artistName} ({albumYear})</p>';
+    pattern += '</a></li>';
+
+    for (var i = 0; i < results.albums.length; i++) {
+        tokens = {
+            'albumId': results.albums[i].uri,
+            'albumName': results.albums[i].name,
+            'artistName': '',
+            'albumYear': results.albums[i].date
+        };
+
+        for (var j = 0; j < results.albums[i].artists.length; j++) {
+            tokens.artistName += results.albums[i].artists[j].name + ' ';
+        }
+
+        // Add 'Show all' item after a certain number of hits.
+        if (i == 4 && results.albums.length > 5) {
+            child += theme(showMorePattern, {'count': results.albums.length - i});
+            pattern = pattern.replace('<li>', '<li class="overflow">');
+        }
+
+        child += theme(pattern, tokens);
+    }
+
+    // Inject list items, refresh listview and hide superfluous items.
+    $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide();
 
     $('#expandsearch').show();
 
-//console.log(results.tracks);
+    // Track results
     playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
+
     setSongInfo();
     showLoading(false);
 }

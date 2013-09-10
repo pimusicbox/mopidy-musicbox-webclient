@@ -200,12 +200,24 @@
                 <div id="searchresults">
                     <div class="ui-grid-a srch-breakpoint">
                         <div class="ui-block-a" id="searchartists">
-                            <h4>Artists</h4>
-                            <ul class="table" id="artistresulttable"></ul>
+                            <div data-role="listview" data-inset="true">
+                                <div data-role="header">
+                                    <h4>Artists</h4>
+                                </div>
+                                <div data-role="content">
+                                    <ul data-role="listview" id="artistresulttable"></ul>
+                                </div>
+                            </div>
                         </div>
                         <div class="ui-block-b" id="searchalbums">
-                            <h4>Albums</h4>
-                            <ul class="table" id="albumresulttable"></ul>
+                            <div data-role="listview" data-inset="true">
+                                <div data-role="header">
+                                    <h4>Albums</h4>
+                                </div>
+                                <div data-role="content">
+                                    <ul data-role="listview" id="albumresulttable"></ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- grid a -->
