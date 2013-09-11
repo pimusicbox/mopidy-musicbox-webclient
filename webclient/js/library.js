@@ -140,16 +140,18 @@ function processSearchResults(resultArr) {
         tokens = {
             'track': results.tracks[i].name,
             'artist': '',
-            'time': results.tracks[i].length,
+            'time': timeFromSeconds(results.tracks[i].length / 1000),
             'album': results.tracks[i].album.name,
             'listuri': undefined,
             'trackuri': results.tracks[i].uri,
             'domId': SEARCH_TRACK_TABLE.substr(1) + '-' + results.tracks[i].uri,
         };
 
+        var as = [];
         for (var j = 0; j < results.tracks[i].artists.length; ++j) {
-            tokens.artist += results.tracks[i].artists[j].name + ', ';
+            as.push(results.tracks[i].artists[j].name);
         }
+        tokens.artist = as.join(', ');
 
         child += theme(pattern, tokens);
     }
