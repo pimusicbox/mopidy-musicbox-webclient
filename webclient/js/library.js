@@ -129,10 +129,14 @@ function processSearchResults(resultArr) {
 
     // Track results
     child = '';
-    pattern = '<tr><td>{track}</td><td>{artist}</td><td>{time}</td><td>{album}</td></tr>';
+    pattern = '<tr><td>';
+    pattern += '<a id="{domId}" onclick="return popupTracks(event, \'trackresultscache\', \'{trackuri}\')" data-role="button" data-icon="bars" data-iconpos="notext"></a>';
+    pattern += '</td><td>{track}</td><td>{artist}</td><td>{time}</td><td>{album}</td></tr>';
 
     //playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
     for (var i = 0; i < results.tracks.length; ++i) {
+        popupData[results.tracks[i].uri] = results.tracks[i];
+
         tokens = {
             'track': results.tracks[i].name,
             'artist': '',
@@ -140,6 +144,7 @@ function processSearchResults(resultArr) {
             'album': results.tracks[i].album.name,
             'listuri': undefined,
             'trackuri': results.tracks[i].uri,
+            'domId': SEARCH_TRACK_TABLE.substr(1) + '-' + results.tracks[i].uri,
         };
 
         for (var j = 0; j < results.tracks[i].artists.length; ++j) {
@@ -150,6 +155,7 @@ function processSearchResults(resultArr) {
     }
 
     $(SEARCH_TRACK_TABLE).children('tbody').html(child);
+    $(SEARCH_TRACK_TABLE).find('tbody tr td a').button();
     $(SEARCH_TRACK_TABLE).table('refresh');
 
     setSongInfo();
