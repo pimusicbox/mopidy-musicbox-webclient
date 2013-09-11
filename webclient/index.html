@@ -222,12 +222,24 @@
                     </div>
                     <!-- grid a -->
 
-<!--                    <div class="" style="text-align: center" id="expandsearch">
-                        <a href="#" onclick="toggleSearch(); return false;"><img src="images/icons/arrow_down_16x16.png"></a>
-                    </div>
--->                    <div class="" id="searchtracks">
-                        <h4>Tracks</h4>
-                        <ul id="trackresulttable"  class="table"></ul>
+                    <div class="" id="searchtracks">
+                        <div data-role="header">
+                            <h4>Tracks</h4>
+                        </div>
+                        <div data-role="content">
+                            <table data-role="table" data-mode="reflow" id="trackresulttable" class="ui-responsive table-stroke">
+                                <thead>
+                                    <tr>
+                                        <th>Track</th>
+                                        <th data-priority="1">Artist</th>
+                                        <th data-priority="2">Time</th>
+                                        <th data-priority="3">Album</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -22,9 +22,6 @@ function initSearch() {
         document.activeElement.blur();
         $("input").blur();
 
-        $('#artistresulttable').empty();
-        $('#albumresulttable').empty();
-        $('#trackresulttable').empty();
         delete customTracklists['allresultscache'];
         delete customTracklists['artistresultscache'];
         delete customTracklists['albumresultscache'];
@@ -41,10 +38,6 @@ function initSearch() {
  * process results of a search
  *********************************************************/
 function processSearchResults(resultArr) {
-    $(SEARCH_TRACK_TABLE).empty();
-    $(SEARCH_ARTIST_TABLE).empty();
-    $(SEARCH_ALBUM_TABLE).empty();
-
     // Merge results from different backends.
     var results = {'tracks': [], 'artists': [], 'albums': []};
     var emptyResult = true;
@@ -134,10 +127,30 @@ function processSearchResults(resultArr) {
     // Inject list items, refresh listview and hide superfluous items.
     $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide();
 
-    $('#expandsearch').show();
-
     // Track results
-    playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
+    child = '';
+    pattern = '<tr><td>{track}</td><td>{artist}</td><td>{time}</td><td>{album}</td></tr>';
+
+    //playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
+    for (var i = 0; i < results.tracks.length; ++i) {
+        tokens = {
+            'track': results.tracks[i].name,
+            'artist': '',
+            'time': results.tracks[i].length,
+            'album': results.tracks[i].album.name,
+            'listuri': undefined,
+            'trackuri': results.tracks[i].uri,
+        };
+
+        for (var j = 0; j < results.tracks[i].artists.length; ++j) {
+            tokens.artist += results.tracks[i].artists[j].name + ', ';
+        }
+
+        child += theme(pattern, tokens);
+    }
+
+    $(SEARCH_TRACK_TABLE).children('tbody').html(child);
+    $(SEARCH_TRACK_TABLE).table('refresh');
 
     setSongInfo();
     showLoading(false);
