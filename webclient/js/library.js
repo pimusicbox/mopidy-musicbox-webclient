@@ -38,7 +38,10 @@ function initSearch() {
  * process results of a search
  *********************************************************/
 function processSearchResults(resultArr) {
-<<<<<<< HEAD
+    $(SEARCH_TRACK_TABLE).empty();
+    $(SEARCH_ARTIST_TABLE).empty();
+    $(SEARCH_ALBUM_TABLE).empty();
+
     // Merge results from different backends.
     var results = {'tracks': [], 'artists': [], 'albums': []};
     var emptyResult = true;
@@ -57,36 +60,8 @@ function processSearchResults(resultArr) {
     customTracklists['trackresultscache'] = results.tracks;
 
     if (emptyResult) {
-        alert('No results');
+        toast('No results');
         showLoading(false);
-=======
-    $(SEARCH_TRACK_TABLE).empty();
-    $(SEARCH_ARTIST_TABLE).empty();
-    $(SEARCH_ALBUM_TABLE).empty();
-    //get the right result
-    //depends on versioon of mopidy: 0 = 0.14+ 1 =  0.13-
-    //    var results = resultArr[0];
-    //add complete array
-    //results = tracks from spotify
-    var results = resultArr[0];
-    //add tracks from local search
-    if (resultArr[1].tracks) {
-	results.tracks = resultArr[1].tracks.concat(results.tracks);
-    }
-    if (resultArr[1].artists) {
-	results.artists = resultArr[1].artists.concat(results.artists);
-    }
-    if (resultArr[1].albums) {
-	results.albums = resultArr[1].albums.concat(results.albums);
-    }
-
-    var tracks = (results.tracks) ? results.tracks : '';
-    customTracklists['trackresultscache'] = tracks;
-    var artists = (results.artists) ? results.artists : '';
-    var albums = (results.albums) ? results.albums : '';
-    if ((tracks == '') && (artists == '') && (albums == '')) {
-        toast('No results', 1500, true);
->>>>>>> develop
         return false;
     }
 
@@ -118,14 +93,8 @@ function processSearchResults(resultArr) {
             child += theme(showMorePattern, {'count': results.artists.length - i});
             pattern = pattern.replace('<li>', '<li class="overflow">');
         }
-<<<<<<< HEAD
 
         child += theme(pattern, tokens);
-=======
-	if (artists[i]) {
-    	    child += '"><a href="#" onclick="return showArtist(this.id)" id="' + artists[i].uri + '">' + artists[i].name + "</a></li>";
-	}
->>>>>>> develop
     }
 
     // Inject list items, refresh listview and hide superfluous items.
@@ -133,7 +102,6 @@ function processSearchResults(resultArr) {
 
     // Album results
     child = '';
-<<<<<<< HEAD
     pattern = '<li><a href="#" onclick="return showAlbum(this.id)" id="{albumId}">';
     pattern += '<h5 data-role="heading">{albumName}</h5>';
     pattern += '<p data-role="desc">{artistName} ({albumYear})</p>';
@@ -163,63 +131,11 @@ function processSearchResults(resultArr) {
     // Inject list items, refresh listview and hide superfluous items.
     $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide();
 
+    $('#expandsearch').show();
+
     // Track results
-    child = '';
-    pattern = '<tr><td>';
-    pattern += '<a id="{domId}" onclick="return popupTracks(event, \'trackresultscache\', \'{trackuri}\')" data-role="button" data-icon="bars" data-iconpos="notext"></a>';
-    pattern += '</td><td>{track}</td><td>{artist}</td><td>{time}</td><td>{album}</td></tr>';
-
-    //playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
-    for (var i = 0; i < results.tracks.length; ++i) {
-        popupData[results.tracks[i].uri] = results.tracks[i];
-
-        tokens = {
-            'track': results.tracks[i].name,
-            'artist': '',
-            'time': timeFromSeconds(results.tracks[i].length / 1000),
-            'album': results.tracks[i].album.name,
-            'listuri': undefined,
-            'trackuri': results.tracks[i].uri,
-            'domId': SEARCH_TRACK_TABLE.substr(1) + '-' + results.tracks[i].uri,
-        };
-
-        var as = [];
-        for (var j = 0; j < results.tracks[i].artists.length; ++j) {
-            as.push(results.tracks[i].artists[j].name);
-        }
-        tokens.artist = as.join(', ');
-
-        child += theme(pattern, tokens);
-=======
-//    console.log(albums.length);
-    for (var i = 0; i < albums.length; i++) {
-        child += '<li class="resultrow';
-        if (i > 9) {
-            break;
-            //child += " hidden";
-        }
-	if(albums[i]) {
-            child += '"><a href="#" onclick="return showAlbum(this.id)" id="' + albums[i].uri + '">';
-	    child += "<h1>" + albums[i].name + "</h1><p>";
-    	    for (var j = 0; j < albums[i].artists.length; j++) {
-    		if (albums[i].artists[j]) {
-		    child += albums[i].artists[j].name + " ";
-    	        }
-	    }
-    	    child += '</p></a></li>';
-	}
->>>>>>> develop
-    }
-
-    $(SEARCH_TRACK_TABLE).children('tbody').html(child);
-    $(SEARCH_TRACK_TABLE).find('tbody tr td a').button();
-    $(SEARCH_TRACK_TABLE).table('refresh');
-
-<<<<<<< HEAD
-=======
-//    console.log(results.tracks);
     playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
->>>>>>> develop
+
     setSongInfo();
     showLoading(false);
 }
@@ -318,4 +234,3 @@ function showAlbum(uri) {
     setSongInfo();
     return false;
 }
-
