@@ -90,7 +90,7 @@ function LastFM(options){
 		/* Cross-domain GET request (JSONP). */
 		else{
 			/* Get JSONP callback name. */
-			var jsonp = 'jsonp' + new Date().getTime();
+			var jsonp = 'jsonp' + new Date().getTime() + Math.floor(Math.random()*101);
 
 			/* Calculate cache hash. */
 			var hash = auth.getApiSignature(params);

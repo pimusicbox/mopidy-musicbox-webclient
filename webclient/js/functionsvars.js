@@ -72,6 +72,14 @@ TRACK_TIMER = 1000;
 //check status timer, every 5 or 10 sec
 STATUS_TIMER = 10000;
 
+var radioStations = [];
+//fill with defaults
+    radioStations.push(['NPR 24', 'http://nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3']);
+    radioStations.push(['3FM Dutch', 'http://icecast.omroep.nl/3fm-bb-mp3']);
+    radioStations.push(['BBC WorldService', 'http://vprbbc.streamguys.net:8000/vprbbc24.mp3']);
+    radioStations.push(['Arrow Jazz', 'http://81.173.3.132:8082']);
+    radioStations.push(['PBS Australia', 'http://eno.emit.com:8000/pbsfm_live_64.mp3']);
+
 /*******
  *
  */
@@ -130,32 +138,13 @@ function albumTracksToTable(pl, target, uri) {
     };
     $(target).html(tmp);
     $(target).attr('data', uri);
-    //set click handlers
-    /*   $(table + ' .name').click(function() {
-    return playtrack(this.id, uri)
-    });*/
-    //create (for new tables)
-//    $(target).listview().trigger("create");
-    //refresh
- //   $(target).listview('refresh');
 }
 
 function resultsToTables(results, target, uri) {
     var newalbum = [];
     var nexturi = '';
     var count = 0;
-    //check if there are too many different albums in the list
-    /*    for (var i = 1; i < results.length; i++) {
-     if (results[i].album.uri != results[i - 1].album.uri)
-     count++;
-     }
-     console.log(count);
-     //don't do the fancy rendering if there are more than X albums in the list
-     if (count > 8) {
-     playlisttotable(results, target, uri);
-     return;
-     }
-     */
+//    var popupMenu = (target == CURRENT_PLAYLIST_TABLE) ? 'popupQueue' : 'popupTracks';
     newalbum = [];
     $(target).html('');
 
@@ -164,18 +153,25 @@ function resultsToTables(results, target, uri) {
     var tableid, j, artistname, alburi;
     var targetmin = target.substr(1);
     $(target).attr('data', uri);
-
-    for ( i = 0; i < results.length; i++) {
-        newalbum.push(results[i]);
-        nexturi = '';
-        if (i < results.length - 1) {
+    var length = 0 || results.length;
+    for ( i = 0; i < length; i++) {
+            newalbum.push(results[i]);
+	    nexturi = '';
+        if (i < length - 1) {
             nexturi = results[i + 1].album.uri;
         }
-        if (results[i].album.uri != nexturi) {
+        if (!results[i].album) {
+	    if (results[i].uri) {
+    		var name = results[i].name || results[i].uri;
+                html += '<li class="albumli"><a href="#"><h1>' + name + ' [Stream]</h1></a></li>';
+                newalbum = [];
+		    nexturi = '';
+	    }
+	} else {
+	  if (results[i].album.uri != nexturi) {
             tableid = 'art' + i;
             //render differently if only one track in the album
             if ( newalbum.length == 1 ) {
-//                html += '<li data-role="list-divider" data-theme="d" class="smalldivider"></li>';
                 if (i != 0) { html += '<li class="smalldivider"> &nbsp;</li>'; }
                 html += '<li id="' + targetmin + '-' + newalbum[0].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\');">';
                 html += '<h1>' + newalbum[0].name + "</h1>";
@@ -197,7 +193,6 @@ function resultsToTables(results, target, uri) {
 
             } else {
                 html += '<li class="albumdivider">';
-//                html += '<a href="#coverpopup" onclick="return coverPopup();" data-position-to="window" data-rel="popup"><img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /></a>';
                 html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1>' + results[i].album.name + '</h1><p>';
                 for ( j = 0; j < results[i].album.artists.length; j++) {
                     html += results[i].album.artists[j].name;
@@ -209,9 +204,9 @@ function resultsToTables(results, target, uri) {
                     }
                 }
                 html += '</p></a></li>';
-                //            html += '<ul data-role="listview" data-inset="true" data-icon="false" class="" id="' + tableid + '"></ul>';
                 for ( j = 0; j < newalbum.length; j++) {
                     popupData[newalbum[j].uri] = newalbum[j];
+//                    html += '<li class="albumli" id="' + targetmin + '-' + newalbum[j].uri + '"><a href="#" onclick="return ' + popupMenu + '(event, \'' + uri + '\',\'' + newalbum[j].uri + '\');">';
                     html += '<li class="albumli" id="' + targetmin + '-' + newalbum[j].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[j].uri + '\');">';
                     html += '<p class="pright">' + timeFromSeconds(newalbum[j].length / 1000) + '</p><h1>' + newalbum[j].name + '</h1></a></li>';
                 };
@@ -220,11 +215,11 @@ function resultsToTables(results, target, uri) {
                 //            customTracklists[results[i].album.uri] = newalbum;
                 newalbum = [];
             }
+	  }    
         }
     }
     tableid = "#" + tableid;
     $(target).html(html);
-
     $(target).attr('data', uri);
 //    $(target).listview('refresh');
 }
@@ -236,34 +231,32 @@ function playlisttotable(pl, target, uri) {
     var targetmin = target.substr(1);
     var child = '';
     for (var i = 0; i < pl.length; i++) {
-        popupData[pl[i].uri] = pl[i];
-
-        child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
-        child += '<h1>' + pl[i].name + "</h1>";
-        child += '<p>';
-        child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>';
-        // <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
-        for (var j = 0; j < pl[i].artists.length; j++) {
-            child += pl[i].artists[j].name;
-            child += (j == pl[i].artists.length - 1) ? '' : ' / ';
-            //stop after 3
-            if (j > 2) {
-                child += '...';
-                break;
+	if (pl[i]) {
+            popupData[pl[i].uri] = pl[i];
+	    child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
+    	    child += '<h1>' + pl[i].name + "</h1>";
+            child += '<p>';
+	    child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>';
+    	    // <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
+            for (var j = 0; j < pl[i].artists.length; j++) {
+		if (pl[i].artists[j]) {
+                    child += pl[i].artists[j].name;
+    	            child += (j == pl[i].artists.length - 1) ? '' : ' / ';
+	            //stop after 3
+    	            if (j > 2) {
+	                child += '...';
+    			break;
+    	    	    }
+		}
             }
-        }
-        child += ' / <em>' + pl[i].album.name + '</em></p>';
-
-        //        child += '<p>' + pl[i].album.name + '</p>';
-        child += '</a></li>';
-        tmp += child;
+	    child += ' / <em>' + pl[i].album.name + '</em></p>';
+            child += '</a></li>';
+	    tmp += child;
+	}
     };
 
     $(target).html(tmp);
     $(target).attr('data', uri);
-
-    //refresh
-//    $(target).listview('refresh');
 }
 
 function getPlaylistFromUri(uri) {
@@ -295,15 +288,55 @@ function timeFromSeconds(length) {
 
 
 /******* Toast ***/
-function toast (message, delay) {
+function toast (message, delay, textOnly) {
+    textOnl = textOnly || false;
     message = message || "Loading...";
     delay = delay || 1000;
-    $.mobile.showPageLoadingMsg("a", message);
+    $.mobile.loading( 'show', {
+	text: message,
+	textVisible: true,
+	theme: 'a',
+	textonly: textOnl
+    });
     if(delay > 0) {
         setTimeout(function(){
-            $.mobile.hidePageLoadingMsg();
+            $.mobile.loading('hide');
         }, delay);
     }
 }
 
+/*****************
+ * Modal dialogs
+ *****************/
+function showLoading(on) {
+    if (on) {
+        $("body").css("cursor", "progress");
+        $.mobile.loading('show', {
+            text : 'Loading data from ' + PROGRAM_NAME + '. Please wait...',
+            textVisible : true,
+            theme : 'a'
+        });
+    } else {
+        $("body").css("cursor", "default");
+        $.mobile.loading('hide');
+    }
+}
 
+function showOffline(on) {
+    if (on) {
+        $.mobile.loading('show', {
+            text : 'Trying to reach ' + PROGRAM_NAME + '. Please wait...',
+            textVisible : true,
+            theme : 'a'
+        });
+    } else {
+        $.mobile.loading('hide');
+    }
+}
+
+
+// from http://dzone.com/snippets/validate-url-regexp
+function validUri(str) {
+    var regexp = /(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    return regexp.test(str);
+}

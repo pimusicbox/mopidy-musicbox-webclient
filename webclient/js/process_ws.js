@@ -65,11 +65,23 @@ function processGetPlaylists(resultArr) {
     if ((!resultArr) || (resultArr == '')) {
         return;
     }
-    var tmp = '';
+    var tmp = '',
+        starredRegex = /spotify:user:.*:starred/g,
+        starred;
+
     for (var i = 0; i < resultArr.length; i++) {
         var child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
-        tmp += child;
+        // Check if this is Spotify's "Starred" playlist
+        if(starredRegex.test(resultArr[i].uri))
+            starred = child;
+        else
+            tmp += child;
     };
+
+    // Move Spotify "Starred" playlist to top as this is the way Spotify does it
+    if(starred)
+        tmp = starred + tmp;
+
     $('#playlistslist').empty();
     $('#playlistslist').html(tmp);
     scrollToTracklist();
