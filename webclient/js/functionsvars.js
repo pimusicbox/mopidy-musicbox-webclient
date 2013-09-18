@@ -147,7 +147,9 @@ function resultsToTables(results, target, uri) {
 //    var popupMenu = (target == CURRENT_PLAYLIST_TABLE) ? 'popupQueue' : 'popupTracks';
     newalbum = [];
     $(target).html('');
-
+    //quick fix, sorry
+    if (!results) {exit;}
+    
     //break into albums and put in tables
     var html = '';
     var tableid, j, artistname, alburi;
