@@ -153,6 +153,7 @@ function resultsToTables(results, target, uri) {
     var tableid, j, artistname, alburi;
     var targetmin = target.substr(1);
     $(target).attr('data', uri);
+//    console.log(results);
     var length = 0 || results.length;
     for ( i = 0; i < length; i++) {
             newalbum.push(results[i]);
@@ -194,15 +195,17 @@ function resultsToTables(results, target, uri) {
             } else {
                 html += '<li class="albumdivider">';
                 html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1>' + results[i].album.name + '</h1><p>';
-                for ( j = 0; j < results[i].album.artists.length; j++) {
-                    html += results[i].album.artists[j].name;
-                    html += (j == results[i].album.artists.length - 1) ? '' : ' / ';
-                    //stop after 3
-                    if (j > 2) {
-                        child += '...';
-                        break;
-                    }
-                }
+                if (results[i].album.artists) {
+		    for ( j = 0; j < results[i].album.artists.length; j++) {
+                	html += results[i].album.artists[j].name;
+            		html += (j == results[i].album.artists.length - 1) ? '' : ' / ';
+            	        //stop after 3
+            	        if (j > 2) {
+                	    child += '...';
+                		break;
+                	}
+            	    }
+		}
                 html += '</p></a></li>';
                 for ( j = 0; j < newalbum.length; j++) {
                     popupData[newalbum[j].uri] = newalbum[j];
