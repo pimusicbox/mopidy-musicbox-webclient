@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="css/jquery.mobile-1.4.0-alpha.2.css" /> 
+        <link rel="stylesheet" href="css/jquery.mobile-1.4.0-beta.1.css" /> 
         <script src="js/jquery-1.10.2.min.js"></script>
 <!-- <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css" /> -->
         <script type='application/javascript' src='js/fastclick.js'></script>
@@ -38,7 +38,7 @@
                 new FastClick(document.body);
             }, false);
         </script>
-        <script src="js/jquery.mobile-1.4.0-alpha.2.js"></script>
+        <script src="js/jquery.mobile-1.4.0-beta.1.js"></script>
         <meta name="description" content="MusicBox">
         <meta name="author" content="Wouter van Wijk">
         <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk" />
@@ -166,10 +166,10 @@
 
             <div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
                 <div class="ui-block-a scroll" id="playlistslistdiv">
-                    <ul id="playlistslist" class="table"></ul>
+                    <ul id="playlistslist" data-filter="true" class="table"></ul>
                 </div>
                 <div class="ui-block-b scroll" id="playlisttracksdiv">
-                    <ul class="table" id="playlisttracks"></ul> 
+                    <ul class="table" id="playlisttracks" data-filter="true"></ul> 
 <!--                    <ul id="playlisttracks"></ul> -->
 <!--                    <ul data-role="listview" data-theme="c" data-icon="false" id="playlisttracks" data-inset="true"></ul> -->
                 </div>
@@ -180,7 +180,7 @@
                 <a style="float:right" onclick="return clearQueue();" data-role="button">Clear</a><h4>Play Queue</h4>
 <!--                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul> 
                 <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul> -->
-                <ul  class="table" id="currenttable"></ul>
+                <ul data-filter="true" class="table" id="currenttable"></ul>
             </div>
 
             <div data-role="content" class="pane" id="albumspane">

@@ -147,12 +147,15 @@ function resultsToTables(results, target, uri) {
 //    var popupMenu = (target == CURRENT_PLAYLIST_TABLE) ? 'popupQueue' : 'popupTracks';
     newalbum = [];
     $(target).html('');
-
+    //quick fix, sorry
+    if (!results) { return;}
+    
     //break into albums and put in tables
     var html = '';
     var tableid, j, artistname, alburi;
     var targetmin = target.substr(1);
     $(target).attr('data', uri);
+//    console.log(results);
     var length = 0 || results.length;
     for ( i = 0; i < length; i++) {
             newalbum.push(results[i]);
@@ -193,16 +196,18 @@ function resultsToTables(results, target, uri) {
 
             } else {
                 html += '<li class="albumdivider">';
-                html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1>' + results[i].album.name + '</h1><p>';
-                for ( j = 0; j < results[i].album.artists.length; j++) {
-                    html += results[i].album.artists[j].name;
-                    html += (j == results[i].album.artists.length - 1) ? '' : ' / ';
-                    //stop after 3
-                    if (j > 2) {
-                        child += '...';
-                        break;
-                    }
-                }
+                html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="80" height="80" /><h1>' + results[i].album.name + '</h1><p>';
+                if (results[i].album.artists) {
+		    for ( j = 0; j < results[i].album.artists.length; j++) {
+                	html += results[i].album.artists[j].name;
+            		html += (j == results[i].album.artists.length - 1) ? '' : ' / ';
+            	        //stop after 3
+            	        if (j > 2) {
+                	    child += '...';
+                		break;
+                	}
+            	    }
+		}
                 html += '</p></a></li>';
                 for ( j = 0; j < newalbum.length; j++) {
                     popupData[newalbum[j].uri] = newalbum[j];
@@ -211,7 +216,7 @@ function resultsToTables(results, target, uri) {
                     html += '<p class="pright">' + timeFromSeconds(newalbum[j].length / 1000) + '</p><h1>' + newalbum[j].name + '</h1></a></li>';
                 };
                 artistname = results[i].artists[0].name;
-                getCover(artistname, results[i].album.name, target + '-cover-' + i, 'small');
+                getCover(artistname, results[i].album.name, target + '-cover-' + i, 'medium');
                 //            customTracklists[results[i].album.uri] = newalbum;
                 newalbum = [];
             }

@@ -166,6 +166,7 @@ function showTracklist(uri) {
     $('#playlisttracksdiv').show();
 
     var pl = getPlaylistFromUri(uri);
+    console.log(uri, pl);
     //load from cache
     if (pl) {
         resultsToTables(pl.tracks, PLAYLIST_TABLE, uri);
