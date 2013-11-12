@@ -74,11 +74,13 @@ STATUS_TIMER = 10000;
 
 var radioStations = [];
 //fill with defaults
-radioStations.push(['FluxFM', 'http://www.fluxfm.de/stream-berlin']);
-radioStations.push(['FM4', 'http://mp3stream1.apasf.apa.at:8000/']);
-radioStations.push(['Bayern 2', 'http://gffstream.ic.llnwd.net/stream/gffstream_w11a']);
-radioStations.push(['Bayern 3', 'http://gffstream.ic.llnwd.net/stream/gffstream_w12a']);
-radioStations.push(['Campus Crew', 'http://streamplus8.leonex.de:35132/']);
+    radioStations.push(['NPR 24', 'http://nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3']);
+    radioStations.push(['3FM Dutch', 'http://icecast.omroep.nl/3fm-bb-mp3']);
+    radioStations.push(['BBC WorldService', 'http://vprbbc.streamguys.net:8000/vprbbc24.mp3']);
+    radioStations.push(['Arrow Jazz', 'http://81.173.3.132:8082']);
+    radioStations.push(['PBS Australia', 'http://eno.emit.com:8000/pbsfm_live_64.mp3']);
+    radioStations.push(['Kiss FM Berlin', 'http://stream.kissfm.de/kissfm/mp3-128/internetradio/']);
+
 
 /*******
  *
@@ -145,7 +147,6 @@ function albumTracksToTable(pl, target, uri) {
 }
 
 function renderSongLi(song, liID, uri){
-
     var hash = document.location.hash.split('?');
     //this is so dirty... ... ...
     var playlistType = '';
@@ -155,6 +156,7 @@ function renderSongLi(song, liID, uri){
     } else {
         playlistType = 'playTrackByUri';
     }
+    console.log(playlistType);
 
 //    songLi = '';
     songLi = '<li class="song albumli" id="' + liID + '">' +
@@ -176,6 +178,7 @@ function resultsToTables(results, target, uri) {
     } else {
         playlistType = 'playTrackByUri';
     }
+    console.log(playlistType);
 
     var newalbum = [];
     var nexturi = '';
@@ -215,7 +218,7 @@ function resultsToTables(results, target, uri) {
 		    '<i class="fa fa-ellipsis-vertical"></i></a>' +
 		    '<a href="#" onclick="return ' + playlistType + '(\'' + newalbum[0].uri + '\',\'' + uri + '\');">' +
                     '<h1>' + newalbum[0].name + "</h1><p>";
-/*            	     '<span style="float: right;">' + timeFromSeconds(newalbum[0].length / 1000) + '</span>'; */
+/*                 '<span style="float: right;">' + timeFromSeconds(newalbum[0].length / 1000) + '</span>'; */
                 for ( j = 0; j < newalbum[0].artists.length; j++) {
                     html += newalbum[0].artists[j].name;
                     html += (j == newalbum[0].artists.length - 1) ? '' : ' / ';
@@ -325,6 +328,7 @@ function getTracksFromUri(uri) {
     } else if (customTracklists[uri]) {
         return customTracklists[uri];
     }
+    return [];
 }
 
 //convert time to human readable format
@@ -390,3 +394,40 @@ function validUri(str) {
     var regexp = /(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
     return regexp.test(str);
 }
+
+
+$.event.special.swipe = $.extend($.event.special.swipe, {
+        start: function( event ) {
+                 var data = event.originalEvent.touches ?
+                        event.originalEvent.touches[ 0 ] : event;
+                return {
+                        time: ( new Date() ).getTime(),
+                        coords: [ data.pageX, data.pageY ],
+                        origin: $( event.target ),
+                        offset: $('body').scrollTop()
+                };
+        },
+
+        stop: function( event ) {
+                 var data = event.originalEvent.touches ?
+                        event.originalEvent.touches[ 0 ] : event;
+                return {
+                        time: ( new Date() ).getTime(),
+                        coords: [ data.pageX, data.pageY ],
+                        offset: $('body').scrollTop()
+                };
+        },
+
+        handleSwipe: function( start, stop ) {
+                var swipe = $.event.special.swipe,
+                        x = Math.abs( start.coords[ 0 ] - stop.coords[ 0 ] ),
+                        y = Math.abs( start.coords[ 1 ] - stop.coords[ 1 ] ),
+                        offset =  Math.abs( start.offset - stop.offset ),
+                        time = stop.time - start.time;
+                if ( time < swipe.durationThreshold && x > swipe.horizontalDistanceThreshold && ( y  + offset )
+                                < swipe.verticalDistanceThreshold ) {
+
+                        start.origin.trigger( "swipe" ).trigger( ( start.coords[ 0 ] - stop.coords[ 0 ] ) ? "swipeleft" : "swiperight" );
+                }
+        }
+});

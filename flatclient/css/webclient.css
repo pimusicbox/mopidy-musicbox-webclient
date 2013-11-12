@@ -165,10 +165,6 @@
     font-size: 15px;
 }
 
-.pane {
-    min-height: 125px;
-}
-
 /***********************
  *  Track Slider
  ***********************/
@@ -377,21 +373,29 @@
 }
 
 #controlspopup, #artistpopup, #coverpopup {
-    max-width: 460px;
+    max-width: 550px;
     background: white;
     padding: 5px;
-    max-width: 80%;
 }
 
 #h_artistname {
     margin-bottom: 65px;
     margin-top: 10px;
 }
+
 #buttons, #controlspopupimage, #coverpopupimage, #artistpopupimage {
     display: block;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 5px;
+}
+
+#popupTracksLv li, #popupQueueLv li {
+    border-bottom: 1px solid #aaa;
+}
+
+#popupTracksLv, #popupQueueLv {
+    border: 1px solid #aaa;
 }
 
 /*dont hide clear buttons in text input */

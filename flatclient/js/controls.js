@@ -127,6 +127,7 @@ function playTrackByUri(uri, playlisturi){
  */
 function playTrackQueueByUri(uri, playlisturi){
     //stop directly, for user feedback
+//console.log('qu');
     mopidy.playback.stop(true);
     $('#popupQueue').popup('close');
     toast('Loading...');

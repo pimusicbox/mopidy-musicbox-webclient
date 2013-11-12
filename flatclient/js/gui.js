@@ -392,18 +392,11 @@ $(document).ready(function() {
     });
     initRadio();
 
-    if ($(window).width() < 560) {
+    if ($(window).width() <= 1024) {
         $("#panel").panel("close");
     }else{
         $("#panel").panel("open");
     }
-
-/*    //hide fs button if mobile browser
-    if(isMobileSafari) {
-	alert(ua);
-        $('#navExitFullscreen').hide();
-    }
-*/
 
     //hide fullscreen button if in UIWebview
     if (window.navigator.standalone) {
@@ -413,9 +406,10 @@ $(document).ready(function() {
     // swipe songinfo and panel
     $( "#normalFooter" ).on( "swiperight",  doPrevious );
     $( "#normalFooter" ).on( "swipeleft",  doNext );
+    $( "#panel, .pane" ).on( "swiperight",  function() { $("#panel").panel("open") } );
+    $( "#panel, .pane" ).on( "swipeleft",  function() { $("#panel").panel("close") });
     $( "#header" ).on( "swiperight",  function() { $("#panel").panel("open") } );
     $( "#header" ).on( "swipeleft",  function() { $("#panel").panel("close") });
-    $( ".pane" ).on( "swiperight",  function() { $("#panel").panel("open") } );
 });
 
 $(document).bind("pageinit", function() {
@@ -569,6 +563,9 @@ function locationHashChanged() {
 }
 
 $(document).bind("mobileinit", function(){
-    $.event.special.swipe.horizontalDistanceThreshold = 100; // (default: 30px) – Swipe horizontal displacement must be more than this.
-    $.event.special.swipe.verticalDistanceThreshold = 100; // (default: 75px) – Swipe vertical displacement must be less than this.
+    $.event.special.swipe.horizontalDistanceThreshold = 30; // (default: 30px)  Swipe horizontal displacement must be more than this.
+    $.event.special.swipe.verticalDistanceThreshold = 75; // (default: 75px)  Swipe vertical displacement must be less than this.
+    $.event.special.swipe.scrollSupressionThreshold = 30;
+    $.event.special.swipe.durationThreshold = 500;
+
 });
