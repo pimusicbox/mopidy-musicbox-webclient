@@ -148,7 +148,11 @@ function resultsToTables(results, target, uri) {
     newalbum = [];
     $(target).html('');
     //quick fix, sorry
+<<<<<<< HEAD
     if (!results) {exit;}
+=======
+    if (!results) { return;}
+>>>>>>> master
     
     //break into albums and put in tables
     var html = '';
@@ -196,7 +200,11 @@ function resultsToTables(results, target, uri) {
 
             } else {
                 html += '<li class="albumdivider">';
+<<<<<<< HEAD
                 html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1>' + results[i].album.name + '</h1><p>';
+=======
+                html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="80" height="80" /><h1>' + results[i].album.name + '</h1><p>';
+>>>>>>> master
                 if (results[i].album.artists) {
 		    for ( j = 0; j < results[i].album.artists.length; j++) {
                 	html += results[i].album.artists[j].name;
@@ -216,7 +224,7 @@ function resultsToTables(results, target, uri) {
                     html += '<p class="pright">' + timeFromSeconds(newalbum[j].length / 1000) + '</p><h1>' + newalbum[j].name + '</h1></a></li>';
                 };
                 artistname = results[i].artists[0].name;
-                getCover(artistname, results[i].album.name, target + '-cover-' + i, 'small');
+                getCover(artistname, results[i].album.name, target + '-cover-' + i, 'medium');
                 //            customTracklists[results[i].album.uri] = newalbum;
                 newalbum = [];
             }

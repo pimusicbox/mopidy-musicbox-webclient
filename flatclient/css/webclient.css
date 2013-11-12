@@ -1,0 +1,593 @@
+/*
+ * Mopidy Webclient CSS
+ * (c) Wouter van Wijk 2012-2013
+ */
+
+/****************************
+ *  Responsive stuff
+ *  * iphone 3 20em
+ *    landscape 30
+ * iphone 4 40em
+ *    landscape 60
+ * ipad landsc 64
+ *    portr 48
+ ****************************/
+
+@media all and (min-width: 40.1em) {
+    /*header*/
+    .header-breakpoint.ui-grid-b .ui-block-a {
+        width: 30%;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-b {
+        width: 30%;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-c {
+        width: 30.1%;
+    }
+    /*playlists*/
+    .pl-breakpoint.ui-grid-a .ui-block-a {
+        width: 32.95%;
+    }
+    .pl-breakpoint.ui-grid-a .ui-block-b {
+        width: 65.4%;
+    }
+    .pl-breakpoint.ui-grid-a .ui-block-a {
+        clear: left;
+    }
+    .pl-breakpoint.ui-grid-a .ui-block-a {
+        clear: left;
+    }
+    #playlisttracksdiv {
+        margin-left: 10px;
+    }
+    /*search*/
+    .srch-breakpoint.ui-grid-a .ui-block-b {
+        margin-left: .5em;
+    }
+    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
+        width: 49%;
+    }
+    .scroll {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+/* tablet etc */
+@media all and (min-width: 30.1em) and (max-width: 40em) {
+    /*header*/
+    .header-breakpoint.ui-grid-b .ui-block-a {
+        width: 45.95%;
+        clear: left;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-b {
+        display: none;
+        width: 0;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-c {
+        width: 40%;
+    }
+    /*search*/
+    .srch-breakpoint.ui-grid-a .ui-block-b {
+        margin-left: .2em;
+    }
+    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
+        width: 49.5%;
+    }
+    .scroll {
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+}
+
+/* phone landscape */
+@media all and (max-width: 30em) {
+    /*header*/
+    .header-breakpoint.ui-grid-b .ui-block-a {
+        width: 35%;
+        clear: left;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-b {
+        display: none;
+    }
+    .header-breakpoint.ui-grid-b .ui-block-c {
+        width: 33%;
+    }
+    /*playlists*/
+    .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
+        width: 100%;
+    }
+    /*search*/
+    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
+        width: 100%;
+    }
+    #playlistspane, .scroll {
+/*        overflow-y: auto;
+        overflow-x: hidden;
+*/
+        width: 100%;
+        heigth: 90%;
+    }
+}
+
+/* phone portrait */
+@media all and (max-width: 25em) {
+
+    #playlistspane, .scroll {
+        overflow-y: auto;
+        overflow-x: hidden;
+        width: auto;
+        max-width: 100%;
+        heigth: 100%;
+    }
+}
+
+/***********
+ * Side Panel and Navigation
+ */
+.mainNav .fa{
+    float: right;
+}
+.mainNav .navtxt{
+    float: left;
+}
+.mainNav .navtxt:after{
+    clear: left;
+}
+
+.bottom{
+    width: 100%;
+    margin: -15px;
+    margin-top: 30px;
+}
+
+
+
+
+/**headers and controls**/
+
+
+#playimg {
+    margin-top: 2px;
+}
+
+#nextimg, #previmg, #backimg, #controlsimg {
+    margin-top: 6px;
+}
+
+#headermenubtn{
+    width: 50px;
+}
+#headersearchbtn{
+    text-align: right;
+}
+#headersearchbtn .ui-btn-inner{
+    padding: 6px;
+    font-size: 15px;
+}
+
+/***********************
+ *  Track Slider
+ ***********************/
+
+#trackslider {
+    display: inline;
+    width: 100%;
+}
+
+#slidercontainer {
+    margin-top: 7px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.ui-slider-track {
+    margin-left: 38px;
+    margin-right: 35px;
+}
+
+.ui-mobile .ui-page .ui-slider-input, .ui-mobile .ui-dialog .ui-slider-input {
+    display: none !important;
+}
+
+#songelapsed, #songlength {
+    font-size: 10px;
+    margin-top: 12px;
+}
+
+/************************
+ *  Volume Slider
+ ***********************/
+#mutebt {
+    float: left;
+    margin-left: 8px;
+    margin-top: 8px;
+}
+
+#volumeslider {
+    display: inline;
+}
+
+/***********
+ * pages, content
+ */
+#page{
+    background-color: #fff;
+}
+
+#searchresults {
+    display: none;
+}
+
+#currentpane, #searchpane, #albumspane, #artistspane, #radiopane {
+    display: none; 
+}
+
+
+
+#artistviewimage, #albumviewcover {
+    float: right;
+    heigth: 90px;
+}
+
+/*********************
+ * listviews
+ ********************/
+.table li a {
+    color: #555 !important;
+    font-size: 80% !important;
+    display: block;
+    padding: 2px;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+.table li {
+    background-color: #F8F8F5;
+    border: 1px solid  #CECECE;
+    border-bottom: 0;
+    padding: 0;
+}
+
+.table {
+    padding: 0;
+    list-style-type:none;
+}
+
+/*.table li:first-child {  */
+    /*-moz-border-radius-topleft: 2px;*/
+    /*-moz-border-radius-topright: 2px;*/
+    /*-webkit-border-top-left-radius: 2px;*/
+    /*-webkit-border-top-right-radius: 2px;*/
+    /*border-top-right-radius: 2px;*/
+    /*border-top-left-radius: 2px;*/
+/*}*/
+
+.table li:last-child {
+    /*-moz-border-radius-bottomleft: 2px;*/
+    /*-moz-border-radius-bottomright: 2px;*/
+    /*-webkit-border-bottom-left-radius: 2px;*/
+    /*-webkit-border-bottom-right-radius: 2px;*/
+    /*border-bottom-left-radius: 2px;*/
+    /*border-bottom-right-radius: 2px;*/
+    border-bottom: 1px solid #CECECE;
+}
+
+.albumdivider h1, .table li h1 {
+    font-size: 120% !important;
+}
+
+.albumdivider {
+        background-color: #ddd !important;
+}
+
+.smalldivider {
+    font-size: 25% !important;
+    heigth: 5px !important;
+    background-color: #ddd !important;
+}
+
+#playlistslist li a {
+    padding: 7px;
+}
+
+#playlistslist, #playlisttracks {
+    margin: 0 !important;
+    padding: 0 !important;
+/*    border: 1px solid blue; */
+}
+
+.albumli {
+    padding-left: 5px;
+}
+
+.playlistactive {
+    background-color: #ccc;
+}
+
+.artistcover {
+    float: right;
+    width: 30px;
+    heigth: 30px;
+    margin-right: 3px;
+    margin-top: 3px;
+}
+
+.currenttrack2 {
+    background-image: url('../images/icons/play_alt_12x12.png');
+    background-repeat: no-repeat;
+    background-position: 4px center;
+}
+.currenttrack {
+    background-image: url('../images/icons/play_alt_16x16.png');
+    background-repeat: no-repeat;
+    background-color: #eee;
+    background-position: 6px center;
+}
+
+.currenttrack2 a {
+    margin-left: 15px;
+}
+.currenttrack a {
+    margin-left: 20px;
+}
+
+
+
+
+.song .moreBtn{
+    float: right;
+    padding: 15px 18px 12px 22px;
+    display: inline-block;
+    line-height: 100%;
+}
+
+
+/*******************
+ * Now Playing area
+ *******************/
+.nowPlayingControls{
+    font-size: 1.2em;
+    line-height: 50px;
+}
+.nowPlayingControls .fa{
+    vertical-align: -webkit-baseline-middle;
+    vertical-align: middle;
+}
+.nowPlayingControls #btplayNowPlaying{
+    font-size: 190%;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+
+/*******************
+ * Popups
+ *******************/
+#modalalbum a, #modalartist a {
+    color: #444;
+    text-decoration: none;
+}
+
+.popupArtistName, .popupTrackName, .popupAlbumName, .popupArtistName {
+    font-style: oblique;
+}
+
+#controlspopup, #artistpopup, #coverpopup {
+    max-width: 550px;
+    background: white;
+    padding: 5px;
+}
+
+#h_artistname {
+    margin-bottom: 65px;
+    margin-top: 10px;
+}
+
+#buttons, #controlspopupimage, #coverpopupimage, #artistpopupimage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+
+#popupTracksLv li, #popupQueueLv li {
+    border-bottom: 1px solid #aaa;
+}
+
+#popupTracksLv, #popupQueueLv {
+    border: 1px solid #aaa;
+}
+
+/*dont hide clear buttons in text input */
+.ui-input-clear-hidden {
+    display:block !important;
+}    
+  
+
+/***************
+ *  common use
+ ***************/
+
+#playlistspane {
+/*  height: 90% !important;*/
+    margin: 0px !important;
+    padding: 2px !important;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.nobreak, .btsquare {
+    display: inline !important;
+}
+
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
+}
+
+.hidden, #allresultloader, .loader {
+    display: none;
+}
+
+.breakafter {
+    margin-right: 15px;
+}
+
+.pright {
+    display: inline;
+    margin-top: 4px;
+    float: right;
+}
+/**********************
+ *  Song information
+ **********************/
+.ui-footer{
+    border: 0px;
+}
+#normalFooter{
+    height: 48px;
+}
+#nowPlayingFooter{
+    text-align: center;
+    color: white;
+}
+#infoname {
+    overflow: hidden;
+    white-space: nowrap;
+    font: bold;
+    font-size: 14px;
+}
+
+#infoartist {
+    overflow: hidden;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+#infocover {
+    height: 48px;
+    width: 48px;
+    position: absolute;
+}
+
+
+.songinfo-text{
+    display:inline-block;
+    padding: 6px;
+    color: white;
+    position: absolute;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+.playPausebtn{
+    padding-right: 10px;
+    position: absolute;
+    right: 0px;
+}
+
+#controldiv{
+    background: none repeat scroll 0% 0% rgb(44, 62, 80);
+    height: 48px;
+    padding: 8px 8px 8px 8px;
+
+}
+
+#controldiv img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+
+#nowPlayingpane{
+    text-align: center;
+}
+
+
+.footer {
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    width: 100%;
+}
+
+/*helper*/
+
+.hidden{
+    display: none;
+}
+.ui-loader h1{
+    color: #efefef;
+}
+
+
+
+
+/* panel workaround to make it responsive wrap push on wide viewports once open */
+@media (min-width: 35em){
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal {
+        margin-right: 17em;
+    }
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-push.ui-panel-content-fixed-toolbar-position-right,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-reveal.ui-panel-content-fixed-toolbar-position-right,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
+        margin: 0 0 0 17em;
+    }
+    .ui-responsive-panel .ui-panel-dismiss-display-reveal {
+        display: none;
+    }
+}
+/*smartphones*/
+@media (max-width: 35em){
+    #nowPlayingpane{
+        padding: 15px 25px 0px 25px;
+    }
+    #nowPlayingpane #controlspopupimage{
+        max-width: 100%;
+    }
+    .nowPlaying-artistInfo {
+           font-size: 12px;
+    }
+    .nowPlaying-artistInfo h4{
+        margin: 0px;
+        font-weight: normal;
+        font-size:  12px;
+    }
+    .nowPlaying-artistInfo h3{
+        margin: 0px 0px 3px 00px;
+        white-space: nowrap;
+        overflow: hidden;
+
+    }
+    #controlspopupimage{
+        margin-bottom: 3px;
+    }
+    #nowPlayingpane #slidercontainer {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+
+    .nowPlayingControls{
+        font-size: 1.3em;
+        line-height: 50px;
+    }
+}
+
+/* disable text selection for mouse swipe */
+body * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}

@@ -174,9 +174,10 @@ function setSongInfo(data) {
     } else {
 	$("#modalalbum").html('');
 	$("#infocover").attr('src', '../images/icons/cd_32x32.png');
+	$("#controlspopupimage").attr('src', '../images/icons/cd_32x32.png');
     }
 
-        $("#modalartist").html(arttmp);
+    $("#modalartist").html(arttmp);
 
     $("#trackslider").attr("min", 0);
     $("#trackslider").attr("max", data.length);

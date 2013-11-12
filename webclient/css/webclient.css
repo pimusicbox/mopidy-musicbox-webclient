@@ -266,12 +266,17 @@
 
 #artistviewimage, #albumviewcover {
     float: right;
-    heigth: 90px;
+    heigth: 160px;
 }
 
 /*********************
  * listviews
  ********************/
+
+#albumstable, #artiststable {
+    margin-top: 90px;
+}
+
 .table li a {
     color: #555 !important;
     font-size: 80% !important;
@@ -318,6 +323,7 @@
 
 .albumdivider {
         background-color: #ddd !important;
+	height: 90px;
 }
 
 .smalldivider {
@@ -346,8 +352,8 @@
 
 .artistcover {
     float: right;
-    width: 30px;
-    heigth: 30px;
+    width: 80px;
+    heigth: 80px;
     margin-right: 3px;
     margin-top: 3px;
 }

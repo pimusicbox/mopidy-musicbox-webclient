@@ -65,17 +65,18 @@ function processGetPlaylists(resultArr) {
     if ((!resultArr) || (resultArr == '')) {
         return;
     }
-    var tmp = '',
+    var child, tmp = '',
         starredRegex = /spotify:user:.*:starred/g,
         starred;
 
     for (var i = 0; i < resultArr.length; i++) {
-        var child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
         // Check if this is Spotify's "Starred" playlist
-        if(starredRegex.test(resultArr[i].uri))
-            starred = child;
-        else
-            tmp += child;
+        if(starredRegex.test(resultArr[i].uri)) {
+	    starred = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">&#9733; Spotify Starred Tracks</a></li>';
+	} else {
+	    child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
+	    tmp += child;
+	}
     };
 
     // Move Spotify "Starred" playlist to top as this is the way Spotify does it
@@ -94,6 +95,7 @@ function processGetPlaylists(resultArr) {
 function processGetTracklist(resultArr) {
     //cache result
     var newplaylisturi = resultArr.uri;
+    console.log(resultArr);
     playlists[newplaylisturi] = resultArr;
     resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     setSongInfo();
