@@ -20,7 +20,7 @@ function resetSong() {
         setSongInfo(data);
     }
 }
-console.log('test');
+//console.log('test');
 
 function resizeMb() {
     $("#infoname").html(songdata.name);
@@ -41,40 +41,38 @@ function resizeMb() {
 //    });
 
 
-//    //initialize iScroll if MobileWebkit and large window
-//    if (isMobileWebkit) {
-//        if ($(window).width() > 480) {
-//            if (!playlistslistScroll) {
-//                playlistslistScroll = new iScroll('playlistslistdiv');
-//                playlisttracksScroll = new iScroll('playlisttracksdiv');
-//            }
-//        } else {
-//            if (playlistslistScroll) {
-//                playlistslistScroll.destroy();
-//                playlistslistScroll = null;
-//                playlisttracksScroll.destroy();
-//                playlisttracksScroll = null;
-//            }
-//        }
-//    }
-//
+//initialize iScroll if MobileWebkit and large window
+    if (isMobileWebkit && $(window).width() > 480) {
+        if (!playlistslistScroll) {
+                playlistslistScroll = new iScroll('playlistslistdiv');
+                playlisttracksScroll = new iScroll('playlisttracksdiv');
+            }
+        } else {
+            if (playlistslistScroll) {
+                playlistslistScroll.destroy();
+                playlistslistScroll = null;
+                playlisttracksScroll.destroy();
+                playlisttracksScroll = null;
+            }
+        }
+
 //    //set height of playlist scrollers
-//
-//    if ($(window).width() > 480) {
-//        $('.scroll').height($(window).height() - 111);
-//        //jqm added something which it shouldnt (at least in this case) I guess
-//        //        $('#playlistspane').removeClass('height').height($(window).height() - 110);
-//        $('.scroll').removeClass('height').removeClass('width');
-//        $('#playlistspane').removeClass('height').removeClass('width');
-//    } else {
-//        $('.scroll').addClass('height', '100%').addClass('width', '100%');
-//        $('#playlistspane').addClass('height', '100%').addClass('width', '100%');
-//    }
-//
-//    if (isMobileWebkit && ($(window).width() > 480)) {
-//        playlistslistScroll.refresh();
-//        playlisttracksScroll.refresh();
-//    }
+
+    if ($(window).width() > 480) {
+        $('.scroll').height($(window).height() - 96);
+        //jqm added something which it shouldnt (at least in this case) I guess
+        //        $('#playlistspane').removeClass('height').height($(window).height() - 110);
+        $('.scroll').removeClass('height').removeClass('width');
+        $('#playlistspane').removeClass('height').removeClass('width');
+    } else {
+        $('.scroll').addClass('height', '99%').addClass('width', '99%');
+        $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
+    }
+
+    if (isMobileWebkit && ($(window).width() > 480)) {
+        playlistslistScroll.refresh();
+        playlisttracksScroll.refresh();
+    }
 }
 
 function setSongInfo(data) {
@@ -304,114 +302,6 @@ function initSocketevents() {
     });
 }
 
-/**********************
- * initialize software
- **********************/
-$(document).ready(function() {
-    //check for websockets
-    if (!window.WebSocket) {
-        switchContent("playlists");
-        $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>');
-        exit;
-    }
-    //workaround for a bug in jQuery Mobile, without that the panel doesn't close on mobile devices...
-    $('.ui-panel-dismiss').on( "tap", function() { $("#panel").panel("close"); } );
-    //end of workaround
-
-
-
-    $(window).hashchange();
-
-    // Connect to server
-    mopidy = new Mopidy();
-//    mopidy.on(console.log.bind(console));  // Log all events
-
-    //initialize events
-    initSocketevents();
-
-    resetSong();
-
-    if (location.hash.length < 2) {
-        switchContent("playlists");
-    }
-
-    initgui = false;
-    window.onhashchange = locationHashChanged;
-    // Log all events
-    //mopidy.on(function() {
-    //});
-
-    //update gui status every x seconds from mopdidy
-    setInterval(updateTimer, STATUS_TIMER);
-    //only show backbutton if in UIWebview
-    if (window.navigator.standalone) {
-        $("#btback").show();
-    } else {
-        $("#btback").hide();
-    }
-
-    $(window).resize(function() {
-        resizeMb();
-    });
-
-
-    //navigation temporary, rewrite this!
-    $('#normalFooter').click( 
-	function() { 
-	    if(!$(event.target).is("#playimg"))
-	 {return switchContent('nowPlaying')} } 
-    );
-    $('#navEnterFullscreen').click(function(){
-        enterFullscreen();
-    });
-    $('#navExitFullscreen').click(function(){
-        exitFullscreen();
-    });
-
-
-
-    //navigation stuff
-
-    $(document).keypress( function (event) {
-	//console.log('kp:    '+event);
-	if (event.target.tagName != 'INPUT') { 
-	    event.preventDefault();
-	    switch(event.which) {
-	        case 32:
-    		    doPlay();
-		    break;
-		case '>':
-    		    doNext();
-		    break;
-		case '<':
-    		    doPrevious();
-		    break;
-	    }
-	    return true;
-	}
-    });
-    initRadio();
-
-    if ($(window).width() <= 1024) {
-        $("#panel").panel("close");
-    }else{
-        $("#panel").panel("open");
-    }
-
-    //hide fullscreen button if in UIWebview
-    if (window.navigator.standalone) {
-        $('#navExitFullscreen').hide();
-    }
-
-    // swipe songinfo and panel
-    $( "#normalFooter" ).on( "swiperight",  doPrevious );
-    $( "#normalFooter" ).on( "swipeleft",  doNext );
-    $( "#panel, .pane" ).on( "swiperight",  function() { $("#panel").panel("open") } );
-    $( "#panel, .pane" ).on( "swipeleft",  function() { $("#panel").panel("close") });
-    $( "#header" ).on( "swiperight",  function() { $("#panel").panel("open") } );
-    $( "#header" ).on( "swipeleft",  function() { $("#panel").panel("close") });
-});
-
 $(document).bind("pageinit", function() {
     resizeMb();
 
@@ -421,7 +311,7 @@ $(document).bind("pageinit", function() {
  * diverse
  ************************/
 function enterFullscreen() {
-    if (isMobileSafari) { alert ("Go make this app Full Screen, you have to add this app to your home-screen using the Share button."); exit(); }
+    if (isMobileSafari) { alert ("To get this app in Full Screen, you have to add it to your home-screen using the Share button."); exit(); }
     var elem = document.querySelector("#page");
     elem.onwebkitfullscreenchange = onFullScreenEnter;
     elem.onmozfullscreenchange = onFullScreenEnter;
@@ -562,10 +452,117 @@ function locationHashChanged() {
     return false;
 }
 
-$(document).bind("mobileinit", function(){
-    $.event.special.swipe.horizontalDistanceThreshold = 30; // (default: 30px)  Swipe horizontal displacement must be more than this.
-    $.event.special.swipe.verticalDistanceThreshold = 75; // (default: 75px)  Swipe vertical displacement must be less than this.
-    $.event.special.swipe.scrollSupressionThreshold = 30;
+/**********************
+ * initialize software
+ **********************/
+$(document).ready(function(event) {
+    //check for websockets
+    if (!window.WebSocket) {
+        switchContent("playlists");
+        $('#playlistspane').html('<h2>Old Browser</h2><p>Sorry. Your browser isn\'t modern enough for this webapp. Modern versions of Chrome, Firefox, Safari all will do. Maybe Opera and Internet Explorer 10 also work, but it\'s not tested.</p>');
+        exit;
+    }
+
+    //workaround for a bug in jQuery Mobile, without that the panel doesn't close on mobile devices...
+    $('.ui-panel-dismiss').on( "tap", function() { $("#panel").panel("close"); } );
+    //end of workaround
+
+
+
+    $(window).hashchange();
+
+    // Connect to server
+    mopidy = new Mopidy();
+//    mopidy.on(console.log.bind(console));  // Log all events
+
+    //initialize events
+    initSocketevents();
+
+    resetSong();
+
+    if (location.hash.length < 2) {
+        switchContent("playlists");
+    }
+
+    initgui = false;
+    window.onhashchange = locationHashChanged;
+    // Log all events
+    //mopidy.on(function() {
+    //});
+
+    //update gui status every x seconds from mopdidy
+    setInterval(updateTimer, STATUS_TIMER);
+    //only show backbutton if in UIWebview
+    if (window.navigator.standalone) {
+        $("#btback").show();
+    } else {
+        $("#btback").hide();
+    }
+
+    $(window).resize(function() {
+        resizeMb();
+    });
+
+
+    //navigation temporary, rewrite this!
+    $('#normalFooter').click( 
+	function() { 
+	    if(!$(event.target).is("#playimg"))
+	 {return switchContent('nowPlaying')} } 
+    );
+    $('#nowPlayingpane, #controlspopupimage').click( 
+	function() {return switchContent('current')} 
+    );
+    $('#navEnterFullscreen').click(function(){
+        enterFullscreen();
+    });
+    $('#navExitFullscreen').click(function(){
+        exitFullscreen();
+    });
+
+
+
+    //navigation stuff
+
+    $(document).keypress( function (event) {
+	//console.log('kp:    '+event);
+	if (event.target.tagName != 'INPUT') { 
+	    event.preventDefault();
+	    switch(event.which) {
+	        case 32:
+    		    doPlay();
+		    break;
+		case '>':
+    		    doNext();
+		    break;
+		case '<':
+    		    doPrevious();
+		    break;
+	    }
+	    return true;
+	}
+    });
+    initRadio();
+
+    if ($(window).width() <= 1024) {
+        $("#panel").panel("close");
+    }else{
+        $("#panel").panel("open");
+    }
+
+    //hide fullscreen button if in UIWebview
+    if (window.navigator.standalone) {
+        $('#navExitFullscreen').hide();
+    }
+
+    $.event.special.swipe.horizontalDistanceThreshold = 150; // (default: 30px)  Swipe horizontal displacement must be more than this.
+    $.event.special.swipe.verticalDistanceThreshold = 50; // (default: 75px)  Swipe vertical displacement must be less than this.
+//    $.event.special.swipe.scrollSupressionThreshold = 20;
     $.event.special.swipe.durationThreshold = 500;
 
+    // swipe songinfo and panel
+    $( "#normalFooter" ).on( "swiperight",  doPrevious );
+    $( "#normalFooter" ).on( "swipeleft",  doNext );
+    $( "#page, #header, #panel, .pane" ).on( "swiperight",  function() { $("#panel").panel("open") } );
+    $( "#page, #header, #panel, .pane" ).on( "swipeleft",  function() { $("#panel").panel("close") });
 });

@@ -45,7 +45,7 @@ var customPlaylists = [];
 var customTracklists = [];
 
 var ua = navigator.userAgent,
-  isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua), isMobileWebkit = /WebKit/.test(ua) && /Mobile/.test(ua), isMobile = /Mobile/.test(ua);
+  isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua), isMobileWebkit = /WebKit/.test(ua) && /Mobile/.test(ua), isMobile = /Mobile/.test(ua), isWebkit = /WebKit/.test(ua);
 
 //constants
 PROGRAM_NAME = 'MusicBox';
@@ -156,7 +156,7 @@ function renderSongLi(song, liID, uri){
     } else {
         playlistType = 'playTrackByUri';
     }
-    console.log(playlistType);
+//    console.log(playlistType);
 
 //    songLi = '';
     songLi = '<li class="song albumli" id="' + liID + '">' +
@@ -178,7 +178,7 @@ function resultsToTables(results, target, uri) {
     } else {
         playlistType = 'playTrackByUri';
     }
-    console.log(playlistType);
+//    console.log(playlistType);
 
     var newalbum = [];
     var nexturi = '';
@@ -395,7 +395,7 @@ function validUri(str) {
     return regexp.test(str);
 }
 
-
+/*
 $.event.special.swipe = $.extend($.event.special.swipe, {
         start: function( event ) {
                  var data = event.originalEvent.touches ?
@@ -406,6 +406,7 @@ $.event.special.swipe = $.extend($.event.special.swipe, {
                         origin: $( event.target ),
                         offset: $('body').scrollTop()
                 };
+//	    console.log('start');
         },
 
         stop: function( event ) {
@@ -416,6 +417,7 @@ $.event.special.swipe = $.extend($.event.special.swipe, {
                         coords: [ data.pageX, data.pageY ],
                         offset: $('body').scrollTop()
                 };
+	    alert.log('stop');
         },
 
         handleSwipe: function( start, stop ) {
@@ -424,10 +426,13 @@ $.event.special.swipe = $.extend($.event.special.swipe, {
                         y = Math.abs( start.coords[ 1 ] - stop.coords[ 1 ] ),
                         offset =  Math.abs( start.offset - stop.offset ),
                         time = stop.time - start.time;
-                if ( time < swipe.durationThreshold && x > swipe.horizontalDistanceThreshold && ( y  + offset )
+                if ( time < swipe.durationThreshold && x > swipe.horizontalDistanceThreshold && ( y + offset )
                                 < swipe.verticalDistanceThreshold ) {
 
                         start.origin.trigger( "swipe" ).trigger( ( start.coords[ 0 ] - stop.coords[ 0 ] ) ? "swipeleft" : "swiperight" );
+
+//		        alert(x + ' ' + y + ' '  + time + ' ' + offset + ' ' + swipe.verticalDistanceThreshold);
                 }
         }
 });
+*/

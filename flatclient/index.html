@@ -38,7 +38,7 @@
             new FastClick(document.body);
         }, false);
     </script>
-    <script src="js/jquery.mobile-1.3.1.min.js"></script>
+    <script src="js/jquery.mobile-1.3.2.min.js"></script>
     <meta name="description" content="MusicBox">
     <meta name="author" content="Wouter van Wijk">
     <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk"/>
@@ -51,7 +51,7 @@
 
 <body>
 <div data-role="page" id="page" class="ui-responsive-panel" data-theme="c">
-<div data-role="panel" id="panel" data-position="left" data-theme="a" data-display="reveal"  data-position-fixed="true">
+<div data-role="panel" id="panel" data-position="left" data-theme="a" data-display="reveal"> <!-- data-position-fixed="true"> -->
 
 
     <ul class="ui-listview mainNav" data-role="listview" data-theme="a">
@@ -185,10 +185,12 @@
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint headerbtn">
     <a data-iconpos="notext" href="#panel" data-role="button" data-icon="flat-menu" id="headermenubtn"></a>
+<!--     <a id="headerplaylistsbtn" href="#" class="" onclick="switchContent('playlists' ); return false;">
+            <i class="fa fa-star"></i></a> &nbsp;
+-->
     <h1 id="contentHeadline" >Musicbox</h1>
-     <a id="headersearchbtn" href="#search" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;">
+     <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;">
             <i class="fa fa-search"></i></a>
-
 </div>
 <!-- /header -->
 

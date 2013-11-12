@@ -29,7 +29,7 @@
         width: 32.95%;
     }
     .pl-breakpoint.ui-grid-a .ui-block-b {
-        width: 65.2%;
+        width: 65.4%;
     }
     .pl-breakpoint.ui-grid-a .ui-block-a {
         clear: left;
@@ -102,10 +102,11 @@
         width: 100%;
     }
     #playlistspane, .scroll {
-        overflow-y: auto;
+/*        overflow-y: auto;
         overflow-x: hidden;
+*/
         width: 100%;
-        heigth: 100%;
+        heigth: 90%;
     }
 }
 
@@ -346,8 +347,8 @@
  * Now Playing area
  *******************/
 .nowPlayingControls{
-    font-size: 2em;
-    line-height: 80px;
+    font-size: 1.2em;
+    line-height: 50px;
 }
 .nowPlayingControls .fa{
     vertical-align: -webkit-baseline-middle;
@@ -407,6 +408,13 @@
 /***************
  *  common use
  ***************/
+
+#playlistspane {
+/*  height: 90% !important;*/
+    margin: 0px !important;
+    padding: 2px !important;
+}
+
 a {
     text-decoration: none !important;
 }
@@ -573,4 +581,13 @@ a {
         font-size: 1.3em;
         line-height: 50px;
     }
+}
+
+/* disable text selection for mouse swipe */
+body * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
