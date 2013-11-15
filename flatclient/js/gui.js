@@ -508,10 +508,12 @@ $(document).ready(function(event) {
     $('#normalFooter').click( 
 	function() { 
 	    if(!$(event.target).is("#playimg"))
-	 {return switchContent('nowPlaying')} } 
+    	 {return switchContent('nowPlaying')} } 
     );
-    $('#nowPlayingpane, #controlspopupimage').click( 
-	function() {return switchContent('current')} 
+    $('#nowPlayingpane, #nowPlayingFooter, #controlspopupimage').click( 
+	function() {
+	    if(!$(event.target).is("#trackslider"))
+	    return switchContent('current')} 
     );
     $('#navEnterFullscreen').click(function(){
         enterFullscreen();
@@ -561,8 +563,16 @@ $(document).ready(function(event) {
     $.event.special.swipe.durationThreshold = 500;
 
     // swipe songinfo and panel
-    $( "#normalFooter" ).on( "swiperight",  doPrevious );
-    $( "#normalFooter" ).on( "swipeleft",  doNext );
-    $( "#page, #header, #panel, .pane" ).on( "swiperight",  function() { $("#panel").panel("open") } );
-    $( "#page, #header, #panel, .pane" ).on( "swipeleft",  function() { $("#panel").panel("close") });
+    $( "#normalFooter, #nowPlayingFooter" ).on( "swiperight",  doPrevious );
+    $( "#normalFooter, #nowPlayingFooter" ).on( "swipeleft",  doNext );
+    $( "#nowPlayingpane, .ui-body-c, #header, #panel, .pane" ).on( "swiperight",  function() { 
+		    if(!$(event.target).is("#normalFooter") && !$(event.target).is("#nowPlayingFooter"))
+			$("#panel").panel("open");
+			event.stopImmediatePropagation();
+		    } ); 
+    $( "#nowPlayingpane, .ui-body-c, #header, #panel, .pane" ).on( "swipeleft",  function() { 
+		    if(!$(event.target).is("#normalFooter") && !$(event.target).is("#nowPlayingFooter"))
+			$("#panel").panel("close");
+			event.stopImmediatePropagation();
+		    } ); 
 });
