@@ -505,16 +505,12 @@ $(document).ready(function(event) {
 
 
     //navigation temporary, rewrite this!
-    $('#normalFooter').click( 
-	function() { 
-	    if(!$(event.target).is("#playimg"))
-    	 {return switchContent('nowPlaying')} } 
-    );
-    $('#nowPlayingpane, #nowPlayingFooter, #controlspopupimage').click( 
+    $('#songinfo').click(
+	function() 
+    	 {return switchContent('nowPlaying')}   );
+    $('#controlspopupimage').click( 
 	function() {
-	    if(!$(event.target).is("#trackslider"))
-	    return switchContent('current')} 
-    );
+	    return switchContent('current')}   );
     $('#navEnterFullscreen').click(function(){
         enterFullscreen();
     });
@@ -557,7 +553,7 @@ $(document).ready(function(event) {
         $('#navExitFullscreen').hide();
     }
 
-    $.event.special.swipe.horizontalDistanceThreshold = 150; // (default: 30px)  Swipe horizontal displacement must be more than this.
+    $.event.special.swipe.horizontalDistanceThreshold = 125; // (default: 30px)  Swipe horizontal displacement must be more than this.
     $.event.special.swipe.verticalDistanceThreshold = 50; // (default: 75px)  Swipe vertical displacement must be less than this.
 //    $.event.special.swipe.scrollSupressionThreshold = 20;
     $.event.special.swipe.durationThreshold = 500;
@@ -566,13 +562,13 @@ $(document).ready(function(event) {
     $( "#normalFooter, #nowPlayingFooter" ).on( "swiperight",  doPrevious );
     $( "#normalFooter, #nowPlayingFooter" ).on( "swipeleft",  doNext );
     $( "#nowPlayingpane, .ui-body-c, #header, #panel, .pane" ).on( "swiperight",  function() { 
-		    if(!$(event.target).is("#normalFooter") && !$(event.target).is("#nowPlayingFooter"))
+		    if(!$(event.target).is("#normalFooter") && !$(event.target).is("#nowPlayingFooter")) {
 			$("#panel").panel("open");
-			event.stopImmediatePropagation();
+			event.stopImmediatePropagation(); }
 		    } ); 
     $( "#nowPlayingpane, .ui-body-c, #header, #panel, .pane" ).on( "swipeleft",  function() { 
-		    if(!$(event.target).is("#normalFooter") && !$(event.target).is("#nowPlayingFooter"))
-			$("#panel").panel("close");
-			event.stopImmediatePropagation();
+		    if(!$(event.target).is("#normalFooter") && !$(event.target).is("#nowPlayingFooter")) {
+			$("#panel").panel("close"); 
+			event.stopImmediatePropagation(); }
 		    } ); 
 });

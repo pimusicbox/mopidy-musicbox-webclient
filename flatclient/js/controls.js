@@ -65,7 +65,7 @@ function playTrack(addtoqueue) {
     }
 
     mopidy.playback.play(); //tracks[selected]);
-    console.log(selected);
+    //console.log(selected);
     return false;
 }
 
@@ -75,6 +75,7 @@ function playTrack(addtoqueue) {
  * @returns {boolean}
  */
 function playTrackByUri(uri, playlisturi){
+    //console.log('playuri');
     //stop directly, for user feedback
     mopidy.playback.stop(true);
     mopidy.tracklist.clear();
@@ -111,7 +112,7 @@ function playTrackByUri(uri, playlisturi){
     }
 
     mopidy.playback.play(); //tracks[selected]);
-    console.log(selected);
+//    console.log(selected);
     return false;
 }
 
@@ -126,6 +127,7 @@ function playTrackByUri(uri, playlisturi){
  * @returns {boolean}
  */
 function playTrackQueueByUri(uri, playlisturi){
+    //console.log('playqu');
     //stop directly, for user feedback
 //console.log('qu');
     mopidy.playback.stop(true);
@@ -144,7 +146,7 @@ function playTrackQueueByUri(uri, playlisturi){
     }
 
     mopidy.playback.play(); //currentplaylist[track]);
-    console.log(track, currentplaylist[track]);
+    //console.log(track, currentplaylist[track]);
     return false;
 }
 

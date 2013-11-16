@@ -45,8 +45,18 @@ function playTrack(addtoqueue) {
 	    return false;
     }
 
-// first add track to be played, then the other tracks
 
+    mopidy.tracklist.add(tracks);
+
+    for (var i = 0; i <= selected; i++) {
+        mopidy.playback.next();
+    }
+
+    mopidy.playback.play(); 
+
+
+// first add track to be played, then the other tracks
+/*
 //    mopidy.tracklist.add(null, 0, playlisturi);
     mopidy.tracklist.add( tracks.slice(selected, selected + 1) );
     //wait .5 second before adding the rest to give server the time to start playing
@@ -64,6 +74,7 @@ function playTrack(addtoqueue) {
     }
 
     mopidy.playback.play(); //tracks[selected]);
+*/
     console.log(selected);
     return false;
 }

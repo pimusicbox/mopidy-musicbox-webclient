@@ -135,7 +135,7 @@ function albumTracksToTable(pl, target, uri) {
     for (var i = 0; i < pl.length; i++) {
         popupData[pl[i].uri] = pl[i];
         liID = targetmin + '-' + pl[i].uri;
-        tmp += renderSongLi(pl[i], liID, uri);
+        tmp += renderSongLi(pl[i], liID, uri, target);
 
         //child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
        // child += '<p style="float:right; display: inline;">' + timeFromSeconds(pl[i].length / 1000) + '</p><h1>' + pl[i].name + '</h1></a></li>';
@@ -146,19 +146,7 @@ function albumTracksToTable(pl, target, uri) {
     $(target).attr('data', uri);
 }
 
-function renderSongLi(song, liID, uri){
-    var hash = document.location.hash.split('?');
-    //this is so dirty... ... ...
-    var playlistType = '';
-    var divid = hash[0].substr(1);
-    if (divid == 'current') {
-        playlistType = 'playTrackQueueByUri';
-    } else {
-        playlistType = 'playTrackByUri';
-    }
-//    console.log(playlistType);
-
-//    songLi = '';
+function renderSongLi(song, liID, uri, playlistType){
     songLi = '<li class="song albumli" id="' + liID + '">' +
         '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + '\');">' +
         '<i class="fa fa-ellipsis-vertical"></i>' +
@@ -171,14 +159,12 @@ function renderSongLi(song, liID, uri){
 }
 
 function resultsToTables(results, target, uri) {
-    var hash = document.location.hash.split('?');
-    var divid = hash[0].substr(1), playlistType;
-    if (divid == 'current') {
+//    console.log(target);
+    if (target == '#currenttable') {
         playlistType = 'playTrackQueueByUri';
     } else {
         playlistType = 'playTrackByUri';
     }
-//    console.log(playlistType);
 
     var newalbum = [];
     var nexturi = '';
@@ -257,7 +243,7 @@ function resultsToTables(results, target, uri) {
 
                     //hERE!
                     var liID = targetmin + '-' + newalbum[j].uri;
-                   html+= renderSongLi(newalbum[j], liID, uri);
+                   html+= renderSongLi(newalbum[j], liID, uri, playlistType);
 
                     //html += '<li class="albumli" id="' + targetmin + '-' + newalbum[j].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[j].uri + '\');">';
                     //html += '<p class="pright">' + timeFromSeconds(newalbum[j].length / 1000) + '</p><h1>' + newalbum[j].name + '</h1></a></li>';
