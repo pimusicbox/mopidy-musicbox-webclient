@@ -380,6 +380,9 @@ function updateStatusOfAll() {
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
 
+//    mopidy.tracklist.getRepeat().then(processRepeat, console.error);
+//    mopidy.tracklist.getRandom().then(processRandom, console.error);
+
     mopidy.playback.getRepeat().then(processRepeat, console.error);
     mopidy.playback.getRandom().then(processRandom, console.error);
 
@@ -484,6 +487,7 @@ $(document).ready(function(event) {
         switchContent("playlists");
     }
 
+
     initgui = false;
     window.onhashchange = locationHashChanged;
     // Log all events
@@ -571,4 +575,15 @@ $(document).ready(function(event) {
 			$("#panel").panel("close"); 
 			event.stopImmediatePropagation(); }
 		    } ); 
+
+//mopidy.on("state:online", debug);
+
 });
+
+function debug() {
+  if (mopidy.tracklist === undefined) {
+    alert('Broke at ' +  new Date());
+  } else {
+    setTimeout(debug, 100);
+  }
+}

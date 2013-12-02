@@ -264,8 +264,10 @@ function setRandom(nwrandom) {
 
 function doRandom() {
     if (random == false) {
+        //mopidy.tracklist.setRandom(true).then();
         mopidy.playback.setRandom(true).then();
     } else {
+        //mopidy.tracklist.setRandom(false).then();
         mopidy.playback.setRandom(false).then();
     }
     setRandom(!random);
@@ -273,8 +275,10 @@ function doRandom() {
 
 function doRepeat() {
     if (repeat == false) {
+        //mopidy.tracklist.setRepeat(true).then();
         mopidy.playback.setRepeat(true).then();
     } else {
+        //mopidy.tracklist.setRepeat(false).then();
         mopidy.playback.setRepeat(false).then();
     }
     setRepeat(!repeat);
