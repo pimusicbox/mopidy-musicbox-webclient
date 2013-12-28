@@ -9,7 +9,7 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width, maximum-scale=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-title" content="MusicBox">
@@ -201,7 +201,7 @@
             <div data-role="content" class="pane" id="searchpane">
                 <div class="">
                     <form>
-                    <input id="searchinput" class="span2" data-clear-btn="true" onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text" />
+                    <input id="searchinput" class="span2" data-clear-btn="true" onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text" autocorrect="off" autocomplete="off"/>
                     <button class="btn" type="button" onclick="return initSearch(event.value);" >
                         Search!
                     </button>
