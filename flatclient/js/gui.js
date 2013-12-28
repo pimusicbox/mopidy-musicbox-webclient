@@ -380,11 +380,14 @@ function updateStatusOfAll() {
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
 
-//    mopidy.tracklist.getRepeat().then(processRepeat, console.error);
-//    mopidy.tracklist.getRandom().then(processRandom, console.error);
-
-    mopidy.playback.getRepeat().then(processRepeat, console.error);
-    mopidy.playback.getRandom().then(processRandom, console.error);
+    //check for mopidy 0.16 and higher
+    if (mopidy.tracklist.getRepeat) {
+	mopidy.tracklist.getRepeat().then(processRepeat, console.error);
+        mopidy.tracklist.getRandom().then(processRandom, console.error);
+    } else {
+        mopidy.playback.getRepeat().then(processRepeat, console.error);
+	mopidy.playback.getRandom().then(processRandom, console.error);
+    }
 
     mopidy.playback.getVolume().then(processVolume, console.error);
 }
