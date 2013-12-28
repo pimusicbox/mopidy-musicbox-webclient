@@ -380,12 +380,9 @@ function updateStatusOfAll() {
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
 
-<<<<<<< HEAD
-=======
 //    mopidy.tracklist.getRepeat().then(processRepeat, console.error);
 //    mopidy.tracklist.getRandom().then(processRandom, console.error);
 
->>>>>>> develop
     mopidy.playback.getRepeat().then(processRepeat, console.error);
     mopidy.playback.getRandom().then(processRandom, console.error);
 
@@ -490,10 +487,7 @@ $(document).ready(function(event) {
         switchContent("playlists");
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> develop
     initgui = false;
     window.onhashchange = locationHashChanged;
     // Log all events
@@ -515,23 +509,12 @@ $(document).ready(function(event) {
 
 
     //navigation temporary, rewrite this!
-<<<<<<< HEAD
-    $('#normalFooter').click( 
-	function() { 
-	    if(!$(event.target).is("#playimg"))
-	 {return switchContent('nowPlaying')} } 
-    );
-    $('#nowPlayingpane, #controlspopupimage').click( 
-	function() {return switchContent('current')} 
-    );
-=======
     $('#songinfo').click(
 	function() 
     	 {return switchContent('nowPlaying')}   );
     $('#controlspopupimage').click( 
 	function() {
 	    return switchContent('current')}   );
->>>>>>> develop
     $('#navEnterFullscreen').click(function(){
         enterFullscreen();
     });
@@ -574,23 +557,12 @@ $(document).ready(function(event) {
         $('#navExitFullscreen').hide();
     }
 
-<<<<<<< HEAD
-    $.event.special.swipe.horizontalDistanceThreshold = 150; // (default: 30px)  Swipe horizontal displacement must be more than this.
-=======
     $.event.special.swipe.horizontalDistanceThreshold = 125; // (default: 30px)  Swipe horizontal displacement must be more than this.
->>>>>>> develop
     $.event.special.swipe.verticalDistanceThreshold = 50; // (default: 75px)  Swipe vertical displacement must be less than this.
 //    $.event.special.swipe.scrollSupressionThreshold = 20;
     $.event.special.swipe.durationThreshold = 500;
 
     // swipe songinfo and panel
-<<<<<<< HEAD
-    $( "#normalFooter" ).on( "swiperight",  doPrevious );
-    $( "#normalFooter" ).on( "swipeleft",  doNext );
-    $( "#page, #header, #panel, .pane" ).on( "swiperight",  function() { $("#panel").panel("open") } );
-    $( "#page, #header, #panel, .pane" ).on( "swipeleft",  function() { $("#panel").panel("close") });
-});
-=======
     $( "#normalFooter, #nowPlayingFooter" ).on( "swiperight",  doPrevious );
     $( "#normalFooter, #nowPlayingFooter" ).on( "swipeleft",  doNext );
     $( "#nowPlayingpane, .ui-body-c, #header, #panel, .pane" ).on( "swiperight",  function() { 
@@ -615,4 +587,3 @@ function debug() {
     setTimeout(debug, 100);
   }
 }
->>>>>>> develop

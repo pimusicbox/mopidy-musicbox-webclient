@@ -316,21 +316,13 @@
 .currenttrack2 {
     background-image: url('../images/icons/play_alt_12x12.png');
     background-repeat: no-repeat;
-<<<<<<< HEAD
-    background-position: 4px center;
-=======
     background-position: 4px 51%;
->>>>>>> develop
 }
 .currenttrack {
     background-image: url('../images/icons/play_alt_16x16.png');
     background-repeat: no-repeat;
     background-color: #eee;
-<<<<<<< HEAD
-    background-position: 6px center;
-=======
     background-position: 4px 50%;
->>>>>>> develop
 }
 
 .currenttrack2 a {
@@ -592,18 +584,13 @@ a {
 }
 
 /* disable text selection for mouse swipe */
-<<<<<<< HEAD
-=======
 
->>>>>>> develop
 body * {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-<<<<<<< HEAD
-=======
 }
 /* but fix for text input (safari certainly needs it)*/
 input[type=text] {
@@ -611,5 +598,4 @@ input[type=text] {
   -webkit-user-select: text;
     -o-user-select: text;
     user-select: text;
->>>>>>> develop
 }
