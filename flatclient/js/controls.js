@@ -264,7 +264,7 @@ function setRandom(nwrandom) {
 
 function doRandom() {
     if (random == false) {
-        //mopidy.tracklist.setRandom(true).then();
+//	mopidy.tracklist.setRandom(true).then();
         mopidy.playback.setRandom(true).then();
     } else {
         //mopidy.tracklist.setRandom(false).then();
@@ -526,3 +526,14 @@ function saveRadioStations() {
     $.cookie('radioStations', radioStations);
 }
 
+function haltSystem() {
+    window.history.back();
+    $.post("/haltSystem");
+    toast('Stopping system...', 3000);
+}
+
+function rebootSystem() {
+    window.history.back();
+    $.post("/rebootSystem");
+    toast('Rebooting...', 3000);
+}
