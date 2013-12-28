@@ -135,7 +135,11 @@ function albumTracksToTable(pl, target, uri) {
     for (var i = 0; i < pl.length; i++) {
         popupData[pl[i].uri] = pl[i];
         liID = targetmin + '-' + pl[i].uri;
+<<<<<<< HEAD
         tmp += renderSongLi(pl[i], liID, uri);
+=======
+        tmp += renderSongLi(pl[i], liID, uri, 'playTrackByUri');
+>>>>>>> develop
 
         //child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
        // child += '<p style="float:right; display: inline;">' + timeFromSeconds(pl[i].length / 1000) + '</p><h1>' + pl[i].name + '</h1></a></li>';
@@ -146,6 +150,7 @@ function albumTracksToTable(pl, target, uri) {
     $(target).attr('data', uri);
 }
 
+<<<<<<< HEAD
 function renderSongLi(song, liID, uri){
     var hash = document.location.hash.split('?');
     //this is so dirty... ... ...
@@ -159,6 +164,9 @@ function renderSongLi(song, liID, uri){
 //    console.log(playlistType);
 
 //    songLi = '';
+=======
+function renderSongLi(song, liID, uri, playlistType){
+>>>>>>> develop
     songLi = '<li class="song albumli" id="' + liID + '">' +
         '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + '\');">' +
         '<i class="fa fa-ellipsis-vertical"></i>' +
@@ -171,14 +179,22 @@ function renderSongLi(song, liID, uri){
 }
 
 function resultsToTables(results, target, uri) {
+<<<<<<< HEAD
     var hash = document.location.hash.split('?');
     var divid = hash[0].substr(1), playlistType;
     if (divid == 'current') {
+=======
+//    console.log(target);
+    if (target == '#currenttable') {
+>>>>>>> develop
         playlistType = 'playTrackQueueByUri';
     } else {
         playlistType = 'playTrackByUri';
     }
+<<<<<<< HEAD
 //    console.log(playlistType);
+=======
+>>>>>>> develop
 
     var newalbum = [];
     var nexturi = '';
@@ -241,6 +257,7 @@ function resultsToTables(results, target, uri) {
                 html += '<li class="albumdivider">';
                 html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' +
                     targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1>' + results[i].album.name + '</h1><p>';
+<<<<<<< HEAD
                 for (j = 0; j < results[i].album.artists.length; j++) {
                     html += results[i].album.artists[j].name;
                     html += (j == results[i].album.artists.length - 1) ? '' : ' / ';
@@ -250,6 +267,19 @@ function resultsToTables(results, target, uri) {
                         break;
                     }
                 }
+=======
+		if (results[i].album.artists) {
+                    for (j = 0; j < results[i].album.artists.length; j++) {
+	                html += results[i].album.artists[j].name;
+    		        html += (j == results[i].album.artists.length - 1) ? '' : ' / ';
+    	                //stop after 3
+            	        if (j > 2) {
+                	    child += '...';
+                    	    break;
+                        }
+	            }
+		}
+>>>>>>> develop
                 html += '</p></a></li>';
                 for (j = 0; j < newalbum.length; j++) {
                     popupData[newalbum[j].uri] = newalbum[j];
@@ -257,7 +287,11 @@ function resultsToTables(results, target, uri) {
 
                     //hERE!
                     var liID = targetmin + '-' + newalbum[j].uri;
+<<<<<<< HEAD
                    html+= renderSongLi(newalbum[j], liID, uri);
+=======
+                   html+= renderSongLi(newalbum[j], liID, uri, playlistType);
+>>>>>>> develop
 
                     //html += '<li class="albumli" id="' + targetmin + '-' + newalbum[j].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[j].uri + '\');">';
                     //html += '<p class="pright">' + timeFromSeconds(newalbum[j].length / 1000) + '</p><h1>' + newalbum[j].name + '</h1></a></li>';

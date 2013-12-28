@@ -65,7 +65,11 @@ function playTrack(addtoqueue) {
     }
 
     mopidy.playback.play(); //tracks[selected]);
+<<<<<<< HEAD
     console.log(selected);
+=======
+    //console.log(selected);
+>>>>>>> develop
     return false;
 }
 
@@ -75,6 +79,10 @@ function playTrack(addtoqueue) {
  * @returns {boolean}
  */
 function playTrackByUri(uri, playlisturi){
+<<<<<<< HEAD
+=======
+    //console.log('playuri');
+>>>>>>> develop
     //stop directly, for user feedback
     mopidy.playback.stop(true);
     mopidy.tracklist.clear();
@@ -111,7 +119,11 @@ function playTrackByUri(uri, playlisturi){
     }
 
     mopidy.playback.play(); //tracks[selected]);
+<<<<<<< HEAD
     console.log(selected);
+=======
+//    console.log(selected);
+>>>>>>> develop
     return false;
 }
 
@@ -126,6 +138,10 @@ function playTrackByUri(uri, playlisturi){
  * @returns {boolean}
  */
 function playTrackQueueByUri(uri, playlisturi){
+<<<<<<< HEAD
+=======
+    //console.log('playqu');
+>>>>>>> develop
     //stop directly, for user feedback
 //console.log('qu');
     mopidy.playback.stop(true);
@@ -144,7 +160,11 @@ function playTrackQueueByUri(uri, playlisturi){
     }
 
     mopidy.playback.play(); //currentplaylist[track]);
+<<<<<<< HEAD
     console.log(track, currentplaylist[track]);
+=======
+    //console.log(track, currentplaylist[track]);
+>>>>>>> develop
     return false;
 }
 
@@ -262,8 +282,15 @@ function setRandom(nwrandom) {
 
 function doRandom() {
     if (random == false) {
+<<<<<<< HEAD
         mopidy.playback.setRandom(true).then();
     } else {
+=======
+//	mopidy.tracklist.setRandom(true).then();
+        mopidy.playback.setRandom(true).then();
+    } else {
+        //mopidy.tracklist.setRandom(false).then();
+>>>>>>> develop
         mopidy.playback.setRandom(false).then();
     }
     setRandom(!random);
@@ -271,8 +298,15 @@ function doRandom() {
 
 function doRepeat() {
     if (repeat == false) {
+<<<<<<< HEAD
         mopidy.playback.setRepeat(true).then();
     } else {
+=======
+        //mopidy.tracklist.setRepeat(true).then();
+        mopidy.playback.setRepeat(true).then();
+    } else {
+        //mopidy.tracklist.setRepeat(false).then();
+>>>>>>> develop
         mopidy.playback.setRepeat(false).then();
     }
     setRepeat(!repeat);
@@ -520,3 +554,17 @@ function saveRadioStations() {
     $.cookie('radioStations', radioStations);
 }
 
+<<<<<<< HEAD
+=======
+function haltSystem() {
+    window.history.back();
+    $.post("/haltSystem");
+    toast('Stopping system...', 3000);
+}
+
+function rebootSystem() {
+    window.history.back();
+    $.post("/rebootSystem");
+    toast('Rebooting...', 3000);
+}
+>>>>>>> develop

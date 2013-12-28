@@ -46,7 +46,11 @@ function processSearchResults(resultArr) {
     var results = {'tracks': [], 'artists': [], 'albums': []};
     var emptyResult = true;
 
+<<<<<<< HEAD
     console.log(resultArr, 'resultArr');
+=======
+//    console.log(resultArr, 'resultArr');
+>>>>>>> develop
 
     for (var i = 0; i < resultArr.length; ++i) {
         for (var prop in results) {
@@ -134,7 +138,12 @@ function processSearchResults(resultArr) {
     $('#expandsearch').show();
 
     // Track results
+<<<<<<< HEAD
     playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
+=======
+//    playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
+    resultsToTables(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
+>>>>>>> develop
 
     setSongInfo();
     showLoading(false);
