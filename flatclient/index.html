@@ -90,7 +90,7 @@
         </li>
         <li id="" data-icon="false">
             <div><!-- slider for volume -->
-                <a href="#" onclick="doMute(); return false;"><img id="mutebt" src="images/icons/volume_16x12.png" alt=""/></a>
+                <a href="#" onclick="doMute(); return false;"><i class="fa fa-volume-up" id="mutebt"></i></a>
                 <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
                 <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
                        value="0" max="100" onchange="doVolume(this.value);"/>
@@ -356,15 +356,15 @@
     <!--id="shufflebt" alt=""/></a>-->
 
     <p id="buttons"' style="float:right; margin-top: 20px; margin-right: 5px;">
-            <a href="#" onclick="doRandom(); return false"><img src="images/icons/loop_alt2_16x14.png" alt="" id="randombt" /></a>
-            &nbsp; <a href="#" onclick="doRepeat(); return false"><img src="images/icons/reload_12x14.png" id="repeatbt" alt="" /></a>
-            &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><img src="images/icons/fork_21x24.png" id="shufflebt" alt="" /></a>
+            <a href="#" onclick="doRandom(); return false"><i class="fa fa-random" id="randombt"></i></a>
+            &nbsp; <a href="#" onclick="doRepeat(); return false"><i class="fa fa-repeat" id="repeatbt"></i></a>
+            &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><i class="fa fa-code-fork" id="shufflebt"></i></a>
     </p>
 
         <div class="nowPlayingControls" style="float:left; margin-left: 5px;">
             <a href="#" onclick="doPrevious(); return false"><span id="btprev"><i class="fa fa-fast-backward"></i></span></a>
-            <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying"><i class="fa fa-play"></i></span></a>
-            <a href="#" onclick="doNext(); return false"><span id="btnext"><i class="fa fa-fast-forward"></i></span></a>
+            &nbsp; <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying"><i class="fa fa-play"></i></span></a>
+            &nbsp; <a href="#" onclick="doNext(); return false"><span id="btnext"><i class="fa fa-fast-forward"></i></span></a>
         </div>
 </div>
 <!-- /footer -->

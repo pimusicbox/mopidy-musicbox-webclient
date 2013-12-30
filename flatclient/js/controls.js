@@ -543,13 +543,13 @@ function saveRadioStations() {
 }
 
 function haltSystem() {
-    window.history.back();
     $.post("/haltSystem");
-    toast('Stopping system...', 3000);
+    toast('Stopping system...', 10000);
+    setTimeout(function(){window.history.back();}, 10000);
 }
 
 function rebootSystem() {
-    window.history.back();
     $.post("/rebootSystem");
-    toast('Rebooting...', 3000);
+    toast('Rebooting...', 10000);
+    setTimeout(function(){window.history.back();}, 10000);
 }
