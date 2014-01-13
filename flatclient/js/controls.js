@@ -46,18 +46,20 @@ function playTrack(addtoqueue) {
             return false;
     }
 
-// first add track to be played, then the other tracks
+//normal    mopidy.tracklist.add(tracks);
 
-//    mopidy.tracklist.add(null, 0, playlisturi);
-    mopidy.tracklist.add(tracks); //.slice(selected, selected + 1) );
+//test    mopidy.tracklist.add(null, 0, playlisturi);
+
+// first add track to be played, then the other tracks
+    mopidy.tracklist.add(tracks.slice(selected, selected + 1) );
     //wait 1.5 second before adding the rest to give server the time to start playing
-    /*    setTimeout(function() {
-     mopidy.tracklist.add(tracks.slice(0, selected), 0);
-     if (selected < tracks.length) {
-     mopidy.tracklist.add(tracks.slice(selected + 1) );
-     }
-     }, 1500);
-     */
+    setTimeout(function() {
+	mopidy.tracklist.add(tracks.slice(0, selected), 0);
+	if (selected < tracks.length) {
+	    mopidy.tracklist.add(tracks.slice(selected + 1) );
+	}
+    }, 1500);
+     
 //    mopidy.playback.changeTrack(tracks[selected]);
 
     for (var i = 0; i <= selected; i++) {
