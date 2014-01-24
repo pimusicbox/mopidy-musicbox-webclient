@@ -248,6 +248,7 @@ function initSocketevents() {
         getCurrentPlaylist();
         updateStatusOfAll();
         getPlaylists();
+	getBrowseDir();
         showLoading(false);
         $(window).hashchange();
     });
@@ -421,6 +422,9 @@ function locationHashChanged() {
         case 'playlists':
             $('#navplaylists a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;
+        case 'browse':
+            $('#navbrowse a').addClass('ui-state-active ui-state-persist ui-btn-active');
+            break;
         case 'search':
             $('#navsearch a').addClass($.mobile.activeBtnClass);
             $("#searchinput").focus();
@@ -480,7 +484,7 @@ $(document).ready(function(event) {
 
     // Connect to server
     mopidy = new Mopidy();
-//    mopidy.on(console.log.bind(console));  // Log all events
+    mopidy.on(console.log.bind(console));  // Log all events
 
     //initialize events
     initSocketevents();

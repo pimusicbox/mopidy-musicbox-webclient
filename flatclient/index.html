@@ -63,6 +63,10 @@
             <a href="#playlists" onclick="switchContent('playlists' ); return false;">
                 <span class="navtxt"> Playlists </span><i class="fa  fa-star"></i></a>
         </li>
+        <li id="navbrowse" data-icon="false">
+            <a href="#browse" onclick="switchContent('browse' ); return false;">
+                <span class="navtxt"> Browse </span><i class="fa  fa-folder"></i></a>
+        </li>
         <li id="navcurrent" data-icon="false">
             <a href="#current" onclick="switchContent('current' ); return false;">
                 <span class="navtxt">Queue </span><i class="fa fa-align-left"></i></a>
@@ -204,13 +208,16 @@
     </div>
     <div class="ui-block-b scroll" id="playlisttracksdiv">
         <ul class="table" id="playlisttracks"></ul>
-        <!--                    <ul id="playlisttracks"></ul> -->
-        <!--                    <ul data-role="listview" data-theme="c" data-icon="false" id="playlisttracks" data-inset="true"></ul> -->
     </div>
 
 </div>
 <!--/playlistspane-->
 
+<div data-role="content" id="browsepane" class="pane">
+    <h3>Browse</h3>
+        <ul id="browselist" class="table"></ul>
+</div>
+<!--/browsepane-->
 
 <div id="nowPlayingpane" data-role="content" class="pane">
 

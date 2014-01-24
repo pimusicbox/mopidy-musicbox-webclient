@@ -56,6 +56,73 @@ function processPlaystate(data) {
 }
 
 /********************************************************
+ * process results of a browse list
+ *********************************************************/
+function processBrowseDir(resultArr) {
+    /*<p><ul><li>Donec id elit non mi porta</li><li>Gravida at eget metus. Fusce dapibus.</li><li>Tellus ac cursus commodo</li></p>
+     <p><a class="btn" href="#">More &raquo;</a></p>
+     */
+
+    if ((!resultArr) || (resultArr == '')) {
+        return;
+    }
+    console.log(resultArr);
+
+    if (resultArr.length == 0) {
+	return;
+    }
+
+    $('#browselist').empty();
+
+    var child = "", rooturi = "", uri = resultArr[0].uri;
+
+    //check root uri
+    //find last : or / (spltting the result)
+    //do it twice, since.
+    var colonindex = uri.lastIndexOf(':');
+    var slashindex = uri.lastIndexOf('/');
+
+    var lastindex = (colonindex > slashindex) ? colonindex : slashindex;
+    rooturi = uri.slice(0, lastindex);
+    if (resultArr[0].type == 'track' ) {
+        rooturi = rooturi.replace(":track:", ":directory:");
+    }
+
+    console.log(uri, lastindex, rooturi);
+
+    colonindex = rooturi.lastIndexOf(':');
+    slashindex = rooturi.lastIndexOf('/');
+
+    lastindex = (colonindex > slashindex) ? colonindex : slashindex;
+    rooturi = rooturi.slice(0, lastindex);
+    
+    console.log(rooturi);
+
+    if (rooturi.indexOf(':') == -1 ) {
+	rooturi = '';
+	child += '<li><a href="#" onclick="return getBrowseDir();">..</a></li>';
+    } else {
+	child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + rooturi + '">..</a></li>';
+    }
+
+    console.log('new:' + rooturi);
+
+
+    console.log('a1');
+    for (var i = 0; i < resultArr.length; i++) {
+	if(resultArr[i].type == 'track' ) {
+            child += '<li><a href="#" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
+	} else {
+            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
+	}
+    };
+    console.log(child);
+    $('#browselist').html(child);
+//    scrollToTracklist();
+    showLoading(false);
+}
+
+/********************************************************
  * process results of list of playlists of the user
  *********************************************************/
 function processGetPlaylists(resultArr) {

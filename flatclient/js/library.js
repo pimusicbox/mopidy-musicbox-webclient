@@ -147,12 +147,19 @@ function toggleSearch() {
 }
 
 /*********************************
- * Playlists
+ * Playlists & Browse
  *********************************/
 
 function getPlaylists() {
     //  get playlists without tracks
     mopidy.playlists.getPlaylists(false).then(processGetPlaylists, console.error);
+}
+
+function getBrowseDir(rootdir) {
+    //  get directory to browse
+    console.log('browse init: ' + rootdir);
+    showLoading(true);
+    mopidy.library.browse(rootdir).then(processBrowseDir, console.error);
 }
 
 function getCurrentPlaylist() {
