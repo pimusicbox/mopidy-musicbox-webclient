@@ -42,7 +42,7 @@ function resizeMb() {
 
 
 //initialize iScroll if MobileWebkit and large window
-    if (isMobileWebkit && $(window).width() > 480) {
+/*    if (isMobileWebkit && $(window).width() > 480) {
         if (!playlistslistScroll) {
                 playlistslistScroll = new iScroll('playlistslistdiv');
                 playlisttracksScroll = new iScroll('playlisttracksdiv');
@@ -55,7 +55,7 @@ function resizeMb() {
                 playlisttracksScroll = null;
             }
         }
-
+*/
 //    //set height of playlist scrollers
 
     if ($(window).width() > 480) {
@@ -68,11 +68,12 @@ function resizeMb() {
         $('.scroll').addClass('height', '99%').addClass('width', '99%');
         $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
     }
-
+/*
     if (isMobileWebkit && ($(window).width() > 480)) {
         playlistslistScroll.refresh();
         playlisttracksScroll.refresh();
     }
+*/
 }
 
 function setSongInfo(data) {

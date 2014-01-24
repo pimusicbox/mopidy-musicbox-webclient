@@ -319,7 +319,7 @@
     background-position: 4px 51%;
 }
 .currenttrack {
-    background-image: url('../images/icons/play_alt_16x16.png');
+    background-image: url('../images/icons/play_alt_16x16.png'); 
     background-repeat: no-repeat;
     background-color: #eee;
     background-position: 4px 50%;
@@ -331,9 +331,6 @@
 .currenttrack a {
     margin-left: 20px;
 }
-
-
-
 
 .song .moreBtn{
     float: right;
