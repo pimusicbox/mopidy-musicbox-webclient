@@ -157,7 +157,7 @@ function getPlaylists() {
 
 function getBrowseDir(rootdir) {
     //  get directory to browse
-    console.log('browse init: ' + rootdir);
+//    console.log('browse init: ' + rootdir);
     showLoading(true);
     mopidy.library.browse(rootdir).then(processBrowseDir, console.error);
 }

@@ -484,7 +484,7 @@ $(document).ready(function(event) {
 
     // Connect to server
     mopidy = new Mopidy();
-    mopidy.on(console.log.bind(console));  // Log all events
+//    mopidy.on(console.log.bind(console));  // Log all events
 
     //initialize events
     initSocketevents();

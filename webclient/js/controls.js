@@ -8,31 +8,29 @@ function playBrowsedTracks(addtoqueue, trackid) {
         mopidy.tracklist.clear();
     }
     toast('Loading...');
+    var selected = 0, counter = 0;
 
-// first add track to be played, then the other tracks
-    mopidy.tracklist.add(trackid);
-//    mopidy.tracklist.add({ 'uri':trackid });
-    
-    console.log(trackid);
-    return false;
+//only add one station for dirble, otherwise add all tracks
+    if ( trackid.indexOf('dirble') != -1 ) {
+	mopidy.tracklist.add(null, null, trackid);
+    } else {
+        //add all items in the playlist
+	$('.browsetrack').each(function() { 
+	    mopidy.tracklist.add(null, null, this.id);
+    	    if (this.id = trackid) {
+		    selected = counter;
+		}
+		counter++;
+        } );
+    }
 
-    //wait 1.5 second before adding the rest to give server the time to start playing
-    setTimeout(function() {
-	mopidy.tracklist.add(tracks.slice(0, selected), 0);
-	if (selected < tracks.length) {
-	    mopidy.tracklist.add(tracks.slice(selected + 1) );
-	}
-    }, 1500);
-     
-
-//    mopidy.playback.changeTrack(tracks[selected]);
+    selected = counter - selected;
 
     for (var i = 0; i <= selected; i++) {
         mopidy.playback.next();
     }
 
     mopidy.playback.play(); //tracks[selected]);
-    //console.log(selected);
     return false;
 
 }

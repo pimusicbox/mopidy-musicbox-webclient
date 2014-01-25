@@ -66,7 +66,7 @@ function processBrowseDir(resultArr) {
     if ((!resultArr) || (resultArr == '')) {
         return;
     }
-    console.log(resultArr);
+//    console.log(resultArr);
 
     if (resultArr.length == 0) {
 	return;
@@ -88,7 +88,7 @@ function processBrowseDir(resultArr) {
         rooturi = rooturi.replace(":track:", ":directory:");
     }
 
-    console.log(uri, lastindex, rooturi);
+//    console.log(uri, lastindex, rooturi);
 
     colonindex = rooturi.lastIndexOf(':');
     slashindex = rooturi.lastIndexOf('/');
@@ -96,7 +96,7 @@ function processBrowseDir(resultArr) {
     lastindex = (colonindex > slashindex) ? colonindex : slashindex;
     rooturi = rooturi.slice(0, lastindex);
     
-    console.log(rooturi);
+//    console.log(rooturi);
 
     if (rooturi.indexOf(':') == -1 ) {
 	rooturi = '';
@@ -105,20 +105,19 @@ function processBrowseDir(resultArr) {
 	child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + rooturi + '">..</a></li>';
     }
 
-    console.log('new:' + rooturi);
+//    console.log('new:' + rooturi);
 
-
-    console.log('a1');
     for (var i = 0; i < resultArr.length; i++) {
 	if(resultArr[i].type == 'track' ) {
-            child += '<li><a href="#" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
+            child += '<li><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
 	} else {
             child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
 	}
     };
-    console.log(child);
+//    console.log(child);
+
     $('#browselist').html(child);
-//    scrollToTracklist();
+
     showLoading(false);
 }
 
@@ -177,6 +176,7 @@ function processGetTracklist(resultArr) {
  *********************************************************/
 function processCurrentPlaylist(resultArr) {
     currentplaylist = resultArr;
+//    console.log(resultArr);
     resultsToTables(resultArr, CURRENT_PLAYLIST_TABLE);
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
 }
