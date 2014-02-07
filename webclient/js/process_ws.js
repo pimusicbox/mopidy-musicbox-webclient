@@ -66,7 +66,7 @@ function processBrowseDir(resultArr) {
     if ((!resultArr) || (resultArr == '')) {
         return;
     }
-//    console.log(resultArr);
+    console.log(resultArr);
 
     if (resultArr.length == 0) {
 	return;
@@ -100,18 +100,19 @@ function processBrowseDir(resultArr) {
 
     if (rooturi.indexOf(':') == -1 ) {
 	rooturi = '';
-	child += '<li><a href="#" onclick="return getBrowseDir();">..</a></li>';
+	child += '<li><a href="#" onclick="return getBrowseDir();"><h1 class="trackname">..</h1></a></li>';
     } else {
-	child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + rooturi + '">..</a></li>';
+	child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + rooturi + '"><h1 class="trackname">..</h1></a></li>';
     }
 
 //    console.log('new:' + rooturi);
 
     for (var i = 0; i < resultArr.length; i++) {
 	if(resultArr[i].type == 'track' ) {
-            child += '<li><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
+//	    console.log(resultArr[i]);
+            child += '<li><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + '""><h1 class="trackname">' + resultArr[i].name + '</h1></a></li>';
 	} else {
-            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
+            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + '""><h1 class="trackname">' + resultArr[i].name + '</h1></a></li>';
 	}
     };
 //    console.log(child);

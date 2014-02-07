@@ -9,7 +9,6 @@ function playBrowsedTracks(addtoqueue, trackid) {
     }
     toast('Loading...');
     var selected = 0, counter = 0;
-
 //only add one station for dirble, otherwise add all tracks
     if ( trackid.indexOf('dirble') != -1 ) {
 	mopidy.tracklist.add(null, null, trackid);
@@ -17,14 +16,12 @@ function playBrowsedTracks(addtoqueue, trackid) {
         //add all items in the playlist
 	$('.browsetrack').each(function() { 
 	    mopidy.tracklist.add(null, null, this.id);
-    	    if (this.id = trackid) {
+    	    if (this.id == trackid) {
 		    selected = counter;
-		}
-		counter++;
+	    }
+	    counter++;
         } );
     }
-
-    selected = counter - selected;
 
     for (var i = 0; i <= selected; i++) {
         mopidy.playback.next();

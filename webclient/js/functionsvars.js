@@ -71,7 +71,7 @@ TRACK_TIMER = 1000;
 
 //check status timer, every 5 or 10 sec
 STATUS_TIMER = 10000;
-
+/*
 var radioStations = [];
 //fill with defaults
     radioStations.push(['NPR 24', 'http://nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3']);
@@ -80,7 +80,7 @@ var radioStations = [];
     radioStations.push(['Arrow Jazz', 'http://81.173.3.132:8082']);
     radioStations.push(['PBS Australia', 'http://eno.emit.com:8000/pbsfm_live_64.mp3']);
     radioStations.push(['Kiss FM Berlin', 'http://stream.kissfm.de/kissfm/mp3-128/internetradio/']);
-
+*/
 
 /*******
  *

@@ -259,6 +259,7 @@ function initSocketevents() {
     });
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
+	console.log(mopidy);
         mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
         setPlayState(true);
         setSongInfo(data.tl_track.track);
@@ -310,7 +311,7 @@ $(document).bind("pageinit", function() {
 });
 
 /************************
- * diverse
+ * gui stuff
  ************************/
 function enterFullscreen() {
     if (isMobileSafari) { alert ("To get this app in Full Screen, you have to add it to your home-screen using the Share button."); exit(); }
@@ -485,7 +486,7 @@ $(document).ready(function(event) {
     // Connect to server
     mopidy = new Mopidy();
 //    mopidy.on(console.log.bind(console));  // Log all events
-
+//    mopidy.on(console.error.bind(console));
     //initialize events
     initSocketevents();
 
@@ -498,9 +499,6 @@ $(document).ready(function(event) {
 
     initgui = false;
     window.onhashchange = locationHashChanged;
-    // Log all events
-    //mopidy.on(function() {
-    //});
 
     //update gui status every x seconds from mopdidy
     setInterval(updateTimer, STATUS_TIMER);
@@ -584,14 +582,4 @@ $(document).ready(function(event) {
 			event.stopImmediatePropagation(); }
 		    } ); 
 
-//mopidy.on("state:online", debug);
-
 });
-
-function debug() {
-  if (mopidy.tracklist === undefined) {
-    alert('Broke at ' +  new Date());
-  } else {
-    setTimeout(debug, 100);
-  }
-}
