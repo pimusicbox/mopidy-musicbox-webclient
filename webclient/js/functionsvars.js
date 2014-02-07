@@ -159,7 +159,7 @@ function renderSongLi(song, liID, uri, playlistType){
 }
 
 function resultsToTables(results, target, uri) {
-//    console.log(target);
+//    console.log(results);
     if (target == '#currenttable') {
         playlistType = 'playTrackQueueByUri';
     } else {
@@ -180,18 +180,17 @@ function resultsToTables(results, target, uri) {
     $(target).attr('data', uri);
     var length = 0 || results.length;
     for ( i = 0; i < length; i++) {
-            newalbum.push(results[i]);
-	    nexturi = '';
+        newalbum.push(results[i]);
+	nexturi = '';
         if (i < length - 1) {
             nexturi = results[i + 1].album.uri;
         }
-        if (!results[i].album) {
-	    if (results[i].uri) {
-    		var name = results[i].name || results[i].uri;
-                html += '<li class="albumli"><a href="#"><h1>' + name + ' [Stream]</h1></a></li>';
-                newalbum = [];
-		    nexturi = '';
-	    }
+//console.log(results[i]);
+        if (!results[i].album || (results[i].length == -1)) {
+	    var name = results[i].name || results[i].uri;
+            html += '<li class="albumli"><a href="#"><h1>' + name + ' [Stream]</h1></a></li>';
+            newalbum = [];
+	    nexturi = '';
 	} else {
 	  if (results[i].album.uri != nexturi) {
             tableid = 'art' + i;

@@ -66,7 +66,7 @@ function processBrowseDir(resultArr) {
     if ((!resultArr) || (resultArr == '')) {
         return;
     }
-    console.log(resultArr);
+//    console.log(resultArr);
 
     if (resultArr.length == 0) {
 	return;

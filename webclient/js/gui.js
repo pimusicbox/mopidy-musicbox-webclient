@@ -259,7 +259,6 @@ function initSocketevents() {
     });
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
-	console.log(mopidy);
         mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
         setPlayState(true);
         setSongInfo(data.tl_track.track);
