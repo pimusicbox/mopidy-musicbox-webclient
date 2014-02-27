@@ -98,13 +98,15 @@ function processBrowseDir(resultArr) {
     
 //    console.log(rooturi);
 
-    if (rooturi.indexOf(':') == -1 ) {
+    child += '<li><a href="#" onclick="return getBrowseDir();"><h1 class="trackname">..</h1></a></li>';
+
+/*    if (rooturi.indexOf(':') == -1 ) {
 	rooturi = '';
 	child += '<li><a href="#" onclick="return getBrowseDir();"><h1 class="trackname">..</h1></a></li>';
     } else {
 	child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + rooturi + '"><h1 class="trackname">..</h1></a></li>';
     }
-
+*/
 //    console.log('new:' + rooturi);
 
     for (var i = 0; i < resultArr.length; i++) {

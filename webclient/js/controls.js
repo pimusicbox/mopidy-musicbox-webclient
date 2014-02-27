@@ -81,7 +81,8 @@ function playTrack(addtoqueue) {
             return false;
     }
 
-//normal    mopidy.tracklist.add(tracks);
+//normal    
+//    mopidy.tracklist.add(tracks);
 
 //test    mopidy.tracklist.add(null, 0, playlisturi);
 
