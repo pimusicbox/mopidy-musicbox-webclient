@@ -77,7 +77,7 @@ function resizeMb() {
 }
 
 function setSongInfo(data) {
-    if (!data) { return; }
+    if (!data || (songdata == data) ) { return; }
     if (data.name == '') {
         return;
     };
@@ -120,11 +120,7 @@ function setSongInfo(data) {
     if (data.name && (songdata.name == data.name)) {
 	return;
     }
-    if (data) {
-        songdata = data;
-    } else {
-        data = songdata;
-    }
+    songdata = data;
     artistshtml = '';
     artiststext = '';
 
@@ -144,6 +140,8 @@ function setSongInfo(data) {
 	$("#songlength").html('');
 	pauseTimer();
 	$('#trackslider').slider('disable');
+	$('#radionameinput').val(data.name);
+	$('#radiouriinput').val(data.uri);
     } else {
         songlength = data.length;
 	$("#songlength").html(timeFromSeconds(data.length / 1000));

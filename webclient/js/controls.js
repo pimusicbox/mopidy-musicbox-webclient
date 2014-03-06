@@ -9,8 +9,8 @@ function playBrowsedTracks(addtoqueue, trackid) {
     }
     toast('Loading...');
     var selected = 0, counter = 0;
-//only add one station for dirble, otherwise add all tracks
-    if ( trackid.indexOf('dirble') != -1 ) {
+    //only add one station for dirble, otherwise add all tracks
+    if (isRadioUri(trackid)) {
 	mopidy.tracklist.add(null, null, trackid);
     } else {
         //add all items in the playlist
@@ -514,7 +514,7 @@ function addRadioUri(name, uri) {
         $('#radionameinput').val('');
     }
     uri = uri || $('#radiouriinput').val();
-    if (validUri(uri)) {
+    if (isRadioUri(uri)) {
         toast('Selecting radiostation...');
         //stop directly, for user feedback
         mopidy.playback.stop(true);

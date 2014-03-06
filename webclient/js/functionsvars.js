@@ -47,6 +47,9 @@ var customTracklists = [];
 var ua = navigator.userAgent,
   isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua), isMobileWebkit = /WebKit/.test(ua) && /Mobile/.test(ua), isMobile = /Mobile/.test(ua), isWebkit = /WebKit/.test(ua);
 
+// the first part of Mopidy extensions which serve radiostations (streams)
+var radioExtensionsUris = ['somafm', 'tunein', 'dirble'];
+
 //constants
 PROGRAM_NAME = 'MusicBox';
 //PROGRAM_NAME = 'Mopidy';
@@ -423,3 +426,8 @@ $.event.special.swipe = $.extend($.event.special.swipe, {
         }
 });
 */
+
+function isRadioUri (uri) {
+    var uriSplit = uri.split(":");
+    return validUri || radioExtensionsUris.indexOf(uriSplit[0].toLowerCase()) >= 0;
+}
