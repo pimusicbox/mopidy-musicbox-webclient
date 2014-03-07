@@ -11,7 +11,6 @@ function playBrowsedTracks(addtoqueue, trackid) {
     var selected = 0, counter = 0;
     //only add one station for dirble, otherwise add all tracks
     if (isRadioUri(trackid)) {
-	alert(trackid);
 	mopidy.tracklist.add(null, null, trackid);
     } else {
         //add all items in the playlist

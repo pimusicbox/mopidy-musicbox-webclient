@@ -77,11 +77,11 @@ function resizeMb() {
 }
 
 function setSongInfo(data) {
-    if (!data || (songdata == data) ) { return; }
-    if (data.name == '') {
-//	data.name = data.uri;
-        return;
+    if (!data.name || data.name == '') {
+	var name = data.uri.split('/');
+	data.name = decodeURI(name[name.length - 1]);
     };
+    if (!data || (songdata == data) ) { return; }
 
     //update styles of listviews
     $('#currenttable li').each(function() {
@@ -118,9 +118,6 @@ function setSongInfo(data) {
     });
     
     
-    if (data.name && (songdata.name == data.name)) {
-	return;
-    }
     songdata = data;
     artistshtml = '';
     artiststext = '';
@@ -133,6 +130,7 @@ function setSongInfo(data) {
 	}
     };
     }
+	console.log(data);
     
     $("#modalname").html(data.name);
 
@@ -163,7 +161,7 @@ function setSongInfo(data) {
         arttmp = artistshtml;
     }
 
-    if (data.album) {
+    if (data.album && data.album.name) {
         $("#modalalbum").html('<a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
         getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
     } else {

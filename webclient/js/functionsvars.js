@@ -150,11 +150,18 @@ function albumTracksToTable(pl, target, uri) {
 }
 
 function renderSongLi(song, liID, uri, playlistType){
+    var name;
+    if (!song.name || song.name == '') {
+	name = data.uri.split('/');
+	name = decodeURI(name[name.length - 1]);
+    } else {
+	name = song.name;
+    }
     songLi = '<li class="song albumli" id="' + liID + '">' +
         '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + '\');">' +
         '<i class="fa fa-ellipsis-vertical"></i>' +
         '</a>' +'<a href="#" onclick="return ' + playlistType + '(\'' + song.uri + '\',\'' + uri + '\');">' +
-        '<h1 class="trackname">'+song.name+'</h1>' +
+        '<h1 class="trackname">'+ name + '</h1>' +
         '</a>' +
 
         '</li>';
@@ -188,14 +195,13 @@ function resultsToTables(results, target, uri) {
         if (i < length - 1) {
             nexturi = results[i + 1].album.uri;
         }
-//console.log(results[i]);
         if (!results[i].album || (results[i].length == -1)) {
 	    var name = results[i].name || results[i].uri;
             html += '<li class="albumli"><a href="#"><h1>' + name + ' [Stream]</h1></a></li>';
             newalbum = [];
 	    nexturi = '';
 	} else {
-	  if (results[i].album.uri != nexturi) {
+	  if (results[i].album.uri && (results[i].album.uri != nexturi)) {
             tableid = 'art' + i;
             //render differently if only one track in the album
             if ( newalbum.length == 1 ) {
@@ -226,9 +232,12 @@ function resultsToTables(results, target, uri) {
                 newalbum = [];
 		
             } else {
-                html += '<li class="albumdivider">';
-                html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' +
-                    targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1>' + results[i].album.name + '</h1><p>';
+		if ( results[i].album.uri && results[i].album.name) {
+                    html += '<li class="albumdivider">';
+	            html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' +
+    	                targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1>' + results[i].album.name + '</h1><p>';
+		}
+console.log(i);
 		if (results[i].album.artists) {
                     for (j = 0; j < results[i].album.artists.length; j++) {
 	                html += results[i].album.artists[j].name;
