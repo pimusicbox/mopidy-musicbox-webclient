@@ -429,5 +429,5 @@ $.event.special.swipe = $.extend($.event.special.swipe, {
 
 function isRadioUri (uri) {
     var uriSplit = uri.split(":");
-    return validUri || radioExtensionsUris.indexOf(uriSplit[0].toLowerCase()) >= 0;
+    return validUri(uri) || radioExtensionsUris.indexOf(uriSplit[0].toLowerCase()) >= 0;
 }

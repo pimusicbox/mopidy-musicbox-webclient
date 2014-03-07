@@ -9,6 +9,7 @@
  * process results of a (new) currently playing track
  *********************************************************/
 function processCurrenttrack(data) {
+//    console.log(data);
     setSongInfo(data);
 }
 
@@ -49,7 +50,7 @@ function processCurrentposition(data) {
 function processPlaystate(data) {
     if (data == 'playing') {
         setPlayState(true);
-        resumeTimer();
+        resumePosTimer();
     } else {
         setPlayState(false);
     }

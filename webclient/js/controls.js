@@ -11,6 +11,7 @@ function playBrowsedTracks(addtoqueue, trackid) {
     var selected = 0, counter = 0;
     //only add one station for dirble, otherwise add all tracks
     if (isRadioUri(trackid)) {
+	alert(trackid);
 	mopidy.tracklist.add(null, null, trackid);
     } else {
         //add all items in the playlist
@@ -391,7 +392,7 @@ function doSeekPos(value) {
     var val = $("#trackslider").val();
     newposition = Math.round(val);
     if (!initgui) {
-        pauseTimer();
+        pausePosTimer();
         //set timer to not trigger it too much
         clearTimeout(seekTimer);
         $("#songelapsed").html(timeFromSeconds(val / 1000));
@@ -406,7 +407,7 @@ function triggerPos() {
 //	console.log(newposition);
         mopidy.playback.seek(newposition);
 //        mopidy.playback.resume();
-        resumeTimer();
+        resumePosTimer();
         posChanging = false;
     }
 }
@@ -418,7 +419,7 @@ function setPosition(pos) {
     var oldval = initgui;
     if (pos > songlength) {
         pos = songlength;
-        pauseTimer();
+        pausePosTimer();
     }
     currentposition = pos;
     initgui = true;
@@ -467,30 +468,30 @@ function doMute() {
 }
 
 /*******
- * Track timer
+ * Track position timer
  */
 
 //timer function to update interface
-function updateTimer() {
+function updatePosTimer() {
     currentposition += TRACK_TIMER;
     setPosition(currentposition);
     //    $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
 }
 
-function resumeTimer() {
-    pauseTimer();
+function resumePosTimer() {
+    pausePosTimer();
     if (songlength > 0) {
-        posTimer = setInterval(updateTimer, TRACK_TIMER);
+        posTimer = setInterval(updatePosTimer, TRACK_TIMER);
     }
 }
 
-function initTimer() {
-    pauseTimer();
+function initPosTimer() {
+    pausePosTimer();
     // setPosition(0);
-    resumeTimer();
+    resumePosTimer();
 }
 
-function pauseTimer() {
+function pausePosTimer() {
     clearInterval(posTimer);
 }
 

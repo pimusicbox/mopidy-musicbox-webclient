@@ -8,7 +8,7 @@
  ********************/
 function resetSong() {
     if (!posChanging) {
-        pauseTimer();
+        pausePosTimer();
 
         setPlayState(false);
         setPosition(0);
@@ -79,6 +79,7 @@ function resizeMb() {
 function setSongInfo(data) {
     if (!data || (songdata == data) ) { return; }
     if (data.name == '') {
+//	data.name = data.uri;
         return;
     };
 
@@ -138,7 +139,7 @@ function setSongInfo(data) {
     if (!data.length || data.length == 0) {
         songlength = 0;
 	$("#songlength").html('');
-	pauseTimer();
+	pausePosTimer();
 	$('#trackslider').slider('disable');
 	$('#radionameinput').val(data.name);
 	$('#radiouriinput').val(data.uri);
@@ -260,12 +261,12 @@ function initSocketevents() {
         mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
         setPlayState(true);
         setSongInfo(data.tl_track.track);
-        initTimer();
+        initPosTimer();
     });
 
     mopidy.on("event:trackPlaybackPaused", function(data) {
         //setSongInfo(data.tl_track.track);
-        pauseTimer();
+        pausePosTimer();
         setPlayState(false);
     });
 
@@ -287,7 +288,7 @@ function initSocketevents() {
                 break;
             case "playing":
                 mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-                resumeTimer();
+                resumePosTimer();
                 setPlayState(true);
                 break;
         }
@@ -368,7 +369,7 @@ function setHeadline(site){
 }
 
 //update timer
-function updateTimer() {
+function updateStatusTimer() {
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     //TODO check offline?
@@ -498,7 +499,8 @@ $(document).ready(function(event) {
     window.onhashchange = locationHashChanged;
 
     //update gui status every x seconds from mopdidy
-    setInterval(updateTimer, STATUS_TIMER);
+    setInterval(updateStatusTimer, STATUS_TIMER);
+
     //only show backbutton if in UIWebview
     if (window.navigator.standalone) {
         $("#btback").show();
