@@ -9,14 +9,13 @@
 function resetSong() {
     if (!posChanging) {
         pausePosTimer();
-
         setPlayState(false);
         setPosition(0);
         var data = new Object;
         data.name = '';
         data.artists = '';
         data.length = 0;
-        data.uri = '';
+        data.uri = ' ';
         setSongInfo(data);
     }
 }
@@ -25,37 +24,6 @@ function resetSong() {
 function resizeMb() {
     $("#infoname").html(songdata.name);
     $("#infoartist").html(artiststext);
-//    //bug in truncate?
-//    var spanwidth = $("#infoartist").width() - 38;
-//    $("#infoname").truncate({
-//        width : spanwidth,
-//        token : '&hellip;',
-//        center : true,
-//        multiline : false
-//    });
-//    $("#infoartist").truncate({
-//        width : spanwidth,
-//        token : '&hellip;',
-//        center : true,
-//        multiline : false
-//    });
-
-
-//initialize iScroll if MobileWebkit and large window
-/*    if (isMobileWebkit && $(window).width() > 480) {
-        if (!playlistslistScroll) {
-                playlistslistScroll = new iScroll('playlistslistdiv');
-                playlisttracksScroll = new iScroll('playlisttracksdiv');
-            }
-        } else {
-            if (playlistslistScroll) {
-                playlistslistScroll.destroy();
-                playlistslistScroll = null;
-                playlisttracksScroll.destroy();
-                playlisttracksScroll = null;
-            }
-        }
-*/
 //    //set height of playlist scrollers
 
     if ($(window).width() > 480) {
@@ -67,7 +35,7 @@ function resizeMb() {
     } else {
         $('.scroll').addClass('height', '99%').addClass('width', '99%');
         $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
-    }
+    }	
 /*
     if (isMobileWebkit && ($(window).width() > 480)) {
         playlistslistScroll.refresh();
@@ -77,48 +45,15 @@ function resizeMb() {
 }
 
 function setSongInfo(data) {
+//    console.log(data, songdata);
+    if (!data ) { return; }
+    if ( (data.uri == songdata.uri) ) { return;}
     if (!data.name || data.name == '') {
 	var name = data.uri.split('/');
 	data.name = decodeURI(name[name.length - 1]);
     };
-    if (!data || (songdata == data) ) { return; }
 
-    //update styles of listviews
-    $('#currenttable li').each(function() {
-        $(this).removeClass("currenttrack");
-        if (this.id == 'currenttable-' + data.uri) {
-            $(this).addClass('currenttrack');
-        }
-    });
-
-    $('#playlisttracks li').each(function() {
-        $(this).removeClass("currenttrack2");
-        if (this.id == 'playlisttracks-' + data.uri) {
-            $(this).addClass('currenttrack2');
-        }
-    });
-    $('#trackresulttable li').each(function() {
-        $(this).removeClass("currenttrack2");
-        if (this.id == 'trackresulttable-' + data.uri) {
-            $(this).addClass('currenttrack2');
-        }
-    });
-
-    $('#artiststable li').each(function() {
-        $(this).removeClass("currenttrack2");
-        if (this.id == 'artiststable-' + data.uri) {
-            $(this).addClass('currenttrack2');
-        }
-    });1
-    $('#albumstable li').each(function() {
-        $(this).removeClass("currenttrack2");
-        if (this.id == 'albumstable-' + data.uri) {
-            $(this).addClass('currenttrack2');
-        }
-    });
-    
-    
-    songdata = data;
+    updatePlayIcons(data.uri);
     artistshtml = '';
     artiststext = '';
 
@@ -130,8 +65,9 @@ function setSongInfo(data) {
 	}
     };
     }
-	console.log(data);
     
+    songdata = data;
+
     $("#modalname").html(data.name);
 
     if (!data.length || data.length == 0) {
@@ -170,7 +106,7 @@ function setSongInfo(data) {
     $("#controlspopupimage").attr('src', '../images/default_cover.png');
     }
 
-        $("#modalartist").html(arttmp);
+    $("#modalartist").html(arttmp);
 
     $("#trackslider").attr("min", 0);
     $("#trackslider").attr("max", data.length);
@@ -580,3 +516,52 @@ $(document).ready(function(event) {
 		    } ); 
 
 });
+
+function updatePlayIcons (uri) {
+    //update styles of listviews
+    $('#currenttable li').each(function() {
+        if (this.id == 'currenttable-' + uri) {
+            $(this).addClass('currenttrack');
+        } else {
+            $(this).removeClass("currenttrack");
+	}
+    });
+
+    $('#playlisttracks li').each(function() {
+        if (this.id == 'playlisttracks-' + uri) {
+            $(this).addClass('currenttrack2');
+        } else {
+            $(this).removeClass("currenttrack2");
+	}
+    });
+    $('#trackresulttable li').each(function() {
+        if (this.id == 'trackresulttable-' + uri) {
+            $(this).addClass('currenttrack2');
+        } else {
+	    $(this).removeClass("currenttrack2");
+	}
+    });
+
+    $('#artiststable li').each(function() {
+        if (this.id == 'artiststable-' + uri) {
+            $(this).addClass('currenttrack2');
+        } else {
+            $(this).removeClass("currenttrack2");
+	}
+    });
+
+    $('#albumstable li').each(function() {
+        if (this.id == 'albumstable-' + uri) {
+            $(this).addClass('currenttrack2');
+        } else {
+            $(this).removeClass("currenttrack2");
+	}
+    });
+    $('#browselist li').each(function() {
+        if (this.id == 'browselisttracks-' + uri) {
+            $(this).addClass('currenttrack2');
+        } else {
+            $(this).removeClass("currenttrack2");
+	}
+    });
+}

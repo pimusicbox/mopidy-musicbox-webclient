@@ -22,7 +22,7 @@ $(window).load(function() {
 
 
 function getCover(nwartist, nwalbum, image, size) {
-        $(image).attr('src', '../images/icons/cd_32x32.png');
+//        $(image).attr('src', '../images/default_cover.png');
         lastfm.album.getInfo({artist: nwartist, album: nwalbum}, {success: function(data){
             for (var i = 0; i < data.album.image.length; i++) {
                 if ( data.album.image[i]['size'] == size) {
@@ -30,7 +30,8 @@ function getCover(nwartist, nwalbum, image, size) {
                 }
             }
         }, error: function(code, message){
-            console.log('Error #'+code+': '+message);
+            $(image).attr('src', '../images/default_cover.png');
+//            console.log('Error #'+code+': '+message);
         }});
 }
 function getArtistImage(nwartist, image, size) {
@@ -42,6 +43,7 @@ function getArtistImage(nwartist, image, size) {
                 }
             }
         }, error: function(code, message){
-            console.log('Error #'+code+': '+message);
+            $(image).attr('src', '../images/icons/user_24x32.png');
+//            console.log('Error #'+code+': '+message);
         }});
 }

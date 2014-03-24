@@ -8,28 +8,44 @@ function playBrowsedTracks(addtoqueue, trackid) {
         mopidy.tracklist.clear();
     }
     toast('Loading...');
+
     var selected = 0, counter = 0;
     //only add one station for dirble, otherwise add all tracks
     if (isRadioUri(trackid)) {
 	mopidy.tracklist.add(null, null, trackid);
     } else {
-        //add all items in the playlist
+        //add selected item to the playlist
 	$('.browsetrack').each(function() { 
-	    mopidy.tracklist.add(null, null, this.id);
     	    if (this.id == trackid) {
 		    selected = counter;
+		    mopidy.tracklist.add(null, null, this.id);
 	    }
 	    counter++;
         } );
     }
 
-    for (var i = 0; i <= selected; i++) {
-        mopidy.playback.next();
+//play selected item
+    if (!addtoqueue) { 
+	for (var i = 0; i <= selected; i++) {
+        	mopidy.playback.next();
+	}
+        mopidy.playback.play(); //tracks[selected]);
     }
 
-    mopidy.playback.play(); //tracks[selected]);
-    return false;
+    //add all items, but selected to the playlist
+    selected = 0;
+    counter = 0
+    $('.browsetrack').each(function() { 
+	    //do not add selected song again
+    	    if (this.id == trackid) {
+		selected = counter;
+	    } else {
+		mopidy.tracklist.add(null, counter, this.id);
+	    }
+	    counter++;
+        } );
 
+    return false;
 }
 
 
@@ -88,21 +104,29 @@ function playTrack(addtoqueue) {
 
 // first add track to be played, then the other tracks
     mopidy.tracklist.add(tracks.slice(selected, selected + 1) );
-    //wait 1.5 second before adding the rest to give server the time to start playing
-    setTimeout(function() {
-	mopidy.tracklist.add(tracks.slice(0, selected), 0);
-	if (selected < tracks.length) {
-	    mopidy.tracklist.add(tracks.slice(selected + 1) );
-	}
-    }, 1500);
-     
-//    mopidy.playback.changeTrack(tracks[selected]);
 
-    for (var i = 0; i <= selected; i++) {
-        mopidy.playback.next();
+// //   mopidy.playback.changeTrack(tracks[selected]);
+//    mopidy.tracklist.add(tracks.slice(selected, selected + 1) );
+//    //wait 2.5 seconds before adding the rest to give server the time to start playing
+//    setTimeout(function() {
+//	mopidy.tracklist.add(tracks.slice(0, selected), 0);
+//	if (selected < tracks.length) {
+//	    mopidy.tracklist.add(tracks.slice(selected + 1) );
+//	}
+//    }, 2500);
+
+    if (!addtoqueue) { 
+	for (var i = 0; i <= selected; i++) {
+        	mopidy.playback.next();
+	}
+        mopidy.playback.play(); //tracks[selected]);
     }
 
-    mopidy.playback.play(); //tracks[selected]);
+    mopidy.tracklist.add(tracks.slice(0, selected), 0);
+    if (selected < tracks.length) {
+	mopidy.tracklist.add(tracks.slice(selected + 1) );
+    }
+     
     //console.log(selected);
     return false;
 }
@@ -220,7 +244,10 @@ function removeTrack() {
 }
 
 function clearQueue() {
+    mopidy.playback.stop();
+    resetSong();
     mopidy.tracklist.clear();
+    resetSong();
     return false;
 }
 

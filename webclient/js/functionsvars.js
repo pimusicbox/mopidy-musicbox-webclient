@@ -44,6 +44,8 @@ var currentplaylist;
 var customPlaylists = [];
 var customTracklists = [];
 
+var browseStack = [];
+
 var ua = navigator.userAgent,
   isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua), isMobileWebkit = /WebKit/.test(ua) && /Mobile/.test(ua), isMobile = /Mobile/.test(ua), isWebkit = /WebKit/.test(ua);
 
@@ -152,7 +154,7 @@ function albumTracksToTable(pl, target, uri) {
 function renderSongLi(song, liID, uri, playlistType){
     var name;
     if (!song.name || song.name == '') {
-	name = data.uri.split('/');
+	name = uri.split('/');
 	name = decodeURI(name[name.length - 1]);
     } else {
 	name = song.name;
@@ -169,7 +171,7 @@ function renderSongLi(song, liID, uri, playlistType){
 }
 
 function resultsToTables(results, target, uri) {
-//    console.log(results);
+    if (!results) { return }
     if (target == '#currenttable') {
         playlistType = 'playTrackQueueByUri';
     } else {
@@ -177,67 +179,72 @@ function resultsToTables(results, target, uri) {
     }
 
     var newalbum = [];
-    var nexturi = '';
+    var nextname = '';
     var count = 0;
-//    var popupMenu = (target == CURRENT_PLAYLIST_TABLE) ? 'popupQueue' : 'popupTracks';
-    newalbum = [];
     $(target).html('');
 
     //break into albums and put in tables
     var html = '';
-    var tableid, j, artistname, alburi;
+    var tableid, j, artistname, alburi, name;
     var targetmin = target.substr(1);
     $(target).attr('data', uri);
     var length = 0 || results.length;
     for ( i = 0; i < length; i++) {
-        newalbum.push(results[i]);
-	nexturi = '';
-        if (i < length - 1) {
-            nexturi = results[i + 1].album.uri;
+	//create album if none extists
+	if (!results[i].album) { results[i].album={}; }
+	//create album uri if there is none
+	if (!results[i].album.uri) { results[i].album.uri = 'x'; }
+	if (!results[i].album.name) { results[i].album.name = ''; }
+	//create name if there is no one
+        if (!results[i].name || results[i].name == '') {
+		name = results[i].uri.split('/');
+		results[i].name = decodeURI(name[name.length - 1]) || 'Track ' + String(i);
         }
-        if (!results[i].album || (results[i].length == -1)) {
-	    var name = results[i].name || results[i].uri;
-            html += '<li class="albumli"><a href="#"><h1>' + name + ' [Stream]</h1></a></li>';
+
+        newalbum.push(results[i]);
+	nextname = '';
+        if ((i < length - 1) && results[i+1].album && results[i+1].album.name ) {
+            nextname = results[i + 1].album.name;
+        }
+        if (results[i].length == -1) {
+            html += '<li class="albumli"><a href="#"><h1>' + results[i].name + ' [Stream]</h1></a></li>';
             newalbum = [];
-	    nexturi = '';
+	    nextname = '';
 	} else {
-	  if (results[i].album.uri && (results[i].album.uri != nexturi)) {
+	  if ( (results[i].album.name != nextname) || (nextname == '') )  {
             tableid = 'art' + i;
             //render differently if only one track in the album
             if ( newalbum.length == 1 ) {
                 if (i != 0) { html += '<li class="smalldivider"> &nbsp;</li>'; }
-
                 html += '<li class="song albumli" id="' + targetmin + '-' + newalbum[0].uri + '">' + 
 		    '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\');">' +
 		    '<i class="fa fa-ellipsis-vertical"></i></a>' +
 		    '<a href="#" onclick="return ' + playlistType + '(\'' + newalbum[0].uri + '\',\'' + uri + '\');">' +
                     '<h1>' + newalbum[0].name + "</h1><p>";
 /*                 '<span style="float: right;">' + timeFromSeconds(newalbum[0].length / 1000) + '</span>'; */
-                for ( j = 0; j < newalbum[0].artists.length; j++) {
-                    html += newalbum[0].artists[j].name;
-                    html += (j == newalbum[0].artists.length - 1) ? '' : ' / ';
-                    //stop after 3
-                    if (j > 2) {
-                        html += '...';
-                        break;
-                    }
-                }
-                html += ' / <em>' + newalbum[0].album.name + '</em></p>';
+		if (newalbum[0].artists) {
+                    for ( j = 0; j < newalbum[0].artists.length; j++) {
+	                html += newalbum[0].artists[j].name;
+    	                html += (j == newalbum[0].artists.length - 1) ? '' : ' / ';
+        	        //stop after 3
+            	        if (j > 2) {
+                	    html += '...';
+                	    break;
+	                }
+    	            }
+		}
+                if ( newalbum[0].album.name != '') { html += ' / ';}
+		html += '<em>' + newalbum[0].album.name + '</em></p>';
                 html += '</a></li>';
-/*                var liID = targetmin + '-' + newalbum[0].uri;
-                html+= renderSongLi(newalbum[0], liID, uri);
-*/
 
                 popupData[newalbum[0].uri] = newalbum[0];
                 newalbum = [];
-		
-            } else {
-		if ( results[i].album.uri && results[i].album.name) {
+            } else {  //newalbum length
+		if ( results[i].album.uri && results[i].album.name ) {
                     html += '<li class="albumdivider">';
 	            html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' +
     	                targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1>' + results[i].album.name + '</h1><p>';
 		}
-console.log(i);
 		if (results[i].album.artists) {
                     for (j = 0; j < results[i].album.artists.length; j++) {
 	                html += results[i].album.artists[j].name;
@@ -266,14 +273,13 @@ console.log(i);
                 getCover(artistname, results[i].album.name, target + '-cover-' + i, 'small');
                 //            customTracklists[results[i].album.uri] = newalbum;
                 newalbum = [];
-            }
-	  }    
+            } //newalbum length
+	  } //albums name
         }
     }
     tableid = "#" + tableid;
     $(target).html(html);
     $(target).attr('data', uri);
-//    $(target).listview('refresh');
 }
 
 //process updated playlist to gui
@@ -390,7 +396,7 @@ function showOffline(on) {
 
 // from http://dzone.com/snippets/validate-url-regexp
 function validUri(str) {
-    var regexp = /(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
     return regexp.test(str);
 }
 

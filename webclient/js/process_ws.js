@@ -89,38 +89,29 @@ function processBrowseDir(resultArr) {
         rooturi = rooturi.replace(":track:", ":directory:");
     }
 
-//    console.log(uri, lastindex, rooturi);
 
     colonindex = rooturi.lastIndexOf(':');
     slashindex = rooturi.lastIndexOf('/');
 
     lastindex = (colonindex > slashindex) ? colonindex : slashindex;
     rooturi = rooturi.slice(0, lastindex);
-    
-//    console.log(rooturi);
 
-    child += '<li><a href="#" onclick="return getBrowseDir();"><h1 class="trackname">..</h1></a></li>';
-
-/*    if (rooturi.indexOf(':') == -1 ) {
-	rooturi = '';
+    if (browseStack.length > 0) {
 	child += '<li><a href="#" onclick="return getBrowseDir();"><h1 class="trackname">..</h1></a></li>';
-    } else {
-	child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + rooturi + '"><h1 class="trackname">..</h1></a></li>';
     }
-*/
-//    console.log('new:' + rooturi);
 
     for (var i = 0; i < resultArr.length; i++) {
 	if(resultArr[i].type == 'track' ) {
 //	    console.log(resultArr[i]);
-            child += '<li><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + '""><h1 class="trackname">' + resultArr[i].name + '</h1></a></li>';
+            child += '<li id="browselisttracks-' + resultArr[i].uri + '"><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + '""><h1 class="trackname">' + resultArr[i].name + '</h1></a></li>';
 	} else {
             child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + '""><h1 class="trackname">' + resultArr[i].name + '</h1></a></li>';
 	}
     };
-//    console.log(child);
 
     $('#browselist').html(child);
+
+    updatePlayIcons(songdata.uri);
 
     showLoading(false);
 }
@@ -166,8 +157,8 @@ function processGetTracklist(resultArr) {
     //cache result
     var newplaylisturi = resultArr.uri;
     playlists[newplaylisturi] = resultArr;
-    resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     setSongInfo();
+    resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     showLoading(false);
     scrollToTracklist();
     if (isMobileWebkit) {
@@ -180,9 +171,9 @@ function processGetTracklist(resultArr) {
  *********************************************************/
 function processCurrentPlaylist(resultArr) {
     currentplaylist = resultArr;
-//    console.log(resultArr);
     resultsToTables(resultArr, CURRENT_PLAYLIST_TABLE);
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
+    updatePlayIcons(songdata.uri);
 }
 
 /********************************************************
