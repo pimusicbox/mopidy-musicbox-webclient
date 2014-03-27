@@ -416,7 +416,12 @@ $(document).ready(function(event) {
     $(window).hashchange();
 
     // Connect to server
-    mopidy = new Mopidy();
+//    mopidy = new Mopidy();
+//    console.log(wsLocation);
+//    $.getScript( wsLocation + '/mopidy/mopidy.min.js');
+    mopidy = new Mopidy({
+        webSocketUrl: 'ws://' + wsLocation + '/mopidy/ws/' // wslocation is set in index.html "ws://localhost:6680/mopidy/ws/"
+    });
 //    mopidy.on(console.log.bind(console));  // Log all events
 //    mopidy.on(console.error.bind(console));
     //initialize events

@@ -1,28 +1,150 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Mopidy Settings</title>
-    <link rel="stylesheet" type="text/css" href="mopidy.css">
-  </head>
-  <body>
-    <div class="box focus">
-      <h1>Settings</h1>
-      <h2>Spotify</h2>
-      <p>Please provide your username, password to enable playing music from Spotify.</p>
-      <form action="/updateSettings" method="post">
-      <p>Username</p>
-        <input type="text" name="SPOTIFY_USERNAME" value="{SPOTIFY_USERNAME}" size="15" maxlength="40"/>
-      <p>Password</p>
-        <input type="password" name="SPOTIFY_PASSWORD" value="{SPOTIFY_PASSWORD}" size="10" maxlength="40"/>
-      <h2>Last.FM</h2>
+<head>
+    <meta charset="utf-8">
+    <script src="../js/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/jquery.mobile.flatui.css"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="MusicBox">
+    <meta http-equiv="imagetoolbar" content="no"/>
+    <meta content="true" name="MSSmartTagsPreventParsing"/>
 
-      <p>Please provide the username, password to enable scrobbling via Last.FM.</p>
-      <p>Username</p>
-        <input type="text" name="LASTFM_USERNAME" value="{LASTFM_USERNAME}" size="15" maxlength="40"/>
-      <p>Password</p>
-        <input type="password" name="LASTFM_PASSWORD" value="{LASTFM_PASSWORD}" size="10" maxlength="40"/>
-        <p><input type="submit" value="Update"/></p>
+    <meta http-equiv="cleartype" content="on">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="../mopidy/favicon.png">
+    <meta name="msapplication-TileColor" content="#eee">
+
+    <link rel="apple-touch-icon" href="../mopidy/favicon.png"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../mopidy/favicon.png">
+    <script src="../js/jquery.mobile-1.3.2.min.js"></script>
+    <meta name="description" content="MusicBox">
+    <meta name="author" content="Wouter van Wijk">
+    <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk"/>
+    <link href="../css/webclient.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+</head>
+
+<body>
+  <div class="box focus">
+    <h3>Settings</h3>
+    <div>{{ error }}</div>
+        <form action="/updateSettings" method="post">
+        <div data-role="collapsible" data-collapsed="false">
+            <h2>MusicBox</h2>
+            <label for="network__name">Device name</label>
+            <p>Set the name of the MusicBox. In this way you can create different devices on the same network (in different rooms). The webinterface is accessible via the name you use here, e.g. http://kitchen.local/, and multiple devices will show up in AirTunes. You can only use normal caracters and numbers in the name (no spaces, dots, etc). You can even have different devices with different Spotify accounts when needed.</p>
+            <input type="text" name="network__name" value="{{ network__name }}" size="12" maxlength="9"/>
+
+            <label for="musicbox__root_password">Root password</label>
+            <p>To secure your device a bit more than with only changing the default password, you can also change the default password of root, the superuser.</p>
+            <input type="password" name="musicbox__root_password" value="{{ musicbox__root_password }}" size="15" maxlength="40"/>
+
+            <label for="flip-spot">Resize filesystem</label><br/>
+            <p>Enable this to let MusicBox automatically resize the filesystem of your SD Card, so the system uses all the space of your card. Recommended because otherwise the card might fill up. This is beta, you can lose data on your card if you enable this!! (If so, you can put the original MusicBox image on it again and start over) </p>
+            <div>
+                <select name="musicbox__resize_once" data-role="slider"><br/>
+                    <option value="false">Off</option>
+                    <option value="true" selected="{{musicbox__resize_once}}">On</option>
+                </select> 
+            </div>
+
+            <label for="flip-spot">Scan Music Files</label><br/>
+            <p>Use this setting to let Mopidy/MusicBox scan on startup for new music files on the SD Card, USB or the Network. This could take a while! This can slowdown the boot a lot. Disable it again if your music doesn't change.</p>
+            <div>
+                <select name="musicbox__scan_always" data-role="slider"><br/>
+                    <option value="false">Off</option>
+                    <option value="true" selected="{{ musicbox__scan_always }}">On</option>
+                </select> 
+            </div>
+
+        </div>
+
+        <div data-role="collapsible" data-collapsed="false">
+            <h2>Network</h2>
+            <label for="network__wifi_network">Wifi Network Name</label>
+            <input type="text" name="network__wifi_network" value="{{ network__wifi_network }}" size="15" maxlength="40"/>
+            <label for="network__wifi_password">Wifi Password</label>
+            <input type="password" name="network__wifi_password" value="{{ network__wifi_password }}" size="10" maxlength="40"/>
+
+            <label for="network__workgroup">Workgroup</label>
+            <p>Here you can change the default workgroup of the Windows network. This will set the workgroup to the name you want</p>
+            <input type="text" name="network__workgroup" value="{{ network__workgroup }}" size="15" maxlength="40"/>
+            
+            <label for="network__mount_address">Network Drive</label>
+            <p>Mount Windows Network Drive on boot (via samba/cifs). The address is exactly how Samba mount works: //servername/mountpoint/directory e.g. //192.168.1.5/musicmount or //server.local/shared/music<br/>
+If the mount needs a username/password, also set it (leave empty for guest-access). Don't forget to let Mopidy/MusicBox scan the contents at first boot (see below)</p>
+            <input type="text" name="network__mount_address" value="{{ network__mount_address }}" size="10" maxlength="40"/>
+
+            <label for="network__mount_user">Username</label>
+            <input type="text" name="network__mount_user" value="{{ network__mount_user }}" size="15" maxlength="40"/>
+            
+            <label for="network__mount_password">Password</label>
+            <input type="password" name="network__mount_password" value="{{ network__mount_password }}" size="15" maxlength="40"/>
+
+            <label for="flip-spot">Enable SSH</label><br/>
+            <div>
+                <select name="network__ssh" data-role="slider"><br/>
+                    <option value="false">Off</option>
+                    <option value="true" selected="{{network__ssh}}">On</option>
+                </select> 
+            </div>
+        </div>
+        <div data-role="collapsible">
+            <h2>Spotify</h2>
+            <p>Please provide your username, password to enable playing music from Spotify.</p>
+            <label for="flip-spot">Enable</label><br/>
+            <div>
+                <select name="spotify__enabled" data-role="slider"><br/>
+                    <option value="false">Off</option>
+                    <option value="true" selected="{{spotify__enabled}}">On</option>
+                </select> 
+            </div>
+            <label for="spotify__username">Username</label>
+            <input type="text" name="spotify__username" value="{{ spotify__username }}" size="15" maxlength="40"/>
+            <label for="spotify__password">Password</label>
+            <input type="password" name="spotify__password" value="{{ spotify__password }}" size="10" maxlength="40"/>
+            <label for="spotify__bitrate">Bitrate</label>
+            <input type="text" name="spotify__bitrate" value="{{ spotify__bitrate }}" size="15" maxlength="40"/>
+        </div>
+
+        <div data-role="collapsible">
+            <h2>Last.FM</h2>
+            <p>Please provide your username, password to enable scrobbling music to Last.FM.</p>
+            <label for="flip-spot">Enable</label><br/>
+            <div>
+                <select name="scrobbler__enabled" data-role="slider"><br/>
+                    <option value="false">Off</option>
+                    <option value="true" selected="{{scrobbler__enabled}}">On</option>
+                </select>
+            </div>
+            <label for="scrobbler__username">Username</label>
+            <input type="text" name="scrobbler__username" value="{{ scrobbler__username }}" size="15" maxlength="40"/>
+            <label for="spotify__password">Password</label>
+            <input type="password" name="scrobbler__password" value="{{ scrobbler__password }}" size="10" maxlength="40"/>
+        </div>
+
+        <div data-role="collapsible">
+            <h2>Dirble</h2>
+            <p>Enable Dirble webradio directory.</p>
+            <label for="flip-spot">Enable</label><br/>
+            <div>
+                <select name="dirble__enabled" data-role="slider"><br/>
+                    <option value="false">Off</option>
+                    <option value="true" selected="{{dirble__enabled}}">On</option>
+                </select>
+            </div>
+            <label for="dirble__api_key">API-key</label>
+            <p>Optionally you can get an api-key by creating an account at <a href="http://www.dirble.com/">Dirble.com</a>. Then go to the section 'Your API-Keys' and copy the key you see and fill it in e.g 473279e3fa0e7010cbbbb40ecc31890d46e57a2e</p>
+            <input type="text" name="dirble__api_key" value="{{ dirble__api_key }}" size="15" maxlength="40"/>
+            
+        </div>
+        <input type="submit" value="Update settings" />
       </form>
     </div>
   </body>
