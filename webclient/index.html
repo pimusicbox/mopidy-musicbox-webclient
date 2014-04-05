@@ -37,11 +37,11 @@
     <meta http-equiv="cleartype" content="on">
 
     <!-- Tile icon for Win8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="/mopidy/favicon.png">
+    <meta name="msapplication-TileImage" content="mopidy/favicon.png">
     <meta name="msapplication-TileColor" content="#eee">
 
-    <link rel="apple-touch-icon" href="/mopidy/favicon.png"/>
-
+    <link rel="apple-touch-icon" href="mopidy/favicon.png"/>
+    <link rel="shortcut icon" type="image/x-icon" href="mopidy/favicon.png">
     <script src="js/jquery.mobile-1.3.2.min.js"></script>
     <meta name="description" content="MusicBox">
     <meta name="author" content="Wouter van Wijk">
@@ -92,7 +92,7 @@
                 <span class="navtxt"> Exit Fullscreen </span><i class="fa  fa-desktop"></i></a>
         </li>
         <li id="navSettings" data-icon="false">
-                <a href="/settings">
+                <a href="/Settings" onclick="toast('Loading...', 2000);">
                 <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
         </li>
         <li id="navshutdown" data-icon="false">

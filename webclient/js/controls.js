@@ -10,17 +10,19 @@ function playBrowsedTracks(addtoqueue, trackid) {
     toast('Loading...');
 
     var selected = 0, counter = 0;
+
+    var isRadio = isRadioUri(trackid);
     //only add one station for dirble, otherwise add all tracks
-    if (isRadioUri(trackid)) {
-	mopidy.tracklist.add(null, null, trackid);
+    if (isRadio) {
+    	mopidy.tracklist.add(null, null, trackid);
     } else {
-        //add selected item to the playlist
-	$('.browsetrack').each(function() { 
+          //add selected item to the playlist
+        $('.browsetrack').each(function() { 
     	    if (this.id == trackid) {
-		    selected = counter;
-		    mopidy.tracklist.add(null, null, this.id);
-	    }
-	    counter++;
+		      selected = counter;
+            }
+	      mopidy.tracklist.add(null, null, this.id);
+	      counter++;
         } );
     }
 
@@ -35,16 +37,18 @@ function playBrowsedTracks(addtoqueue, trackid) {
     //add all items, but selected to the playlist
     selected = 0;
     counter = 0
-    $('.browsetrack').each(function() { 
-	    //do not add selected song again
-    	    if (this.id == trackid) {
-		selected = counter;
-	    } else {
-		mopidy.tracklist.add(null, counter, this.id);
-	    }
-	    counter++;
+/*    if(!isRadio) {
+        $('.browsetrack').each(function() { 
+    	  //do not add selected song again
+    	  if (this.id == trackid) {
+		    selected = counter;
+	      } else {
+	      	mopidy.tracklist.add(null, counter, this.id);
+	      }
+	      counter++;
         } );
-
+      }
+*/
     return false;
 }
 
@@ -124,7 +128,7 @@ function playTrack(addtoqueue) {
 
     mopidy.tracklist.add(tracks.slice(0, selected), 0);
     if (selected < tracks.length) {
-	mopidy.tracklist.add(tracks.slice(selected + 1) );
+    	mopidy.tracklist.add(tracks.slice(selected + 1) );
     }
      
     //console.log(selected);

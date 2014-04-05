@@ -186,7 +186,7 @@
     margin-right: 35px;
 }
 
-.ui-mobile .ui-page .ui-slider-input, .ui-mobile .ui-dialog .ui-slider-input {
+.ui-slider-input {
     display: none !important;
 }
 
@@ -524,7 +524,11 @@ a {
 }
 
 
-
+.settingscoll label {
+    font-size: 120%;
+    font-weight: bold;
+    padding-top: 30px;
+}
 
 /* panel workaround to make it responsive wrap push on wide viewports once open */
 @media (min-width: 35em){
