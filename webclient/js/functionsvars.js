@@ -171,6 +171,7 @@ function renderSongLi(song, liID, uri, playlistType){
 }
 
 function resultsToTables(results, target, uri) {
+console.log(results, target, uri);
     if (!results) { return }
     if (target == '#currenttable') {
         playlistType = 'playTrackQueueByUri';
@@ -277,6 +278,7 @@ function resultsToTables(results, target, uri) {
 	  } //albums name
         }
     }
+  console.log(html);
     tableid = "#" + tableid;
     $(target).html(html);
     $(target).attr('data', uri);
