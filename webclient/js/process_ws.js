@@ -97,7 +97,8 @@ function processBrowseDir(resultArr) {
     rooturi = rooturi.slice(0, lastindex);
 
     if (browseStack.length > 0) {
-	child += '<li><a href="#" onclick="return getBrowseDir();"><h1 class="trackname">..</h1></a></li>';
+//	child += '<li><a href="#" onclick="return getBrowseDir();"><h1 class="trackname">..</h1></a></li>';
+	child += '<li style="background-color:#ccc"><a href="#" onclick="return getBrowseDir();"><h1 class="trackname"><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>';
     }
 
     for (var i = 0; i < resultArr.length; i++) {
@@ -160,10 +161,10 @@ function processGetTracklist(resultArr) {
     setSongInfo();
     resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     showLoading(false);
-    scrollToTracklist();
-    if (isMobileWebkit) {
-        playlisttracksScroll.refresh();
-    }
+//    scrollToTracklist();
+//    if (isMobileWebkit) {
+//        playlisttracksScroll.refresh();
+//    }
 }
 
 /********************************************************

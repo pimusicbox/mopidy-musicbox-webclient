@@ -26,7 +26,6 @@
     <meta name="description" content="MusicBox">
     <meta name="author" content="Wouter van Wijk">
     <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk"/>
-    <link href="../css/webclient.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/font-awesome.min.css">
     <style>
         .ui-slider-input {
@@ -151,7 +150,7 @@ If the mount needs a username/password, also set it (leave empty for guest-acces
             <label for="network__mount_password">Password</label>
             <input type="password" name="network__mount_password" value="{{ network__mount_password }}" size="15" maxlength="40"/>
 
-            <label for="musicbox__resize_once">Resize filesystem (Restart Required)</label><br/>
+            <label for="musicbox__resize_once">Resize filesystem</label><br/>
             <p>Enable this to let MusicBox automatically resize the filesystem of your SD Card, so the system uses all the space of your card. Recommended because otherwise the card might fill up. This is beta, you can lose data on your card if you enable this!! (If so, you can put the original MusicBox image on it again and start over) </p>
             <div>
                 <select name="musicbox__resize_once" data-role="slider"><br/>
@@ -275,6 +274,38 @@ If the mount needs a username/password, also set it (leave empty for guest-acces
         </div>
 
         <div data-role="collapsible" class="settingscoll">
+            <h2>The Internet Archive</h2>
+            <p>Play (old) sounds, music and speech from The Internet Archive</p>
+            <div>
+                <select name="internetarchive__enabled" data-role="slider"><br/>
+                    <option value="false"{% if internetarchive__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if internetarchive__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+        </div>
+        
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Podcasts</h2>
+            <p>Play Podcasts from iTunes and Gpodder.net.</p>
+            <div>
+                <select name="podcast__enabled" data-role="slider"><br/>
+                    <option value="false"{% if podcast__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if podcast__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+<!-- does work yet            <label for="podcast__feed_urls">Feed urls</label>
+            <p>Give the links to podcast RSS feeds you want to use. Seperate with commas. E.g. http://www.npr.org/rss/podcast.php?id=510019, http://www.npr.org/rss/podcast.php?id=510253</p>
+            <div data-role="fieldcontain">
+                <textarea rows="8" cols="40" name="podcast__feed_urls">{{ podcast__feed_urls }}</textarea>
+            </div>
+-->
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
             <h2>TuneIn</h2>
             <p>Select radiostations from TuneIn directory.</p>
             <div>
@@ -310,23 +341,18 @@ If the mount needs a username/password, also set it (leave empty for guest-acces
         </div>
 
         <div data-role="collapsible" class="settingscoll">
-            <h2>Podcasts</h2>
-            <p>Play Podcasts from iTunes and Gpodder.net.</p>
+            <h2>Soma FM</h2>
+            <p>Play radiostations from Soma FM.</p>
             <div>
-                <select name="podcast__enabled" data-role="slider"><br/>
-                    <option value="false"{% if podcast__enabled == "false" %} selected="true"{% endif
+                <select name="somafm__enabled" data-role="slider"><br/>
+                    <option value="false"{% if somafm__enabled == "false" %} selected="true"{% endif
   %}>Off</option>
-                    <option value="true"{% if podcast__enabled == "true" %} selected="true"{% endif
+                    <option value="true"{% if somafm__enabled == "true" %} selected="true"{% endif
   %}>On</option>
                 </select>
             </div>
-<!-- does work yet            <label for="podcast__feed_urls">Feed urls</label>
-            <p>Give the links to podcast RSS feeds you want to use. Seperate with commas. E.g. http://www.npr.org/rss/podcast.php?id=510019, http://www.npr.org/rss/podcast.php?id=510253</p>
-            <div data-role="fieldcontain">
-                <textarea rows="8" cols="40" name="podcast__feed_urls">{{ podcast__feed_urls }}</textarea>
-            </div>
--->
         </div>
+        
         <div data-role="collapsible" class="settingscoll">
             <h2>Subsonic</h2>
             <p>Enable subsonic musicstreamer support.</p>
@@ -338,7 +364,7 @@ If the mount needs a username/password, also set it (leave empty for guest-acces
   %}>On</option>
                 </select>
             </div>
-            <label for="subsonic__hostname">Host url (e.g. music.pimusicbox.com )</label>
+            <label for="subsonic__hostname">Host url (e.g. music.myserver.org )</label>
             <input type="text" name="subsonic__hostname" value="{{ subsonic__hostname }}" size="15" maxlength="40"/>
             <label for="subsonic__port">Port (e.g. 445)</label>
             <input type="text" name="subsonic__port" value="{{ subsonic__port }}" size="6" maxlength="5"/>
@@ -356,7 +382,7 @@ If the mount needs a username/password, also set it (leave empty for guest-acces
                 </select> 
             </div>
         </div>
-        <input type="submit" value="Update settings" />
+        <input type="submit" value="Update settings (will restart the box)" />
       </form>
       <br/><br/>
     </div>

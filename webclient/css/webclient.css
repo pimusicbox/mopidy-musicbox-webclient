@@ -13,7 +13,7 @@
  *    portr 48
  ****************************/
 
-@media all and (min-width: 40.1em) {
+@media all and (min-width: 961px) {
     /*header*/
     .header-breakpoint.ui-grid-b .ui-block-a {
         width: 30%;
@@ -40,6 +40,15 @@
     #playlisttracksdiv {
         margin-left: 10px;
     }
+    #playlisttracksback {
+        display:none;
+    }
+    #playlisttracksdiv {
+        display:block;
+    }
+    #playlistslistdiv {
+        display:block;
+    }
     /*search*/
     .srch-breakpoint.ui-grid-a .ui-block-b {
         margin-left: .5em;
@@ -47,41 +56,16 @@
     .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
         width: 49%;
     }
-    .scroll {
+/*    .scroll {
         overflow-y: auto;
         overflow-x: hidden;
     }
+*/
 }
 
-/* tablet etc */
-@media all and (min-width: 30.1em) and (max-width: 40em) {
-    /*header*/
-    .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 45.95%;
-        clear: left;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-b {
-        display: none;
-        width: 0;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 40%;
-    }
-    /*search*/
-    .srch-breakpoint.ui-grid-a .ui-block-b {
-        margin-left: .2em;
-    }
-    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
-        width: 49.5%;
-    }
-    .scroll {
-        overflow-y: scroll;
-        overflow-x: hidden;
-    }
-}
 
 /* phone landscape */
-@media all and (max-width: 30em) {
+@media all and (max-width: 960px) {
     /*header*/
     .header-breakpoint.ui-grid-b .ui-block-a {
         width: 35%;
@@ -101,24 +85,19 @@
     .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
         width: 100%;
     }
-    #playlistspane, .scroll {
-/*        overflow-y: auto;
-        overflow-x: hidden;
-*/
+/*    .scroll {
         width: 100%;
-        heigth: 90%;
+        heigth: 99%;
     }
-}
-
-/* phone portrait */
-@media all and (max-width: 25em) {
-
-    #playlistspane, .scroll {
-        overflow-y: auto;
-        overflow-x: hidden;
-        width: auto;
-        max-width: 100%;
-        heigth: 100%;
+*/
+    #playlisttracksback {
+        display:block;
+    }
+    #playlisttracksdiv {
+        display:none;
+    }
+    #playlistslistdiv {
+        display:block;
     }
 }
 

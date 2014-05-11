@@ -35,7 +35,7 @@ function getCover(nwartist, nwalbum, image, size) {
         }});
 }
 function getArtistImage(nwartist, image, size) {
-        $(image).attr('src', '../images/icons/user_24x32.png');
+        $(image).attr('src', '../images/user_24x32.png');
         lastfm.artist.getInfo({artist: nwartist}, {success: function(data){
             for (var i = 0; i < data.artist.image.length; i++) {
                 if ( data.artist.image[i]['size'] == size) {

@@ -590,7 +590,7 @@ function updateRadioStations() {
         var rs = radioStations[key];
         if (rs) {
             name = rs[0] || rs[1];
-            child = '<li><a href="#" onclick="return addRadioUri(\'' + rs[0] + '\', \'' + rs[1] + '\');">';
+            child = '<li data-icon="delete"> <a href="#" onclick="return addRadioUri(\'' + rs[0] + '\', \'' + rs[1] + '\');">';
             child += '<h1>' + name + '</h1></a></li>';
             tmp += child;
         }

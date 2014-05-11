@@ -27,10 +27,12 @@ function initSearch() {
         delete customTracklists['albumresultscache'];
         delete customTracklists['trackresultscache'];
         $("#searchresults").hide();
-
+//        var limit = new Object;
+        
         mopidy.library.search({
-            any : value
+            any: [value]
         }).then(processSearchResults, console.error);
+        console.log('search sent', value);
     }
 }
 
@@ -38,6 +40,7 @@ function initSearch() {
  * process results of a search
  *********************************************************/
 function processSearchResults(resultArr) {
+    console.log('srch', resultArr);
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
@@ -46,7 +49,6 @@ function processSearchResults(resultArr) {
     var results = {'tracks': [], 'artists': [], 'albums': []};
     var emptyResult = true;
 
-//    console.log(resultArr, 'resultArr');
 
     for (var i = 0; i < resultArr.length; ++i) {
         for (var prop in results) {
@@ -174,10 +176,17 @@ function getCurrentPlaylist() {
 /********************************************************
  * Show tracks of playlist
  ********************************************************/
+function togglePlaylists() {
+    if ($(window).width() <= 960) {
+        $('#playlisttracksdiv').toggle();
+        $('#playlistslistdiv').toggle();
+    }
+    return true;
+}
+
 function showTracklist(uri) {
     $(PLAYLIST_TABLE).empty();
-    $('#playlisttracksdiv').show();
-
+    togglePlaylists();
     var pl = getPlaylistFromUri(uri);
     //load from cache
     if (pl) {
@@ -192,7 +201,7 @@ function showTracklist(uri) {
             $(this).addClass('playlistactive');
         }
     });
-    scrollToTracklist();
+//    scrollToTracklist();
     //lookup recent tracklist
     mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);
     return false;

@@ -19,23 +19,38 @@ function resetSong() {
         setSongInfo(data);
     }
 }
-//console.log('test');
 
 function resizeMb() {
     $("#infoname").html(songdata.name);
     $("#infoartist").html(artiststext);
 //    //set height of playlist scrollers
+//    togglePlaylists();
 
-    if ($(window).width() > 480) {
+    if ($(window).width() > 960) {
+        $('#playlisttracksdiv').show();
+        $('#playlistslistdiv').show();
+    } else {
+        if ( $('#playlisttracksdiv').is(':visible') == $('#playlistslistdiv').is(':visible')) {
+            $('#playlisttracksdiv').hide();
+            $('#playlistslistdiv').show();
+        }
+    }
+
+/*    if ($('#playlisttracksdiv').is(':visible') && !$('#playlisttracksback').is(':visible') ) {
         $('.scroll').height($(window).height() - 96);
         //jqm added something which it shouldnt (at least in this case) I guess
         //        $('#playlistspane').removeClass('height').height($(window).height() - 110);
         $('.scroll').removeClass('height').removeClass('width');
         $('#playlistspane').removeClass('height').removeClass('width');
+//        $('#playlisttracksdiv').show();
+//        $('#playlistslistdiv').show();
     } else {
         $('.scroll').addClass('height', '99%').addClass('width', '99%');
         $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
+//        $('#playlisttracksdiv').show();
+//        $('#playlistslistdiv').show();
     }	
+*/
 /*
     if (isMobileWebkit && ($(window).width() > 480)) {
         playlistslistScroll.refresh();

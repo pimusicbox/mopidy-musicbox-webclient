@@ -24,7 +24,10 @@
             new FastClick(document.body);
         }, false);
     </script>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link rel="apple-touch-startup-image" href="images/startup.png">
+    <meta name="apple-mobile-web-app-title" content="MusicBox">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -96,7 +99,7 @@
                 <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
         </li>
         <li id="navshutdown" data-icon="false">
-            <a href="system.html" data-transition="pop">
+            <a href="system.html">
                 <span class="navtxt">System </span><i class="fa  fa-power-off"></i></a>
         </li>
         <li id="" data-icon="false">
@@ -210,11 +213,12 @@
 <!-- /header -->
 
 <div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
-    <div class="ui-block-a scroll" id="playlistslistdiv">
-        <ul id="playlistslist" class="table"></ul>
+    <div class="ui-block-a" id="playlistslistdiv">
+        <ul id="playlistslist" data-filter="true" class="table"></ul>
     </div>
-    <div class="ui-block-b scroll" id="playlisttracksdiv">
-        <ul class="table" id="playlisttracks"></ul>
+    <div class="ui-block-b" id="playlisttracksdiv">
+        <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
+        <ul class="table" data-filter="true" id="playlisttracks"></ul>
     </div>
 
 </div>
@@ -316,7 +320,7 @@
 <div data-role="content" class="pane" id="radiopane">
     <h4>Radio</h4>
 
-    <div class="">
+    <div>
         <ul id="radiostationstable" class="table"></ul>
         <p>Add an url of a radio station stream that you want to listen to in the boxes below. The last 25 stations are saved locally (not
             on the server yet). To find stations, use the Browse function with extensions like Dirble or TuneIn, the right values will appear in these boxes automatically. Or use websites like <a href="http://www.listenlive.eu/" target="_blank">Listenlive</a> or <a
