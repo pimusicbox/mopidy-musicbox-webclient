@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="../js/jquery-1.10.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/jquery.mobile.flatui.css"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="MusicBox">
+    <meta http-equiv="imagetoolbar" content="no"/>
+    <meta content="true" name="MSSmartTagsPreventParsing"/>
+
+    <meta http-equiv="cleartype" content="on">
+    <title>MusicBox Settings</title>
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="../mopidy/favicon.png">
+    <meta name="msapplication-TileColor" content="#eee">
+
+    <link rel="apple-touch-icon" href="../mopidy/favicon.png"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../mopidy/favicon.png">
+    <script src="../js/jquery.mobile-1.3.2.min.js"></script>
+    <meta name="description" content="MusicBox">
+    <meta name="author" content="Wouter van Wijk">
+    <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk"/>
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <style>
+        .ui-slider-input {
+            display: block !important;
+        }
+        .ui-slider-track {
+            margin-left: 4em;
+        }
+
+    </style>
+</head>
+
+<body>
+  <div class="box focus">
+    <h3>Settings</h3>
+    <div>{{ error }}</div>
+        <form action="/updateSettings" method="post" onsubmit="alert('Will updating and reboot now...'); return true;">
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Network</h2>
+            <label for="network__wifi_network">Wifi Network Name</label>
+            <input type="text" name="network__wifi_network" value="{{ network__wifi_network }}" size="15" maxlength="40"/>
+            <label for="network__wifi_password">Wifi Password</label>
+            <input type="password" name="network__wifi_password" value="{{ network__wifi_password }}" size="10" maxlength="40"/>
+
+            <label for="network__workgroup">Workgroup</label>
+            <p>Here you can change the default workgroup of the Windows network. This will set the workgroup to the name you want</p>
+            <input type="text" name="network__workgroup" value="{{ network__workgroup }}" size="15" maxlength="40"/>
+            
+            <label for="network__enable_ssh">Enable SSH</label><br/>
+            <div>
+                <select name="network__enable_ssh" data-role="slider"><br/>
+                    <option value="false"{% if network__enable_ssh == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if network__enable_ssh == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select> 
+            </div>
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <h2>MusicBox</h2>
+            <label for="network__name">Device name</label>
+            <p>Set the name of the MusicBox. In this way you can create different devices on the same network (in different rooms). The webinterface is accessible via the name you use here, e.g. http://kitchen.local/, and multiple devices will show up in AirTunes. You can only use normal caracters and numbers in the name (no spaces, dots, etc). You can even have different devices with different Spotify accounts when needed.</p>
+            <input type="text" name="network__name" value="{{ network__name }}" size="12" maxlength="9"/>
+
+            <label for="musicbox__autoplay">Autoplay Url</label>
+            <p>MusicBox can automatically start playing a radiostation or stream at startup. It will wait a number of seconds before trying to play, to give the system (Mopidy) time to start. Since this time can vary per device, network and configuration, you can also set the number of seconds. If it does not work, give the system more time, e.g. 60 seconds.</p>
+            <input type="text" name="musicbox__autoplay" value="{{ musicbox__autoplay }}" size="15" maxlength="40"/>
+
+            <label for="musicbox__autoplaywait">Wait time</label>
+            <input type="range" name="musicbox__autoplaywait" value="{{ musicbox__autoplaywait }}" min="0" max="600">
+
+            <label for="musicbox__root_password">Root password</label>
+            <p>To secure your device, you can change the default password of root, the superuser.</p>
+            <input type="password" name="musicbox__root_password" value="{{ musicbox__root_password }}" size="15" maxlength="40"/>
+
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Audio</h2>
+            <label for="musicbox__output">Audio output</label>
+            <p>Automatic detection sets to usb audio if an usb audio device is found, else to hdmi, if hdmi is connected at boot, and otherwise to the analog output.
+i2s (HifiBerry et all) cannot be detected automatically. Set it here to be able to use it.</p>
+	    <select name="musicbox__output">
+	    	<option value=""{% if musicbox__output == "" %} selected="true"{% endif
+  %}>Automatic</option>
+	    	<option value="usb"{% if musicbox__output == "usb" %} selected="true"{% endif
+  %}>USB</option>
+	    	<option value="hdmi"{% if musicbox__output == "hdmi" %} selected="true"{% endif
+  %}>HDMI</option>
+	    	<option value="i2s"{% if musicbox__output == "i2s" %} selected="true"{% endif
+  %}>i2s (HifiBerry etc.)</option>
+	    	<option value="analog"{% if musicbox__output == "analog" %} selected="true"{% endif
+  %}>Analog</option>
+	    </select>
+            
+            <label for="audio__mixer_volume">Initial volume:</label>
+            <input type="range" name="audio__mixer_volume" style=".ui-slider-input {
+    display: block !important;
+}" value="{{ audio__mixer_volume  }}" min="0" max="100">
+            
+            <label for="musicbox__downsample_usb">Downsample USB</label><br/>
+            <p>Because of limitations with some USB-DACs, MusicBox downsamples USB sound to 44k by default. You can disable this here.</p>
+            <div>
+                <select name="musicbox__downsample_usb" data-role="slider"><br/>
+                    <option value="false"{% if musicbox__downsample_usb == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if musicbox__downsample_usb == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select> 
+            </div>
+
+            <label for="audio__mixer">Hardware Mixer</label><br/>
+            <p>For some USB audiocards (DACs), you can enable hardware mixing of the volume.</p>
+            <div>
+                <select name="audio__mixer" data-role="slider"><br/>
+                    <option value="software"{% if audio__mixer == "software" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="autoaudiomixer"{% if audio__mixer == "autoaudiomixer" %} selected="true"{% endif
+  %}>On</option>
+                </select> 
+            </div>
+
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Music files</h2>
+            <label for="musicbox__scan_always">Scan Music Files</label><br/>
+            <p>Use this setting to let Mopidy/MusicBox scan on startup for new music files on the SD Card, USB or the Network. This could take a while! This can slowdown the boot a lot. Disable it again if your music doesn't change.</p>
+            <div>
+                <select name="musicbox__scan_always" data-role="slider"><br/>
+                    <option value="false"{% if musicbox__scan_always == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if musicbox__scan_always == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select> 
+            </div>
+
+            <label for="network__mount_address">Network Drive</label>
+            <p>Mount Windows Network Drive on boot. Type the address exactly like this (samba mount): //servername/mountpoint/directory e.g. //192.168.1.5/musicmount or //server.local/shared/music<br/>
+If the mount needs a username/password, also set it (leave empty for guest-access). Don't forget to let Mopidy/MusicBox scan the contents at first boot (see MusicBox Settings section)</p>
+            <input type="text" name="network__mount_address" value="{{ network__mount_address }}" size="10" maxlength="40"/>
+
+            <label for="network__mount_user">Username</label>
+            <input type="text" name="network__mount_user" value="{{ network__mount_user }}" size="15" maxlength="40"/>
+            
+            <label for="network__mount_password">Password</label>
+            <input type="password" name="network__mount_password" value="{{ network__mount_password }}" size="15" maxlength="40"/>
+
+            <label for="musicbox__resize_once">Resize filesystem</label><br/>
+            <p>Enable this to let MusicBox automatically resize the filesystem of your SD Card, so the system uses all the space of your card. Recommended because otherwise the card might fill up. This is beta, you can lose data on your card if you enable this!! (If so, you can put the original MusicBox image on it again and start over) </p>
+            <div>
+                <select name="musicbox__resize_once" data-role="slider"><br/>
+                    <option value="false"{% if musicbox__resize_once == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if musicbox__resize_once == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select> 
+            </div>
+
+        </div>
+                    
+    <h3>Services</h3>
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Spotify</h2>
+            <p>Enable playing music from Spotify.</p>
+            <div>
+                <select name="spotify__enabled" data-role="slider"><br/>
+                    <option value="false"{% if spotify__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if spotify__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select> 
+            </div>
+            <label for="spotify__username">Username</label>
+            <input type="text" name="spotify__username" value="{{ spotify__username }}" size="15" maxlength="40"/>
+            <label for="spotify__password">Password</label>
+            <input type="password" name="spotify__password" value="{{ spotify__password }}" size="10" maxlength="40"/>
+            <label for="spotify__bitrate">Music Quality (bitrate)</label>
+	    <select name="spotify__bitrate">
+	    	<option value="96"{% if spotify__bitrate == "96" %} selected="true"{% endif
+  %}>Lowest, low network usage (96kbps)</option>
+	    	<option value="160"{% if spotify__bitrate == "160" %} selected="true"{% endif
+  %}>Medium, medium network usage (160kbps)</option>
+	    	<option value="320"{% if spotify__bitrate == "320" %} selected="true"{% endif
+  %}>High, higher network usage (320kbps)</option>
+	    </select>
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <script src="//connect.soundcloud.com/sdk.js"></script>
+              <script>
+                SC.initialize({
+                  client_id: "93e33e327fd8a9b77becd179652272e2",
+                  redirect_uri: "http://www.mopidy.com/soundcloud_callback",
+                });
+                function auth_soundcloud () {
+                  SC.connect(function() {
+                    SC.get("/me", function(user, error) {
+                      if (error) {
+                        alert("Error: " + error.message);
+                      } else {
+                        alert(SC.accessToken());
+                        $("#sc_token").val(SC.accessToken());
+                      }
+                    });
+                  });
+                }
+              </script>
+            
+            <h2>SoundCloud</h2>
+            <p>(Beta) If you want to use SoundCloud, you must first authenticate
+      your installation to access your SoundCloud account. <!-- Click here to do that: <a href="#soundcloud" class="img"
+            onclick="javascript:auth_soundcloud()"><img src="http://connect.soundcloud.com/2/btn-connect-sc-l.png"
+              alt="Connect with SoundCloud"></a>. Or --> To do that, go to <a href="http://www.mopidy.com/authenticate" target="_blank">http://www.mopidy.com/authenticate</a></p>
+            <p>NOTE: Enabling this plugin can mess up the search functionality of MusicBox!</p>
+            <div>
+                <select name="soundcloud__enabled" data-role="slider"><br/>
+                    <option value="false"{% if soundcloud__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if soundcloud__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+            <label for="soundcloud__auth_token">Token</label>
+            <p>Fill the token here e.g. 1-1111-1111111</p>
+            <input type="text" name="soundcloud__auth_token" id="sc_token" value="{{ soundcloud__auth_token }}" size="15" maxlength="40"/>
+<!-- does not work yey            <label for="soundcloud__explore">Explore</label>
+            <p>The explore option lets you define playlists to explore in SoundCloud. For example, if you want Jazz from <a href="https://soundcloud.com/explore/jazz" target="_blank">https://soundcloud.com/explore/jazz</a> your entry would be 'jazz'. More info at <a href="https://github.com/dz0ny/mopidy-soundcloud" target="_blank">https://github.com/dz0ny/mopidy-soundcloud</a>. Seperate with commas. E.g. explore = jazz, electronic/Ambient, pop/New Wave, rock/Indie</p>
+            <div data-role="fieldcontain">
+                <textarea rows="8" cols="40" name="soundcloud__explore">{{ soundcloud__explore }}</textarea>
+            </div>
+-->
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Google Music</h2>
+            <p>(Beta) Please provide your username, password to enable Google Music. You have to supply a device-id too.</p>
+            <p>NOTE: This could delay the startup for a while. Please be patient after rebooting.</p>
+            <div>
+                <select name="gmusic__enabled" data-role="slider"><br/>
+                    <option value="false"{% if gmusic__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if gmusic__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+            <label for="gmusic__username">Username</label>
+            <input type="text" name="gmusic__username" value="{{ gmusic__username }}" size="15" maxlength="40"/>
+            <label for="gmusic__password">Password</label>
+            <p>If you use 2-way authentication, you need an application-specific password.</p>
+            <input type="password" name="gmusic__password" value="{{ gmusic__password }}" size="10" maxlength="40"/>
+            <label for="gmusic__deviceid">Device ID</label>
+            <p>The device ID is a 16-digit hexadecimal string (without a '0x' prefix) identifying the Android device registered for Google Play Music. You can obtain this ID by dialing *#*#8255#*#* on your phone (see the aid) or using an app like Android Device ID (see the Google Service Framework ID Key). You may also leave this field empty. MusicBox will try to find the ID by itself. See the Mopidy logs for more information. More info at <a href="https://github.com/hechtus/mopidy-gmusic">https://github.com/hechtus/mopidy-gmusic</a></p>
+            <input type="text" name="gmusic__deviceid" value="{{ gmusic__deviceid }}" size="10" maxlength="40"/>
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Last.FM</h2>
+            <p>Please provide your username, password to enable scrobbling music to Last.FM.</p>
+            <div>
+                <select name="scrobbler__enabled" data-role="slider"><br/>
+                    <option value="false"{% if scrobbler__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if scrobbler__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+            <label for="scrobbler__username">Username</label>
+            <input type="text" name="scrobbler__username" value="{{ scrobbler__username }}" size="15" maxlength="40"/>
+            <label for="spotify__password">Password</label>
+            <input type="password" name="scrobbler__password" value="{{ scrobbler__password }}" size="10" maxlength="40"/>
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <h2>The Internet Archive</h2>
+            <p>Play (old) sounds, music and speech from The Internet Archive</p>
+            <div>
+                <select name="internetarchive__enabled" data-role="slider"><br/>
+                    <option value="false"{% if internetarchive__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if internetarchive__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+        </div>
+        
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Podcasts</h2>
+            <p>Play Podcasts from iTunes and Gpodder.net.</p>
+            <div>
+                <select name="podcast__enabled" data-role="slider"><br/>
+                    <option value="false"{% if podcast__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if podcast__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+<!-- does work yet            <label for="podcast__feed_urls">Feed urls</label>
+            <p>Give the links to podcast RSS feeds you want to use. Seperate with commas. E.g. http://www.npr.org/rss/podcast.php?id=510019, http://www.npr.org/rss/podcast.php?id=510253</p>
+            <div data-role="fieldcontain">
+                <textarea rows="8" cols="40" name="podcast__feed_urls">{{ podcast__feed_urls }}</textarea>
+            </div>
+-->
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <h2>TuneIn</h2>
+            <p>Select radiostations from TuneIn directory.</p>
+            <div>
+                <select name="tunein__enabled" data-role="slider"><br/>
+                    <option value="false"{% if tunein__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if tunein__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+        </div>
+        
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Dirble</h2>
+            <p>Enable Dirble webradio directory.</p>
+            <div>
+                <select name="dirble__enabled" data-role="slider"><br/>
+                    <option value="false"{% if dirble__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if dirble__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+            
+<!-- does not work yet            <label for="dirble__countries">Countries</label>
+            <p>Fill in the stations of country codes you want to see in the Dirble directory. Seperate with commas. E.g. US, NL, DE, NO, SE</p>
+            <input type="text" name="dirble__countries" value="{{ dirble__countries }}" size="15" maxlength="40"/>
+-->            
+            <label for="dirble__api_key">API-key</label>
+            <p>Optionally you can get an api-key by creating an account at <a href="http://www.dirble.com/">Dirble.com</a>. Then go to the section 'Your API-Keys' and copy the key you see and fill it in e.g 473279e3fa0e7010cbbbb40ecc31890d46e57a2e</p>
+            <input type="text" name="dirble__api_key" value="{{ dirble__api_key }}" size="15" maxlength="40"/>
+            
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Soma FM</h2>
+            <p>Play radiostations from Soma FM.</p>
+            <div>
+                <select name="somafm__enabled" data-role="slider"><br/>
+                    <option value="false"{% if somafm__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if somafm__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+        </div>
+        
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Subsonic</h2>
+            <p>Enable subsonic musicstreamer support.</p>
+            <div>
+                <select name="subsonic__enabled" data-role="slider"><br/>
+                    <option value="false"{% if subsonic__enabled == "false" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="true"{% if subsonic__enabled == "true" %} selected="true"{% endif
+  %}>On</option>
+                </select>
+            </div>
+            <label for="subsonic__hostname">Host url (e.g. music.myserver.org )</label>
+            <input type="text" name="subsonic__hostname" value="{{ subsonic__hostname }}" size="15" maxlength="40"/>
+            <label for="subsonic__port">Port (e.g. 445)</label>
+            <input type="text" name="subsonic__port" value="{{ subsonic__port }}" size="6" maxlength="5"/>
+            <label for="subsonic__username">Username</label>
+            <input type="text" name="subsonic__username" value="{{ subsonic__username }}" size="15" maxlength="40"/>
+            <label for="subsonic__api_key">Password</label>
+            <input type="password" name="subsonic__password" value="{{ subsonic__password }}" size="15" maxlength="40"/>
+            <label for="subsonic__ssl">Enable SSL</label><br/>
+            <div>
+                <select name="subsonic__ssl" data-role="slider"><br/>
+                    <option value="no"{% if subsonic__ssl == "no" %} selected="true"{% endif
+  %}>Off</option>
+                    <option value="yes"{% if subsonic__ssl == "yes" %} selected="true"{% endif
+  %}>On</option>
+                </select> 
+            </div>
+        </div>
+        <input type="submit" value="Update settings (will restart the box)" />
+      </form>
+      <br/><br/>
+    </div>
+  </body>
+</html>
