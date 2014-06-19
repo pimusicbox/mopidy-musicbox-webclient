@@ -579,3 +579,16 @@ input[type=text] {
     -o-user-select: text;
     user-select: text;
 }
+
+/* type/source of media in listviews */
+/*a[id^="spotify"] {
+    margin-left:20px;
+    background-image: url('../images/icons/play_alt_12x12.png');
+    border: 2px solid black;
+    display:block;
+}
+*/
+
+.mediaicon {
+    float: right;
+}

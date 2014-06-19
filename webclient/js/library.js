@@ -27,8 +27,6 @@ function initSearch() {
         delete customTracklists['albumresultscache'];
         delete customTracklists['trackresultscache'];
         $("#searchresults").hide();
-//        var limit = new Object;
-        
         mopidy.library.search({
             any: [value]
         }).then(processSearchResults, console.error);
@@ -46,6 +44,7 @@ function processSearchResults(resultArr) {
     $(SEARCH_ALBUM_TABLE).empty();
 
     // Merge results from different backends.
+    // TODO  should of coures have multiple tables
     var results = {'tracks': [], 'artists': [], 'albums': []};
     var emptyResult = true;
 
@@ -81,13 +80,14 @@ function processSearchResults(resultArr) {
 
     // Artist results
     var child = '';
-    var pattern = '<li><a href="#" onclick="return showArtist(this.id)" id={id}><strong>{name}</strong></a></li>';
+    var pattern = '<li><a href="#" onclick="return showArtist(this.id)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>';
     var tokens;
 
     for (var i = 0; i < results.artists.length; i++) {
         tokens = {
             'id': results.artists[i].uri,
-            'name': results.artists[i].name
+            'name': results.artists[i].name,
+            'class': getMediaClass(results.artists[i].uri)
         };
 
         // Add 'Show all' item after a certain number of hits.
@@ -105,7 +105,7 @@ function processSearchResults(resultArr) {
     // Album results
     child = '';
     pattern = '<li><a href="#" onclick="return showAlbum(this.id)" id="{albumId}">';
-    pattern += '<h5 data-role="heading">{albumName}</h5>';
+    pattern += '<h5 data-role="heading"><i class="{class}"></i> {albumName}</h5>';
     pattern += '<p data-role="desc">{artistName} ({albumYear})</p>';
     pattern += '</a></li>';
 
@@ -114,13 +114,16 @@ function processSearchResults(resultArr) {
             'albumId': results.albums[i].uri,
             'albumName': results.albums[i].name,
             'artistName': '',
-            'albumYear': results.albums[i].date
+            'albumYear': results.albums[i].date,
+            'class': getMediaClass(results.albums[i].uri)
         };
 
-        for (var j = 0; j < results.albums[i].artists.length; j++) {
-            tokens.artistName += results.albums[i].artists[j].name + ' ';
+        //console.log(i, results.albums[i].artists.length);
+        if (results.albums[i].artists) {
+            for (var j = 0; j < results.albums[i].artists.length; j++) {
+                tokens.artistName += results.albums[i].artists[j].name + ' ';
+            }
         }
-
         // Add 'Show all' item after a certain number of hits.
         if (i == 4 && results.albums.length > 5) {
             child += theme(showMorePattern, {'count': results.albums.length - i});
@@ -129,8 +132,8 @@ function processSearchResults(resultArr) {
 
         child += theme(pattern, tokens);
     }
-
     // Inject list items, refresh listview and hide superfluous items.
+    console.log(child, results.albums.length);
     $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide();
 
     $('#expandsearch').show();

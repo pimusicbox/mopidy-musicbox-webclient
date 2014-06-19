@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+<!-- <html manifest="mb.manifest"> -->
 <html>
 <head>
     <meta charset="utf-8">
-    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/jquery-1.10.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css"/>
     <script type='application/javascript' src='js/fastclick.js'></script>
     <script>
@@ -202,7 +203,7 @@
 
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint headerbtn">
-    <a data-iconpos="notext" href="#panel" data-role="button" data-icon="flat-menu" id="headermenubtn"></a>
+    <a href="#panel" style="margin-left: -12px; padding-top: 2px;" id="headermenubtn"><i class="fa fa-align-justify"></i></a>
 <!--     <a id="headerplaylistsbtn" href="#" class="" onclick="switchContent('playlists' ); return false;">
             <i class="fa fa-star"></i></a> &nbsp;
 -->
@@ -213,12 +214,12 @@
 <!-- /header -->
 
 <div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
-    <div class="ui-block-a" id="playlistslistdiv">
-        <ul id="playlistslist" data-filter="true" class="table"></ul>
+    <div class="ui-block-a scroll" id="playlistslistdiv">
+        <ul id="playlistslist" class="table"></ul>
     </div>
-    <div class="ui-block-b" id="playlisttracksdiv">
+    <div class="ui-block-b scroll" id="playlisttracksdiv">
         <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
-        <ul class="table" data-filter="true" id="playlisttracks"></ul>
+        <ul class="table" id="playlisttracks"></ul>
     </div>
 
 </div>

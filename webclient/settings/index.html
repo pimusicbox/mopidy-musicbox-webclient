@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <script src="../js/jquery-1.10.2.js"></script>
+    <script src="../js/jquery-1.10.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/jquery.mobile.flatui.css"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <meta name="HandheldFriendly" content="True">
@@ -42,7 +42,7 @@
   <div class="box focus">
     <h3>Settings</h3>
     <div>{{ error }}</div>
-        <form action="/updateSettings" method="post">
+        <form action="/updateSettings" method="post" onsubmit="alert('Will updating and reboot now...'); return true;">
         <div data-role="collapsible" class="settingscoll">
             <h2>Network</h2>
             <label for="network__wifi_network">Wifi Network Name</label>
@@ -70,6 +70,22 @@
             <label for="network__name">Device name</label>
             <p>Set the name of the MusicBox. In this way you can create different devices on the same network (in different rooms). The webinterface is accessible via the name you use here, e.g. http://kitchen.local/, and multiple devices will show up in AirTunes. You can only use normal caracters and numbers in the name (no spaces, dots, etc). You can even have different devices with different Spotify accounts when needed.</p>
             <input type="text" name="network__name" value="{{ network__name }}" size="12" maxlength="9"/>
+
+            <label for="musicbox__autoplay">Autoplay Url</label>
+            <p>MusicBox can automatically start playing a radiostation or stream at startup. It will wait a number of seconds before trying to play, to give the system (Mopidy) time to start. Since this time can vary per device, network and configuration, you can also set the number of seconds. If it does not work, give the system more time, e.g. 60 seconds.</p>
+            <input type="text" name="musicbox__autoplay" value="{{ musicbox__autoplay }}" size="15" maxlength="40"/>
+
+            <label for="musicbox__autoplaywait">Wait time</label>
+            <input type="range" name="musicbox__autoplaywait" value="{{ musicbox__autoplaywait }}" min="0" max="600">
+
+            <label for="musicbox__root_password">Root password</label>
+            <p>To secure your device, you can change the default password of root, the superuser.</p>
+            <input type="password" name="musicbox__root_password" value="{{ musicbox__root_password }}" size="15" maxlength="40"/>
+
+        </div>
+
+        <div data-role="collapsible" class="settingscoll">
+            <h2>Audio</h2>
             <label for="musicbox__output">Audio output</label>
             <p>Automatic detection sets to usb audio if an usb audio device is found, else to hdmi, if hdmi is connected at boot, and otherwise to the analog output.
 i2s (HifiBerry et all) cannot be detected automatically. Set it here to be able to use it.</p>
@@ -86,7 +102,7 @@ i2s (HifiBerry et all) cannot be detected automatically. Set it here to be able 
   %}>Analog</option>
 	    </select>
             
-            <label for="audio__mixer_volume">Initial audio volume:</label>
+            <label for="audio__mixer_volume">Initial volume:</label>
             <input type="range" name="audio__mixer_volume" style=".ui-slider-input {
     display: block !important;
 }" value="{{ audio__mixer_volume  }}" min="0" max="100">
@@ -112,17 +128,6 @@ i2s (HifiBerry et all) cannot be detected automatically. Set it here to be able 
   %}>On</option>
                 </select> 
             </div>
-
-            <label for="musicbox__autoplay">Autoplay Url</label>
-            <p>MusicBox can automatically start playing a radiostation or stream at startup. It will wait a number of seconds before trying to play, to give the system (Mopidy) time to start. Since this time can vary per device, network and configuration, you can also set the number of seconds. If it does not work, give the system more time, e.g. 60 seconds.</p>
-            <input type="text" name="musicbox__autoplay" value="{{ musicbox__autoplay }}" size="15" maxlength="40"/>
-
-            <label for="musicbox__autoplaywait">Wait time</label>
-            <input type="range" name="musicbox__autoplaywait" value="{{ musicbox__autoplaywait }}" min="0" max="600">
-
-            <label for="musicbox__root_password">Root password</label>
-            <p>To secure your device, you can change the default password of root, the superuser.</p>
-            <input type="password" name="musicbox__root_password" value="{{ musicbox__root_password }}" size="15" maxlength="40"/>
 
         </div>
 
@@ -212,10 +217,11 @@ If the mount needs a username/password, also set it (leave empty for guest-acces
               </script>
             
             <h2>SoundCloud</h2>
-            <p>If you want to use SoundCloud, you must first authenticate
+            <p>(Beta) If you want to use SoundCloud, you must first authenticate
       your installation to access your SoundCloud account. <!-- Click here to do that: <a href="#soundcloud" class="img"
             onclick="javascript:auth_soundcloud()"><img src="http://connect.soundcloud.com/2/btn-connect-sc-l.png"
               alt="Connect with SoundCloud"></a>. Or --> To do that, go to <a href="http://www.mopidy.com/authenticate" target="_blank">http://www.mopidy.com/authenticate</a></p>
+            <p>NOTE: Enabling this plugin can mess up the search functionality of MusicBox!</p>
             <div>
                 <select name="soundcloud__enabled" data-role="slider"><br/>
                     <option value="false"{% if soundcloud__enabled == "false" %} selected="true"{% endif
@@ -237,7 +243,8 @@ If the mount needs a username/password, also set it (leave empty for guest-acces
 
         <div data-role="collapsible" class="settingscoll">
             <h2>Google Music</h2>
-            <p>Please provide your username, password to enable Google Music. You have to supply a device-id too.</p>
+            <p>(Beta) Please provide your username, password to enable Google Music. You have to supply a device-id too.</p>
+            <p>NOTE: This could delay the startup for a while. Please be patient after rebooting.</p>
             <div>
                 <select name="gmusic__enabled" data-role="slider"><br/>
                     <option value="false"{% if gmusic__enabled == "false" %} selected="true"{% endif

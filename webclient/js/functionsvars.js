@@ -76,20 +76,10 @@ TRACK_TIMER = 1000;
 
 //check status timer, every 5 or 10 sec
 STATUS_TIMER = 10000;
-/*
-var radioStations = [];
-//fill with defaults
-    radioStations.push(['NPR 24', 'http://nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3']);
-    radioStations.push(['3FM Dutch', 'http://icecast.omroep.nl/3fm-bb-mp3']);
-    radioStations.push(['BBC WorldService', 'http://vprbbc.streamguys.net:8000/vprbbc24.mp3']);
-    radioStations.push(['Arrow Jazz', 'http://81.173.3.132:8082']);
-    radioStations.push(['PBS Australia', 'http://eno.emit.com:8000/pbsfm_live_64.mp3']);
-    radioStations.push(['Kiss FM Berlin', 'http://stream.kissfm.de/kissfm/mp3-128/internetradio/']);
-*/
 
-/*******
- *
- */
+var uriClassList = [ ['spotify', 'fa-spotify'], ['local', 'fa-file-sound-o'], ['podcast', 'fa-rss-square'], ['dirble', 'fa-microphone'],
+    ['tunein', 'fa-headphones'], ['soundcloud', 'fa-soundcloud'], ['gmusic', 'fa-google'], ['internetarchive', 'fa-university'], ['somafm', 'fa-flask'], ['subsonic', 'fa-folder-open'] ];
+
 function scrollToTop() {
     var divtop = 0;
     $('body,html').animate({
@@ -159,11 +149,13 @@ function renderSongLi(song, liID, uri, playlistType){
     } else {
 	name = song.name;
     }
+//    var iconClass = getMediaClass(liID.split('-')[1]);
     songLi = '<li class="song albumli" id="' + liID + '">' +
         '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + '\');">' +
-        '<i class="fa fa-ellipsis-vertical"></i>' +
+        '<i class="fa fa-ellipsis-v"></i>' +
         '</a>' +'<a href="#" onclick="return ' + playlistType + '(\'' + song.uri + '\',\'' + uri + '\');">' +
-        '<h1 class="trackname">'+ name + '</h1>' +
+//        '<h1 class="trackname"><i class="' + iconClass + '"></i> ' + name + '</h1>' +
+        '<h1 class="trackname">' + name + '</h1>' +
         '</a>' +
 
         '</li>';
@@ -186,7 +178,7 @@ function resultsToTables(results, target, uri) {
 
     //break into albums and put in tables
     var html = '';
-    var tableid, j, artistname, alburi, name;
+    var tableid, j, artistname, alburi, name, iconClass;
     var targetmin = target.substr(1);
     $(target).attr('data', uri);
     var length = 0 || results.length;
@@ -208,7 +200,7 @@ function resultsToTables(results, target, uri) {
             nextname = results[i + 1].album.name;
         }
         if (results[i].length == -1) {
-            html += '<li class="albumli"><a href="#"><h1>' + results[i].name + ' [Stream]</h1></a></li>';
+            html += '<li class="albumli"><a href="#"><h1><i class="' + iconClass + '"></i> ' + results[i].name + ' [Stream]</h1></a></li>';
             newalbum = [];
 	    nextname = '';
 	} else {
@@ -217,11 +209,12 @@ function resultsToTables(results, target, uri) {
             //render differently if only one track in the album
             if ( newalbum.length == 1 ) {
                 if (i != 0) { html += '<li class="smalldivider"> &nbsp;</li>'; }
+                iconClass = getMediaClass(newalbum[0].uri);
                 html += '<li class="song albumli" id="' + targetmin + '-' + newalbum[0].uri + '">' + 
 		    '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\');">' +
-		    '<i class="fa fa-ellipsis-vertical"></i></a>' +
+		    '<i class="fa fa-ellipsis-v"></i></a>' +
 		    '<a href="#" onclick="return ' + playlistType + '(\'' + newalbum[0].uri + '\',\'' + uri + '\');">' +
-                    '<h1>' + newalbum[0].name + "</h1><p>";
+                    '<h1><i class="' + iconClass + '"></i> ' + newalbum[0].name + "</h1><p>";
 /*                 '<span style="float: right;">' + timeFromSeconds(newalbum[0].length / 1000) + '</span>'; */
 		if (newalbum[0].artists) {
                     for ( j = 0; j < newalbum[0].artists.length; j++) {
@@ -242,9 +235,11 @@ function resultsToTables(results, target, uri) {
                 newalbum = [];
             } else {  //newalbum length
 		if ( results[i].album.uri && results[i].album.name ) {
+//                    iconClass = getMediaClass(results[i].album.uri);
+                    iconClass = getMediaClass(newalbum[0].uri);
                     html += '<li class="albumdivider">';
 	            html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' +
-    	                targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1>' + results[i].album.name + '</h1><p>';
+    	                targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1><i class="' + iconClass + '"></i> ' + results[i].album.name + '</h1><p>';
 		}
 		if (results[i].album.artists) {
                     for (j = 0; j < results[i].album.artists.length; j++) {
@@ -449,4 +444,14 @@ function isRadioUri (uri) {
     var a = validUri(uri);
     var b = radioExtensionsUris.indexOf(uriSplit[0].toLowerCase()) >= 0;
     return a || b;
+}
+
+function getMediaClass(uri) {
+    var uriSplit = uri.split(":")[0].toLowerCase();
+    for (var i = 0; i < uriClassList.length; i++) {
+        if (uriSplit == uriClassList[i][0]) {
+            return "fa " + uriClassList[i][1];
+        }
+    }
+    return '';
 }

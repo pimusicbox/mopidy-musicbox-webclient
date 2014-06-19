@@ -102,11 +102,17 @@ function processBrowseDir(resultArr) {
     }
 
     for (var i = 0; i < resultArr.length; i++) {
+        iconClass = getMediaClass(resultArr[i].uri);
 	if(resultArr[i].type == 'track' ) {
 //	    console.log(resultArr[i]);
-            child += '<li id="browselisttracks-' + resultArr[i].uri + '"><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + '""><h1 class="trackname">' + resultArr[i].name + '</h1></a></li>';
+            child += '<li id="browselisttracks-' + resultArr[i].uri + '"><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + 
+                '"><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
 	} else {
-            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + '""><h1 class="trackname">' + resultArr[i].name + '</h1></a></li>';
+            if (browseStack.length > 0) {
+                iconClass="fa fa-folder-o";
+            }
+            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + 
+                '""><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
 	}
     };
 
@@ -129,14 +135,17 @@ function processGetPlaylists(resultArr) {
     }
     var child, tmp = '',
         starredRegex = /spotify:user:.*:starred/g,
-        starred;
+        iconClass, starred;
+    
 
     for (var i = 0; i < resultArr.length; i++) {
+        iconClass = getMediaClass(resultArr[i].uri);
+        
         // Check if this is Spotify's "Starred" playlist
         if(starredRegex.test(resultArr[i].uri)) {
     	    starred = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">&#9733; Spotify Starred Tracks</a></li>';
 	} else {
-        child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">' + resultArr[i].name + '</a></li>';
+        child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</a></li>';
         tmp += child;
     }
     };

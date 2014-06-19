@@ -23,35 +23,38 @@ function resetSong() {
 function resizeMb() {
     $("#infoname").html(songdata.name);
     $("#infoartist").html(artiststext);
-//    //set height of playlist scrollers
-//    togglePlaylists();
 
-    if ($(window).width() > 960) {
+//    //set height of playlist scrollers
+/*    if ($(window).width() > 960) {
         $('#playlisttracksdiv').show();
         $('#playlistslistdiv').show();
+        $('.scroll').removeClass('height').removeClass('width');
+        $('#playlistspane').removeClass('height').removeClass('width');
     } else {
         if ( $('#playlisttracksdiv').is(':visible') == $('#playlistslistdiv').is(':visible')) {
             $('#playlisttracksdiv').hide();
             $('#playlistslistdiv').show();
+            $('.scroll').addClass('height', '99%').addClass('width', '99%');
+            $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
         }
     }
 
-/*    if ($('#playlisttracksdiv').is(':visible') && !$('#playlisttracksback').is(':visible') ) {
+    if ($('#playlisttracksdiv').is(':visible') && !$('#playlisttracksback').is(':visible') ) {
         $('.scroll').height($(window).height() - 96);
         //jqm added something which it shouldnt (at least in this case) I guess
         //        $('#playlistspane').removeClass('height').height($(window).height() - 110);
         $('.scroll').removeClass('height').removeClass('width');
         $('#playlistspane').removeClass('height').removeClass('width');
-//        $('#playlisttracksdiv').show();
-//        $('#playlistslistdiv').show();
+        $('#playlisttracksdiv').show();
+        $('#playlistslistdiv').show();
     } else {
         $('.scroll').addClass('height', '99%').addClass('width', '99%');
         $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
-//        $('#playlisttracksdiv').show();
-//        $('#playlistslistdiv').show();
-    }	
-*/
-/*
+        $('#playlisttracksdiv').show();
+        $('#playlistslistdiv').show();
+    }
+
+
     if (isMobileWebkit && ($(window).width() > 480)) {
         playlistslistScroll.refresh();
         playlisttracksScroll.refresh();
@@ -147,21 +150,27 @@ function popupTracks(e, listuri, trackuri) {
     $('.popupTrackName').html(popupData[trackuri].name);
     $('.popupAlbumName').html(popupData[trackuri].album.name);
     var child = "";
-    if (popupData[trackuri].artists.length == 1) {
-        child = '<a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'; 
-        $('.popupArtistName').html(popupData[trackuri].artists[0].name);
-        $('.popupArtistHref').attr('onclick', 'showArtist("' + popupData[trackuri].artists[0].uri + '");' );
-        $('.popupArtistsDiv').hide();
-        $('.popupArtistsLi').show();
-    } else {
-        for (var j = 0; j < popupData[trackuri].artists.length; j++) {
-            child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>';
+
+    if (popupData[trackuri].artists) {
+        if (popupData[trackuri].artists.length == 1) {
+            child = '<a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'; 
+            $('.popupArtistName').html(popupData[trackuri].artists[0].name);
+            $('.popupArtistHref').attr('onclick', 'showArtist("' + popupData[trackuri].artists[0].uri + '");' );
+            $('.popupArtistsDiv').hide();
+            $('.popupArtistsLi').show();
+        } else {
+            for (var j = 0; j < popupData[trackuri].artists.length; j++) {
+                child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>';
+            }
+            $('.popupArtistsLi').hide();
+            $('.popupArtistsLv').html(child).show();
+            $('.popupArtistsDiv').show();
+            //  this makes the viewport of the window resize somehow
+            $('.popupArtistsLv').listview("refresh");
         }
-        $('.popupArtistsLi').hide();
-        $('.popupArtistsLv').html(child).show();
-        $('.popupArtistsDiv').show();
-        //  this makes the viewport of the window resize somehow
-        $('.popupArtistsLv').listview("refresh");
+    } else {
+            $('.popupArtistsDiv').hide();
+            $('.popupArtistsLi').hide();
     }
 
     var hash = document.location.hash.split('?');
