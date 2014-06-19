@@ -6,7 +6,7 @@ With Mopidy MusicBox Webclient, you can play your music on your computer (Rapsbe
 
 This is a responsive html/js/css client especially written for Mopidy, a music server. Responsive, so it works on desktop and mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
 
-[Mopidy](http://www.mopidy.com/) is a music server which can play music from `Spotify (http://www.spotify.com/) Google Music, SoundCloud, etc or from your hard drive. 
+[Mopidy](http://www.mopidy.com/) is a music server which can play music from Spotify, Google Music, SoundCloud, etc or from your hard drive. 
 
 Development
 ===========
