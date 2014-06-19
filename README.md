@@ -1,12 +1,12 @@
-*********************
-Mopidy Browser Client
-*********************
+*************************
+Mopidy MusicBox Webclient
+*************************
 
-With Mopidy Browser Client, you can play your music on your computer (or Rapsberry Pi) and remotely control it from a computer, phone, tablet, laptop. From your couch.
+With Mopidy MusicBox Webclient, you can play your music on your computer (Rapsberry Pi) and remotely control it from a computer, phone, tablet, laptop. From your couch.
 
 This is a responsive html/js/css client especially written for Mopidy, a music server. Responsive, so it works on desktop and mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
 
-[Mopidy](http://www.mopidy.com/) is a music server which can play music from `Spotify (http://www.spotify.com/) or from your hard drive. 
+[Mopidy](http://www.mopidy.com/) is a music server which can play music from `Spotify (http://www.spotify.com/) Google Music, SoundCloud, etc or from your hard drive. 
 
 Development
 ===========
