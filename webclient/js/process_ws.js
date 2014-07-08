@@ -117,7 +117,19 @@ function processBrowseDir(resultArr) {
     };
 
     $('#browselist').html(child);
-
+    if (browseStack.length > 0 ) {
+/*        child = '';
+        for (var i = 0; i < browseStack.length; i++) {
+            child += browseStack[i] + ' / ';
+        }
+*/
+        child = getMediaHuman(browseStack[0]);
+        iconClass = getMediaClass(browseStack[0]);
+        $('#browsepath').html('<i class="' + iconClass + '"></i> ' + child);
+    } else {
+        $('#browsepath').html('');
+    }
+    
     updatePlayIcons(songdata.uri);
 
     showLoading(false);

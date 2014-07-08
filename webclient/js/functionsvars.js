@@ -80,6 +80,9 @@ STATUS_TIMER = 10000;
 var uriClassList = [ ['spotify', 'fa-spotify'], ['local', 'fa-file-sound-o'], ['podcast', 'fa-rss-square'], ['dirble', 'fa-microphone'],
     ['tunein', 'fa-headphones'], ['soundcloud', 'fa-soundcloud'], ['gmusic', 'fa-google'], ['internetarchive', 'fa-university'], ['somafm', 'fa-flask'], ['subsonic', 'fa-folder-open'] ];
 
+var uriHumanList = [ ['spotify', 'Spotify'], ['local', 'Local Files'], ['podcast', 'Podcasts'], ['dirble', 'Dirble'],
+    ['tunein', 'TuneIn'], ['soundcloud', 'SoundCloud'], ['gmusic', 'Google Music'], ['internetarchive', 'Internet Archive'], ['somafm', 'Soma FM'], ['subsonic', 'Subsonic'] ];
+
 function scrollToTop() {
     var divtop = 0;
     $('body,html').animate({
@@ -455,3 +458,14 @@ function getMediaClass(uri) {
     }
     return '';
 }
+
+function getMediaHuman(uri) {
+    var uriSplit = uri.split(":")[0].toLowerCase();
+    for (var i = 0; i < uriHumanList.length; i++) {
+        if (uriSplit == uriHumanList[i][0]) {
+            return uriHumanList[i][1];
+        }
+    }
+    return '';
+}
+

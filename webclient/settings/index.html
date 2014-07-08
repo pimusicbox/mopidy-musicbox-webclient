@@ -221,7 +221,7 @@ If the mount needs a username/password, also set it (leave empty for guest-acces
       your installation to access your SoundCloud account. <!-- Click here to do that: <a href="#soundcloud" class="img"
             onclick="javascript:auth_soundcloud()"><img src="http://connect.soundcloud.com/2/btn-connect-sc-l.png"
               alt="Connect with SoundCloud"></a>. Or --> To do that, go to <a href="http://www.mopidy.com/authenticate" target="_blank">http://www.mopidy.com/authenticate</a></p>
-            <p>NOTE: Enabling this plugin can mess up the search functionality of MusicBox!</p>
+<!--            <p>NOTE: Enabling this plugin can mess up the search functionality of MusicBox!</p> -->
             <div>
                 <select name="soundcloud__enabled" data-role="slider"><br/>
                     <option value="false"{% if soundcloud__enabled == "false" %} selected="true"{% endif
@@ -244,7 +244,7 @@ If the mount needs a username/password, also set it (leave empty for guest-acces
         <div data-role="collapsible" class="settingscoll">
             <h2>Google Music</h2>
             <p>(Beta) Please provide your username, password to enable Google Music. You have to supply a device-id too.</p>
-            <p>NOTE: This could delay the startup for a while. Please be patient after rebooting.</p>
+            <p>NOTE: This could slowdown the startup of MusicBox for a while. Please be patient after rebooting.</p>
             <div>
                 <select name="gmusic__enabled" data-role="slider"><br/>
                     <option value="false"{% if gmusic__enabled == "false" %} selected="true"{% endif
