@@ -30,7 +30,7 @@ function initSearch() {
         mopidy.library.search({
             any: [value]
         }).then(processSearchResults, console.error);
-        console.log('search sent', value);
+//       console.log('search sent', value);
     }
 }
 
@@ -38,7 +38,7 @@ function initSearch() {
  * process results of a search
  *********************************************************/
 function processSearchResults(resultArr) {
-    console.log('srch', resultArr);
+//    console.log('srch', resultArr);
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
@@ -133,7 +133,7 @@ function processSearchResults(resultArr) {
         child += theme(pattern, tokens);
     }
     // Inject list items, refresh listview and hide superfluous items.
-    console.log(child, results.albums.length);
+//    console.log(child, results.albums.length);
     $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide();
 
     $('#expandsearch').show();

@@ -514,7 +514,7 @@ $(document).ready(function(event) {
     });
     initRadio();
 
-    if ($(window).width() <= 1024) {
+    if ($(window).width() < 980) {
         $("#panel").panel("close");
     }else{
         $("#panel").panel("open");
