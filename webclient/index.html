@@ -8,7 +8,7 @@
     <script type='application/javascript' src='js/fastclick.js'></script>
     <script>
      //configuration
-     var wsLocation = location.host + ':6680';  //for musicbox configuration and normal operation of mopidy http
+     var wsLocation = location.host.split(':')[0] + ':6680';  //for musicbox configuration and normal operation of mopidy http. remove port from location.host before adding :6680
 //      var wsLocation = location.host;   //for running on port 80
 
 
