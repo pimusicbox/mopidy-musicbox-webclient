@@ -35,6 +35,8 @@ port = 6680
 static_dir = /opt/webclient
 ```
 
+At least on Raspbian with Mopidy installed from apt.mopidy.com, the 'webclient/mopidy' symbolic link should be re-linked to '/usr/share/mopidy/mopidy/http/data'. Another missing file/symbolic link is 'webclient/js/radiostations.js', which can be copied from https://github.com/woutervanwijk/Pi-MusicBox/tree/master/filechanges/boot/config.
+
 Then point your browser (modern, with websockets: recent versions of Firefox, Chrome, Safari and IE10) to the ip-address and port of your device. e.g. http://192.168.1.5:6680
 
 Security
