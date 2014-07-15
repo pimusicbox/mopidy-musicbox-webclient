@@ -18,7 +18,7 @@ function initSearch() {
 
     if ((value.length < 100) && (value.length > 0)) {
         showLoading(true);
-        //hide ios/android keyboard 
+        //hide ios/android keyboard
         document.activeElement.blur();
         $("input").blur();
 
@@ -27,10 +27,19 @@ function initSearch() {
         delete customTracklists['albumresultscache'];
         delete customTracklists['trackresultscache'];
         $("#searchresults").hide();
-        mopidy.library.search({
-            any: [value]
-        }).then(processSearchResults, console.error);
-//       console.log('search sent', value);
+
+        var query = {},
+            uris = [];
+
+        if (value.match(/^spotify:/)) {
+            query = {uri: [value]};
+            uris = ["spotify:"];
+        } else {
+            query = {any: [value]};
+        }
+
+        mopidy.library.search(query, uris).then(processSearchResults, console.error);
+        // console.log('search sent', value);
     }
 }
 
