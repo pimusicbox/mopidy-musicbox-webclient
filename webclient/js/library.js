@@ -28,18 +28,26 @@ function initSearch() {
         delete customTracklists['trackresultscache'];
         $("#searchresults").hide();
 
-        var query = {},
-            uris = [];
+        mopidy.getUriSchemes().then(function (schemes) {
+            var query = {},
+                uris = [];
 
-        if (value.match(/^spotify:/)) {
-            query = {uri: [value]};
-            uris = ["spotify:"];
-        } else {
-            query = {any: [value]};
-        }
+            var regexp = $.map(schemes, function (scheme) {
+                return '^' + scheme + ':';
+            }).join('|');
 
-        mopidy.library.search(query, uris).then(processSearchResults, console.error);
-        // console.log('search sent', value);
+            var match = value.match(regexp);
+            if (match) {
+                var scheme = match[0];
+                query = {uri: [value]};
+                uris = [scheme];
+            } else {
+                query = {any: [value]};
+            }
+
+            mopidy.library.search(query, uris).then(processSearchResults, console.error);
+            // console.log('search sent', value);
+        });
     }
 }
 
