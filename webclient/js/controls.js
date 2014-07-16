@@ -140,7 +140,7 @@ function playTrack(addtoqueue) {
  * @param uri
  * @returns {boolean}
  */
-function playTrackByUri(uri, playlisturi){
+function queueTrackByUri(uri, playlisturi){
     //console.log('playuri');
     //stop directly, for user feedback
     //mopidy.playback.stop(true);
@@ -215,16 +215,6 @@ function playTrackQueueByUri(uri, playlisturi){
     mopidy.playback.play(); //currentplaylist[track]);
     //console.log(track, currentplaylist[track]);
     return false;
-}
-
-/***
- * @deprecated
- * @returns {boolean}
- */
-function playTrackQueue() {
-    playlisturi = $('#popupQueue').data("list");
-    uri = $('#popupQueue').data("track");
-    return playTrackByUri(uri, playlisturi);
 }
 
 /********************************************************
