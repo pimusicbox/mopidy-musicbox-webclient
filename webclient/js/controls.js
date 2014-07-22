@@ -140,11 +140,11 @@ function playTrack(addtoqueue) {
  * @param uri
  * @returns {boolean}
  */
-function playTrackByUri(uri, playlisturi){
+function queueTrackByUri(uri, playlisturi){
     //console.log('playuri');
     //stop directly, for user feedback
-    mopidy.playback.stop(true);
-    mopidy.tracklist.clear();
+    //mopidy.playback.stop(true);
+    //mopidy.tracklist.clear();
 
     //this is deprecated, remove when popuptracks is removed completly
     $('#popupTracks').popup('close');
@@ -165,19 +165,20 @@ function playTrackByUri(uri, playlisturi){
     }
 
 //find track that is playing
-    for (var playing = 0; playing < currentplaylist.length; playing++) {
+    /*for (var playing = 0; playing < currentplaylist.length; playing++) {
         if (currentplaylist[playing].uri == songdata.uri) {
             break;
         }
-    }
+    }*/
 
-    mopidy.tracklist.add(tracks);
+    mopidy.tracklist.add(tracks.slice(selected, selected + 1));
+    //mopidy.tracklist.add(tracks);
 
-    for (var i = 0; i <= selected; i++) {
-        mopidy.playback.next();
-    }
+    //for (var i = 0; i <= selected; i++) {
+    //    mopidy.playback.next();
+    //}
 
-    mopidy.playback.play(); //tracks[selected]);
+//    mopidy.playback.play(); //tracks[selected]);
 //    console.log(selected);
     return false;
 }
@@ -214,16 +215,6 @@ function playTrackQueueByUri(uri, playlisturi){
     mopidy.playback.play(); //currentplaylist[track]);
     //console.log(track, currentplaylist[track]);
     return false;
-}
-
-/***
- * @deprecated
- * @returns {boolean}
- */
-function playTrackQueue() {
-    playlisturi = $('#popupQueue').data("list");
-    uri = $('#popupQueue').data("track");
-    return playTrackByUri(uri, playlisturi);
 }
 
 /********************************************************
