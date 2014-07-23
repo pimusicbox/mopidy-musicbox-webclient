@@ -29,6 +29,13 @@ Install by running::
     pip install Mopidy-MusicBox-Webclient
 
 
+Alternatively, clone the repository and run ``sudo python setup.py install`` from within the project directory. e.g. ::
+
+    $ git clone https://github.com/woutervanwijk/Mopidy-MusicBox-Webclient
+    $ cd Mopidy-MusicBox-Webclient
+    $ sudo python setup.py install
+
+
 Usage
 =====
 
