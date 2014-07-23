@@ -10,11 +10,13 @@ Mopidy-MusicBox-Webclient
     :target: https://pypi.python.org/pypi/Mopidy-MusicBox-Webclient/
     :alt: Number of PyPI downloads
 
-With Mopidy MusicBox Webclient, you can play your music on your computer (Rapsberry Pi) and remotely control it from a computer, phone, tablet, laptop. From your couch.
+With Mopidy MusicBox Webclient, you can play your music on your computer (`Rapsberry Pi <http://www.raspberrypi.org/>`_) and remotely control it using your computer, tablet or phone.
 
-This is a responsive html/js/css client especially written for Mopidy, a music server. Responsive, so it works on desktop and mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
+This is a responsive webclient especially written for Mopidy, a music server. Responsive, so it works on desktop and mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
 
-[Mopidy](http://www.mopidy.com/) is a music server which can play music from Spotify, Google Music, SoundCloud, etc or from your hard drive. 
+`Mopidy <http://www.mopidy.com/>`_ is a music server which can play music from Spotify, Google Music, SoundCloud, etc or from your hard drive. 
+
+If you want to run Mopidy with this webclient on a Raspberry Pi, do yourself a favor and use my custom built SD-image: `Pi MusicBox <http://www.woutervanwijk.nl/pimusicbox/>`_.
 
 .. image:: https://github.com/woutervanwijk/Mopidy-MusicBox-Webclient/raw/master/screenshots/playlists_desktop.png
 
