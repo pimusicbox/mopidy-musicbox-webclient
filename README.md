@@ -3,19 +3,22 @@
 To connect to the raspberry pi, ask someone in the office for login credentials.
 
 ## Mopidy
-See documentation for [Mopidy](http://www.mopidy.com/).  Mopidy is running on port 6681.
+See documentation for [Mopidy](http://docs.mopidy.com/).  Mopidy is running on port 6681.
 
 ### Startup Script
 The script in `etc/init.d/mopidy` runs mopidy on startup.  It also updates the webclient by pulling from the master branch of this repository.
 
 ### Configuration
-Mopidy's configuration file is located in `/home/pi/.config/mopidy/mopidy.conf`.  To edit this file, you can run `mopconfig`.  After editing, you should restart mopidy with `sudo service mopidy restart`.  This configuration file contains account information for Spotify, Dirble, Soundcloud, and other services.  It also specifies the location of the webclient to serve on port 6681.
+Mopidy's configuration file is located in `/home/pi/.config/mopidy/mopidy.conf`.  (The startup script uses a symbolic link to this file at `/etc/mopidy/mopidy.conf`.  To edit this file, you can run `mopconfig`.  After editing, you should restart mopidy with `sudo service mopidy restart`.  This configuration file contains account information for Spotify, Dirble, Soundcloud, and other services.  It also specifies the location of the webclient to serve on port 6681.
 
 ### Webclient
 Mopidy serves the webclient at `/opt/Mopidy-MusicBox-Webclient`.  The client uses websocket connections to control mopidy.  See the [documentation for Mopidy's JavaScript library](http://docs.mopidy.com/en/latest/api/js/).
 
 #### Making Changes
 To make changes to the webclient, simply merge changes into master.  The updates will be automatically deployed to the music server at 6am the following day.
+
+#### Setting Up Development Environment on OS X
+Follow Mopidy's [installation instructions for OS X](http://docs.mopidy.com/en/latest/installation/osx/).  You should also install the extensions mopidy-soundcloud, mopidy-dirble, mopidy-scrobbler, and mopidy-spotify, availabe via the Mopidy Homebrew tap.  Use a `mopidy.conf` similar to the one on the music server.  Use different Spotify credentials to avoid cutting off the music server while running locally.  Point `static_dir` under `[http]` to your checked out version of the webclient in this repository. 
 
 ## NginX
 [NginX](http://nginx.com/) is running as a reverse proxy server on ports 80 and 6680.  It forwards incoming HTTP requests on port 80 and incoming websocket connections on port 6680 to mopidy on port 6681.  Note that the music server is using NginX version 1.6, built from source, because previous versions (including 1.4, the latest version available with `apt-get`) don't support websocket proxying.
@@ -35,6 +38,8 @@ The server reboots every morning at 6am.  To change or remove this behavior, edi
 
 ### Internet
 Internet settings are located at `/etc/network/interfaces`.  Currently the music server does not reserve a static IP, but it reserves the hostname `music` and accepts connections at `music.local`.  To change this, edit `/etc/hostname` as well as the `127.0.1.1` entry of `/etc/hosts`, and then run `/etc/init.d/hostname.sh` and reboot.
+
+If the internet is down, the music server will try reconnecting to the network.  The script `/usr/local/bin/checkwifi.sh` is run every five minutes as a cron job.  It does this by pinging the Originate Airport Extreme at 192.168.2.86.  If the router's IP changes, this script should be updated.
 
 *************************
 # Mopidy MusicBox Webclient
