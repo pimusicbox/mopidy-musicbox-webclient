@@ -1,0 +1,8 @@
+include AUTHORS
+include LICENSE
+include MANIFEST.in
+include README.rst
+include mopidy_musicbox/ext.conf
+
+recursive-include screenshots *
+recursive-include mopidy_musicbox/static *
