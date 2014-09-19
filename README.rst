@@ -54,11 +54,13 @@ Project resources
 Changelog
 =========
 
-v1.0.0 (UNRELEASED)
+v1.0.0
 -------------------
 
 - Compatible with Mopidy v0.19
 - Made pip installable
+- A lot of fixes
+- Works with mopidy-websettings extension
 
 v0.1.0 (2013-07-21)
 -------------------
