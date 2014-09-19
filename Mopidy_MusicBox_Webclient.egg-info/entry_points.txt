@@ -1,3 +1,0 @@
-[mopidy.ext]
-musicbox_webclient = mopidy_musicbox_webclient:MusicBoxExtension
-
