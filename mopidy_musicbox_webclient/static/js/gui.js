@@ -120,8 +120,8 @@ function setSongInfo(data) {
         getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
     } else {
 	$("#modalalbum").html('');
-	$("#infocover").attr('src', './images/default_cover.png');
-    $("#controlspopupimage").attr('src', '../images/default_cover.png');
+	$("#infocover").attr('src', '../images/default_cover.png');
+        $("#controlspopupimage").attr('src', '../images/default_cover.png');
     }
 
     $("#modalartist").html(arttmp);
@@ -435,8 +435,6 @@ $(document).ready(function(event) {
     $('.ui-panel-dismiss').on( "tap", function() { $("#panel").panel("close"); } );
     //end of workaround
 
-
-
     $(window).hashchange();
 
     // Connect to server
@@ -475,7 +473,6 @@ $(document).ready(function(event) {
         resizeMb();
     });
 
-
     //navigation temporary, rewrite this!
     $('#songinfo').click(
 	function() 
@@ -490,7 +487,11 @@ $(document).ready(function(event) {
         exitFullscreen();
     });
 
-
+// remove buttons only for MusicBox
+    if (!isMusicBox) {
+        $('#navSettings').hide();
+        $('#navshutdown').hide();
+    }
 
     //navigation stuff
 

@@ -122,9 +122,12 @@ function processBrowseDir(resultArr) {
         for (var i = 0; i < browseStack.length; i++) {
             child += browseStack[i] + ' / ';
         }
-*/
+
         child = getMediaHuman(browseStack[0]);
         iconClass = getMediaClass(browseStack[0]);
+*/
+        child = getMediaHuman(resultArr[0].uri);
+        iconClass = getMediaClass(resultArr[0].uri);
         $('#browsepath').html('<i class="' + iconClass + '"></i> ' + child);
     } else {
         $('#browsepath').html('');
@@ -178,6 +181,7 @@ function processGetPlaylists(resultArr) {
 function processGetTracklist(resultArr) {
     //cache result
     var newplaylisturi = resultArr.uri;
+//console.log(resultArr);
     playlists[newplaylisturi] = resultArr;
     setSongInfo();
     resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);

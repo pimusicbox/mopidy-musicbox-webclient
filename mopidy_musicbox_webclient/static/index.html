@@ -8,9 +8,9 @@
     <script type='application/javascript' src='js/fastclick.js'></script>
     <script>
      //configuration
-     var wsLocation = location.host.split(':')[0] + ':6680';  //for musicbox configuration and normal operation of mopidy http. remove port from location.host before adding :6680
-//      var wsLocation = location.host;   //for running on port 80
-
+//     var wsLocation = location.host + ':6680';  //for musicbox configuration and normal operation of mopidy http
+      var wsLocation = location.host;   //for running on port 80
+      var isMusicBox = true;   //set to true to remove buttons only for musicbox
 
         $(document).bind("mobileinit", function () {
             $.extend($.mobile, {
@@ -101,7 +101,7 @@
                 <span class="navtxt"> Exit Fullscreen </span><i class="fa  fa-desktop"></i></a>
         </li>
         <li id="navSettings" data-icon="false">
-                <a href="/Settings">
+                <a href="/settings">
                 <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
         </li>
         <li id="navshutdown" data-icon="false">
@@ -240,7 +240,7 @@
 <div id="nowPlayingpane" data-role="content" class="pane">
 
 
-    <img id="controlspopupimage" src=""/>
+    <img id="controlspopupimage" src="images/default_cover.png" />
 
 
     <div class="nowPlaying-artistInfo">

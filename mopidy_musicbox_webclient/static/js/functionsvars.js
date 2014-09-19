@@ -197,6 +197,9 @@ function resultsToTables(results, target, uri) {
 		results[i].name = decodeURI(name[name.length - 1]) || 'Track ' + String(i);
         }
 
+        //leave out unplayable items
+        if (results[i].name.substring(0,12) == '[unplayable]') continue;
+        
         newalbum.push(results[i]);
 	nextname = '';
         if ((i < length - 1) && results[i+1].album && results[i+1].album.name ) {
