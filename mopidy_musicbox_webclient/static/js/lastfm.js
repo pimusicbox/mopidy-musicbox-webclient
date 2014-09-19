@@ -22,28 +22,29 @@ $(window).load(function() {
 
 
 function getCover(nwartist, nwalbum, image, size) {
-//        $(image).attr('src', '../images/default_cover.png');
+        var defUrl = 'images/default_cover.png';
         lastfm.album.getInfo({artist: nwartist, album: nwalbum}, {success: function(data){
             for (var i = 0; i < data.album.image.length; i++) {
                 if ( data.album.image[i]['size'] == size) {
-                    $(image).attr('src', data.album.image[i]['#text']);
+                    
+                    $(image).attr('src', data.album.image[i]['#text'] || defUrl);
                 }
             }
         }, error: function(code, message){
-            $(image).attr('src', '../images/default_cover.png');
+            $(image).attr('src', defUrl);
 //            console.log('Error #'+code+': '+message);
         }});
 }
 function getArtistImage(nwartist, image, size) {
-        $(image).attr('src', '../images/user_24x32.png');
+        var defUrl = 'images/user_24x32.png';
         lastfm.artist.getInfo({artist: nwartist}, {success: function(data){
             for (var i = 0; i < data.artist.image.length; i++) {
                 if ( data.artist.image[i]['size'] == size) {
-                    $(image).attr('src', data.artist.image[i]['#text']);
+                    $(image).attr('src', data.artist.image[i]['#text'] || defUrl);
                 }
             }
         }, error: function(code, message){
-            $(image).attr('src', '../images/icons/user_24x32.png');
+            $(image).attr('src', defUrl);
 //            console.log('Error #'+code+': '+message);
         }});
 }
