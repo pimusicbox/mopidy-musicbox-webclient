@@ -612,13 +612,13 @@ function saveRadioStations() {
 }
 
 function haltSystem() {
-    $.post("/haltSystem");
+    $.post("/settings/shutdown");
     toast('Stopping system...', 10000);
     setTimeout(function(){window.history.back();}, 10000);
 }
 
 function rebootSystem() {
-    $.post("/rebootSystem");
+    $.post("/settings/reboot");
     toast('Rebooting...', 10000);
     setTimeout(function(){window.history.back();}, 10000);
 }
