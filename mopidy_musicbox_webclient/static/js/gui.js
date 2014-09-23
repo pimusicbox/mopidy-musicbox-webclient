@@ -383,6 +383,7 @@ function locationHashChanged() {
             $('#navbrowse a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;
         case 'search':
+            getSearchSchemes();
             $('#navsearch a').addClass($.mobile.activeBtnClass);
             $("#searchinput").focus();
             if (customTracklists['allresultscache'] == '') {
