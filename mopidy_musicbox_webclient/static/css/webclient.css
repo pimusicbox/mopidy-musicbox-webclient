@@ -198,7 +198,7 @@
     display: none;
 }
 
-#currentpane, #searchpane, #albumspane, #artistspane, #radiopane {
+#currentpane, #searchpane, #albumspane, #artistspane, #streampane {
     display: none; 
 }
 
