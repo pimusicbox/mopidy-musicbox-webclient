@@ -538,19 +538,19 @@ function streamPressed(key) {
 
 function playStreamUri(uri) {
     //value of name is based on the passing of an uri as a parameter or not
-    uri = uri || $('#streamuriinput').val().trim();
+    var nwuri = uri || $('#streamuriinput').val().trim();
     var service = $('#selectstreamservice').val();
-    if (service) {
-        uri = service + ':' + uri;
+    if (!uri && service) {
+        nwuri = service + ':' + uri;
     }
-    if (isServiceUri(uri)) {
+    if (isServiceUri(nwuri)) {
         toast('Playing uri...');
         //stop directly, for user feedback
         mopidy.playback.stop(true);
         clearQueue();
-        mopidy.tracklist.add(null, 0, uri);
+        mopidy.tracklist.add(null, 0, nwuri);
         mopidy.playback.play();
-    } else if (isStreamUri(uri)) {
+    } else if (isStreamUri(nwuri)) {
             toast('Selecting stream...');
             //stop directly, for user feedback
             mopidy.playback.stop(true);
@@ -558,7 +558,7 @@ function playStreamUri(uri) {
             document.activeElement.blur();
             $("input").blur();
             clearQueue();
-            mopidy.tracklist.add(null, 0, uri);
+            mopidy.tracklist.add(null, 0, nwuri);
             mopidy.playback.play();
     } else {
         toast('No valid url!');
@@ -583,10 +583,6 @@ function saveStreamUri() {
             continue;
         }
         i++;
-        if (rs && rs[1] == uri) {
-            name = name || streamUris[key][0];
-            delete streamUris[key];
-        }
     }
     streamUris.unshift([name, uri]);
     $.cookie.json = true;
