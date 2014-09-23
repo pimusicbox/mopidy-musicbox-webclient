@@ -77,11 +77,14 @@ TRACK_TIMER = 1000;
 //check status timer, every 5 or 10 sec
 STATUS_TIMER = 10000;
 
+//var uriHumanList = [ ['spotify', 'Spotify'], ['local', 'Local Files'], ['podcast', 'Podcasts'], ['dirble', 'Dirble'],
+//    ['tunein', 'TuneIn'], ['soundcloud', 'SoundCloud'], ['sc', 'SoundCloud'], ['gmusic', 'Google Music'], ['internetarchive', 'Internet Archive'], ['somafm', 'Soma FM'], ['yt', 'YouTube'], ['youtube', 'YouTube'], ['subsonic', 'Subsonic'] ];
+
 var uriClassList = [ ['spotify', 'fa-spotify'], ['local', 'fa-file-sound-o'], ['podcast', 'fa-rss-square'], ['dirble', 'fa-microphone'],
-    ['tunein', 'fa-headphones'], ['soundcloud', 'fa-soundcloud'], ['gmusic', 'fa-google'], ['internetarchive', 'fa-university'], ['somafm', 'fa-flask'], ['subsonic', 'fa-folder-open'] ];
+    ['tunein', 'fa-headphones'], ['soundcloud', 'fa-soundcloud'], ['sc', 'fa-soundcloud'], ['gmusic', 'fa-google'], ['internetarchive', 'fa-university'], ['somafm', 'fa-flask'], ['youtube', 'fa-youtube'], ['yt', 'fa-youtube'], ['subsonic', 'fa-folder-open'] ];
 
 var uriHumanList = [ ['spotify', 'Spotify'], ['local', 'Local Files'], ['podcast', 'Podcasts'], ['dirble', 'Dirble'],
-    ['tunein', 'TuneIn'], ['soundcloud', 'SoundCloud'], ['gmusic', 'Google Music'], ['internetarchive', 'Internet Archive'], ['somafm', 'Soma FM'], ['subsonic', 'Subsonic'] ];
+    ['tunein', 'TuneIn'], ['soundcloud', 'SoundCloud'], ['gmusic', 'Google Music'], ['internetarchive', 'Internet Archive'], ['somafm', 'Soma FM'], ['youtube', 'YouTube'], ['subsonic', 'Subsonic'] ];
 
 function scrollToTop() {
     var divtop = 0;
@@ -166,7 +169,6 @@ function renderSongLi(song, liID, uri, playlistType){
 }
 
 function resultsToTables(results, target, uri) {
-//console.log(results, target, uri);
     if (!results) { return }
     if (target == '#currenttable') {
         playlistType = 'playTrackQueueByUri';
@@ -279,7 +281,6 @@ function resultsToTables(results, target, uri) {
 	  } //albums name
         }
     }
-//  console.log(html);
     tableid = "#" + tableid;
     $(target).html(html);
     $(target).attr('data', uri);
@@ -414,7 +415,6 @@ $.event.special.swipe = $.extend($.event.special.swipe, {
                         origin: $( event.target ),
                         offset: $('body').scrollTop()
                 };
-//	    console.log('start');
         },
 
         stop: function( event ) {
