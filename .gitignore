@@ -15,7 +15,5 @@ mopidy.log*
 node_modules/
 nosetests.xml
 .project
-
 *.pbxproj
-
-Mopidy Webclient/Mopidy Webclient.xcodeproj/project.pbxproj
+*.egg-info

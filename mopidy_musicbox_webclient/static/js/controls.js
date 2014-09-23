@@ -312,9 +312,9 @@ function setRepeat(nwrepeat) {
         return
     }
     if (!nwrepeat) {
-        $("#repeatbt").attr('src', 'images/icons/reload_alt_18x21.png');
+        $("#repeatbt").attr('style', 'color:#7cc4e7');
     } else {
-        $("#repeatbt").attr('src', 'images/icons/reload_18x21.png');
+        $("#repeatbt").attr('style', 'color:#66FF33');
     }
     repeat = nwrepeat;
 }
@@ -324,9 +324,9 @@ function setRandom(nwrandom) {
         return
     }
     if (!nwrandom) {
-        $("#randombt").attr('src', 'images/icons/loop_alt2_24x21.png');
+        $("#randombt").attr('style', 'color:#7cc4e7');
     } else {
-        $("#randombt").attr('src', 'images/icons/loop_24x24.png');
+        $("#randombt").attr('style', 'color:#66FF33');
     }
     random = nwrandom;
 }
@@ -612,13 +612,13 @@ function saveRadioStations() {
 }
 
 function haltSystem() {
-    $.post("/haltSystem");
+    $.post("/settings/shutdown");
     toast('Stopping system...', 10000);
     setTimeout(function(){window.history.back();}, 10000);
 }
 
 function rebootSystem() {
-    $.post("/rebootSystem");
+    $.post("/settings/reboot");
     toast('Rebooting...', 10000);
     setTimeout(function(){window.history.back();}, 10000);
 }

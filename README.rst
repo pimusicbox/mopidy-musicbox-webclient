@@ -54,7 +54,19 @@ Project resources
 Changelog
 =========
 
-v1.0.0
+v1.0.2 Dev
+-------------------
+
+- Search: select service to search in
+- Youtube icons
+- Fixed single quote bug #39
+
+v1.0.1 (20-9-2014)
+-------------------
+
+- Small fixes for Pypi distro
+
+v1.0.0 (20-9-2014)
 -------------------
 
 - Compatible with Mopidy v0.19

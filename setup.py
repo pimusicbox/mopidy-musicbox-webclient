@@ -29,7 +29,7 @@ setup(
     ],
     entry_points={
         'mopidy.ext': [
-            'musicbox = mopidy_musicbox_webclient:MusicBoxExtension',
+            'musicbox_webclient = mopidy_musicbox_webclient:MusicBoxExtension',
         ],
     },
     classifiers=[

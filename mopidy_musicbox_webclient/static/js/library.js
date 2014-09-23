@@ -15,10 +15,11 @@ function searchPressed(key) {
 //init search
 function initSearch() {
     var value = $('#searchinput').val();
+    var searchService = $('#selectSearchService').val();
 
     if ((value.length < 100) && (value.length > 0)) {
         showLoading(true);
-        //hide ios/android keyboard 
+        //hide ios/android keyboard
         document.activeElement.blur();
         $("input").blur();
 
@@ -27,10 +28,29 @@ function initSearch() {
         delete customTracklists['albumresultscache'];
         delete customTracklists['trackresultscache'];
         $("#searchresults").hide();
-        mopidy.library.search({
-            any: [value]
-        }).then(processSearchResults, console.error);
-//       console.log('search sent', value);
+
+        if (searchService != 'all') {
+            mopidy.library.search({any:[value]}, [searchService + ':']).then(processSearchResults, console.error);
+        } else {
+            mopidy.getUriSchemes().then(function (schemes) {
+                var query = {},
+                    uris = [];
+
+                var regexp = $.map(schemes, function (scheme) {
+                    return '^' + scheme + ':';
+                }).join('|');
+
+                var match = value.match(regexp);
+                if (match) {
+                    var scheme = match[0];
+                    query = {uri: [value]};
+                    uris = [scheme];
+                } else {
+                    query = {any: [value]};
+                }
+                mopidy.library.search(query, uris).then(processSearchResults, console.error);
+            });
+        }
     }
 }
 
@@ -38,7 +58,6 @@ function initSearch() {
  * process results of a search
  *********************************************************/
 function processSearchResults(resultArr) {
-//    console.log('srch', resultArr);
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
     $(SEARCH_ALBUM_TABLE).empty();
@@ -106,7 +125,7 @@ function processSearchResults(resultArr) {
     child = '';
     pattern = '<li><a href="#" onclick="return showAlbum(this.id)" id="{albumId}">';
     pattern += '<h5 data-role="heading"><i class="{class}"></i> {albumName}</h5>';
-    pattern += '<p data-role="desc">{artistName} ({albumYear})</p>';
+    pattern += '<p data-role="desc">{artistName}</p>';
     pattern += '</a></li>';
 
     for (var i = 0; i < results.albums.length; i++) {
@@ -117,12 +136,15 @@ function processSearchResults(resultArr) {
             'albumYear': results.albums[i].date,
             'class': getMediaClass(results.albums[i].uri)
         };
-
-        //console.log(i, results.albums[i].artists.length);
         if (results.albums[i].artists) {
             for (var j = 0; j < results.albums[i].artists.length; j++) {
-                tokens.artistName += results.albums[i].artists[j].name + ' ';
+                if (results.albums[i].artists[j].name) {
+                    tokens.artistName += results.albums[i].artists[j].name + ' ';
+                }
             }
+        }
+        if (tokens.albumYear) {
+            tokens.artistName += '(' + tokens.albumYear + ')';
         }
         // Add 'Show all' item after a certain number of hits.
         if (i == 4 && results.albums.length > 5) {
@@ -133,7 +155,6 @@ function processSearchResults(resultArr) {
         child += theme(pattern, tokens);
     }
     // Inject list items, refresh listview and hide superfluous items.
-//    console.log(child, results.albums.length);
     $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide();
 
     $('#expandsearch').show();
@@ -258,4 +279,22 @@ function showAlbum(uri) {
     scrollToTop();
     setSongInfo();
     return false;
+}
+
+function getSearchSchemes() {
+    mopidy.getUriSchemes().then(
+        function(schemesArray) {
+            var humanIndex;
+            $("#selectSearchService").children().remove().end();
+            $("#selectSearchService").append(new Option('All services', 'all'));
+            for (var i = 0; i < schemesArray.length; i++) {
+                for (var j = 0; j < uriHumanList.length; j++) {
+                    if (uriHumanList[j][0] == schemesArray[i].toLowerCase() ) {
+                        $("#selectSearchService").append(new Option(uriHumanList[j][1], schemesArray[i]));
+                    }
+                }
+            }
+            $("#selectSearchService").selectmenu( "refresh", true );
+        }, console.error
+    );
 }

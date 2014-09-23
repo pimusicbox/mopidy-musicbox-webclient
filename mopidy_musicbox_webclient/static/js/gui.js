@@ -120,8 +120,8 @@ function setSongInfo(data) {
         getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
     } else {
 	$("#modalalbum").html('');
-	$("#infocover").attr('src', '../images/default_cover.png');
-        $("#controlspopupimage").attr('src', '../images/default_cover.png');
+	$("#infocover").attr('src', 'images/default_cover.png');
+        $("#controlspopupimage").attr('src', 'images/default_cover.png');
     }
 
     $("#modalartist").html(arttmp);
