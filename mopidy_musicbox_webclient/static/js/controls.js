@@ -11,10 +11,10 @@ function playBrowsedTracks(addtoqueue, trackid) {
 
     var selected = 0, counter = 0;
 
-    var isRadio = isRadioUri(trackid);
-    //only add one station for dirble, otherwise add all tracks
-    if (isRadio) {
-    	mopidy.tracklist.add(null, null, trackid);
+    var isStream = isStreamUri(trackid);
+    //only add one uri for dirble, tunein; otherwise add all tracks
+    if (isStream) {
+        mopidy.tracklist.add(null, null, trackid);
     } else {
           //add selected item to the playlist
         $('.browsetrack').each(function() { 
@@ -37,7 +37,7 @@ function playBrowsedTracks(addtoqueue, trackid) {
     //add all items, but selected to the playlist
     selected = 0;
     counter = 0
-/*    if(!isRadio) {
+/*    if(!isStream) {
         $('.browsetrack').each(function() { 
     	  //do not add selected song again
     	  if (this.id == trackid) {
@@ -526,89 +526,115 @@ function pausePosTimer() {
 }
 
 /*********************************
- * Radio
+ * Stream
  *********************************/
-function radioPressed(key) {
+function streamPressed(key) {
     if (key == 13) {
-        addRadioUri();
+        playStreamUri();
         return false;
     }
     return true;
 }
 
-function addRadioUri(name, uri) {
+function playStreamUri(uri) {
     //value of name is based on the passing of an uri as a parameter or not
-    var name = '';
-    if (!uri) {
-        name = $('#radionameinput').val();
-    } else {
-        $('#radionameinput').val('');
+    uri = uri || $('#streamuriinput').val().trim();
+    var service = $('#selectstreamservice').val();
+    if (service) {
+        uri = service + ':' + uri;
     }
-    uri = uri || $('#radiouriinput').val();
-    if (isRadioUri(uri)) {
-        toast('Selecting radiostation...');
+    if (isServiceUri(uri)) {
+        toast('Playing uri...');
         //stop directly, for user feedback
         mopidy.playback.stop(true);
-        //hide ios/android keyboard
-        document.activeElement.blur();
-        $("input").blur();
         clearQueue();
         mopidy.tracklist.add(null, 0, uri);
         mopidy.playback.play();
-        var tmpname = name || '';
-        var i = 0;
-        //add station to list and check for doubles and add no more than 25
-        for (var key in radioStations) {
-            rs = radioStations[key];
-            if (i > 25) {
-                delete radioStations[key];
-                continue;
-            }
-            i++;
-            if (rs && rs[1] == uri) {
-                tmpname = name || radioStations[key][0];
-                delete radioStations[key];
-            }
-        }
-        ;
-        $('#radionameinput').val(tmpname);
-        $('#radiouriinput').val(uri);
-        radioStations.unshift([tmpname, uri]);
-        saveRadioStations();
-        updateRadioStations();
+    } else if (isStreamUri(uri)) {
+            toast('Selecting stream...');
+            //stop directly, for user feedback
+            mopidy.playback.stop(true);
+            //hide ios/android keyboard
+            document.activeElement.blur();
+            $("input").blur();
+            clearQueue();
+            mopidy.tracklist.add(null, 0, uri);
+            mopidy.playback.play();
     } else {
         toast('No valid url!');
     }
+
     return false;
 }
 
-function updateRadioStations() {
+function saveStreamUri() {
+    var i = 0;
+    var name = $('#streamnameinput').val().trim();
+    var uri = $('#streamuriinput').val().trim();
+    var service = $('#selectstreamservice').val();
+    if (service) {
+        uri = service + ':' + uri;
+    }
+    //add stream to list and check for doubles and add no more than 100
+    for (var key in streamUris) {
+        rs = streamUris[key];
+        if (i > 100) {
+            delete streamUris[key];
+            continue;
+        }
+        i++;
+        if (rs && rs[1] == uri) {
+            name = name || streamUris[key][0];
+            delete streamUris[key];
+        }
+    }
+//    streamUris.unshift([name, uri]);
+    $.cookie.json = true;
+    $.cookie('streamUris', streamUris);
+    updateStreamUris();
+    return false;
+}
+
+function deleteStreamUri(uri) {
+    var i = 0;
+    for (var key in streamUris) {
+        rs = streamUris[key];
+        if (rs && rs[1] == uri) {
+            delete streamUris[key];
+        }
+    }
+//    streamUris.unshift([name, uri]);
+    $.cookie.json = true;
+    $.cookie('streamUris', streamUris);
+    updateStreamUris();
+    return false;
+}
+
+function updateStreamUris() {
     var tmp = '';
-    $('#radiostationstable').empty();
+    $('#streamuristable').empty();
     var child = '';
-    for (var key in radioStations) {
-        var rs = radioStations[key];
+    for (var key in streamUris) {
+        var rs = streamUris[key];
+        console.log(rs);
         if (rs) {
             name = rs[0] || rs[1];
-            child = '<li data-icon="delete"> <a href="#" onclick="return addRadioUri(\'' + rs[0] + '\', \'' + rs[1] + '\');">';
+            child = '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;"><a href="#" onclick="return deleteStreamUri(\'' + rs[1] + '\');">&nbsp;</a></span>' +
+                '<i class="fa fa-rss" style="float: left; padding: .5em; padding-top: 1em;"></i>' +     
+                ' <a style="margin-left: 20px" href="#" onclick="return playStreamUri(\'' + rs[1] + '\');">';
             child += '<h1>' + name + '</h1></a></li>';
             tmp += child;
         }
     }
-    ;
-    $('#radiostationstable').html(tmp);
+    console.log(tmp);
+    $('#streamuristable').html(tmp);
 }
 
-function initRadio() {
+function initStreams() {
     $.cookie.json = true;
-    tmpRS = $.cookie('radioStations');
-    radioStations = tmpRS || radioStations;
-    updateRadioStations();
-}
-
-function saveRadioStations() {
-    $.cookie.json = true;
-    $.cookie('radioStations', radioStations);
+    tmpRS = $.cookie('streamUris');
+    streamUris = tmpRS || streamUris;
+    updateStreamUris();
 }
 
 function haltSystem() {

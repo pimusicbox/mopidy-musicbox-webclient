@@ -76,8 +76,8 @@ function setSongInfo(data) {
     artiststext = '';
 
     if (validUri(data.name)) {
-        for (var key in radioStations) {
-	rs = radioStations[key];
+        for (var key in streamUris) {
+	rs = streamUris[key];
 	if (rs && rs[1] == data.name) {
 	  data.name = (rs[0] || rs[1]);
 	}
@@ -93,8 +93,8 @@ function setSongInfo(data) {
 	$("#songlength").html('');
 	pausePosTimer();
 	$('#trackslider').slider('disable');
-	$('#radionameinput').val(data.name);
-	$('#radiouriinput').val(data.uri);
+//	$('#streamnameinput').val(data.name);
+//	$('#streamuriinput').val(data.uri);
     } else {
         songlength = data.length;
 	$("#songlength").html(timeFromSeconds(data.length / 1000));
@@ -205,7 +205,8 @@ function initSocketevents() {
         getCurrentPlaylist();
         updateStatusOfAll();
         getPlaylists();
-	getBrowseDir();
+        getBrowseDir();
+        getSearchSchemes();
         showLoading(false);
         $(window).hashchange();
     });
@@ -383,15 +384,14 @@ function locationHashChanged() {
             $('#navbrowse a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;
         case 'search':
-            getSearchSchemes();
             $('#navsearch a').addClass($.mobile.activeBtnClass);
             $("#searchinput").focus();
             if (customTracklists['allresultscache'] == '') {
                 initSearch($('#searchinput').val());
             }
             break;
-        case 'radio':
-            $('#navradio a').addClass('ui-state-active ui-state-persist ui-btn-active');
+        case 'stream':
+            $('#navstream a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;
         case 'artists':
             if (uri != '') {
@@ -514,7 +514,7 @@ $(document).ready(function(event) {
 	    return true;
 	}
     });
-    initRadio();
+    initStreams();
 
     if ($(window).width() < 980) {
         $("#panel").panel("close");

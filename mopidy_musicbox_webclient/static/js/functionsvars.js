@@ -49,9 +49,6 @@ var browseStack = [];
 var ua = navigator.userAgent,
   isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua), isMobileWebkit = /WebKit/.test(ua) && /Mobile/.test(ua), isMobile = /Mobile/.test(ua), isWebkit = /WebKit/.test(ua);
 
-// the first part of Mopidy extensions which serve radiostations (streams)
-var radioExtensionsUris = ['somafm', 'tunein', 'dirble'];
-
 //constants
 PROGRAM_NAME = 'MusicBox';
 //PROGRAM_NAME = 'Mopidy';
@@ -80,11 +77,16 @@ STATUS_TIMER = 10000;
 //var uriHumanList = [ ['spotify', 'Spotify'], ['local', 'Local Files'], ['podcast', 'Podcasts'], ['dirble', 'Dirble'],
 //    ['tunein', 'TuneIn'], ['soundcloud', 'SoundCloud'], ['sc', 'SoundCloud'], ['gmusic', 'Google Music'], ['internetarchive', 'Internet Archive'], ['somafm', 'Soma FM'], ['yt', 'YouTube'], ['youtube', 'YouTube'], ['subsonic', 'Subsonic'] ];
 
+// the first part of Mopidy extensions which serve streams
+var streamExtensionsList = ['somafm', 'tunein', 'dirble', 'sc', 'yt', 'podcast'];
+
 var uriClassList = [ ['spotify', 'fa-spotify'], ['local', 'fa-file-sound-o'], ['podcast', 'fa-rss-square'], ['dirble', 'fa-microphone'],
     ['tunein', 'fa-headphones'], ['soundcloud', 'fa-soundcloud'], ['sc', 'fa-soundcloud'], ['gmusic', 'fa-google'], ['internetarchive', 'fa-university'], ['somafm', 'fa-flask'], ['youtube', 'fa-youtube'], ['yt', 'fa-youtube'], ['subsonic', 'fa-folder-open'] ];
 
 var uriHumanList = [ ['spotify', 'Spotify'], ['local', 'Local Files'], ['podcast', 'Podcasts'], ['dirble', 'Dirble'],
     ['tunein', 'TuneIn'], ['soundcloud', 'SoundCloud'], ['gmusic', 'Google Music'], ['internetarchive', 'Internet Archive'], ['somafm', 'Soma FM'], ['youtube', 'YouTube'], ['subsonic', 'Subsonic'] ];
+
+var uriServiceDetectList = [['youtube.com', 'yt'], ['soundcloud.com', 'sc']];
 
 function scrollToTop() {
     var divtop = 0;
@@ -401,7 +403,11 @@ function showOffline(on) {
 // from http://dzone.com/snippets/validate-url-regexp
 function validUri(str) {
     var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-    return regexp.test(str);
+    return regexp.test(str) || isServiceUri(str);
+}
+
+function validServiceUri(str) {
+    return validUri(str) || isServiceUri(str);
 }
 
 /*
@@ -445,10 +451,10 @@ $.event.special.swipe = $.extend($.event.special.swipe, {
 });
 */
 
-function isRadioUri (uri) {
+function isStreamUri (uri) {
     var uriSplit = uri.split(":");
     var a = validUri(uri);
-    var b = radioExtensionsUris.indexOf(uriSplit[0].toLowerCase()) >= 0;
+    var b = streamExtensionsList.indexOf(uriSplit[0].toLowerCase()) >= 0;
     return a || b;
 }
 
@@ -470,5 +476,24 @@ function getMediaHuman(uri) {
         }
     }
     return '';
+}
+
+function isServiceUri(uri) {
+    var uriSplit = uri.split(":")[0].toLowerCase();
+    var retVal = false;
+
+    for (var i = 0; i < uriHumanList.length; i++) {
+        if (uriSplit == uriHumanList[i][0]) {
+            retVal = true;
+        }
+    }
+
+    for (var i = 0; i < streamExtensionsList.length; i++) {
+        if (uriSplit == streamExtensionsList[i]) {
+            retVal = true;
+        }
+    }
+
+    return retVal;
 }
 
