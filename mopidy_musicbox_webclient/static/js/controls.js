@@ -588,7 +588,7 @@ function saveStreamUri() {
             delete streamUris[key];
         }
     }
-//    streamUris.unshift([name, uri]);
+    streamUris.unshift([name, uri]);
     $.cookie.json = true;
     $.cookie('streamUris', streamUris);
     updateStreamUris();
@@ -600,13 +600,15 @@ function deleteStreamUri(uri) {
     for (var key in streamUris) {
         rs = streamUris[key];
         if (rs && rs[1] == uri) {
-            delete streamUris[key];
+            if (confirm("About to remove " + rs[0] + ". Sure?")) {
+                delete streamUris[key];
+            }
         }
     }
-//    streamUris.unshift([name, uri]);
     $.cookie.json = true;
     $.cookie('streamUris', streamUris);
     updateStreamUris();
+
     return false;
 }
 
@@ -616,7 +618,6 @@ function updateStreamUris() {
     var child = '';
     for (var key in streamUris) {
         var rs = streamUris[key];
-        console.log(rs);
         if (rs) {
             name = rs[0] || rs[1];
             child = '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;"><a href="#" onclick="return deleteStreamUri(\'' + rs[1] + '\');">&nbsp;</a></span>' +
@@ -626,7 +627,6 @@ function updateStreamUris() {
             tmp += child;
         }
     }
-    console.log(tmp);
     $('#streamuristable').html(tmp);
 }
 
