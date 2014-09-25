@@ -207,16 +207,16 @@
 }
 
 /*** home ***/
-#homerows a {
+
+#homerows div {
     text-align:center;
-    color: #2C3E50;
-}
-
-#homerows a div {
+    background-color: #2C3E50;
     padding: 5px;
+    padding-top: 20px;
+    border: 2px solid white;
 }
 
-#homerows a div i {
+#homerows div i {
     border: 0;
     font-size: 64px;
 }

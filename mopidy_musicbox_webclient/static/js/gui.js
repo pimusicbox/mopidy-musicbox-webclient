@@ -371,6 +371,9 @@ function locationHashChanged() {
     $('#' + divid + 'pane').show();
 
     switch(divid) {
+        case 'home':
+            $('#navhome a').addClass('ui-state-active ui-state-persist ui-btn-active');
+            break;
         case 'nowPlaying':
             $('#navnowPlaying a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;
