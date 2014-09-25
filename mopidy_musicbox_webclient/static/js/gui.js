@@ -453,7 +453,7 @@ $(document).ready(function(event) {
     resetSong();
 
     if (location.hash.length < 2) {
-        switchContent("playlists");
+        switchContent("home");
     }
 
 
@@ -492,6 +492,8 @@ $(document).ready(function(event) {
     if (!isMusicBox) {
         $('#navSettings').hide();
         $('#navshutdown').hide();
+        $('#homesettings').hide();
+        $('#homeshutdown').hide();
     }
 
     //navigation stuff

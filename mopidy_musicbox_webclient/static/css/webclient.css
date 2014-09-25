@@ -120,9 +120,6 @@
     margin-top: 30px;
 }
 
-
-
-
 /**headers and controls**/
 
 
@@ -209,6 +206,20 @@
     heigth: 90px;
 }
 
+/*** home ***/
+#homerows a {
+    text-align:center;
+    color: #2C3E50;
+}
+
+#homerows a div {
+    padding: 5px;
+}
+
+#homerows a div i {
+    border: 0;
+    font-size: 64px;
+}
 /*********************
  * listviews
  ********************/
