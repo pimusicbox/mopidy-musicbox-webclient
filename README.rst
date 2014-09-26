@@ -57,9 +57,12 @@ Changelog
 v1.0.2 Dev
 -------------------
 
-- Search: select service to search in
-- Youtube icons
-- Fixed single quote bug #39
+- A friendlier welcome with a home page with buttons to the most used functions
+- Converted Radio Stations to Streams, so user can add streams for youtube, spotify, soundcloud, podcasts
+- Enhanced radio/streams interface
+- Search: select service to search
+- Youtube icons added
+- Fixed single quote bug #39, other bugs
 
 v1.0.1 (20-9-2014)
 -------------------
