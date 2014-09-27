@@ -120,9 +120,6 @@
     margin-top: 30px;
 }
 
-
-
-
 /**headers and controls**/
 
 
@@ -198,7 +195,7 @@
     display: none;
 }
 
-#currentpane, #searchpane, #albumspane, #artistspane, #radiopane {
+#currentpane, #searchpane, #albumspane, #artistspane, #streampane {
     display: none; 
 }
 
@@ -209,6 +206,19 @@
     heigth: 90px;
 }
 
+/*** home ***/
+
+#homerows div {
+    text-align:center;
+    background-color: #2C3E50;
+    padding: 2px;
+    padding-top: 20px;
+    border: 3px solid white;
+}
+
+#homerows div i {
+    font-size: 28px;
+}
 /*********************
  * listviews
  ********************/

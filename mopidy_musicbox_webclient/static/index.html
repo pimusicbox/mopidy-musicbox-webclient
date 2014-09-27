@@ -68,9 +68,13 @@
 
 
     <ul class="ui-listview mainNav" data-role="listview" data-theme="a">
+        <li id="navhome" data-icon="false">
+            <a href="#home" onclick="switchContent('home' ); return false;">
+                <span class="navtxt"> Home </span><i class="fa fa-home"></i></a>
+        </li>
         <li id="navnowPlaying" data-icon="false">
             <a href="#nowPlaying" onclick="switchContent('nowPlaying' ); return false;">
-                <span class="navtxt"> Now Playing </span><i class="fa  fa-music"></i></a>
+                <span class="navtxt"> Now Playing </span><i class="fa fa-music"></i></a>
         </li>
         <li id="navplaylists" data-icon="false">
             <a href="#playlists" onclick="switchContent('playlists' ); return false;">
@@ -82,15 +86,15 @@
         </li>
         <li id="navcurrent" data-icon="false">
             <a href="#current" onclick="switchContent('current' ); return false;">
-                <span class="navtxt">Queue </span><i class="fa fa-align-left"></i></a>
+                <span class="navtxt">Queue </span><i class="fa fa-bars"></i></a>
         </li>
         <li id="navsearch" data-icon="false">
             <a href="#search" onclick="switchContent('search' ); return false;">
                 <span class="navtxt">Search </span><i class="fa fa-search"></i></a>
         </li>
-        <li id="navradio" data-icon="false">
-            <a href="#radio" onclick="switchContent('radio' ); return false;">
-                <span class="navtxt">Radio </span><i class="fa  fa-rss"></i></a>
+        <li id="navstream" data-icon="false">
+            <a href="#stream" onclick="switchContent('stream' ); return false;">
+                <span class="navtxt">Streams </span><i class="fa  fa-rss"></i></a>
         </li>
         <li id="navEnterFullscreen" data-icon="false">
                 <a href="#">
@@ -101,7 +105,7 @@
                 <span class="navtxt"> Exit Fullscreen </span><i class="fa  fa-desktop"></i></a>
         </li>
         <li id="navSettings" data-icon="false">
-                <a href="/settings">
+                <a href="/settings/">
                 <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
         </li>
         <li id="navshutdown" data-icon="false">
@@ -117,14 +121,7 @@
             </div>
         </li>
     </ul>
-
-
-
-
-
 </div>
-
-
 
 <div id="coverpopup" data-role="popup" data-theme="c">
     <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
@@ -138,7 +135,7 @@
 <div id="artistpopup" data-role="popup" data-theme="c">
     <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
        class="ui-btn-right">Close</a>
-    <h4 id="artistpopupname">bbb</h4>
+    <h4 id="artistpopupname">&nbsp;</h4>
     <a href="#" onclick="closePopups();"><img id="artistpopupimage" src=""/></a>
 </div>
 
@@ -147,10 +144,6 @@
 <div data-role="popup" data-transition="none" data-theme="c" id="popupTracks">
     <div data-role="collapsible-set">
         <ul data-role="listview" data-icon="false" id="popupTracksLv">
-            <!--                        <li data-role="divider">
-                                    <span id="popupTrackName"></span>
-                                    </li>
-            -->
             <li>
                 <a href="#" onclick="return playTrack();">Play <span class="popupTrackName"></span></a>
             </li>
@@ -209,14 +202,87 @@
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint headerbtn">
     <a href="#panel" style="margin-left: -12px; padding-top: 2px;" id="headermenubtn"><i class="fa fa-align-justify"></i></a>
-<!--     <a id="headerplaylistsbtn" href="#" class="" onclick="switchContent('playlists' ); return false;">
-            <i class="fa fa-star"></i></a> &nbsp;
--->
     <h1 id="contentHeadline" >Musicbox</h1>
      <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;">
             <i class="fa fa-search"></i></a>
 </div>
 <!-- /header -->
+
+<div data-role="content" id="homepane" class="pane">
+    <div id="homerows" class="ui-grid-c ui-responsive">
+        <a href="#nowPlaying" onclick="switchContent('nowPlaying' ); return false;">
+            <div class="ui-block-a">
+                <i class="fa fa-music"></i>
+                <h5>Now Playing</h5>
+            </div>
+        </a>
+        <a href="#current" onclick="switchContent('current' ); return false;">
+            <div class="ui-block-b">
+                <i class="fa fa-bars"></i>
+                <h5>Queue</h5>
+            </div>
+        </a>
+        <a href="#playlists" onclick="switchContent('playlists' ); return false;">
+            <div class="ui-block-c">
+                <i class="fa fa-star"></i>
+                <h5>Playlists</h5>
+            </div>
+        </a>
+        <a href="#browse" onclick="switchContent('browse' ); return false;">
+            <div class="ui-block-d">
+                <i class="fa fa-folder"></i>
+                <h5>Browse</h5>
+            </div>
+        </a>
+        <a href="#search" onclick="switchContent('search' ); return false;">
+            <div class="ui-block-a">
+                <i class="fa fa-search"></i>
+                <h5>Search</h5>
+            </div>
+        </a>
+        <a href="#stream" onclick="switchContent('stream' ); return false;">
+            <div class="ui-block-b">
+                <i class="fa fa-rss"></i>
+                <h5>Streams</h5>
+            </div>
+        </a>
+        <a id="homesettings" href="/settings/">
+            <div class="ui-block-c">
+                <i class="fa fa-gear"></i>
+                <h5>Settings</h5>
+            </div>
+        </a>
+        <a id="homeshutdown" href="system.html">
+            <div class="ui-block-d">
+                <i class="fa fa-power-off"></i>
+                <h5>System</h5>
+            </div>
+        </a>
+
+    </div>
+</div>
+<!--/homepane-->
+
+
+<div id="nowPlayingpane" data-role="content" class="pane">
+
+    <img id="controlspopupimage" src="images/default_cover.png" />
+
+
+    <div class="nowPlaying-artistInfo">
+    <h3 id="modalname"></h3>
+        <p class="artistAlbumLine"><span id="modalartist"></span> - <span id="modalalbum"></span></p>
+    </div>
+
+    <div id="slidercontainer"><!-- slider for track position -->
+        <span id="songelapsed" class="pull-left"> 0:00 </span>
+        <span id="songlength" class="pull-right"> 0:00 </span>
+        <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
+        <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
+    </div>
+
+</div>
+<!-- /nowplaying -->
 
 <div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
     <div class="ui-block-a scroll" id="playlistslistdiv">
@@ -236,26 +302,6 @@
         <ul id="browselist" class="table"></ul>
 </div>
 <!--/browsepane-->
-
-<div id="nowPlayingpane" data-role="content" class="pane">
-
-
-    <img id="controlspopupimage" src="images/default_cover.png" />
-
-
-    <div class="nowPlaying-artistInfo">
-    <h3 id="modalname"></h3>
-        <p class="artistAlbumLine"><span id="modalartist"></span> - <span id="modalalbum"></span></p>
-    </div>
-
-    <div id="slidercontainer"><!-- slider for track position -->
-        <span id="songelapsed" class="pull-left"> 0:00 </span>
-        <span id="songlength" class="pull-right"> 0:00 </span>
-        <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
-        <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
-    </div>
-
-</div>
 
 <div data-role="content" class="pane" id="currentpane">
     <a style="float:right" onclick="return clearQueue();" data-role="button">Clear</a><h4>Play Queue</h4>
@@ -283,7 +329,7 @@
 <div data-role="content" class="pane" id="searchpane">
     <div class="">
         <form>
-            <select id="selectSearchService" data-native-menu="false"> <!-- multiple="multiple" data-native-menu="false">
+            <select id="selectSearchService"> <!-- data-native-menu="false"> <!-- multiple="multiple" data-native-menu="false">
                 <option data-placeholder="true">Choose services</option> -->
             </select>
             <input id="searchinput" class="span2" data-clear-btn="true"
@@ -327,24 +373,43 @@
 </div>
 <!-- search div -->
 
-<div data-role="content" class="pane" id="radiopane">
-    <h4>Radio</h4>
+<div data-role="content" class="pane" id="streampane">
+    <h4>Streams</h4>
 
     <div>
-        <ul id="radiostationstable" class="table"></ul>
-        <p>Add an url of a radio station stream that you want to listen to in the boxes below. The last 25 stations are saved locally (not
-            on the server yet). To find stations, use the Browse function with extensions like Dirble or TuneIn, the right values will appear in these boxes automatically. Or use websites like <a href="http://www.listenlive.eu/" target="_blank">Listenlive</a> or <a
-                    href="http://www.dirble.com/" target="_blank">Dirble</a>.</p>
-
         <form>
-            <input id="radiouriinput" placeholder="Playlist URI" class="span2" data-clear-btn="true"
-                   onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text"/>
-            <input id="radionameinput" placeholder="Name" class="span2" data-clear-btn="true"
-                   onkeypress="return radioPressed(event.keyCode);" id="appendedInputButton" type="text"/>
-            <button class="btn" type="button" onclick="return addRadioUri();">
-                Play / Save
-            </button>
-        </form>
+        <div class="ui-grid-a pl-breakpoint">
+        <div class="ui-block-a" style="padding: 5px">
+            <p>Add an url of a stream that you want to listen to in the box below. You can add uri's for Spotify, SoundCloud, YouTube, Podcasts.
+                <select id="selectstreamservice" data-native-menu="true">
+                    <option value="">Internet Radio (mp3, m3u, asx, etc)</option>
+                    <option value="yt">YouTube</option>
+                    <option value="">Spotify Uri</option>
+                    <option value="sc">SoundCloud</option>
+                    <option value="podcast">Podcast</option>
+                </select>
+
+                <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
+                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                <button class="btn" type="button" onclick="return playStreamUri();">
+                    Play
+                </button>
+
+            <p>Put in a name and hit the Save button to save the url (locally, in the browser not
+                on the server yet). <!-- To find stations, use the Browse function with extensions like Dirble or TuneIn, the right values will appear in these boxes automatically. Or use websites like <a href="http://www.listenlive.eu/" target="_blank">Listenlive</a> or <a
+                        href="http://www.dirble.com/" target="_blank">Dirble</a>.</p> -->
+
+                <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
+                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                <button class="btn" type="button" onclick="return saveStreamUri();">
+                    Save
+                </button>
+            </form>
+        </div>
+        <div class="ui-block-b" style="padding: 5px">
+            <ul id="streamuristable" class="table"></ul>
+        </div>
+        </div>
     </div>
 </div>
 
@@ -407,7 +472,7 @@
 <script src="js/library.js"></script>
 <script src="js/functionsvars.js"></script>
 <script src="js/process_ws.js"></script>
-<script src="js/radiostations.js"></script>
+<script src="js/streamuris.js"></script>
 
 <!-- use lastfm -->
 <script type="text/javascript" src="js/lastfm.api.md5.js"></script>
