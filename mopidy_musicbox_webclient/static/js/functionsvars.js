@@ -136,7 +136,7 @@ function albumTracksToTable(pl, target, uri) {
     for (var i = 0; i < pl.length; i++) {
         popupData[pl[i].uri] = pl[i];
         liID = targetmin + '-' + pl[i].uri;
-        tmp += renderSongLi(pl[i], liID, uri, 'playTrackByUri');
+        tmp += renderSongLi(pl[i], liID, uri, 'queueTrackByUri');
 
         //child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
        // child += '<p style="float:right; display: inline;">' + timeFromSeconds(pl[i].length / 1000) + '</p><h1>' + pl[i].name + '</h1></a></li>';
@@ -173,7 +173,7 @@ function resultsToTables(results, target, uri) {
     if (target == '#currenttable') {
         playlistType = 'playTrackQueueByUri';
     } else {
-        playlistType = 'playTrackByUri';
+        playlistType = 'queueTrackByUri';
     }
 
     var newalbum = [];
