@@ -39,7 +39,7 @@ Alternatively, clone the repository and run ``sudo python setup.py install`` fro
 Usage
 =====
 
-Point your (modern) browser at Mopidy-MusicBox-Webclient running on your Mopidy server e.g. http://localhost:6680/musicbox.
+Point your (modern) browser at Mopidy-MusicBox-Webclient running on your Mopidy server e.g. http://localhost:6680/musicbox_webclient.
 
 
 
