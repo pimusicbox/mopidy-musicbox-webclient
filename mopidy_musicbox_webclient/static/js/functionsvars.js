@@ -74,11 +74,8 @@ TRACK_TIMER = 1000;
 //check status timer, every 5 or 10 sec
 STATUS_TIMER = 10000;
 
-//var uriHumanList = [ ['spotify', 'Spotify'], ['local', 'Local Files'], ['podcast', 'Podcasts'], ['dirble', 'Dirble'],
-//    ['tunein', 'TuneIn'], ['soundcloud', 'SoundCloud'], ['sc', 'SoundCloud'], ['gmusic', 'Google Music'], ['internetarchive', 'Internet Archive'], ['somafm', 'Soma FM'], ['yt', 'YouTube'], ['youtube', 'YouTube'], ['subsonic', 'Subsonic'] ];
-
-// the first part of Mopidy extensions which serve streams
-var streamExtensionsList = ['somafm', 'tunein', 'dirble', 'sc', 'yt', 'podcast'];
+// the first part of Mopidy extensions which serve radio streams
+var radioExtensionsList = ['somafm', 'tunein', 'dirble'];
 
 var uriClassList = [ ['spotify', 'fa-spotify'], ['local', 'fa-file-sound-o'], ['podcast', 'fa-rss-square'], ['dirble', 'fa-microphone'],
     ['tunein', 'fa-headphones'], ['soundcloud', 'fa-soundcloud'], ['sc', 'fa-soundcloud'], ['gmusic', 'fa-google'], ['internetarchive', 'fa-university'], ['somafm', 'fa-flask'], ['youtube', 'fa-youtube'], ['yt', 'fa-youtube'], ['subsonic', 'fa-folder-open'] ];
@@ -139,10 +136,6 @@ function albumTracksToTable(pl, target, uri) {
         popupData[pl[i].uri] = pl[i];
         liID = targetmin + '-' + pl[i].uri;
         tmp += renderSongLi(pl[i], liID, uri, 'playTrackByUri');
-
-        //child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">';
-       // child += '<p style="float:right; display: inline;">' + timeFromSeconds(pl[i].length / 1000) + '</p><h1>' + pl[i].name + '</h1></a></li>';
-
     };
     tmp += '</ul>';
     $(target).html(tmp);
@@ -179,6 +172,8 @@ function resultsToTables(results, target, uri) {
     }
 
     var newalbum = [];
+    //keep a list of albums for retreiving of covers
+    var coversList = [];
     var nextname = '';
     var count = 0;
     $(target).html('');
@@ -274,18 +269,25 @@ function resultsToTables(results, target, uri) {
                     //html += '<li class="albumli" id="' + targetmin + '-' + newalbum[j].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[j].uri + '\');">';
                     //html += '<p class="pright">' + timeFromSeconds(newalbum[j].length / 1000) + '</p><h1>' + newalbum[j].name + '</h1></a></li>';
                 }
-                ;
-                artistname = results[i].artists[0].name;
-                getCover(artistname, results[i].album.name, target + '-cover-' + i, 'small');
-                //            customTracklists[results[i].album.uri] = newalbum;
                 newalbum = [];
+            if (results[i].album) {
+                coversList.push([results[i].album, i]);
+            }
             } //newalbum length
+            if (results[i].album) {
+                coversList.push([results[i].album, i]);
+            }
 	  } //albums name
         }
     }
     tableid = "#" + tableid;
     $(target).html(html);
     $(target).attr('data', uri);
+    //retreive albumcovers
+    for (i = 0; i < coversList.length; i++){
+//        console.log(coversList[i]);
+        getCover(coversList[i][0], target + '-cover-' + coversList[i][1], 'small');
+    }
 }
 
 //process updated playlist to gui
@@ -403,7 +405,8 @@ function showOffline(on) {
 // from http://dzone.com/snippets/validate-url-regexp
 function validUri(str) {
     var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-    return regexp.test(str) || isServiceUri(str);
+//    return regexp.test(str) || isServiceUri(str);
+    return regexp.test(str);
 }
 
 function validServiceUri(str) {
@@ -454,7 +457,7 @@ $.event.special.swipe = $.extend($.event.special.swipe, {
 function isStreamUri (uri) {
     var uriSplit = uri.split(":");
     var a = validUri(uri);
-    var b = streamExtensionsList.indexOf(uriSplit[0].toLowerCase()) >= 0;
+    var b = radioExtensionsList.indexOf(uriSplit[0].toLowerCase()) >= 0;
     return a || b;
 }
 
@@ -482,14 +485,14 @@ function isServiceUri(uri) {
     var uriSplit = uri.split(":")[0].toLowerCase();
     var retVal = false;
 
-    for (var i = 0; i < uriHumanList.length; i++) {
-        if (uriSplit == uriHumanList[i][0]) {
+    for (var i = 0; i < uriClassList.length; i++) {
+        if (uriSplit == uriClassList[i][0]) {
             retVal = true;
         }
     }
 
-    for (var i = 0; i < streamExtensionsList.length; i++) {
-        if (uriSplit == streamExtensionsList[i]) {
+    for (var i = 0; i < radioExtensionsList.length; i++) {
+        if (uriSplit == radioExtensionsList[i]) {
             retVal = true;
         }
     }

@@ -24,6 +24,13 @@ function resizeMb() {
     $("#infoname").html(songdata.name);
     $("#infoartist").html(artiststext);
 
+    if ($(window).width() <= 960) {
+//        $('#playlisttracksdiv').hide();
+//        $('#playlistslistdiv').show();
+    } else {
+        $('#playlisttracksdiv').show();
+        $('#playlistslistdiv').show();
+    }
 //    //set height of playlist scrollers
 /*    if ($(window).width() > 960) {
         $('#playlisttracksdiv').show();
@@ -114,10 +121,9 @@ function setSongInfo(data) {
 	}
         arttmp = artistshtml;
     }
-
     if (data.album && data.album.name) {
         $("#modalalbum").html('<a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
-        getCover(artiststext, data.album.name, '#infocover, #controlspopupimage', 'extralarge');
+        getCover(data.album, '#infocover, #controlspopupimage', 'extralarge');
     } else {
 	$("#modalalbum").html('');
 	$("#infocover").attr('src', 'images/default_cover.png');
@@ -285,14 +291,11 @@ function enterFullscreen() {
             elem.requestFullscreen();
         }
     }
-
-
 }
 function exitFullscreen() {
     document.webkitExitFullscreen();
     document.mozCancelFullscreen();
     document.exitFullscreen();
-
 }
 
 function onFullScreenEnter() {
@@ -324,11 +327,12 @@ function setHeadline(site){
     if(str==""){
         str=site;
     }
-    $('#contentHeadline').text(str);
+    $('#contentHeadline').html('<a href="#home" onclick="switchContent(\'home\'); return false;">' + str + '</a>');
 }
 
 //update timer
 function updateStatusTimer() {
+//    console.log('statustimer');
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     //TODO check offline?
@@ -379,6 +383,7 @@ function locationHashChanged() {
             break;
         case 'current':
             $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active');
+            getCurrentPlaylist();
             break;
         case 'playlists':
             $('#navplaylists a').addClass('ui-state-active ui-state-persist ui-btn-active');
@@ -550,7 +555,6 @@ $(document).ready(function(event) {
 			$("#panel").panel("close"); 
 			event.stopImmediatePropagation(); }
 		    } ); 
-
 });
 
 function updatePlayIcons (uri) {

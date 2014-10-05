@@ -19,10 +19,10 @@ function playBrowsedTracks(addtoqueue, trackid) {
           //add selected item to the playlist
         $('.browsetrack').each(function() { 
     	    if (this.id == trackid) {
-		      selected = counter;
+	      selected = counter;
             }
-	      mopidy.tracklist.add(null, null, this.id);
-	      counter++;
+            mopidy.tracklist.add(null, null, this.id);
+	    counter++;
         } );
     }
 
@@ -33,6 +33,7 @@ function playBrowsedTracks(addtoqueue, trackid) {
 	}
         mopidy.playback.play(); //tracks[selected]);
     }
+
 
     //add all items, but selected to the playlist
     selected = 0;
@@ -101,37 +102,15 @@ function playTrack(addtoqueue) {
             return false;
     }
 
-//normal    
-//    mopidy.tracklist.add(tracks);
-
-//test    mopidy.tracklist.add(null, 0, playlisturi);
-
-// first add track to be played, then the other tracks
-    mopidy.tracklist.add(tracks.slice(selected, selected + 1) );
-
-// //   mopidy.playback.changeTrack(tracks[selected]);
-//    mopidy.tracklist.add(tracks.slice(selected, selected + 1) );
-//    //wait 2.5 seconds before adding the rest to give server the time to start playing
-//    setTimeout(function() {
-//	mopidy.tracklist.add(tracks.slice(0, selected), 0);
-//	if (selected < tracks.length) {
-//	    mopidy.tracklist.add(tracks.slice(selected + 1) );
-//	}
-//    }, 2500);
+    mopidy.tracklist.add(tracks);
 
     if (!addtoqueue) { 
 	for (var i = 0; i <= selected; i++) {
         	mopidy.playback.next();
 	}
-        mopidy.playback.play(); //tracks[selected]);
+        mopidy.playback.play();
     }
 
-    mopidy.tracklist.add(tracks.slice(0, selected), 0);
-    if (selected < tracks.length) {
-    	mopidy.tracklist.add(tracks.slice(selected + 1) );
-    }
-     
-    //console.log(selected);
     return false;
 }
 
@@ -141,7 +120,7 @@ function playTrack(addtoqueue) {
  * @returns {boolean}
  */
 function playTrackByUri(uri, playlisturi){
-    //console.log('playuri');
+//    console.log('playuri');
     //stop directly, for user feedback
     mopidy.playback.stop(true);
     mopidy.tracklist.clear();
@@ -177,8 +156,7 @@ function playTrackByUri(uri, playlisturi){
         mopidy.playback.next();
     }
 
-    mopidy.playback.play(); //tracks[selected]);
-//    console.log(selected);
+    mopidy.playback.play();
     return false;
 }
 
@@ -193,7 +171,7 @@ function playTrackByUri(uri, playlisturi){
  * @returns {boolean}
  */
 function playTrackQueueByUri(uri, playlisturi){
-    //console.log('playqu');
+//    console.log('playqu');
     //stop directly, for user feedback
 //console.log('qu');
     mopidy.playback.stop(true);
@@ -211,7 +189,10 @@ function playTrackQueueByUri(uri, playlisturi){
         mopidy.playback.next();
     }
 
-    mopidy.playback.play(); //currentplaylist[track]);
+//    console.log (currentplaylist[track]);
+//    mopidy.playback.changeTrack(currentplaylist[track]);
+
+    mopidy.playback.play();
     //console.log(track, currentplaylist[track]);
     return false;
 }
@@ -312,9 +293,9 @@ function setRepeat(nwrepeat) {
         return
     }
     if (!nwrepeat) {
-        $("#repeatbt").attr('style', 'color:#7cc4e7');
+        $("#repeatbt").attr('style', 'color:#2489ce');
     } else {
-        $("#repeatbt").attr('style', 'color:#66FF33');
+        $("#repeatbt").attr('style', 'color:#66DD33');
     }
     repeat = nwrepeat;
 }
@@ -324,9 +305,9 @@ function setRandom(nwrandom) {
         return
     }
     if (!nwrandom) {
-        $("#randombt").attr('style', 'color:#7cc4e7');
+        $("#randombt").attr('style', 'color:#2489ce');
     } else {
-        $("#randombt").attr('style', 'color:#66FF33');
+        $("#randombt").attr('style', 'color:#66DD33');
     }
     random = nwrandom;
 }
@@ -541,29 +522,21 @@ function playStreamUri(uri) {
     var nwuri = uri || $('#streamuriinput').val().trim();
     var service = $('#selectstreamservice').val();
     if (!uri && service) {
-        nwuri = service + ':' + uri;
+        nwuri = service + ':' + nwuri;
     }
-    if (isServiceUri(nwuri)) {
-        toast('Playing uri...');
+    if (isServiceUri(nwuri) || isStreamUri(nwuri) || validUri(nwuri)) {
+        toast('Playing...');
         //stop directly, for user feedback
         mopidy.playback.stop(true);
+        //hide ios/android keyboard
+        document.activeElement.blur();
+        $("input").blur();
         clearQueue();
         mopidy.tracklist.add(null, 0, nwuri);
         mopidy.playback.play();
-    } else if (isStreamUri(nwuri)) {
-            toast('Selecting stream...');
-            //stop directly, for user feedback
-            mopidy.playback.stop(true);
-            //hide ios/android keyboard
-            document.activeElement.blur();
-            $("input").blur();
-            clearQueue();
-            mopidy.tracklist.add(null, 0, nwuri);
-            mopidy.playback.play();
     } else {
         toast('No valid url!');
     }
-
     return false;
 }
 

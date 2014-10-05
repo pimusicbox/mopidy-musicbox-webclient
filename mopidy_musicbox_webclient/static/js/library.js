@@ -203,7 +203,11 @@ function getCurrentPlaylist() {
 function togglePlaylists() {
     if ($(window).width() <= 960) {
         $('#playlisttracksdiv').toggle();
-        $('#playlistslistdiv').toggle();
+        //Hide other div
+        ($('#playlisttracksdiv').is(":visible")) ? $('#playlistslistdiv').hide() : $('#playlistslistdiv').show();
+    } else {
+        $('#playlisttracksdiv').show();
+        $('#playlistslistdiv').show();
     }
     return true;
 }
@@ -218,7 +222,7 @@ function showTracklist(uri) {
     } else {
         showLoading(true);
     }
-
+    updatePlayIcons(uri);
     $('#playlistslist li a').each(function() {
         $(this).removeClass("playlistactive");
         if (this.id == uri) {
@@ -227,6 +231,7 @@ function showTracklist(uri) {
     });
 //    scrollToTracklist();
     //lookup recent tracklist
+
     mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);
     return false;
 }
@@ -257,7 +262,7 @@ function showAlbum(uri) {
     $(ALBUM_TABLE).empty();
     //fill from cache
     var pl = getTracksFromUri(uri);
-    if (pl) {
+    if (pl.length>0) {
         albumTracksToTable(pl, ALBUM_TABLE, uri);
         var albumname = getAlbum(pl);
         var artistname = getArtist(pl);
@@ -266,8 +271,8 @@ function showAlbum(uri) {
         $('#coverpopupalbumname').html(albumname);
         $('#coverpopupartist').html(artistname);
         showLoading(false);
-        getCover(artistname, albumname, '#albumviewcover, #coverpopupimage', 'extralarge');
         mopidy.library.lookup(uri).then(processAlbumResults, console.error);
+//        getCover(pl, '#albumviewcover, #coverpopupimage', 'extralarge');
     } else {
         showLoading(true);
         $('#h_albumname').html('');

@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css"/>
     <script type='application/javascript' src='js/fastclick.js'></script>
     <script>
@@ -76,6 +76,10 @@
             <a href="#nowPlaying" onclick="switchContent('nowPlaying' ); return false;">
                 <span class="navtxt"> Now Playing </span><i class="fa fa-music"></i></a>
         </li>
+        <li id="navcurrent" data-icon="false">
+            <a href="#current" onclick="switchContent('current' ); return false;">
+                <span class="navtxt">Queue </span><i class="fa fa-bars"></i></a>
+        </li>
         <li id="navplaylists" data-icon="false">
             <a href="#playlists" onclick="switchContent('playlists' ); return false;">
                 <span class="navtxt"> Playlists </span><i class="fa  fa-star"></i></a>
@@ -83,10 +87,6 @@
         <li id="navbrowse" data-icon="false">
             <a href="#browse" onclick="switchContent('browse' ); return false;">
                 <span class="navtxt"> Browse </span><i class="fa  fa-folder"></i></a>
-        </li>
-        <li id="navcurrent" data-icon="false">
-            <a href="#current" onclick="switchContent('current' ); return false;">
-                <span class="navtxt">Queue </span><i class="fa fa-bars"></i></a>
         </li>
         <li id="navsearch" data-icon="false">
             <a href="#search" onclick="switchContent('search' ); return false;">
@@ -202,7 +202,7 @@
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint headerbtn">
     <a href="#panel" style="margin-left: -12px; padding-top: 2px;" id="headermenubtn"><i class="fa fa-align-justify"></i></a>
-    <h1 id="contentHeadline" >Musicbox</h1>
+    <h1 id="contentHeadline">Musicbox</h1>
      <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;">
             <i class="fa fa-search"></i></a>
 </div>
@@ -234,16 +234,16 @@
                 <h4>Browse</h4>
             </div>
         </a>
-        <a href="#search" onclick="switchContent('search' ); return false;">
-            <div class="ui-block-a">
-                <i class="fa fa-search"></i>
-                <h4>Search</h4>
-            </div>
-        </a>
         <a href="#stream" onclick="switchContent('stream' ); return false;">
-            <div class="ui-block-b">
+            <div class="ui-block-a">
                 <i class="fa fa-rss"></i>
                 <h4>Streams</h4>
+            </div>
+        </a>
+        <a href="#search" onclick="switchContent('search' ); return false;">
+            <div class="ui-block-b">
+                <i class="fa fa-search"></i>
+                <h4>Search</h4>
             </div>
         </a>
         <a id="homesettings" href="/settings/">
@@ -429,26 +429,13 @@
         </div>
 </div>
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="nowPlayingFooter">
-<!--     <p id="buttons">
-
-         <select name="flip-random" id="flip-random" data-role="slider" data-mini="true" >
-             <option value="off">Shuffle</option>
-             <option value="on">Shuffle</option>
-         </select>
-         <select name="flip-repeat" id="flip-repeat" data-role="slider" data-mini="true">
-             <option value="off">Repeat</option>
-             <option value="on">Repeat</option>
-         </select>
-
-
-    </p> -->
     <!--&nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><img src="images/icons/fork_21x24.png"-->
     <!--id="shufflebt" alt=""/></a>-->
 
     <p id="buttons"' style="float:right; margin-top: 20px; margin-right: 5px;">
             <a href="#" onclick="doRandom(); return false"><i class="fa fa-random" id="randombt"></i></a>
             &nbsp; <a href="#" onclick="doRepeat(); return false"><i class="fa fa-repeat" id="repeatbt"></i></a>
-            &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><i class="fa fa-code-fork" id="shufflebt"></i></a>
+            &nbsp; <a href="#" onclick="doShuffle(); return false"><i class="fa fa-arrows-v" id="shufflebt"></i></a>
     </p>
 
         <div class="nowPlayingControls" style="float:left; margin-left: 5px;">
@@ -479,7 +466,7 @@
 <script type="text/javascript" src="js/lastfm.api.js"></script>
 <script type="text/javascript" src="js/lastfm.api.cache.js"></script>
 
-<script src="js/lastfm.js"></script>
+<script src="js/images.js"></script>
 
 <script src="js/gui.js"></script>
 </body>

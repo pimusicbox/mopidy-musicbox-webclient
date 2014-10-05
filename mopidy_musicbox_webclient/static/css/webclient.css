@@ -131,6 +131,11 @@
     margin-top: 6px;
 }
 
+#contentHeadline a {
+    color:white;
+    margin-left: 20%;
+}
+
 #headermenubtn{
     width: 50px;
 }
@@ -204,6 +209,7 @@
 #artistviewimage, #albumviewcover {
     float: right;
     heigth: 90px;
+    max-width: 90%;
 }
 
 /*** home ***/
@@ -211,14 +217,14 @@
 #homerows div {
     text-align:center;
     background-color: #2C3E50;
-    padding: 5px;
+    padding: 2px;
     padding-top: 20px;
     border: 2px solid white;
+    color: white;
 }
 
 #homerows div i {
-    border: 0;
-    font-size: 64px;
+    font-size: 28px;
 }
 /*********************
  * listviews
@@ -333,18 +339,18 @@
 /*******************
  * Now Playing area
  *******************/
-.nowPlayingControls{
-    font-size: 1.2em;
-    line-height: 50px;
+.nowPlayingControls {
+    font-size: 20px;
+    line-height: 45px;
+    padding-left: 10px;
 }
 .nowPlayingControls .fa{
     vertical-align: -webkit-baseline-middle;
-    vertical-align: middle;
 }
 .nowPlayingControls #btplayNowPlaying{
     font-size: 190%;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 
@@ -361,7 +367,7 @@
 }
 
 #controlspopup, #artistpopup, #coverpopup {
-    max-width: 550px;
+    max-width: 90%;
     background: white;
     padding: 5px;
 }
@@ -375,7 +381,19 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    max-width:90%;
+    max-height:90%;
+}
+
+#buttons {
+    font-size: 24px;
+    padding-right: 15px;
+    margin-bottom: 15px;
+}
+
+#btplayNowPlaying {
+    padding-top: 15px;
 }
 
 #popupTracksLv li, #popupQueueLv li {
@@ -544,7 +562,8 @@ a {
         padding: 15px 25px 0px 25px;
     }
     #nowPlayingpane #controlspopupimage{
-        max-width: 100%;
+        max-width:90%;
+        max-height:90%;
     }
     .nowPlaying-artistInfo {
            font-size: 12px;
@@ -561,6 +580,8 @@ a {
 
     }
     #controlspopupimage{
+        max-width:90%;
+        max-height:90%;
         margin-bottom: 3px;
     }
     #nowPlayingpane #slidercontainer {
