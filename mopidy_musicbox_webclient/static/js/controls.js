@@ -2,7 +2,8 @@
  * play tracks from a browse list
  *********************************************************/
 function playBrowsedTracks(addtoqueue, trackid) {
-    //stop directly, for user feedback
+
+    //stop directly, for user feedback.
     if (!addtoqueue) {
         mopidy.playback.stop(true);
         mopidy.tracklist.clear();
@@ -58,8 +59,15 @@ function playBrowsedTracks(addtoqueue, trackid) {
  * play an uri from a tracklist
  *********************************************************/
 function playTrack(addtoqueue) {
-    //stop directly, for user feedback
-    if (!addtoqueue) {
+    var hash = document.location.hash.split('?');
+    var divid = hash[0].substr(1);
+
+    if (!addtoqueue) { addtoqueue = PLAY_NOW; }
+
+//    console.log(addtoqueue, divid);
+
+    //stop directly, for user feedback. If searchresults, also clear queue
+    if (!addtoqueue || ( (addtoqueue == PLAY_NOW) && (divid == 'search')) ) {
         mopidy.playback.stop(true);
         mopidy.tracklist.clear();
     }
@@ -91,6 +99,12 @@ function playTrack(addtoqueue) {
 
 //switch popup options
     switch (addtoqueue) {
+        case PLAY_NOW:
+            if (divid == 'search') {
+                mopidy.tracklist.add(tracks.slice(selected, selected + 1));
+                mopidy.playback.play();
+                return false;
+            }
         case ADD_THIS_BOTTOM:
             mopidy.tracklist.add(tracks.slice(selected, selected + 1));
             return false;
@@ -101,7 +115,8 @@ function playTrack(addtoqueue) {
             mopidy.tracklist.add(tracks);
             return false;
     }
-
+// PLAY_NOW, play the selected track 
+//    mopidy.tracklist.add(null, null, uri); //tracks);
     mopidy.tracklist.add(tracks);
 
     if (!addtoqueue) { 
@@ -116,7 +131,7 @@ function playTrack(addtoqueue) {
 
 /***
  * Plays a Track given by an URI
- * @param uri
+ * @param uri, playlisturi
  * @returns {boolean}
  */
 function playTrackByUri(uri, playlisturi){
@@ -132,8 +147,8 @@ function playTrackByUri(uri, playlisturi){
 
     toast('Loading...');
 
-    var trackslist = new Array();
-    var track, tracksbefore, tracksafter;
+//    var trackslist = new Array();
+//    var track, tracksbefore, tracksafter;
     var tracks = getTracksFromUri(playlisturi);
 
 //find track that was selected
@@ -143,13 +158,7 @@ function playTrackByUri(uri, playlisturi){
         }
     }
 
-//find track that is playing
-    for (var playing = 0; playing < currentplaylist.length; playing++) {
-        if (currentplaylist[playing].uri == songdata.uri) {
-            break;
-        }
-    }
-
+//    mopidy.tracklist.add(null, null, uri); //tracks);
     mopidy.tracklist.add(tracks);
 
     for (var i = 0; i <= selected; i++) {
@@ -157,6 +166,7 @@ function playTrackByUri(uri, playlisturi){
     }
 
     mopidy.playback.play();
+
     return false;
 }
 
@@ -171,9 +181,8 @@ function playTrackByUri(uri, playlisturi){
  * @returns {boolean}
  */
 function playTrackQueueByUri(uri, playlisturi){
-//    console.log('playqu');
+//    console.log('playquuri');
     //stop directly, for user feedback
-//console.log('qu');
     mopidy.playback.stop(true);
     $('#popupQueue').popup('close');
     toast('Loading...');
@@ -202,9 +211,10 @@ function playTrackQueueByUri(uri, playlisturi){
  * @returns {boolean}
  */
 function playTrackQueue() {
+//    console.log('playqu');
     playlisturi = $('#popupQueue').data("list");
     uri = $('#popupQueue').data("track");
-    return playTrackByUri(uri, playlisturi);
+    return playTrackQueueByUri(uri, playlisturi);
 }
 
 /********************************************************
@@ -223,9 +233,9 @@ function removeTrack() {
         }
     }
     var track = {};
-    track.uri = currentplaylist[i].uri;
+    track.uri = [currentplaylist[i].uri];
     mopidy.tracklist.remove(track);
-    console.log(currentplaylist[i].uri);
+//    console.log(currentplaylist[i].uri);
 }
 
 function clearQueue() {
@@ -532,7 +542,7 @@ function playStreamUri(uri) {
         document.activeElement.blur();
         $("input").blur();
         clearQueue();
-        mopidy.tracklist.add(null, 0, nwuri);
+        mopidy.tracklist.add(null, null, nwuri);
         mopidy.playback.play();
     } else {
         toast('No valid url!');

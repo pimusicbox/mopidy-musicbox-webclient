@@ -241,6 +241,7 @@ function showTracklist(uri) {
  */
 
 function showArtist(nwuri) {
+    $('#popupQueue').popup('close');
     $('#popupTracks').popup('close');
     $('#controlsmodal').popup('close');
     $(ARTIST_TABLE).empty();
@@ -257,6 +258,7 @@ function showArtist(nwuri) {
 }
 
 function showAlbum(uri) {
+    $('#popupQueue').popup('close');
     $('#popupTracks').popup('close');
     $('#controlsmodal').popup('close');
     $(ALBUM_TABLE).empty();

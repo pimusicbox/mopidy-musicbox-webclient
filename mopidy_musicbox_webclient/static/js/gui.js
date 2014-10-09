@@ -196,8 +196,8 @@ function popupTracks(e, listuri, trackuri) {
     return false;
 }
 
-function showAlbumPopup() {
-    uri = $('#popupTracks').data("track");
+function showAlbumPopup(popupId) {
+    uri = $(popupId).data("track");
     showAlbum(popupData[uri].album.uri);
 }
 
