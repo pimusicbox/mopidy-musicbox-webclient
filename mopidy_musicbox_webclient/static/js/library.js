@@ -57,6 +57,18 @@ function initSearch() {
 /********************************************************
  * process results of a search
  *********************************************************/
+
+//# speed clone http://jsperf.com/cloning-an-object/2
+function clone(obj) {
+    var target = {};
+    for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            target[i] = obj[i];
+        }
+    }
+    return target;
+}
+
 function processSearchResults(resultArr) {
     $(SEARCH_TRACK_TABLE).empty();
     $(SEARCH_ARTIST_TABLE).empty();
@@ -65,10 +77,9 @@ function processSearchResults(resultArr) {
     // Merge results from different backends.
     // TODO  should of coures have multiple tables
     var results = {'tracks': [], 'artists': [], 'albums': []};
-    var emptyResult = true;
-
-
-    for (var i = 0; i < resultArr.length; ++i) {
+    var j, emptyResult = true;
+    
+/*    for (var i = 0; i < resultArr.length; ++i) {
         for (var prop in results) {
             if (resultArr[i][prop] && resultArr[i][prop].length) {
                 results[prop] = results[prop].concat(resultArr[i][prop]);
@@ -76,6 +87,31 @@ function processSearchResults(resultArr) {
             }
         }
     }
+*/
+    for (var i = 0; i < resultArr.length; i++) {
+        if (resultArr[i].tracks) {
+            for (j = 0; j < resultArr[i].tracks.length; j++) {
+                results.tracks.push(resultArr[i].tracks[j]);
+                emptyResult = false;
+            }
+        }
+        if (resultArr[i].artists) {
+            for (j = 0; j < resultArr[i].artists.length; j++) {
+                results.artists.push(resultArr[i].artists[j]);
+                emptyResult = false;
+            }
+        }
+        if (resultArr[i].albums) {
+            for (j = 0; j < resultArr[i].albums.length; j++) {
+                results.albums.push(resultArr[i].albums[j]);
+                emptyResult = false;
+            }
+        }
+    }
+
+//    console.log(resultArr, results);
+
+
 
     customTracklists['trackresultscache'] = results.tracks;
 
