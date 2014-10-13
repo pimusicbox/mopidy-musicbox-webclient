@@ -168,7 +168,7 @@ function resultsToTables(results, target, uri) {
     if (target == '#currenttable') {
         playlistType = 'playTrackQueueByUri';
     } else if (target == SEARCH_TRACK_TABLE) {
-        playlistType = 'playTrackByUri';
+        playlistType = 'playTrackFromSearchByUri';
     } else {
         playlistType = 'playTrackFromPlaylistByUri';
     }

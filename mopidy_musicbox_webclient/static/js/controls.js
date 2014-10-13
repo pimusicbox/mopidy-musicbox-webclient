@@ -164,11 +164,11 @@ function playTrackFromPlaylistByUri(track_uri, playlist_uri){
 }
 
 /***
- * Plays a Track given by an URI
+ * Plays a Track given by an URI from the cached search results.
  * @param uri, playlisturi
  * @returns {boolean}
  */
-function playTrackByUri(uri, playlisturi){
+function playTrackFromSearchByUri(uri, playlisturi){
 //    console.log('playuri');
     //stop directly, for user feedback
     mopidy.playback.stop(true);
