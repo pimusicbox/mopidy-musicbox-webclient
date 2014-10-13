@@ -42,7 +42,6 @@ Usage
 Point your (modern) browser at Mopidy-MusicBox-Webclient running on your Mopidy server e.g. http://localhost:6680/musicbox_webclient.
 
 
-
 Project resources
 =================
 
@@ -59,10 +58,12 @@ v1.0.2 Dev
 
 - A friendlier welcome with a home page with buttons to the most used functions
 - Converted Radio Stations to Streams, so user can add streams for youtube, spotify, soundcloud, podcasts
-- Enhanced radio/streams interface
+- Improved radio/streams interface
+- Better handling of coverart
 - Search: select service to search
 - Youtube icons added
-- Fixed single quote bug #39, other bugs
+- Fixed single quote bug #39
+- Bugfixes (search, popups, etc)
 
 v1.0.1 (20-9-2014)
 -------------------
