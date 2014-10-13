@@ -309,13 +309,19 @@ function showAlbum(uri) {
         $('#coverpopupalbumname').html(albumname);
         $('#coverpopupartist').html(artistname);
         showLoading(false);
-        mopidy.library.lookup(uri).then(processAlbumResults, console.error);
+        mopidy.library.lookup(uri).then(function(resultArr) {
+            resultArr.uri = uri;
+            processAlbumResults(resultArr);
+        }, console.error);
 //        getCover(pl, '#albumviewcover, #coverpopupimage', 'extralarge');
     } else {
         showLoading(true);
         $('#h_albumname').html('');
         $('#h_albumartist').html('');
-        mopidy.library.lookup(uri).then(processAlbumResults, console.error);
+        mopidy.library.lookup(uri).then(function(resultArr) {
+            resultArr.uri = uri;
+            processAlbumResults(resultArr);
+        }, console.error);
     }
     //show page
     switchContent('albums', uri);
