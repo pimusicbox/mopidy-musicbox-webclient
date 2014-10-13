@@ -169,7 +169,6 @@ function playTrackFromPlaylistByUri(track_uri, playlist_uri){
  * @returns {boolean}
  */
 function playTrackFromSearchByUri(uri, playlisturi){
-//    console.log('playuri');
     //stop directly, for user feedback
     mopidy.playback.stop(true);
     mopidy.tracklist.clear();
@@ -181,27 +180,25 @@ function playTrackFromSearchByUri(uri, playlisturi){
 
     toast('Loading...');
 
-//    var trackslist = new Array();
-//    var track, tracksbefore, tracksafter;
     var tracks = getTracksFromUri(playlisturi);
-//    console.log(tracks);
-//find track that was selected
+    mopidy.tracklist.add(tracks);
+    // Find track that was selected
     for (var selected = 0; selected < tracks.length; selected++) {
         if (tracks[selected].uri == uri) {
             break;
         }
     }
 
-//    mopidy.tracklist.add(null, null, uri); //tracks);
-    mopidy.tracklist.add(tracks);
-
-    mopidy.playback.stop();
-    for (var i = 0; i <= selected; i++) {
-        mopidy.playback.next();
-    }
-
-    mopidy.playback.play();
-
+    mopidy.tracklist.getTlTracks().then(
+        function(tltracks) {
+            // Find track that was selected
+            if (tltracks[selected].track.uri == tracks[selected].uri) {
+                mopidy.playback.play(tltracks[selected]);
+                return
+            }
+            console.log('Failed to play selected track ', uri);
+        }
+    ).then(getCurrentPlaylist()); // Updates some state
     return false;
 }
 
