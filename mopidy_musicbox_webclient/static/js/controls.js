@@ -131,6 +131,39 @@ function playTrack(addtoqueue) {
 }
 
 /***
+ * Plays a Track given by an URI from the given playlist URI.
+ * @param track_uri, playlist_uri
+ * @returns {boolean}
+ */
+function playTrackFromPlaylistByUri(track_uri, playlist_uri){
+    // Stop directly, for user feedback
+    mopidy.playback.stop(true);
+    mopidy.tracklist.clear();
+
+    //this is deprecated, remove when popuptracks is removed completly
+    $('#popupTracks').popup('close');
+    $('#controlspopup').popup('close');
+    //end of deprecated
+
+    toast('Loading...');
+
+    mopidy.tracklist.add(null, null, playlist_uri);
+    mopidy.tracklist.getTlTracks().then(
+        function(tracks) {
+            // Find track that was selected
+            for (var selected = 0; selected < tracks.length; selected++) {
+                if (tracks[selected].track.uri == track_uri) {
+                    mopidy.playback.play(tracks[selected]);
+                    return;
+                }
+            }
+            console.log('Failed to play selected track ', track_uri);
+        }
+    ).then(getCurrentPlaylist()); // Updates some state
+    return false;
+}
+
+/***
  * Plays a Track given by an URI
  * @param uri, playlisturi
  * @returns {boolean}
