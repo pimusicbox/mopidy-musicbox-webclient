@@ -286,7 +286,10 @@ function showArtist(nwuri) {
 //TODO cache
     $('#h_artistname').html('');
     showLoading(true);
-    mopidy.library.lookup(nwuri).then(processArtistResults, console.error);
+    mopidy.library.lookup(nwuri).then(function(resultArr) {
+        resultArr.uri = nwuri;
+        processArtistResults(resultArr);
+    }, console.error);
     switchContent('artists', nwuri);
     scrollToTop();
     setSongInfo();
