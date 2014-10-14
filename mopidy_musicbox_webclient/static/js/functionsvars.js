@@ -135,7 +135,7 @@ function albumTracksToTable(pl, target, uri) {
     for (var i = 0; i < pl.length; i++) {
         popupData[pl[i].uri] = pl[i];
         liID = targetmin + '-' + pl[i].uri;
-        tmp += renderSongLi(pl[i], liID, uri, 'playTrackFromPlaylistByUri');
+        tmp += renderSongLi(pl[i], liID, uri, 'playTrackByUri');
     };
     tmp += '</ul>';
     $(target).html(tmp);
@@ -167,10 +167,8 @@ function resultsToTables(results, target, uri) {
     if (!results) { return }
     if (target == '#currenttable') {
         playlistType = 'playTrackQueueByUri';
-    } else if (target == SEARCH_TRACK_TABLE) {
-        playlistType = 'playTrackFromSearchByUri';
     } else {
-        playlistType = 'playTrackFromPlaylistByUri';
+        playlistType = 'playTrackByUri';
     }
 
     var newalbum = [];
