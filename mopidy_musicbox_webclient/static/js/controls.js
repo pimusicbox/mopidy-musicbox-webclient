@@ -188,7 +188,7 @@ function playTrackQueueByUri(uri, playlisturi){
 
     mopidy.tracklist.filter({'uri': [uri]}).then(
         function(tltracks) {
-            if (tltracks.length == 1) {
+            if (tltracks.length > 0) {
                 mopidy.playback.play(tltracks[0]);
                 return;
             }
