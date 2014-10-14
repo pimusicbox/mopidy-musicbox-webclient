@@ -186,23 +186,15 @@ function playTrackQueueByUri(uri, playlisturi){
     $('#popupQueue').popup('close');
     toast('Loading...');
 
-    var track;
-    for (var i = 0; i < currentplaylist.length; i++) {
-        if (currentplaylist[i].uri == uri) {
-            track = i + 1;
-            break;
+    mopidy.tracklist.filter({'uri': [uri]}).then(
+        function(tltracks) {
+            if (tltracks.length == 1) {
+                mopidy.playback.play(tltracks[0]);
+                return;
+            }
+            console.log('Failed to play selected track ', uri);
         }
-    }
-    mopidy.playback.stop();
-    for (var i = 0; i < track; i++) {
-        mopidy.playback.next();
-    }
-
-//    console.log (currentplaylist[track]);
-//    mopidy.playback.changeTrack(currentplaylist[track]);
-
-    mopidy.playback.play();
-    //console.log(track, currentplaylist[track]);
+    );
     return false;
 }
 
