@@ -223,19 +223,6 @@
     color: white;
 }
 
-<<<<<<< HEAD
-/*** home ***/
-
-#homerows div {
-    text-align:center;
-    background-color: #2C3E50;
-    padding: 2px;
-    padding-top: 20px;
-    border: 3px solid white;
-}
-
-=======
->>>>>>> develop
 #homerows div i {
     font-size: 28px;
 }

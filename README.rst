@@ -53,24 +53,23 @@ Project resources
 Changelog
 =========
 
-v1.0.2 Dev
+v1.0.4
+-------------------
+
+- Added AudioAddict icon
+- Bugfixes of course
+
+v1.0.2 
 -------------------
 
 - A friendlier welcome with a home page with buttons to the most used functions
 - Converted Radio Stations to Streams, so user can add streams for youtube, spotify, soundcloud, podcasts
-<<<<<<< HEAD
 - Enhanced radio/streams interface
 - Search: select service to search
-- Youtube icons added
-- Fixed single quote bug #39, other bugs
-=======
-- Improved radio/streams interface
-- Better handling of coverart
-- Search: select service to search
-- Youtube icons added
 - Fixed single quote bug #39
+- Better handling of coverart
+- Youtube icons added
 - Bugfixes (search, popups, etc)
->>>>>>> develop
 
 v1.0.1 (20-9-2014)
 -------------------
