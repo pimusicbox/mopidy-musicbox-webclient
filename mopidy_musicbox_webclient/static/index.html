@@ -3,13 +3,16 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css"/>
-    <script type='application/javascript' src='js/fastclick.js'></script>
+<!--    <script type='application/javascript' src='js/fastclick.js'></script> -->
     <script>
      //configuration
-//     var wsLocation = location.host + ':6680';  //for musicbox configuration and normal operation of mopidy http
+//     var wsLocation = location.host + ':6680';  //for normal operation of mopidy http
       var wsLocation = location.host;   //for running on port 80
+      if (wsLocation == location.hostname) {
+          wsLocation = location.hostname + ':6680';
+      }
       var isMusicBox = true;   //set to true to remove buttons only for musicbox
 
         $(document).bind("mobileinit", function () {
@@ -21,9 +24,10 @@
                 //                  buttonMarkup.corners: false
             });
         });
-        window.addEventListener('load', function () {
+/*        window.addEventListener('load', function () {
             new FastClick(document.body);
         }, false);
+*/
     </script>
     <link rel="icon" type="image/gif" href="images/icons/musicbox32.gif" />
     <link rel="apple-touch-icon" href="images/icons/musicbox57.png" />
@@ -75,6 +79,13 @@
         <li id="navnowPlaying" data-icon="false">
             <a href="#nowPlaying" onclick="switchContent('nowPlaying' ); return false;">
                 <span class="navtxt"> Now Playing </span><i class="fa fa-music"></i></a>
+<<<<<<< HEAD
+=======
+        </li>
+        <li id="navcurrent" data-icon="false">
+            <a href="#current" onclick="switchContent('current' ); return false;">
+                <span class="navtxt">Queue </span><i class="fa fa-bars"></i></a>
+>>>>>>> develop
         </li>
         <li id="navplaylists" data-icon="false">
             <a href="#playlists" onclick="switchContent('playlists' ); return false;">
@@ -84,18 +95,27 @@
             <a href="#browse" onclick="switchContent('browse' ); return false;">
                 <span class="navtxt"> Browse </span><i class="fa  fa-folder"></i></a>
         </li>
+<<<<<<< HEAD
         <li id="navcurrent" data-icon="false">
             <a href="#current" onclick="switchContent('current' ); return false;">
                 <span class="navtxt">Queue </span><i class="fa fa-bars"></i></a>
+=======
+        <li id="navstream" data-icon="false">
+            <a href="#stream" onclick="switchContent('stream' ); return false;">
+                <span class="navtxt">Streams </span><i class="fa  fa-rss"></i></a>
+>>>>>>> develop
         </li>
         <li id="navsearch" data-icon="false">
             <a href="#search" onclick="switchContent('search' ); return false;">
                 <span class="navtxt">Search </span><i class="fa fa-search"></i></a>
         </li>
+<<<<<<< HEAD
         <li id="navstream" data-icon="false">
             <a href="#stream" onclick="switchContent('stream' ); return false;">
                 <span class="navtxt">Streams </span><i class="fa  fa-rss"></i></a>
         </li>
+=======
+>>>>>>> develop
         <li id="navEnterFullscreen" data-icon="false">
                 <a href="#">
                 <span class="navtxt"> Fullscreen </span><i class="fa  fa-desktop"></i></a>
@@ -158,7 +178,7 @@
                     Queue</a>
             </li>
             <li>
-                <a href="#" onclick="showAlbumPopup()">Show Album <span class="popupAlbumName"></span></a>
+                <a href="#" onclick="showAlbumPopup('#popupTracks')">Show Album <span class="popupAlbumName"></span></a>
             </li>
             <li id="popupArtistsLi">
                 <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span
@@ -183,7 +203,7 @@
                 <a href="#" onclick="return removeTrack();">Remove from Queue</a>
             </li>
             <li>
-                <a href="#" onclick="showAlbumPopup()">Show Album <span class="popupAlbumName"></span></a>
+                <a href="#" onclick="showAlbumPopup('#popupQueue')">Show Album <span class="popupAlbumName"></span></a>
             </li>
             <li id="popupArtistsLi">
                 <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span
@@ -202,23 +222,36 @@
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint headerbtn">
     <a href="#panel" style="margin-left: -12px; padding-top: 2px;" id="headermenubtn"><i class="fa fa-align-justify"></i></a>
+<<<<<<< HEAD
     <h1 id="contentHeadline" >Musicbox</h1>
+=======
+    <h1 id="contentHeadline">Musicbox</h1>
+>>>>>>> develop
      <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;">
             <i class="fa fa-search"></i></a>
 </div>
 <!-- /header -->
 
 <div data-role="content" id="homepane" class="pane">
+<<<<<<< HEAD
     <div id="homerows" class="ui-grid-c ui-responsive">
         <a href="#nowPlaying" onclick="switchContent('nowPlaying' ); return false;">
             <div class="ui-block-a">
                 <i class="fa fa-music"></i>
                 <h5>Now Playing</h5>
+=======
+    <div id="homerows" class="ui-grid-a ui-responsive">
+        <a href="#nowPlaying" onclick="switchContent('nowPlaying' ); return false;">
+            <div class="ui-block-a">
+                <i class="fa fa-music"></i>
+                <h4>Now Playing</h4>
+>>>>>>> develop
             </div>
         </a>
         <a href="#current" onclick="switchContent('current' ); return false;">
             <div class="ui-block-b">
                 <i class="fa fa-bars"></i>
+<<<<<<< HEAD
                 <h5>Queue</h5>
             </div>
         </a>
@@ -256,6 +289,45 @@
             <div class="ui-block-d">
                 <i class="fa fa-power-off"></i>
                 <h5>System</h5>
+=======
+                <h4>Queue</h4>
+            </div>
+        </a>
+        <a href="#playlists" onclick="switchContent('playlists' ); return false;">
+            <div class="ui-block-a">
+                <i class="fa fa-star"></i>
+                <h4>Playlists</h4>
+            </div>
+        </a>
+        <a href="#browse" onclick="switchContent('browse' ); return false;">
+            <div class="ui-block-b">
+                <i class="fa fa-folder"></i>
+                <h4>Browse</h4>
+            </div>
+        </a>
+        <a href="#stream" onclick="switchContent('stream' ); return false;">
+            <div class="ui-block-a">
+                <i class="fa fa-rss"></i>
+                <h4>Streams</h4>
+            </div>
+        </a>
+        <a href="#search" onclick="switchContent('search' ); return false;">
+            <div class="ui-block-b">
+                <i class="fa fa-search"></i>
+                <h4>Search</h4>
+            </div>
+        </a>
+        <a id="homesettings" href="/settings/">
+            <div class="ui-block-a">
+                <i class="fa fa-gear"></i>
+                <h4>Settings</h4>
+            </div>
+        </a>
+        <a id="homeshutdown" href="system.html">
+            <div class="ui-block-b">
+                <i class="fa fa-power-off"></i>
+                <h4>System</h4>
+>>>>>>> develop
             </div>
         </a>
 
@@ -429,26 +501,13 @@
         </div>
 </div>
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="nowPlayingFooter">
-<!--     <p id="buttons">
-
-         <select name="flip-random" id="flip-random" data-role="slider" data-mini="true" >
-             <option value="off">Shuffle</option>
-             <option value="on">Shuffle</option>
-         </select>
-         <select name="flip-repeat" id="flip-repeat" data-role="slider" data-mini="true">
-             <option value="off">Repeat</option>
-             <option value="on">Repeat</option>
-         </select>
-
-
-    </p> -->
     <!--&nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><img src="images/icons/fork_21x24.png"-->
     <!--id="shufflebt" alt=""/></a>-->
 
     <p id="buttons"' style="float:right; margin-top: 20px; margin-right: 5px;">
             <a href="#" onclick="doRandom(); return false"><i class="fa fa-random" id="randombt"></i></a>
             &nbsp; <a href="#" onclick="doRepeat(); return false"><i class="fa fa-repeat" id="repeatbt"></i></a>
-            &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><i class="fa fa-code-fork" id="shufflebt"></i></a>
+            &nbsp; <a href="#" onclick="doShuffle(); return false"><i class="fa fa-arrows-v" id="shufflebt"></i></a>
     </p>
 
         <div class="nowPlayingControls" style="float:left; margin-left: 5px;">
@@ -479,7 +538,7 @@
 <script type="text/javascript" src="js/lastfm.api.js"></script>
 <script type="text/javascript" src="js/lastfm.api.cache.js"></script>
 
-<script src="js/lastfm.js"></script>
+<script src="js/images.js"></script>
 
 <script src="js/gui.js"></script>
 </body>

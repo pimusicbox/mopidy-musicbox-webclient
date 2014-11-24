@@ -2,7 +2,8 @@
  * play tracks from a browse list
  *********************************************************/
 function playBrowsedTracks(addtoqueue, trackid) {
-    //stop directly, for user feedback
+
+    //stop directly, for user feedback.
     if (!addtoqueue) {
         mopidy.playback.stop(true);
         mopidy.tracklist.clear();
@@ -11,41 +12,42 @@ function playBrowsedTracks(addtoqueue, trackid) {
 
     var selected = 0, counter = 0;
 
-    var isRadio = isRadioUri(trackid);
-    //only add one station for dirble, otherwise add all tracks
-    if (isRadio) {
-    	mopidy.tracklist.add(null, null, trackid);
+    var isStream = isStreamUri(trackid);
+    //only add one uri for dirble, tunein; otherwise add all tracks
+    if (isStream) {
+        mopidy.tracklist.add(null, null, trackid);
     } else {
-          //add selected item to the playlist
-        $('.browsetrack').each(function() { 
-    	    if (this.id == trackid) {
-		      selected = counter;
+        //add selected item to the playlist
+        $('.browsetrack').each(function() {
+            if (this.id == trackid) {
+                selected = counter;
             }
-	      mopidy.tracklist.add(null, null, this.id);
-	      counter++;
-        } );
+            mopidy.tracklist.add(null, null, this.id);
+            counter++;
+        });
     }
 
-//play selected item
-    if (!addtoqueue) { 
-	for (var i = 0; i <= selected; i++) {
-        	mopidy.playback.next();
-	}
+    //play selected item
+    if (!addtoqueue) {
+        mopidy.playback.stop();
+        for (var i = 0; i <= selected; i++) {
+            mopidy.playback.next();
+        }
         mopidy.playback.play(); //tracks[selected]);
     }
 
     //add all items, but selected to the playlist
     selected = 0;
     counter = 0
-/*    if(!isRadio) {
-        $('.browsetrack').each(function() { 
-    	  //do not add selected song again
-    	  if (this.id == trackid) {
-		    selected = counter;
-	      } else {
-	      	mopidy.tracklist.add(null, counter, this.id);
-	      }
-	      counter++;
+    /*    if(!isStream) {
+        $('.browsetrack').each(function() {
+          //do not add selected song again
+          if (this.id == trackid) {
+            selected = counter;
+          } else {
+              mopidy.tracklist.add(null, counter, this.id);
+          }
+          counter++;
         } );
       }
 */
@@ -57,8 +59,17 @@ function playBrowsedTracks(addtoqueue, trackid) {
  * play an uri from a tracklist
  *********************************************************/
 function playTrack(addtoqueue) {
-    //stop directly, for user feedback
+    var hash = document.location.hash.split('?');
+    var divid = hash[0].substr(1);
+
     if (!addtoqueue) {
+        addtoqueue = PLAY_NOW;
+    }
+
+    //    console.log(addtoqueue, divid);
+
+    //stop directly, for user feedback. If searchresults, also clear queue
+    if (!addtoqueue || ((addtoqueue == PLAY_NOW) && (divid == 'search'))) {
         mopidy.playback.stop(true);
         mopidy.tracklist.clear();
     }
@@ -74,22 +85,28 @@ function playTrack(addtoqueue) {
     var track, tracksbefore, tracksafter;
     var tracks = getTracksFromUri(playlisturi);
 
-//find track that was selected
+    //find track that was selected
     for (var selected = 0; selected < tracks.length; selected++) {
         if (tracks[selected].uri == uri) {
             break;
         }
     }
 
-//find track that is playing
+    //find track that is playing
     for (var playing = 0; playing < currentplaylist.length; playing++) {
         if (currentplaylist[playing].uri == songdata.uri) {
             break;
         }
     }
 
-//switch popup options
+    //switch popup options
     switch (addtoqueue) {
+        case PLAY_NOW:
+            if (divid == 'search') {
+                mopidy.tracklist.add(tracks.slice(selected, selected + 1));
+                mopidy.playback.play();
+                return false;
+            }
         case ADD_THIS_BOTTOM:
             mopidy.tracklist.add(tracks.slice(selected, selected + 1));
             return false;
@@ -100,49 +117,41 @@ function playTrack(addtoqueue) {
             mopidy.tracklist.add(tracks);
             return false;
     }
+    // PLAY_NOW, play the selected track
+    //    mopidy.tracklist.add(null, null, uri); //tracks);
+    mopidy.tracklist.add(tracks);
 
-//normal    
-//    mopidy.tracklist.add(tracks);
-
-//test    mopidy.tracklist.add(null, 0, playlisturi);
-
-// first add track to be played, then the other tracks
-    mopidy.tracklist.add(tracks.slice(selected, selected + 1) );
-
-// //   mopidy.playback.changeTrack(tracks[selected]);
-//    mopidy.tracklist.add(tracks.slice(selected, selected + 1) );
-//    //wait 2.5 seconds before adding the rest to give server the time to start playing
-//    setTimeout(function() {
-//	mopidy.tracklist.add(tracks.slice(0, selected), 0);
-//	if (selected < tracks.length) {
-//	    mopidy.tracklist.add(tracks.slice(selected + 1) );
-//	}
-//    }, 2500);
-
-    if (!addtoqueue) { 
-	for (var i = 0; i <= selected; i++) {
-        	mopidy.playback.next();
-	}
-        mopidy.playback.play(); //tracks[selected]);
+    if (!addtoqueue) {
+        mopidy.playback.stop();
+        for (var i = 0; i <= selected; i++) {
+            mopidy.playback.next();
+        }
+        mopidy.playback.play();
     }
 
-    mopidy.tracklist.add(tracks.slice(0, selected), 0);
-    if (selected < tracks.length) {
-    	mopidy.tracklist.add(tracks.slice(selected + 1) );
-    }
-     
-    //console.log(selected);
     return false;
 }
 
 /***
- * Plays a Track given by an URI
- * @param uri
+ * Plays a Track given by an URI from the given playlist URI.
+ * @param track_uri, playlist_uri
  * @returns {boolean}
  */
-function playTrackByUri(uri, playlisturi){
-    //console.log('playuri');
-    //stop directly, for user feedback
+function playTrackByUri(track_uri, playlist_uri) {
+    function findAndPlayTrack(tltracks) {
+//        console.log('fa', tltracks, track_uri);
+        if (tltracks == []) { return;} 
+        // Find track that was selected
+        for (var selected = 0; selected < tltracks.length; selected++) {
+            if (tltracks[selected].track.uri == track_uri) {
+                mopidy.playback.play(tltracks[selected]);
+                return;
+            }
+        }
+        console.log('Failed to play selected track ', track_uri);
+    }
+
+    // Stop directly, for user feedback
     mopidy.playback.stop(true);
     mopidy.tracklist.clear();
 
@@ -153,32 +162,18 @@ function playTrackByUri(uri, playlisturi){
 
     toast('Loading...');
 
-    var trackslist = new Array();
-    var track, tracksbefore, tracksafter;
-    var tracks = getTracksFromUri(playlisturi);
-
-//find track that was selected
-    for (var selected = 0; selected < tracks.length; selected++) {
-        if (tracks[selected].uri == uri) {
-            break;
+    var func;
+    func = mopidy.tracklist.add(null, null, playlist_uri);
+    func.then(
+        function(tltracks) {
+            //check if tltracks is filled, some backends (gmusic) do not support adding by uri, it seems
+            if (tltracks.length == 0) {
+                var tracks = getTracksFromUri(playlist_uri);
+                mopidy.tracklist.add(tracks).then(findAndPlayTrack);
+            }
+            findAndPlayTrack(tltracks);
         }
-    }
-
-//find track that is playing
-    for (var playing = 0; playing < currentplaylist.length; playing++) {
-        if (currentplaylist[playing].uri == songdata.uri) {
-            break;
-        }
-    }
-
-    mopidy.tracklist.add(tracks);
-
-    for (var i = 0; i <= selected; i++) {
-        mopidy.playback.next();
-    }
-
-    mopidy.playback.play(); //tracks[selected]);
-//    console.log(selected);
+    ).then(getCurrentPlaylist()); // Updates some state
     return false;
 }
 
@@ -192,27 +187,24 @@ function playTrackByUri(uri, playlisturi){
  * @param playlisturi
  * @returns {boolean}
  */
-function playTrackQueueByUri(uri, playlisturi){
-    //console.log('playqu');
+function playTrackQueueByUri(uri, playlisturi) {
+    //    console.log('playquuri');
     //stop directly, for user feedback
-//console.log('qu');
     mopidy.playback.stop(true);
     $('#popupQueue').popup('close');
     toast('Loading...');
 
-    var track;
-    for (var i = 0; i < currentplaylist.length; i++) {
-        if (currentplaylist[i].uri == uri) {
-            track = i + 1;
-            break;
+    mopidy.tracklist.filter({
+        'uri': [uri]
+    }).then(
+        function(tltracks) {
+            if (tltracks.length > 0) {
+                mopidy.playback.play(tltracks[0]);
+                return;
+            }
+            console.log('Failed to play selected track ', uri);
         }
-    }
-    for (var i = 0; i < track; i++) {
-        mopidy.playback.next();
-    }
-
-    mopidy.playback.play(); //currentplaylist[track]);
-    //console.log(track, currentplaylist[track]);
+    );
     return false;
 }
 
@@ -221,9 +213,10 @@ function playTrackQueueByUri(uri, playlisturi){
  * @returns {boolean}
  */
 function playTrackQueue() {
+    //    console.log('playqu');
     playlisturi = $('#popupQueue').data("list");
     uri = $('#popupQueue').data("track");
-    return playTrackByUri(uri, playlisturi);
+    return playTrackQueueByUri(uri, playlisturi);
 }
 
 /********************************************************
@@ -242,9 +235,9 @@ function removeTrack() {
         }
     }
     var track = {};
-    track.uri = currentplaylist[i].uri;
+    track.uri = [currentplaylist[i].uri];
     mopidy.tracklist.remove(track);
-    console.log(currentplaylist[i].uri);
+    //    console.log(currentplaylist[i].uri);
 }
 
 function clearQueue() {
@@ -312,9 +305,9 @@ function setRepeat(nwrepeat) {
         return
     }
     if (!nwrepeat) {
-        $("#repeatbt").attr('style', 'color:#7cc4e7');
+        $("#repeatbt").attr('style', 'color:#2489ce');
     } else {
-        $("#repeatbt").attr('style', 'color:#66FF33');
+        $("#repeatbt").attr('style', 'color:#66DD33');
     }
     repeat = nwrepeat;
 }
@@ -324,26 +317,26 @@ function setRandom(nwrandom) {
         return
     }
     if (!nwrandom) {
-        $("#randombt").attr('style', 'color:#7cc4e7');
+        $("#randombt").attr('style', 'color:#2489ce');
     } else {
-        $("#randombt").attr('style', 'color:#66FF33');
+        $("#randombt").attr('style', 'color:#66DD33');
     }
     random = nwrandom;
 }
 
 function doRandom() {
     if (random == false) {
-	//check for mopidy 0.16.x or higher
-	if (mopidy.tracklist.setRandom) { 
-		mopidy.tracklist.setRandom(true).then();
-	} else {
+        //check for mopidy 0.16.x or higher
+        if (mopidy.tracklist.setRandom) {
+            mopidy.tracklist.setRandom(true).then();
+        } else {
             mopidy.playback.setRandom(true).then();
         }
     } else {
-	//check for mopidy 0.16.x or higher
-	if (mopidy.tracklist.setRandom) { 
-		mopidy.tracklist.setRandom(false).then();
-	} else {
+        //check for mopidy 0.16.x or higher
+        if (mopidy.tracklist.setRandom) {
+            mopidy.tracklist.setRandom(false).then();
+        } else {
             mopidy.playback.setRandom(false).then();
         }
     }
@@ -352,19 +345,19 @@ function doRandom() {
 
 function doRepeat() {
     if (repeat == false) {
-	//check for mopidy 0.16.x or higher
-	if (mopidy.tracklist.setRepeat) { 
+        //check for mopidy 0.16.x or higher
+        if (mopidy.tracklist.setRepeat) {
             mopidy.tracklist.setRepeat(true).then();
         } else {
-    	    mopidy.playback.setRepeat(true).then();
-    	}
+            mopidy.playback.setRepeat(true).then();
+        }
     } else {
-	//check for mopidy 0.16.x or higher
-	if (mopidy.tracklist.setRepeat) { 
+        //check for mopidy 0.16.x or higher
+        if (mopidy.tracklist.setRepeat) {
             mopidy.tracklist.setRepeat(false).then();
         } else {
-    	    mopidy.playback.setRepeat(false).then();
-    	}
+            mopidy.playback.setRepeat(false).then();
+        }
     }
     setRepeat(!repeat);
 }
@@ -433,10 +426,10 @@ function doSeekPos(value) {
 function triggerPos() {
     if (mopidy) {
         posChanging = true;
-//        mopidy.playback.pause();
-//	console.log(newposition);
+        //        mopidy.playback.pause();
+        //    console.log(newposition);
         mopidy.playback.seek(newposition);
-//        mopidy.playback.resume();
+        //        mopidy.playback.resume();
         resumePosTimer();
         posChanging = false;
     }
@@ -526,99 +519,117 @@ function pausePosTimer() {
 }
 
 /*********************************
- * Radio
+ * Stream
  *********************************/
-function radioPressed(key) {
+function streamPressed(key) {
     if (key == 13) {
-        addRadioUri();
+        playStreamUri();
         return false;
     }
     return true;
 }
 
-function addRadioUri(name, uri) {
+function playStreamUri(uri) {
     //value of name is based on the passing of an uri as a parameter or not
-    var name = '';
-    if (!uri) {
-        name = $('#radionameinput').val();
-    } else {
-        $('#radionameinput').val('');
+    var nwuri = uri || $('#streamuriinput').val().trim();
+    var service = $('#selectstreamservice').val();
+    if (!uri && service) {
+        nwuri = service + ':' + nwuri;
     }
-    uri = uri || $('#radiouriinput').val();
-    if (isRadioUri(uri)) {
-        toast('Selecting radiostation...');
+    if (isServiceUri(nwuri) || isStreamUri(nwuri) || validUri(nwuri)) {
+        toast('Playing...');
         //stop directly, for user feedback
         mopidy.playback.stop(true);
         //hide ios/android keyboard
         document.activeElement.blur();
         $("input").blur();
         clearQueue();
-        mopidy.tracklist.add(null, 0, uri);
+        mopidy.tracklist.add(null, null, nwuri);
         mopidy.playback.play();
-        var tmpname = name || '';
-        var i = 0;
-        //add station to list and check for doubles and add no more than 25
-        for (var key in radioStations) {
-            rs = radioStations[key];
-            if (i > 25) {
-                delete radioStations[key];
-                continue;
-            }
-            i++;
-            if (rs && rs[1] == uri) {
-                tmpname = name || radioStations[key][0];
-                delete radioStations[key];
-            }
-        }
-        ;
-        $('#radionameinput').val(tmpname);
-        $('#radiouriinput').val(uri);
-        radioStations.unshift([tmpname, uri]);
-        saveRadioStations();
-        updateRadioStations();
     } else {
         toast('No valid url!');
     }
     return false;
 }
 
-function updateRadioStations() {
+function saveStreamUri() {
+    var i = 0;
+    var name = $('#streamnameinput').val().trim();
+    var uri = $('#streamuriinput').val().trim();
+    var service = $('#selectstreamservice').val();
+    if (service) {
+        uri = service + ':' + uri;
+    }
+    //add stream to list and check for doubles and add no more than 100
+    for (var key in streamUris) {
+        rs = streamUris[key];
+        if (i > 100) {
+            delete streamUris[key];
+            continue;
+        }
+        i++;
+    }
+    streamUris.unshift([name, uri]);
+    $.cookie.json = true;
+    $.cookie('streamUris', streamUris);
+    updateStreamUris();
+    return false;
+}
+
+function deleteStreamUri(uri) {
+    var i = 0;
+    for (var key in streamUris) {
+        rs = streamUris[key];
+        if (rs && rs[1] == uri) {
+            if (confirm("About to remove " + rs[0] + ". Sure?")) {
+                delete streamUris[key];
+            }
+        }
+    }
+    $.cookie.json = true;
+    $.cookie('streamUris', streamUris);
+    updateStreamUris();
+
+    return false;
+}
+
+function updateStreamUris() {
     var tmp = '';
-    $('#radiostationstable').empty();
+    $('#streamuristable').empty();
     var child = '';
-    for (var key in radioStations) {
-        var rs = radioStations[key];
+    for (var key in streamUris) {
+        var rs = streamUris[key];
         if (rs) {
             name = rs[0] || rs[1];
-            child = '<li data-icon="delete"> <a href="#" onclick="return addRadioUri(\'' + rs[0] + '\', \'' + rs[1] + '\');">';
+            child = '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;"><a href="#" onclick="return deleteStreamUri(\'' + rs[1] + '\');">&nbsp;</a></span>' +
+                '<i class="fa fa-rss" style="float: left; padding: .5em; padding-top: 1em;"></i>' +
+                ' <a style="margin-left: 20px" href="#" onclick="return playStreamUri(\'' + rs[1] + '\');">';
             child += '<h1>' + name + '</h1></a></li>';
             tmp += child;
         }
     }
-    ;
-    $('#radiostationstable').html(tmp);
+    $('#streamuristable').html(tmp);
 }
 
-function initRadio() {
+function initStreams() {
     $.cookie.json = true;
-    tmpRS = $.cookie('radioStations');
-    radioStations = tmpRS || radioStations;
-    updateRadioStations();
-}
-
-function saveRadioStations() {
-    $.cookie.json = true;
-    $.cookie('radioStations', radioStations);
+    tmpRS = $.cookie('streamUris');
+    streamUris = tmpRS || streamUris;
+    updateStreamUris();
 }
 
 function haltSystem() {
     $.post("/settings/shutdown");
     toast('Stopping system...', 10000);
-    setTimeout(function(){window.history.back();}, 10000);
+    setTimeout(function() {
+        window.history.back();
+    }, 10000);
 }
 
 function rebootSystem() {
     $.post("/settings/reboot");
     toast('Rebooting...', 10000);
-    setTimeout(function(){window.history.back();}, 10000);
+    setTimeout(function() {
+        window.history.back();
+    }, 10000);
 }

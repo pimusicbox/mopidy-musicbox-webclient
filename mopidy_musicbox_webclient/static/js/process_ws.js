@@ -9,7 +9,6 @@
  * process results of a (new) currently playing track
  *********************************************************/
 function processCurrenttrack(data) {
-//    console.log(data);
     setSongInfo(data);
 }
 
@@ -60,17 +59,12 @@ function processPlaystate(data) {
  * process results of a browse list
  *********************************************************/
 function processBrowseDir(resultArr) {
-    /*<p><ul><li>Donec id elit non mi porta</li><li>Gravida at eget metus. Fusce dapibus.</li><li>Tellus ac cursus commodo</li></p>
-     <p><a class="btn" href="#">More &raquo;</a></p>
-     */
-
-    if ((!resultArr) || (resultArr == '')) {
+    var backHtml = '<li style="background-color:#ccc"><a href="#" onclick="return getBrowseDir();"><h1 class="trackname"><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>'
+    if ( (!resultArr) || (resultArr == '') || (resultArr.length == 0) ) {
+        $('#browsepath').html('No tracks found...');
+        $('#browselist').html(backHtml);
+        showLoading(false);
         return;
-    }
-//    console.log(resultArr);
-
-    if (resultArr.length == 0) {
-	return;
     }
 
     $('#browselist').empty();
@@ -88,8 +82,6 @@ function processBrowseDir(resultArr) {
     if (resultArr[0].type == 'track' ) {
         rooturi = rooturi.replace(":track:", ":directory:");
     }
-
-
     colonindex = rooturi.lastIndexOf(':');
     slashindex = rooturi.lastIndexOf('/');
 
@@ -97,8 +89,7 @@ function processBrowseDir(resultArr) {
     rooturi = rooturi.slice(0, lastindex);
 
     if (browseStack.length > 0) {
-//	child += '<li><a href="#" onclick="return getBrowseDir();"><h1 class="trackname">..</h1></a></li>';
-	child += '<li style="background-color:#ccc"><a href="#" onclick="return getBrowseDir();"><h1 class="trackname"><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>';
+	child += backHtml;
     }
 
     for (var i = 0; i < resultArr.length; i++) {
@@ -132,7 +123,7 @@ function processBrowseDir(resultArr) {
     } else {
         $('#browsepath').html('');
     }
-    
+
     updatePlayIcons(songdata.uri);
 
     showLoading(false);
@@ -186,10 +177,6 @@ function processGetTracklist(resultArr) {
     setSongInfo();
     resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     showLoading(false);
-//    scrollToTracklist();
-//    if (isMobileWebkit) {
-//        playlisttracksScroll.refresh();
-//    }
 }
 
 /********************************************************
@@ -206,6 +193,12 @@ function processCurrentPlaylist(resultArr) {
  * process results of an artist lookup
  *********************************************************/
 function processArtistResults(resultArr) {
+    if (!resultArr || (resultArr.length == 0)) {
+        $('#h_artistname').text('Artist not found...');
+        getCover('', '#artistviewimage, #artistpopupimage', 'extralarge');
+        showLoading(false);
+        return;
+    }
     customTracklists[resultArr.uri] = resultArr;
 
     resultsToTables(resultArr, ARTIST_TABLE, resultArr.uri);
@@ -220,6 +213,13 @@ function processArtistResults(resultArr) {
  * process results of an album lookup
  *********************************************************/
 function processAlbumResults(resultArr) {
+//    console.log(resultArr);
+    if (!resultArr || (resultArr.length == 0)) {
+        $('#h_albumname').text('Album not found...');
+        getCover('', '#albumviewcover, #coverpopupimage', 'extralarge');
+        showLoading(false);
+        return;
+    }
     customTracklists[resultArr.uri] = resultArr;
     albumTracksToTable(resultArr, ALBUM_TABLE, resultArr.uri);
     var albumname = getAlbum(resultArr);
@@ -228,7 +228,7 @@ function processAlbumResults(resultArr) {
     $('#h_albumartist').html(artistname);
     $('#coverpopupalbumname').html(albumname);
     $('#coverpopupartist').html(artistname);
-    getCover(artistname, albumname, '#albumviewcover, #coverpopupimage', 'extralarge');
     setSongInfo();
+    getCover(resultArr[0].album, '#albumviewcover, #coverpopupimage', 'extralarge');
     showLoading(false);
 }
