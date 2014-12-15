@@ -276,7 +276,11 @@ function doPlay() {
     if (!play) {
         mopidy.playback.play();
     } else {
-        mopidy.playback.pause();
+        if(isStreamUri(songdata.uri)) {
+            mopidy.playback.stop();
+        } else {
+            mopidy.playback.pause();
+        }
     }
     setPlayState(!play);
 }
