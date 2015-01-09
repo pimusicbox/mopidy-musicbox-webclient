@@ -509,8 +509,10 @@ $(document).ready(function(event) {
     $(document).keypress( function (event) {
 	//console.log('kp:    '+event);
 	if (event.target.tagName != 'INPUT') {
-	    switch(event.which) {
-	        case 32:
+	    var unicode=event.keyCode? event.keyCode : event.charCode;
+	    var actualkey=String.fromCharCode(unicode);
+	    switch(actualkey) {
+	        case ' ':
     		    doPlay();
     		    event.preventDefault();
 		    break;
