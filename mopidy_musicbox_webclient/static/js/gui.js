@@ -508,17 +508,21 @@ $(document).ready(function(event) {
 
     $(document).keypress( function (event) {
 	//console.log('kp:    '+event);
-	if (event.target.tagName != 'INPUT') { 
-	    event.preventDefault();
-	    switch(event.which) {
-	        case 32:
+	if (event.target.tagName != 'INPUT') {
+	    var unicode=event.keyCode? event.keyCode : event.charCode;
+	    var actualkey=String.fromCharCode(unicode);
+	    switch(actualkey) {
+	        case ' ':
     		    doPlay();
+    		    event.preventDefault();
 		    break;
 		case '>':
     		    doNext();
+    		    event.preventDefault();
 		    break;
 		case '<':
     		    doPrevious();
+    		    event.preventDefault();
 		    break;
 	    }
 	    return true;

@@ -236,7 +236,7 @@ function removeTrack() {
     }
     var track = {};
     track.uri = [currentplaylist[i].uri];
-    mopidy.tracklist.remove(track);
+    mopidy.tracklist.remove({'uri':track.uri});
     //    console.log(currentplaylist[i].uri);
 }
 
