@@ -508,17 +508,19 @@ $(document).ready(function(event) {
 
     $(document).keypress( function (event) {
 	//console.log('kp:    '+event);
-	if (event.target.tagName != 'INPUT') { 
-	    event.preventDefault();
+	if (event.target.tagName != 'INPUT') {
 	    switch(event.which) {
 	        case 32:
     		    doPlay();
+    		    event.preventDefault();
 		    break;
 		case '>':
     		    doNext();
+    		    event.preventDefault();
 		    break;
 		case '<':
     		    doPrevious();
+    		    event.preventDefault();
 		    break;
 	    }
 	    return true;
