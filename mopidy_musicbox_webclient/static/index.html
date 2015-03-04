@@ -207,7 +207,7 @@
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint headerbtn">
     <a href="#panel" style="margin-left: -12px; padding-top: 2px;" id="headermenubtn"><i class="fa fa-align-justify"></i></a>
     <h1 id="contentHeadline">Musicbox</h1>
-     <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;">
+     <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;" title="Search">
             <i class="fa fa-search"></i></a>
 </div>
 <!-- /header -->
@@ -441,15 +441,15 @@
     <!--id="shufflebt" alt=""/></a>-->
 
     <p id="buttons" style="float:right; margin-top: 20px; margin-right: 5px;">
-            <a href="#" onclick="doRandom(); return false"><i class="fa fa-random" id="randombt"></i></a>
-            &nbsp; <a href="#" onclick="doRepeat(); return false"><i class="fa fa-repeat" id="repeatbt"></i></a>
-            &nbsp; <a href="#" onclick="doShuffle(); return false"><i class="fa fa-arrows-v" id="shufflebt"></i></a>
+                   <a href="#" onclick="doRandom(); return false" title="Random"><i class="fa fa-random" id="randombt"></i></a>
+            &nbsp; <a href="#" onclick="doRepeat(); return false" title="Repeat"><i class="fa fa-repeat" id="repeatbt"></i></a>
+            &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><i class="fa fa-arrows-v" id="shufflebt"></i></a>
     </p>
 
         <div class="nowPlayingControls" style="float:left; margin-left: 5px;">
-            <a href="#" onclick="doPrevious(); return false"><span id="btprev"><i class="fa fa-fast-backward"></i></span></a>
-            &nbsp; <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying"><i class="fa fa-play"></i></span></a>
-            &nbsp; <a href="#" onclick="doNext(); return false"><span id="btnext"><i class="fa fa-fast-forward"></i></span></a>
+                   <a href="#" onclick="doPrevious(); return false" title="Previous"><span id="btprev"><i class="fa fa-fast-backward"></i></span></a>
+            &nbsp; <a href="#" onclick="doPlay(); return false" title="Play"><span id="btplayNowPlaying"><i class="fa fa-play"></i></span></a>
+            &nbsp; <a href="#" onclick="doNext(); return false" title="Next"><span id="btnext"><i class="fa fa-fast-forward"></i></span></a>
         </div>
 </div>
 <!-- /footer -->
