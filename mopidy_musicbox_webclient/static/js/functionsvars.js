@@ -16,6 +16,7 @@ var mopidy;
 var play = false;
 var random;
 var repeat;
+var consume;
 var currentVolume = -1;
 var muteVolume = -1;
 var volumeChanging = false;

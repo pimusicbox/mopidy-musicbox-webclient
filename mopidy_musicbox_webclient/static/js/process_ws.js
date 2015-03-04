@@ -36,6 +36,13 @@ function processRandom(data) {
 }
 
 /********************************************************
+ * process results of consume
+ *********************************************************/
+function processConsume(data) {
+    setConsume(data);
+}
+
+/********************************************************
  * process results of current position
  *********************************************************/
 function processCurrentposition(data) {

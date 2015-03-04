@@ -332,6 +332,18 @@ function setRandom(nwrandom) {
     random = nwrandom;
 }
 
+function setConsume(nwconsume) {
+    if (consume == nwconsume) {
+        return
+    }
+    if (!nwconsume) {
+        $("#consumebt").attr('style', 'color:#2489ce');
+    } else {
+        $("#consumebt").attr('style', 'color:#66DD33');
+    }
+    consume = nwconsume;
+}
+
 function doRandom() {
     if (random == false) {
         //check for mopidy 0.16.x or higher
@@ -368,6 +380,10 @@ function doRepeat() {
         }
     }
     setRepeat(!repeat);
+}
+
+function doConsume() {
+    mopidy.tracklist.setConsume(!consume).then();
 }
 
 

@@ -221,6 +221,8 @@ function initSocketevents() {
         resetSong();
         showOffline(true);
     });
+    
+    mopidy.on("event:optionsChanged", updateOptions);
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
         mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
@@ -338,20 +340,20 @@ function updateStatusTimer() {
     //TODO check offline?
 }
 
+//update tracklist options.
+function updateOptions() {
+    mopidy.tracklist.getRepeat().then(processRepeat, console.error);
+    mopidy.tracklist.getRandom().then(processRandom, console.error);
+    mopidy.tracklist.getConsume().then(processConsume, console.error);
+}
+
 //update everything as if reloaded
 function updateStatusOfAll() {
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
 
-    //check for mopidy 0.16 and higher
-    if (mopidy.tracklist.getRepeat) {
-	mopidy.tracklist.getRepeat().then(processRepeat, console.error);
-        mopidy.tracklist.getRandom().then(processRandom, console.error);
-    } else {
-        mopidy.playback.getRepeat().then(processRepeat, console.error);
-	mopidy.playback.getRandom().then(processRandom, console.error);
-    }
+    updateOptions()
 
     mopidy.playback.getVolume().then(processVolume, console.error);
 }
