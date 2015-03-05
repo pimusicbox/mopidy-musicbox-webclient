@@ -504,14 +504,15 @@ function playStreamUri(uri) {
     return false;
 }
 
-function saveStreamUri() {
+function saveStreamUri(nwuri) {
     var i = 0;
     var name = $('#streamnameinput').val().trim();
-    var uri = $('#streamuriinput').val().trim();
+    var uri = nwuri || $('#streamuriinput').val().trim();
     var service = $('#selectstreamservice').val();
     if (service) {
-        uri = service + ':' + uri;
+        uri = serviceupdateStreamUris + ':' + uri;
     }
+    toast('Adding stream ' + uri, 500);
     //add stream to list and check for doubles and add no more than 100
     for (var key in streamUris) {
         rs = streamUris[key];
