@@ -43,6 +43,13 @@ function processConsume(data) {
 }
 
 /********************************************************
+ * process results of single
+ *********************************************************/
+function processSingle(data) {
+    setSingle(data);
+}
+
+/********************************************************
  * process results of current position
  *********************************************************/
 function processCurrentposition(data) {

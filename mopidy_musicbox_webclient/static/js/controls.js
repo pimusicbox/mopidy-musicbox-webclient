@@ -335,6 +335,12 @@ function setConsume(nwconsume) {
     }
 }
 
+function setSingle(nwsingle) {
+    if (single != nwsingle) {
+        single = setTracklistOption("single", nwsingle);
+    }
+}
+
 function doRandom() {
     mopidy.tracklist.setRandom(!random).then();
 }
@@ -345,6 +351,10 @@ function doRepeat() {
 
 function doConsume() {
     mopidy.tracklist.setConsume(!consume).then();
+}
+
+function doSingle() {
+    mopidy.tracklist.setSingle(!single).then();
 }
 
 

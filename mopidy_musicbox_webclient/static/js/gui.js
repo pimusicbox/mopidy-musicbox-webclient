@@ -345,6 +345,7 @@ function updateOptions() {
     mopidy.tracklist.getRepeat().then(processRepeat, console.error);
     mopidy.tracklist.getRandom().then(processRandom, console.error);
     mopidy.tracklist.getConsume().then(processConsume, console.error);
+    mopidy.tracklist.getSingle().then(processSingle, console.error);
 }
 
 //update everything as if reloaded

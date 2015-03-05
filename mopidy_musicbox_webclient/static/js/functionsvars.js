@@ -17,6 +17,7 @@ var play = false;
 var random;
 var repeat;
 var consume;
+var single;
 var currentVolume = -1;
 var muteVolume = -1;
 var volumeChanging = false;
