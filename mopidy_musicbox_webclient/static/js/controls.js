@@ -306,128 +306,46 @@ function backbt() {
 
 /***************
  * Options
- */
+ ***************/
+
+function setTracklistOption(name, new_value) {
+    if (!new_value) {
+        $("#"+name+"bt").attr('style', 'color:#2489ce');
+    } else {
+        $("#"+name+"bt").attr('style', 'color:#66DD33');
+    }
+    return new_value
+}
 
 function setRepeat(nwrepeat) {
-    if (repeat == nwrepeat) {
-        return
+    if (repeat != nwrepeat) {
+        repeat = setTracklistOption("repeat", nwrepeat);
     }
-    if (!nwrepeat) {
-        $("#repeatbt").attr('style', 'color:#2489ce');
-    } else {
-        $("#repeatbt").attr('style', 'color:#66DD33');
-    }
-    repeat = nwrepeat;
 }
 
 function setRandom(nwrandom) {
-    if (random == nwrandom) {
-        return
+    if (random != nwrandom) {
+        random = setTracklistOption("random", nwrandom);
     }
-    if (!nwrandom) {
-        $("#randombt").attr('style', 'color:#2489ce');
-    } else {
-        $("#randombt").attr('style', 'color:#66DD33');
-    }
-    random = nwrandom;
 }
 
 function setConsume(nwconsume) {
-    if (consume == nwconsume) {
-        return
+    if (consume != nwconsume) {
+        consume = setTracklistOption("consume", nwconsume);
     }
-    if (!nwconsume) {
-        $("#consumebt").attr('style', 'color:#2489ce');
-    } else {
-        $("#consumebt").attr('style', 'color:#66DD33');
-    }
-    consume = nwconsume;
 }
 
 function doRandom() {
-    if (random == false) {
-        //check for mopidy 0.16.x or higher
-        if (mopidy.tracklist.setRandom) {
-            mopidy.tracklist.setRandom(true).then();
-        } else {
-            mopidy.playback.setRandom(true).then();
-        }
-    } else {
-        //check for mopidy 0.16.x or higher
-        if (mopidy.tracklist.setRandom) {
-            mopidy.tracklist.setRandom(false).then();
-        } else {
-            mopidy.playback.setRandom(false).then();
-        }
-    }
-    setRandom(!random);
+    mopidy.tracklist.setRandom(!random).then();
 }
 
 function doRepeat() {
-    if (repeat == false) {
-        //check for mopidy 0.16.x or higher
-        if (mopidy.tracklist.setRepeat) {
-            mopidy.tracklist.setRepeat(true).then();
-        } else {
-            mopidy.playback.setRepeat(true).then();
-        }
-    } else {
-        //check for mopidy 0.16.x or higher
-        if (mopidy.tracklist.setRepeat) {
-            mopidy.tracklist.setRepeat(false).then();
-        } else {
-            mopidy.playback.setRepeat(false).then();
-        }
-    }
-    setRepeat(!repeat);
+    mopidy.tracklist.setRepeat(!repeat).then();
 }
 
 function doConsume() {
     mopidy.tracklist.setConsume(!consume).then();
 }
-
-
-/*
-function setRepeat(nwrepeat) {
-    if (repeat == nwrepeat) {
-        return
-    }
-    if (!nwrepeat) {
-        $("#repeatbt").attr('src', 'images/icons/reload_alt_18x21.png');
-    } else {
-        $("#repeatbt").attr('src', 'images/icons/reload_18x21.png');
-    }
-    repeat = nwrepeat;
-}
-
-function setRandom(nwrandom) {
-    if(nwrandom){
-        $("#flip-random").val('On');
-    }else{
-        $("#flip-random").val('Off');
-    }
-    console.log('function setRandom called: '+nwrandom);
-}
-
-function doRandom() {
-    console.log('obsolete function doRandom called');
-}
-*/
-//$("#flip-random").change(function () {
-//    if ($(this).val() == "on") {
-//        mopidy.tracklist.setRandom(true).then();
-//    } else if ($(this).val() == "off") {
-//        mopidy.tracklist.setRandom(false).then();
-//    }
-//});
-//
-//$("#flip-repeat").change(function () {
-//    if ($(this).val() == "on") {
-//        mopidy.tracklist.setRepeat(true).then();
-//    } else if ($(this).val() == "off") {
-//        mopidy.tracklist.setRepeat(false).then();
-//    }
-//});
 
 
 /*********************
