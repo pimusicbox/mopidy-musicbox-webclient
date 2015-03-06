@@ -19,6 +19,7 @@ class MusicBoxExtension(ext.Extension):
 
     def get_config_schema(self):
         schema = super(MusicBoxExtension, self).get_config_schema()
+        schema['musicbox'] = config.Boolean()
         return schema
 
     def setup(self, registry):

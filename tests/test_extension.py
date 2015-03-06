@@ -16,8 +16,7 @@ def test_get_config_schema():
     ext = MusicBoxExtension()
 
     schema = ext.get_config_schema()
-    
-    # TODO Test the content of your config schema
+    assert 'musicbox' in schema
 
 
 # TODO Write more tests

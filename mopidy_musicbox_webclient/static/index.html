@@ -13,7 +13,7 @@
       if (wsLocation == location.hostname) {
           wsLocation = location.hostname + ':6680';
       }
-      var isMusicBox = true;   //set to true to remove buttons only for musicbox
+      var isMusicBox = {{musicbox}}; // Remove MusicBox only content (e.g. settings, system pages)
 
         $(document).bind("mobileinit", function () {
             $.extend($.mobile, {

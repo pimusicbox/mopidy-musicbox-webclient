@@ -30,7 +30,8 @@ class IndexHandler(tornado.web.RequestHandler):
     def initialize(self, config, path):
         ext_config = config[MusicBoxExtension.ext_name]
         self.__dict = {
-            'version': MusicBoxExtension.version
+            'version': MusicBoxExtension.version,
+            'musicbox': int(ext_config['musicbox'])
         }
         self.__path = path
         self.__title = string.Template('MusicBox on $hostname')
