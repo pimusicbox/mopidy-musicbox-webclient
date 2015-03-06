@@ -23,8 +23,9 @@ class MusicBoxExtension(ext.Extension):
         return schema
 
     def setup(self, registry):
-        registry.add('http:app', {'name': self.ext_name, 'factory': self.factory})
-    
+        registry.add(
+            'http:app', {'name': self.ext_name, 'factory': self.factory})
+
     def factory(self, config, core):
         from tornado.web import RedirectHandler
         from .web import IndexHandler, StaticHandler

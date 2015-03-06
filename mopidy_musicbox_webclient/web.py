@@ -24,7 +24,7 @@ class StaticHandler(tornado.web.StaticFileHandler):
     def get_version(cls, settings, path):
         return MusicBoxExtension.version
 
-        
+
 class IndexHandler(tornado.web.RequestHandler):
 
     def initialize(self, config, path):
