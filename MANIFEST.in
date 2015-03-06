@@ -6,4 +6,5 @@ include MANIFEST.in
 include README.rst
 include mopidy_musicbox_webclient/ext.conf
 
-recursive-include tests mopidy_musicbox_webclient/static *
+recursive-include mopidy_musicbox_webclient/static *
+recursive-include tests *.py
