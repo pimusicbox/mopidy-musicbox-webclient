@@ -4,7 +4,6 @@ import os
 
 from mopidy import config, ext
 
-
 __version__ = '1.0.4'
 
 
@@ -23,7 +22,14 @@ class MusicBoxExtension(ext.Extension):
         return schema
 
     def setup(self, registry):
-        registry.add('http:static', {
-            'name': self.ext_name,
-            'path': os.path.join(os.path.dirname(__file__), 'static'),
-        })
+        registry.add('http:app', {'name': self.ext_name, 'factory': self.factory})
+    
+    def factory(self, config, core):
+        from tornado.web import RedirectHandler
+        from .web import IndexHandler, StaticHandler
+        path = os.path.join(os.path.dirname(__file__), 'static')
+        return [
+            (r'/', RedirectHandler, {'url': 'index.html'}),
+            (r'/(index.html)', IndexHandler, {'config': config, 'path': path}),
+            (r'/(.*)', StaticHandler, {'path': path})
+        ]
