@@ -13,6 +13,17 @@
  *    portr 48
  ****************************/
 
+/****************************
+*New colors
+*main bg		121314
+*sidebar bg	1c1c1f
+*active text 	dfe0e6 (or white)
+*inactive text	88898c
+*hover		222326
+*green		84bd00
+****************************/
+
+
 @media all and (min-width: 961px) {
     /*header*/
     .header-breakpoint.ui-grid-b .ui-block-a {
@@ -61,7 +72,17 @@
         overflow-x: hidden;
     }
 */
+/*
+            .hide {
+        display:block;
+    }
+           .show {
+        display:none;
+    }
+*/
+    
 }
+
 
 
 /* phone landscape */
@@ -99,6 +120,14 @@
     #playlistslistdiv {
         display:block;
     }
+/*
+             .hide {
+        display:none;
+    }
+       .show {
+        display:inline-block;
+    }
+*/
 }
 
 
@@ -108,6 +137,7 @@
        .show {
         display:inline-block;
     }
+
 
 
 /***********
@@ -129,6 +159,9 @@
     margin-top: 30px;
 }
 
+
+
+
 /**headers and controls**/
 
 
@@ -140,24 +173,20 @@
     margin-top: 6px;
 }
 
-#contentHeadline a {
-    color:white;
-    margin-left: 20%;
-}
-
 #headermenubtn{
     width: 50px;
+    background-color: #1c1c1f;
+    border: 0px;
 }
-
 #headermenubtn2{
     width: 30px;
+    background-color: #1c1c1f;
     border: 0px;
     float:right;
 }
-
 #close-btn{
     width: 30px;
-/*    background-color: #1c1c1f;*/
+    background-color: #1c1c1f;
     border: 0px;
     float:right;
 }
@@ -178,7 +207,6 @@
     display: inline;
     width: 100%;
 }
-
 #trackslaider.ui-slider-handle { display: none; }
 
 #sidepaneltrackslider .ui-slider-track {
@@ -193,8 +221,8 @@
 }
 
 .ui-slider-track {
-    margin-left: 16%;
-    margin-right: 15%;
+    margin-left: 38px;
+    margin-right: 35px;
 }
 
 .ui-slider-input {
@@ -212,10 +240,13 @@
 #mutebt {
     float: left;
     margin-left: 8px;
-    margin-top: 3px;
+    margin-top: 8px;
 }
 
 #volumeslider {
+    display: inline;
+}
+#volumeslider2 {
     display: inline;
 }
 
@@ -223,14 +254,14 @@
  * pages, content
  */
 #page{
-    background-color: #fff;
+    background-color: #121314;
 }
 
 #searchresults {
     display: none;
 }
 
-#currentpane, #searchpane, #albumspane, #artistspane, #streampane {
+#currentpane, #searchpane, #albumspane, #artistspane, #radiopane {
     display: none; 
 }
 
@@ -239,14 +270,13 @@
 #artistviewimage, #albumviewcover {
     float: right;
     heigth: 90px;
-    max-width: 90%;
 }
 
 /*** home ***/
 
 #homerows div {
     text-align:center;
-    background-color: #2C3E50;
+    background-color: #000000;
     padding: 2px;
     padding-top: 20px;
     border: 2px solid white;
@@ -256,11 +286,12 @@
 #homerows div i {
     font-size: 28px;
 }
+
 /*********************
  * listviews
  ********************/
 .table li a {
-    color: #555 !important;
+    color: #dfe0e6 !important;
     font-size: 80% !important;
     display: block;
     padding: 2px;
@@ -269,8 +300,8 @@
 }
 
 .table li {
-    background-color: #F8F8F5;
-    border: 1px solid  #CECECE;
+    background-color: #121314;
+    border: 1px solid  #1c1c1f;
     border-bottom: 0;
     padding: 0;
 }
@@ -304,13 +335,13 @@
 }
 
 .albumdivider {
-        background-color: #ddd !important;
+        background-color: #1c1c1f !important;
 }
 
 .smalldivider {
     font-size: 25% !important;
     heigth: 5px !important;
-    background-color: #ddd !important;
+    background-color: #1c1c1f !important;
 }
 
 #playlistslist li a {
@@ -327,7 +358,7 @@
     height: 30px; 
     margin: 2px; 
     padding-top: 2px; 
-    background-color: #aaa;   
+    background-color: #000;   
 }
 
 .albumli {
@@ -335,7 +366,13 @@
 }
 
 .playlistactive {
-    background-color: #ccc;
+    background-color: #1c1c1f;
+    border-right: 4px solid #84bd00;
+/*
+    background-image: url('../images/icons/play_alt_16x16.png');
+    background-repeat: no-repeat;
+    background-position: 0px 33%;
+*/
 }
 
 .artistcover {
@@ -347,16 +384,14 @@
 }
 
 .currenttrack2 {
-    background-image: url('../images/icons/play_alt_12x12.png');
+    background-image: url('../images/icons/play_alt_16x16.png');
     background-repeat: no-repeat;
-/*    background-position: 4px 51%;*/
     background-position: left center;
-
 }
 .currenttrack {
-    background-image: url('../images/icons/play_alt_16x16.png'); 
+    background-image: url('../images/icons/play_alt_12x12.png'); 
     background-repeat: no-repeat;
-    background-color: #eee;
+    background-color: #dfe0e6;
     background-position: 4px 50%;
 }
 
@@ -384,34 +419,33 @@
 }
 .nowPlayingControls .fa{
     vertical-align: -webkit-baseline-middle;
+    vertical-align: middle;
 }
 .nowPlayingControls #btplayNowPlaying{
     font-size: 190%;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 
 /*******************
  * Popups
  *******************/
-#nowPlayingpaneSidePanel #modalalbum a, #nowPlayingpaneSidePanel #modalartist a {
-    color: #fff;
+ #modalartist a, #modalalbum a  {
+    color: #eee;
     text-decoration: none;
 }
 
- #modalalbum a, #modalartist a {
-    color: #444;
-    text-decoration: none;
+#modalalbum a:hover ,#modalartist a:hover{
+    color: #84bd00;
 }
-
 .popupArtistName, .popupTrackName, .popupAlbumName, .popupArtistName {
     font-style: oblique;
 }
 
 #controlspopup, #artistpopup, #coverpopup {
     max-width: 550px;
-    background: white;
+    background: grey;
     padding: 5px;
 }
 
@@ -424,19 +458,7 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 10px;
-    max-width:70%;
-    max-height:70%;
-}
-
-#buttons {
-    font-size: 24px;
-    padding-right: 15px;
-    margin-bottom: 15px;
-}
-
-#btplayNowPlaying {
-    padding-top: 15px;
+    margin-bottom: 5px;
 }
 
 #popupTracksLv li, #popupQueueLv li {
@@ -459,8 +481,9 @@
 
 #playlistspane {
 /*  height: 90% !important;*/
-/*    margin: 0px !important;*/
-/*    padding: 2px !important;*/
+    margin: 0px !important;
+    padding: 2px !important;
+    overflow-y: hidden;
 }
 
 a {
@@ -503,7 +526,7 @@ a {
 }
 #nowPlayingFooter{
     text-align: center;
-    color: white;
+    color: #1c1c1f;
 }
 #infoname {
     overflow: hidden;
@@ -540,7 +563,7 @@ a {
 }
 
 #controldiv{
-    background: none repeat scroll 0% 0% rgb(44, 62, 80);
+    background: none repeat scroll 0% 0% ;
     height: 48px;
     padding: 8px 8px 8px 8px;
 
@@ -587,7 +610,8 @@ a {
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal {
-        margin-right: 17em;
+/*        margin-right: 17em;*/ 
+/*        robcode this breaks rightpanel icon position in header*/
     }
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-push.ui-panel-content-fixed-toolbar-position-right,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-reveal.ui-panel-content-fixed-toolbar-position-right,
@@ -601,13 +625,12 @@ a {
 }
 /*smartphones*/
 @media (max-width: 35em){
-    
     #nowPlayingpane{
-        padding: 65px 25px 0px 25px;
+        padding: 15px 25px 0px 25px;
     }
+
     #nowPlayingpane #controlspopupimage{
-        max-width:90%;
-        max-height:90%;
+        max-width: 100%;
     }
     .nowPlaying-artistInfo {
            font-size: 12px;
@@ -624,8 +647,6 @@ a {
 
     }
     #controlspopupimage{
-        max-width:90%;
-        max-height:90%;
         margin-bottom: 3px;
     }
     #nowPlayingpane #slidercontainer {
@@ -654,17 +675,4 @@ input[type=text] {
   -webkit-user-select: text;
     -o-user-select: text;
     user-select: text;
-}
-
-/* type/source of media in listviews */
-/*a[id^="spotify"] {
-    margin-left:20px;
-    background-image: url('../images/icons/play_alt_12x12.png');
-    border: 2px solid black;
-    display:block;
-}
-*/
-
-.mediaicon {
-    float: right;
 }
