@@ -13,7 +13,7 @@
       if (wsLocation == location.hostname) {
           wsLocation = location.hostname + ':6680';
       }
-      var isMusicBox = {{musicbox}}; // Remove MusicBox only content (e.g. settings, system pages)
+      var isMusicBox = true;   //set to true to remove buttons only for musicbox
 
         $(document).bind("mobileinit", function () {
             $.extend($.mobile, {
@@ -27,7 +27,7 @@
 /*        window.addEventListener('load', function () {
             new FastClick(document.body);
         }, false);
-*/
+*/        
     </script>
     <link rel="icon" type="image/gif" href="images/icons/musicbox32.gif" />
     <link rel="apple-touch-icon" href="images/icons/musicbox57.png" />
@@ -100,6 +100,7 @@
             <a href="#search" onclick="switchContent('search' ); return false;">
                 <span class="navtxt">Search </span><i class="fa fa-search"></i></a>
         </li>
+<!--
         <li id="navEnterFullscreen" data-icon="false">
                 <a href="#">
                 <span class="navtxt"> Fullscreen </span><i class="fa  fa-desktop"></i></a>
@@ -108,6 +109,7 @@
             <a href="#">
                 <span class="navtxt"> Exit Fullscreen </span><i class="fa  fa-desktop"></i></a>
         </li>
+-->
         <li id="navSettings" data-icon="false">
                 <a href="/settings/">
                 <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
@@ -116,17 +118,23 @@
             <a href="system.html">
                 <span class="navtxt">System </span><i class="fa  fa-power-off"></i></a>
         </li>
-        <li id="" data-icon="false">
-            <div><!-- slider for volume -->
+        <li id="vol_li" data-icon="false">
+            <div id="vol1"><!-- slider for volume -->
                 <a href="#" onclick="doMute(); return false;"><i class="fa fa-volume-up" id="mutebt"></i></a>
                 <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
                 <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
                        value="0" max="100" onchange="doVolume(this.value);"/>
             </div>
         </li>
+         <li id="nowplay_li">
+            <!-- this is the empty div that the NowPlaying div get appended to if the screen is large -->
+            <div id="nowPlayingpaneSidePanel" style="font-size:0.8em;line-height:1em;text-align:center"></div>
+        </li>
+       
     </ul>
 </div>
 
+  
 <div id="coverpopup" data-role="popup" data-theme="c">
     <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
        class="ui-btn-right">Close</a>
@@ -209,6 +217,7 @@
     <h1 id="contentHeadline">Musicbox</h1>
      <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;" title="Search">
             <i class="fa fa-search"></i></a>
+    <div id="vol2" style="float:right;min-width:280px;width:100%;margin-left:15px;margin-right:15px"></div>    
 </div>
 <!-- /header -->
 
@@ -269,8 +278,8 @@
 
 
 <div id="nowPlayingpane" data-role="content" class="pane">
-
-    <img id="controlspopupimage" src="images/default_cover.png" />
+<div id="nowPlayingpaneInner">
+    <div  id="album-pic" ><img id="controlspopupimage" src="images/default_cover.png" /></div>
 
 
     <div class="nowPlaying-artistInfo">
@@ -284,7 +293,8 @@
         <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
         <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
     </div>
-    <a onclick="return saveStreamUri(songdata.uri);" data-role="button">Add to saved streams</a>
+        </div>
+
 
 </div>
 <!-- /nowplaying -->
@@ -294,7 +304,7 @@
         <ul id="playlistslist" class="table"></ul>
     </div>
     <div class="ui-block-b scroll" id="playlisttracksdiv">
-        <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
+        <div id="playlisttracksback"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
         <ul class="table" id="playlisttracks"></ul>
     </div>
 
