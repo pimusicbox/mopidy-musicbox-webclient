@@ -143,7 +143,27 @@
     <a href="#" onclick="closePopups();"><img id="artistpopupimage" src=""/></a>
 </div>
 
-
+<div data-role="popup" data-transition="none" data-theme="c" id="popupBrowse">
+    <div data-role="collapsible-set">
+        <ul data-role="listview" data-icon="false" id="popupBrowseLv">
+            <li>
+                <a href="#" onclick="return playBrowsedTracks(PLAY_ALL);">Play All</a>
+            </li>
+            <li>
+                <a href="#" onclick="return playBrowsedTracks(PLAY_NOW);">Play <span class="popupTrackName"></span></a>
+            </li>
+            <li class="addqueue">
+                <a href="#" onclick="return playBrowsedTracks(PLAY_NEXT);">Play Track Next</a>
+            </li>
+            <li class="addqueue">
+                <a href="#" onclick="return playBrowsedTracks(ADD_THIS_BOTTOM);">Add Track to Bottom of Queue</a>
+            </li>
+            <li class="addqueue">
+                <a href="#" onclick="return playBrowsedTracks(ADD_ALL_BOTTOM);">Add All to Bottom of Queue</a>
+            </li>
+        </ul>
+    </div>
+</div>
 
 <div data-role="popup" data-transition="none" data-theme="c" id="popupTracks">
     <div data-role="collapsible-set">
