@@ -1,19 +1,5 @@
-/*
- * Mopidy Webclient CSS
- * (c) Wouter van Wijk 2012-2013
- */
-
 /****************************
- *  Responsive stuff
- *  * iphone 3 20em
- *    landscape 30
- * iphone 4 40em
- *    landscape 60
- * ipad landsc 64
- *    portr 48
- ****************************/
-
-/****************************
+DARK THEME CSS
 *New colors
 *main bg		121314
 *sidebar bg	1c1c1f
@@ -23,315 +9,41 @@
 *green		84bd00
 ****************************/
 
-
-@media all and (min-width: 961px) {
-    /*header*/
-    .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 30%;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-b {
-        width: 30%;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 30.1%;
-    }
-    /*playlists*/
-    .pl-breakpoint.ui-grid-a .ui-block-a {
-        width: 32.95%;
-    }
-    .pl-breakpoint.ui-grid-a .ui-block-b {
-        width: 65.4%;
-    }
-    .pl-breakpoint.ui-grid-a .ui-block-a {
-        clear: left;
-    }
-    .pl-breakpoint.ui-grid-a .ui-block-a {
-        clear: left;
-    }
-    #playlisttracksdiv {
-        margin-left: 10px;
-    }
-    #playlisttracksback {
-        display:none;
-    }
-    #playlisttracksdiv {
-        display:block;
-    }
-    #playlistslistdiv {
-        display:block;
-    }
-    /*search*/
-    .srch-breakpoint.ui-grid-a .ui-block-b {
-        margin-left: .5em;
-    }
-    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
-        width: 49%;
-    }
-/*    .scroll {
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-*/
-/*
-            .hide {
-        display:block;
-    }
-           .show {
-        display:none;
-    }
-*/
-    
-}
-
-
-
-/* phone landscape */
-@media all and (max-width: 960px) {
-    /*header*/
-    .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 35%;
-        clear: left;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-b {
-        display: none;
-    }
-    .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 33%;
-    }
-    /*playlists*/
-    .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
-        width: 100%;
-    }
-    /*search*/
-    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
-        width: 100%;
-    }
-/*    .scroll {
-        width: 100%;
-        heigth: 99%;
-    }
-*/
-    #playlisttracksback {
-        display:block;
-    }
-    #playlisttracksdiv {
-        display:none;
-    }
-    #playlistslistdiv {
-        display:block;
-    }
-/*
-             .hide {
-        display:none;
-    }
-       .show {
-        display:inline-block;
-    }
-*/
-}
-
-
-        .hide {
-        display:none;
-    }
-       .show {
-        display:inline-block;
-    }
-
-
-
-/***********
- * Side Panel and Navigation
- */
-.mainNav .fa{
-    float: right;
-}
-.mainNav .navtxt{
-    float: left;
-}
-.mainNav .navtxt:after{
-    clear: left;
-}
-
-.bottom{
-    width: 100%;
-    margin: -15px;
-    margin-top: 30px;
-}
-
-
-
-
-/**headers and controls**/
-
-
-#playimg {
-    margin-top: 2px;
-}
-
-#nextimg, #previmg, #backimg, #controlsimg {
-    margin-top: 6px;
-}
+.hide {display:none;}
+.show {display:inline-block;}
 
 #headermenubtn{
-    width: 50px;
     background-color: #1c1c1f;
     border: 0px;
 }
+
 #headermenubtn2{
-    width: 30px;
     background-color: #1c1c1f;
-    border: 0px;
-    float:right;
 }
+
 #close-btn{
-    width: 30px;
     background-color: #1c1c1f;
-    border: 0px;
-    float:right;
 }
 
-#headersearchbtn{
-    text-align: right;
-}
-#headersearchbtn .ui-btn-inner{
-    padding: 6px;
-    font-size: 15px;
-}
-
-/***********************
- *  Track Slider
- ***********************/
-
-#trackslider {
-    display: inline;
-    width: 100%;
-}
-#trackslaider.ui-slider-handle { display: none; }
-
-#sidepaneltrackslider .ui-slider-track {
-    margin-left: 2px;
-    margin-right: 15px;
-}
-
-#slidercontainer {
-    margin-top: 7px;
-    margin-bottom: 5px;
-    margin-right: 10px;
-}
-
-.ui-slider-track {
-    margin-left: 38px;
-    margin-right: 35px;
-}
-
-.ui-slider-input {
-    display: none !important;
-}
-
-#songelapsed, #songlength {
-    font-size: 10px;
-    margin-top: 12px;
-}
-
-/************************
- *  Volume Slider
- ***********************/
-#mutebt {
-    float: left;
-    margin-left: 8px;
-    margin-top: 8px;
-}
-
-#volumeslider {
-    display: inline;
-}
-#volumeslider2 {
-    display: inline;
-}
-
-/***********
- * pages, content
- */
 #page{
     background-color: #121314;
 }
 
-#searchresults {
-    display: none;
-}
-
-#currentpane, #searchpane, #albumspane, #artistspane, #radiopane {
-    display: none; 
-}
-
-
-
-#artistviewimage, #albumviewcover {
-    float: right;
-    heigth: 90px;
-}
-
-/*** home ***/
-
 #homerows div {
-    text-align:center;
     background-color: #000000;
-    padding: 2px;
-    padding-top: 20px;
-    border: 2px solid white;
-    color: white;
 }
 
-#homerows div i {
-    font-size: 28px;
-}
-
-/*********************
- * listviews
- ********************/
 .table li a {
     color: #dfe0e6 !important;
-    font-size: 80% !important;
-    display: block;
-    padding: 2px;
-    padding-right: 4px;
-    padding-left: 4px;
 }
 
 .table li {
     background-color: #121314;
     border: 1px solid  #1c1c1f;
-    border-bottom: 0;
-    padding: 0;
 }
 
-.table {
-    padding: 0;
-    list-style-type:none;
-}
-
-/*.table li:first-child {  */
-    /*-moz-border-radius-topleft: 2px;*/
-    /*-moz-border-radius-topright: 2px;*/
-    /*-webkit-border-top-left-radius: 2px;*/
-    /*-webkit-border-top-right-radius: 2px;*/
-    /*border-top-right-radius: 2px;*/
-    /*border-top-left-radius: 2px;*/
-/*}*/
-
-.table li:last-child {
-    /*-moz-border-radius-bottomleft: 2px;*/
-    /*-moz-border-radius-bottomright: 2px;*/
-    /*-webkit-border-bottom-left-radius: 2px;*/
-    /*-webkit-border-bottom-right-radius: 2px;*/
-    /*border-bottom-left-radius: 2px;*/
-    /*border-bottom-right-radius: 2px;*/
-    border-bottom: 1px solid #CECECE;
-}
-
-.albumdivider h1, .table li h1 {
-    font-size: 120% !important;
+#homerows div {
+ border: 1px solid #CECECE;   
 }
 
 .albumdivider {
@@ -339,340 +51,80 @@
 }
 
 .smalldivider {
-    font-size: 25% !important;
-    heigth: 5px !important;
     background-color: #1c1c1f !important;
 }
 
 #playlistslist li a {
-    padding: 7px;
-}
-
-#playlistslist, #playlisttracks {
-    margin: 0 !important;
-    padding: 0 !important;
-/*    border: 1px solid blue; */
+    background-color: #000;
 }
 
 #playlisttracksback {
-    height: 30px; 
-    margin: 2px; 
-    padding-top: 2px; 
     background-color: #000;   
 }
 
-.albumli {
-    padding-left: 5px;
-}
 
 .playlistactive {
     background-color: #1c1c1f;
     border-right: 4px solid #84bd00;
-/*
-    background-image: url('../images/icons/play_alt_16x16.png');
-    background-repeat: no-repeat;
-    background-position: 0px 33%;
-*/
 }
 
-.artistcover {
-    float: right;
-    width: 30px;
-    heigth: 30px;
-    margin-right: 3px;
-    margin-top: 3px;
+currenttrack2 {
+    background-image: url('../images/icons/play_alt_16x16.png');
 }
 
-.currenttrack2 {
-    background-image: url('../images/icons/play_alt_16x16.png');
-    background-repeat: no-repeat;
-    background-position: left center;
-}
 .currenttrack {
     background-image: url('../images/icons/play_alt_12x12.png'); 
-    background-repeat: no-repeat;
     background-color: #dfe0e6;
-    background-position: 4px 50%;
 }
 
-.currenttrack2 a {
-    margin-left: 30px;
-}
-.currenttrack a {
-    margin-left: 20px;
-}
-
-.song .moreBtn{
-    float: right;
-    padding: 15px 18px 12px 22px;
-    display: inline-block;
-    line-height: 100%;
-}
-
-
-/*******************
- * Now Playing area
- *******************/
-.nowPlayingControls{
-    font-size: 1.2em;
-    line-height: 50px;
-}
-.nowPlayingControls .fa{
-    vertical-align: -webkit-baseline-middle;
-    vertical-align: middle;
-}
 .nowPlayingControls #btplayNowPlaying{
-    font-size: 190%;
     margin-left: 20px;
     margin-right: 20px;
 }
 
-
-/*******************
- * Popups
- *******************/
- #modalartist a, #modalalbum a  {
+#modalartist a, #modalalbum a  {
     color: #eee;
-    text-decoration: none;
 }
 
 #modalalbum a:hover ,#modalartist a:hover{
     color: #84bd00;
 }
-.popupArtistName, .popupTrackName, .popupAlbumName, .popupArtistName {
-    font-style: oblique;
-}
+
 
 #controlspopup, #artistpopup, #coverpopup {
-    max-width: 550px;
     background: grey;
-    padding: 5px;
 }
 
-#h_artistname {
-    margin-bottom: 65px;
-    margin-top: 10px;
-}
-
-#buttons, #controlspopupimage, #coverpopupimage, #artistpopupimage {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+#btplayNowPlaying {
     margin-bottom: 5px;
 }
 
-#popupTracksLv li, #popupQueueLv li {
-    border-bottom: 1px solid #aaa;
-}
-
-#popupTracksLv, #popupQueueLv {
-    border: 1px solid #aaa;
-}
-
-/*dont hide clear buttons in text input */
-.ui-input-clear-hidden {
-    display:block !important;
-}    
-  
-
-/***************
- *  common use
- ***************/
-
+/*
 #playlistspane {
-/*  height: 90% !important;*/
     margin: 0px !important;
     padding: 2px !important;
     overflow-y: hidden;
 }
+*/
 
-a {
-    text-decoration: none !important;
-}
-
-.nobreak, .btsquare {
-    display: inline !important;
-}
-
-.pull-right {
-    float: right;
-}
-
-.pull-left {
-    float: left;
-}
-
-.hidden, #allresultloader, .loader {
-    display: none;
-}
-
-.breakafter {
-    margin-right: 15px;
-}
-
-.pright {
-    display: inline;
-    margin-top: 4px;
-    float: right;
-}
-/**********************
- *  Song information
- **********************/
-.ui-footer{
-    border: 0px;
-}
-#normalFooter{
-    height: 48px;
-}
 #nowPlayingFooter{
-    text-align: center;
     color: #1c1c1f;
-}
-#infoname {
-    overflow: hidden;
-    white-space: nowrap;
-    font: bold;
-    font-size: 14px;
-}
-
-#infoartist {
-    overflow: hidden;
-    font-size: 11px;
-    white-space: nowrap;
-}
-
-#infocover {
-    height: 48px;
-    width: 48px;
-    position: absolute;
-}
-
-
-.songinfo-text{
-    display:inline-block;
-    padding: 6px;
-    color: white;
-    position: absolute;
-    padding-left: 50px;
-    padding-right: 50px;
-}
-.playPausebtn{
-    padding-right: 10px;
-    position: absolute;
-    right: 0px;
 }
 
 #controldiv{
-    background: none repeat scroll 0% 0% ;
-    height: 48px;
-    padding: 8px 8px 8px 8px;
-
-}
-
-#controldiv img {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+    background: none repeat scroll 0% 0% rgb(44, 62, 80);
 }
 
 
-#nowPlayingpane{
-    text-align: center;
-}
-
-
-.footer {
-    position: fixed;
-    z-index: 1000;
-    bottom: 0;
-    width: 100%;
-}
-
-/*helper*/
-
-.hidden{
-    display: none;
-}
-.ui-loader h1{
-    color: #efefef;
-}
-
-
-.settingscoll label {
-    font-size: 120%;
-    font-weight: bold;
-    padding-top: 30px;
-}
-
-/* panel workaround to make it responsive wrap push on wide viewports once open */
-@media (min-width: 35em){
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal {
-/*        margin-right: 17em;*/ 
-/*        robcode this breaks rightpanel icon position in header*/
-    }
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-push.ui-panel-content-fixed-toolbar-position-right,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-reveal.ui-panel-content-fixed-toolbar-position-right,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
-        margin: 0 0 0 17em;
-    }
-    .ui-responsive-panel .ui-panel-dismiss-display-reveal {
-        display: none;
-    }
-}
-/*smartphones*/
 @media (max-width: 35em){
+    
     #nowPlayingpane{
         padding: 15px 25px 0px 25px;
     }
 
     #nowPlayingpane #controlspopupimage{
-        max-width: 100%;
-    }
-    .nowPlaying-artistInfo {
-           font-size: 12px;
-    }
-    .nowPlaying-artistInfo h4{
-        margin: 0px;
-        font-weight: normal;
-        font-size:  12px;
-    }
-    .nowPlaying-artistInfo h3{
-        margin: 0px 0px 3px 00px;
-        white-space: nowrap;
-        overflow: hidden;
-
-    }
-    #controlspopupimage{
-        margin-bottom: 3px;
-    }
-    #nowPlayingpane #slidercontainer {
-        margin-left: -5px;
-        margin-right: -5px;
-    }
-
-    .nowPlayingControls{
-        font-size: 1.3em;
-        line-height: 50px;
+ 	max-width: 100%;
     }
 }
 
-/* disable text selection for mouse swipe */
 
-body * {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-}
-/* but fix for text input (safari certainly needs it)*/
-input[type=text] {
-  -moz-user-select: text;
-  -webkit-user-select: text;
-    -o-user-select: text;
-    user-select: text;
-}
