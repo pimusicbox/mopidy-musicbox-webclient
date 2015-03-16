@@ -100,17 +100,17 @@ function playTrack(addtoqueue) {
         mopidy.playback.stop(true);
         mopidy.tracklist.clear();
     }
-
     $('#popupTracks').popup('close');
     $('#controlspopup').popup('close');
     toast('Loading...');
 
+    playlisturi = $('#popupTracks').data("list");
+
+    uri = $('#popupTracks').data("track");
+
     var trackslist = new Array();
     var track, tracksbefore, tracksafter;
     var tracks = getTracksFromUri(playlisturi);
-
-    playlisturi = $('#popupTracks').data("list");
-    uri = $('#popupTracks').data("track");
 
     //find track that was selected
     for (var selected = 0; selected < tracks.length; selected++) {
