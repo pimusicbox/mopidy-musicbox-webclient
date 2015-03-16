@@ -48,6 +48,8 @@
     }
     #playlistslistdiv {
         display:block;
+        height:800px;
+        overflow-y: scroll;
     }
     /*search*/
     .srch-breakpoint.ui-grid-a .ui-block-b {
@@ -321,6 +323,10 @@
     margin: 0 !important;
     padding: 0 !important;
 /*    border: 1px solid blue; */
+}
+#playlisttracks {
+    height:800px;
+    overflow-y: scroll;
 }
 
 #playlisttracksback {
