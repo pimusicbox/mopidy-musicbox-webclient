@@ -62,6 +62,13 @@ DARK THEME CSS
     background-color: #000;   
 }
 
+#browselist li {
+    background-color:  #000;
+}
+
+#browselist a:hover {
+    color:#84bd00;
+}
 
 .playlistactive {
     background-color: #1c1c1f;
