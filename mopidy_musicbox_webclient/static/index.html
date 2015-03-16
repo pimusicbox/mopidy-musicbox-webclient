@@ -161,7 +161,6 @@ function get_cookie ( cookie_name )
             <a href="#search" onclick="switchContent('search' ); return false;">
                 <span class="navtxt">Search </span><i class="fa fa-search"></i></a>
         </li>
-<!--
         <li id="navEnterFullscreen" data-icon="false">
                 <a href="#">
                 <span class="navtxt"> Fullscreen </span><i class="fa  fa-desktop"></i></a>
@@ -170,17 +169,18 @@ function get_cookie ( cookie_name )
             <a href="#">
                 <span class="navtxt"> Exit Fullscreen </span><i class="fa  fa-desktop"></i></a>
         </li>
--->
 <!--
         <li id="navSettings" data-icon="false">
                 <a href="/settings/">
                 <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
         </li>
 -->
+<!--
         <li id="navshutdown" data-icon="false">
             <a href="system.html">
                 <span class="navtxt">System </span><i class="fa  fa-power-off"></i></a>
         </li>
+-->
         <li id="vol_li" data-icon="false">
             <div id="vol1"><!-- slider for volume -->
                 <a href="#" onclick="doMute(); return false;"><i class="fa fa-volume-up" id="mutebt"></i></a>
@@ -225,8 +225,12 @@ function get_cookie ( cookie_name )
                 <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
         </li>
         <li id="navshutdown" data-icon="false">
-            <a href="system.html">
-                <span class="navtxt">System </span><i class="fa  fa-power-off"></i></a>
+            <a href="#" onclick="haltSystem(); return false;" >
+                <span class="navtxt">Shutdown </span><i class="fa  fa-power-off"></i></a>
+        </li>
+      <li id="" data-icon="false">
+            <a href="#" onclick="rebootSystem(); return false;">
+                <span class="navtxt">Reboot </span><i class="fa  fa-cogs"></i></a>
         </li>
       
       </ul>
@@ -236,7 +240,7 @@ function get_cookie ( cookie_name )
     <br>
     <br>
     <br>
-
+        
     
 <form>
 <input type="submit" onclick="switch_style('dark');return false;" name="theme" value="Dark Theme" id="dark">
