@@ -116,7 +116,7 @@ function processBrowseDir(resultArr) {
         child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
 		'<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\');">' +
 		'<i class="fa fa-ellipsis-v"></i></a>' +
-		'<a href="#" class="browsetrack" onclick="return playBrowsedTracks(ADD_THIS_BOTTOM, this.id);" id="' + resultArr[i].uri +
+		'<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, this.id);" id="' + resultArr[i].uri +
                 '"><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
 	} else {
             if (browseStack.length > 0) {
