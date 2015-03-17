@@ -73,7 +73,7 @@ function processPlaystate(data) {
  * process results of a browse list
  *********************************************************/
 function processBrowseDir(resultArr) {
-    var backHtml = '<li style="background-color:#ccc"><a href="#" onclick="return getBrowseDir();"><h1 class="trackname"><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>'
+    var backHtml = '<li><a href="#" onclick="return getBrowseDir();"><h1 class="trackname"><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>'
     if ( (!resultArr) || (resultArr == '') || (resultArr.length == 0) ) {
         $('#browsepath').html('No tracks found...');
         $('#browselist').html(backHtml);

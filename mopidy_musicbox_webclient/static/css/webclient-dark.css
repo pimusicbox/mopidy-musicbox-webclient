@@ -1,0 +1,137 @@
+/****************************
+DARK THEME CSS
+*New colors
+*main bg		121314
+*sidebar bg	1c1c1f
+*active text 	dfe0e6 (or white)
+*inactive text	88898c
+*hover		222326
+*green		84bd00
+****************************/
+
+.hide {display:none;}
+.show {display:inline-block;}
+
+#headermenubtn{
+    background-color: #1c1c1f;
+    border: 0px;
+}
+
+#headermenubtn2{
+    background-color: #1c1c1f;
+}
+
+#close-btn{
+    background-color: #1c1c1f;
+}
+
+#page{
+    background-color: #121314;
+}
+
+#homerows div {
+    background-color: #000000;
+}
+
+.table li a {
+    color: #dfe0e6 !important;
+}
+
+.table li {
+    background-color: #121314;
+    border: 1px solid  #1c1c1f;
+}
+
+#homerows div {
+ border: 1px solid #CECECE;   
+}
+
+.albumdivider {
+        background-color: #1c1c1f !important;
+}
+
+.smalldivider {
+    background-color: #1c1c1f !important;
+}
+
+#playlistslist li a {
+    background-color: #000;
+}
+
+#playlisttracksback {
+    background-color: #000;   
+}
+
+#browselist li {
+    background-color:  #000;
+}
+
+#browselist a:hover {
+    color:#84bd00;
+}
+
+.playlistactive {
+    background-color: #1c1c1f;
+    border-right: 4px solid #84bd00;
+}
+
+currenttrack2 {
+    background-image: url('../images/icons/play_alt_16x16.png');
+}
+
+.currenttrack {
+    background-image: url('../images/icons/play_alt_12x12.png'); 
+    background-color: #dfe0e6;
+}
+
+.nowPlayingControls #btplayNowPlaying{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#modalartist a, #modalalbum a  {
+    color: #eee;
+}
+
+#modalalbum a:hover ,#modalartist a:hover{
+    color: #84bd00;
+}
+
+
+#controlspopup, #artistpopup, #coverpopup {
+    background: grey;
+}
+
+#btplayNowPlaying {
+    margin-bottom: 5px;
+}
+
+/*
+#playlistspane {
+    margin: 0px !important;
+    padding: 2px !important;
+    overflow-y: hidden;
+}
+*/
+
+#nowPlayingFooter{
+    color: #1c1c1f;
+}
+
+#controldiv{
+    background: none repeat scroll 0% 0% rgb(44, 62, 80);
+}
+
+
+@media (max-width: 35em){
+    
+    #nowPlayingpane{
+        padding: 15px 25px 0px 25px;
+    }
+
+    #nowPlayingpane #controlspopupimage{
+ 	max-width: 100%;
+    }
+}
+
+

@@ -48,6 +48,8 @@
     }
     #playlistslistdiv {
         display:block;
+        height:800px;
+        overflow-y: scroll;
     }
     /*search*/
     .srch-breakpoint.ui-grid-a .ui-block-b {
@@ -101,6 +103,15 @@
     }
 }
 
+
+        .hide {
+        display:none;
+    }
+       .show {
+        display:inline-block;
+    }
+
+
 /***********
  * Side Panel and Navigation
  */
@@ -139,6 +150,20 @@
 #headermenubtn{
     width: 50px;
 }
+
+#headermenubtn2{
+    width: 30px;
+    border: 0px;
+    float:right;
+}
+
+#close-btn{
+    width: 30px;
+/*    background-color: #1c1c1f;*/
+    border: 0px;
+    float:right;
+}
+
 #headersearchbtn{
     text-align: right;
 }
@@ -156,6 +181,13 @@
     width: 100%;
 }
 
+#trackslaider.ui-slider-handle { display: none; }
+
+#sidepaneltrackslider .ui-slider-track {
+    margin-left: 2px;
+    margin-right: 15px;
+}
+
 #slidercontainer {
     margin-top: 7px;
     margin-bottom: 5px;
@@ -163,8 +195,8 @@
 }
 
 .ui-slider-track {
-    margin-left: 38px;
-    margin-right: 35px;
+    margin-left: 16%;
+    margin-right: 15%;
 }
 
 .ui-slider-input {
@@ -182,7 +214,7 @@
 #mutebt {
     float: left;
     margin-left: 8px;
-    margin-top: 8px;
+    margin-top: 3px;
 }
 
 #volumeslider {
@@ -292,6 +324,17 @@
     padding: 0 !important;
 /*    border: 1px solid blue; */
 }
+#playlisttracks {
+    height:800px;
+    overflow-y: scroll;
+}
+
+#playlisttracksback {
+    height: 30px; 
+    margin: 2px; 
+    padding-top: 2px; 
+    background-color: #aaa;   
+}
 
 .albumli {
     padding-left: 5px;
@@ -312,7 +355,9 @@
 .currenttrack2 {
     background-image: url('../images/icons/play_alt_12x12.png');
     background-repeat: no-repeat;
-    background-position: 4px 51%;
+/*    background-position: 4px 51%;*/
+    background-position: left center;
+
 }
 .currenttrack {
     background-image: url('../images/icons/play_alt_16x16.png'); 
@@ -322,7 +367,7 @@
 }
 
 .currenttrack2 a {
-    margin-left: 15px;
+    margin-left: 30px;
 }
 .currenttrack a {
     margin-left: 20px;
@@ -339,10 +384,9 @@
 /*******************
  * Now Playing area
  *******************/
-.nowPlayingControls {
-    font-size: 20px;
-    line-height: 45px;
-    padding-left: 10px;
+.nowPlayingControls{
+    font-size: 1.2em;
+    line-height: 50px;
 }
 .nowPlayingControls .fa{
     vertical-align: -webkit-baseline-middle;
@@ -357,7 +401,12 @@
 /*******************
  * Popups
  *******************/
-#modalalbum a, #modalartist a {
+#nowPlayingpaneSidePanel #modalalbum a, #nowPlayingpaneSidePanel #modalartist a {
+    color: #fff;
+    text-decoration: none;
+}
+
+ #modalalbum a, #modalartist a {
     color: #444;
     text-decoration: none;
 }
@@ -367,7 +416,7 @@
 }
 
 #controlspopup, #artistpopup, #coverpopup {
-    max-width: 90%;
+    max-width: 550px;
     background: white;
     padding: 5px;
 }
@@ -382,8 +431,8 @@
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 10px;
-    max-width:90%;
-    max-height:90%;
+    max-width:70%;
+    max-height:70%;
 }
 
 #buttons {
@@ -416,8 +465,8 @@
 
 #playlistspane {
 /*  height: 90% !important;*/
-    margin: 0px !important;
-    padding: 2px !important;
+/*    margin: 0px !important;*/
+/*    padding: 2px !important;*/
 }
 
 a {
@@ -558,8 +607,9 @@ a {
 }
 /*smartphones*/
 @media (max-width: 35em){
+    
     #nowPlayingpane{
-        padding: 15px 25px 0px 25px;
+        padding: 65px 25px 0px 25px;
     }
     #nowPlayingpane #controlspopupimage{
         max-width:90%;

@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <script src="js/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css"/>
+    <link rel="alternate stylesheet" type="text/css" href="css/jquery.mobile.flatui-dark.css" title="dark"/>
+
 <!--    <script type='application/javascript' src='js/fastclick.js'></script> -->
     <script>
      //configuration
@@ -13,7 +15,7 @@
       if (wsLocation == location.hostname) {
           wsLocation = location.hostname + ':6680';
       }
-      var isMusicBox = {{musicbox}}; // Remove MusicBox only content (e.g. settings, system pages)
+      var isMusicBox = true;   //set to true to remove buttons only for musicbox
 
         $(document).bind("mobileinit", function () {
             $.extend($.mobile, {
@@ -28,6 +30,64 @@
             new FastClick(document.body);
         }, false);
 */
+        
+var style_cookie_name = "style" ;
+var style_cookie_duration = 30 ;
+
+
+function switch_style ( css_title )
+{
+// You may use this script on your site free of charge provided
+// you do not remove this notice or the URL below. Script from
+// http://www.thesitewizard.com/javascripts/change-style-sheets.shtml
+  var i, link_tag ;
+  for (i = 0, link_tag = document.getElementsByTagName("link") ;
+    i < link_tag.length ; i++ ) {
+    if ((link_tag[i].rel.indexOf( "stylesheet" ) != -1) &&
+      link_tag[i].title) {
+      link_tag[i].disabled = true ;
+      if (link_tag[i].title == css_title) {
+        link_tag[i].disabled = false ;
+      }
+    }
+    set_cookie( style_cookie_name, css_title,
+      style_cookie_duration );
+  }
+}
+function set_style_from_cookie()
+{
+  var css_title = get_cookie( style_cookie_name );
+  if (css_title.length) {
+    switch_style( css_title );
+  }
+}
+function set_cookie ( cookie_name, cookie_value,
+    lifespan_in_days, valid_domain )
+{
+    // http://www.thesitewizard.com/javascripts/cookies.shtml
+    var domain_string = valid_domain ?
+                       ("; domain=" + valid_domain) : '' ;
+    document.cookie = cookie_name +
+                       "=" + encodeURIComponent( cookie_value ) +
+                       "; max-age=" + 60 * 60 *
+                       24 * lifespan_in_days +
+                       "; path=/" + domain_string ;
+}
+function get_cookie ( cookie_name )
+{
+    // http://www.thesitewizard.com/javascripts/cookies.shtml
+    var cookie_string = document.cookie ;
+    if (cookie_string.length != 0) {
+        var cookie_value = cookie_string.match (
+                        '(^|;)[\s]*' +
+                        cookie_name +
+                        '=([^;]*)' );
+        return decodeURIComponent ( cookie_value[2] ) ;
+    }
+    return '' ;
+}
+        
+        
     </script>
     <link rel="icon" type="image/gif" href="images/icons/musicbox32.gif" />
     <link rel="apple-touch-icon" href="images/icons/musicbox57.png" />
@@ -60,6 +120,7 @@
     <meta name="author" content="Wouter van Wijk" />
     <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk" />
     <link href="css/webclient.css" rel="stylesheet" />
+    <link rel="alternate stylesheet" type="text/css" href="css/webclient-dark.css" title="dark"/>
     <link href="css/jquery.mobile.iscrollview.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/font-awesome.min.css" />
 
@@ -108,25 +169,88 @@
             <a href="#">
                 <span class="navtxt"> Exit Fullscreen </span><i class="fa  fa-desktop"></i></a>
         </li>
+<!--
         <li id="navSettings" data-icon="false">
                 <a href="/settings/">
                 <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
         </li>
+-->
+<!--
         <li id="navshutdown" data-icon="false">
             <a href="system.html">
                 <span class="navtxt">System </span><i class="fa  fa-power-off"></i></a>
         </li>
-        <li id="" data-icon="false">
-            <div><!-- slider for volume -->
+-->
+        <li id="vol_li" data-icon="false">
+            <div id="vol1"><!-- slider for volume -->
                 <a href="#" onclick="doMute(); return false;"><i class="fa fa-volume-up" id="mutebt"></i></a>
                 <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
                 <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
                        value="0" max="100" onchange="doVolume(this.value);"/>
             </div>
         </li>
+         <li id="nowplay_li">
+            <!-- this is the empty div that the NowPlaying div get appended to if the screen is large -->
+            <div id="nowPlayingpaneSidePanel" style="font-size:0.8em;line-height:1em;text-align:center"></div>
+        </li>
+       
     </ul>
 </div>
 
+<!------------ right hand settings panel ------------>
+<div data-role="panel" id="panel2" data-position="right" data-theme="a" data-display="overlay" data-position-fixed="true" data-swipe-close="true" data-swipe-open="true">
+  <ul class="ui-listview mainNav" data-role="listview" data-theme="a">
+<!--
+          <h1 id="" >Players</h1>
+
+      
+        <li id="upstairs" data-icon="false">
+            <a href="http://192.168.1.3">
+                <span class="navtxt">Upstairs </span><i class="fa  fa-music"></i></a>
+        </li>
+      <li id="downstairs" data-icon="false">
+            <a href="http://192.168.1.13">
+                <span class="navtxt">Downstairs </span><i class="fa  fa-music"></i></a>
+        </li>
+      <li id="deck" data-icon="false">
+            <a href="http://deck.local">
+                <span class="navtxt">Deck </span><i class="fa  fa-music"></i></a>
+        </li>
+      
+-->
+        <h1 id="" >&nbsp;</h1>
+
+        <li id="navSettings" data-icon="false">
+                <a href="/settings" onclick="toast('Loading...', 2000);">
+                <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
+        </li>
+        <li id="navshutdown" data-icon="false">
+            <a href="#" onclick="haltSystem(); return false;" >
+                <span class="navtxt">Shutdown </span><i class="fa  fa-power-off"></i></a>
+        </li>
+      <li id="" data-icon="false">
+            <a href="#" onclick="rebootSystem(); return false;">
+                <span class="navtxt">Reboot </span><i class="fa  fa-cogs"></i></a>
+        </li>
+      
+      </ul>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+<h4 id="theme-choose">Choose Theme</h4>    
+    <form id="theme">
+    <input type="submit" onclick="switch_style('dark');return false;" name="theme" value="Dark" id="dark">
+    <input type="submit" onclick="switch_style('light');return false;" name="theme" value="Light" id="light">
+    </form>
+           
+        	<a href="#"  data-role="button" data-rel="close" id="" data-transition="slidedown" data-theme="b">Close</a>
+
+</div>
+<!------------ /right hand settings panel ------------>    
+    
 <div id="coverpopup" data-role="popup" data-theme="c">
     <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
        class="ui-btn-right">Close</a>
@@ -207,8 +331,9 @@
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint headerbtn">
     <a href="#panel" style="margin-left: -12px; padding-top: 2px;" id="headermenubtn"><i class="fa fa-align-justify"></i></a>
     <h1 id="contentHeadline">Musicbox</h1>
-     <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;" title="Search">
-            <i class="fa fa-search"></i></a>
+    <a data-iconpos="notext" href="#panel2" data-role="button" data-icon="flat-settings" id="headermenubtn2"></a>
+<!-- this is the empty div that the Volume Slider get appended to if the screen is small -->
+    <div id="vol2" style="float:right;min-width:280px;width:100%;margin-left:15px;margin-right:15px"></div>    
 </div>
 <!-- /header -->
 
@@ -269,8 +394,8 @@
 
 
 <div id="nowPlayingpane" data-role="content" class="pane">
-
-    <img id="controlspopupimage" src="images/default_cover.png" />
+<div id="nowPlayingpaneInner">
+    <div  id="album-pic" ><img id="controlspopupimage" src="images/default_cover.png" /></div>
 
 
     <div class="nowPlaying-artistInfo">
@@ -284,7 +409,9 @@
         <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
         <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
     </div>
-    <a onclick="return saveStreamUri(songdata.uri);" data-role="button">Add to saved streams</a>
+<!--    <a onclick="return saveStreamUri(songdata.uri);" data-role="button">Add to saved streams</a>-->
+</div>
+
 
 </div>
 <!-- /nowplaying -->
@@ -294,7 +421,7 @@
         <ul id="playlistslist" class="table"></ul>
     </div>
     <div class="ui-block-b scroll" id="playlisttracksdiv">
-        <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
+        <div id="playlisttracksback"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
         <ul class="table" id="playlisttracks"></ul>
     </div>
 
