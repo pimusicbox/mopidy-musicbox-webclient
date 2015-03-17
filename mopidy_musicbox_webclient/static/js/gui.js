@@ -90,7 +90,7 @@ function setSongInfo(data) {
 	}
     };
     }
-    
+
     songdata = data;
 
     $("#modalname").html(data.name);
@@ -109,7 +109,7 @@ function setSongInfo(data) {
     }
 
     var arttmp = '';
-    
+
     if(data.artists) {
 	for (var j = 0; j < data.artists.length; j++) {
     	    artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
@@ -134,7 +134,7 @@ function setSongInfo(data) {
 
     $("#trackslider").attr("min", 0);
     $("#trackslider").attr("max", data.length);
-    
+
     resizeMb();
 }
 
@@ -159,7 +159,7 @@ function popupTracks(e, listuri, trackuri) {
 
     if (popupData[trackuri].artists) {
         if (popupData[trackuri].artists.length == 1) {
-            child = '<a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'; 
+            child = '<a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>';
             $('.popupArtistName').html(popupData[trackuri].artists[0].name);
             $('.popupArtistHref').attr('onclick', 'showArtist("' + popupData[trackuri].artists[0].uri + '");' );
             $('.popupArtistsDiv').hide();
@@ -184,9 +184,12 @@ function popupTracks(e, listuri, trackuri) {
     if (divid == 'current') {
         $(".addqueue").hide();
 	var popupName = '#popupQueue';
+    } else if (divid == 'browse') {
+        $(".addqueue").show();
+	var popupName = '#popupBrowse';
     } else {
         $(".addqueue").show();
-	var popupName = '#popupTracks';
+    var popupName = '#popupTracks';
     }
 
     $(popupName).data("list", listuri).data("track", trackuri).popup("open", {
@@ -221,7 +224,7 @@ function initSocketevents() {
         resetSong();
         showOffline(true);
     });
-    
+
     mopidy.on("event:optionsChanged", updateOptions);
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
@@ -487,9 +490,9 @@ $(document).ready(function(event) {
 
     //navigation temporary, rewrite this!
     $('#songinfo').click(
-	function() 
+	function()
     	 {return switchContent('nowPlaying')}   );
-    $('#controlspopupimage').click( 
+    $('#controlspopupimage').click(
 	function() {
 	    return switchContent('current')}   );
     $('#navEnterFullscreen').click(function(){
@@ -552,16 +555,16 @@ $(document).ready(function(event) {
     // swipe songinfo and panel
     $( "#normalFooter, #nowPlayingFooter" ).on( "swiperight",  doPrevious );
     $( "#normalFooter, #nowPlayingFooter" ).on( "swipeleft",  doNext );
-    $( "#nowPlayingpane, .ui-body-c, #header, #panel, .pane" ).on( "swiperight",  function() { 
+    $( "#nowPlayingpane, .ui-body-c, #header, #panel, .pane" ).on( "swiperight",  function() {
 		    if(!$(event.target).is("#normalFooter") && !$(event.target).is("#nowPlayingFooter")) {
 			$("#panel").panel("open");
 			event.stopImmediatePropagation(); }
-		    } ); 
-    $( "#nowPlayingpane, .ui-body-c, #header, #panel, .pane" ).on( "swipeleft",  function() { 
+		    } );
+    $( "#nowPlayingpane, .ui-body-c, #header, #panel, .pane" ).on( "swipeleft",  function() {
 		    if(!$(event.target).is("#normalFooter") && !$(event.target).is("#nowPlayingFooter")) {
-			$("#panel").panel("close"); 
+			$("#panel").panel("close");
 			event.stopImmediatePropagation(); }
-		    } ); 
+		    } );
 });
 
 function updatePlayIcons (uri) {

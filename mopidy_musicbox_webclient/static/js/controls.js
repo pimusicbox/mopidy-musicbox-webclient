@@ -4,11 +4,13 @@
 function playBrowsedTracks(addtoqueue, trackid) {
 
     //stop directly, for user feedback.
-    if (!addtoqueue) {
+    if (addtoqueue == PLAY_ALL) {
         mopidy.playback.stop(true);
         mopidy.tracklist.clear();
     }
     toast('Loading...');
+
+    trackid = typeof trackid !== 'undefined' ? trackid : $('#popupBrowse').data("track");
 
     var selected = 0, counter = 0;
 
@@ -17,23 +19,48 @@ function playBrowsedTracks(addtoqueue, trackid) {
     if (isStream) {
         mopidy.tracklist.add(null, null, trackid);
     } else {
-        //add selected item to the playlist
-        $('.browsetrack').each(function() {
-            if (this.id == trackid) {
-                selected = counter;
-            }
-            mopidy.tracklist.add(null, null, this.id);
-            counter++;
-        });
+        switch (addtoqueue) {
+            case PLAY_NOW:
+            case PLAY_NEXT:
+                //find track that is playing
+                for (var playing = 0; playing < currentplaylist.length; playing++) {
+                    if (currentplaylist[playing].uri == songdata.uri) {
+                        break;
+                    }
+                }
+                mopidy.tracklist.add(null, playing + 1, trackid);
+                break;
+            case ADD_THIS_BOTTOM:
+                mopidy.tracklist.add(null, null, trackid);
+                break;
+            case ADD_ALL_BOTTOM:
+            case PLAY_ALL:
+                //add selected item to the playlist
+                $('.browsetrack').each(function() {
+                    if (this.id == trackid) {
+                        selected = counter;
+                    }
+                    mopidy.tracklist.add(null, null, this.id);
+                    counter++;
+                });
+                break;
+            default:
+                break;
+        }
+
     }
 
     //play selected item
-    if (!addtoqueue) {
+    if (addtoqueue == PLAY_ALL) {
         mopidy.playback.stop();
         for (var i = 0; i <= selected; i++) {
             mopidy.playback.next();
         }
         mopidy.playback.play(); //tracks[selected]);
+    } else if (addtoqueue == PLAY_NOW) {
+        mopidy.playback.stop();
+        mopidy.playback.next();
+        mopidy.playback.play();
     }
 
     //add all items, but selected to the playlist
@@ -140,7 +167,7 @@ function playTrack(addtoqueue) {
 function playTrackByUri(track_uri, playlist_uri) {
     function findAndPlayTrack(tltracks) {
 //        console.log('fa', tltracks, track_uri);
-        if (tltracks == []) { return;} 
+        if (tltracks == []) { return;}
         // Find track that was selected
         for (var selected = 0; selected < tltracks.length; selected++) {
             if (tltracks[selected].track.uri == track_uri) {

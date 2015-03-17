@@ -110,13 +110,19 @@ function processBrowseDir(resultArr) {
         iconClass = getMediaClass(resultArr[i].uri);
 	if(resultArr[i].type == 'track' ) {
 //	    console.log(resultArr[i]);
-            child += '<li id="browselisttracks-' + resultArr[i].uri + '"><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + 
+        mopidy.library.lookup(resultArr[i].uri).then(function (resultArr) {
+            popupData[resultArr[0].uri] = resultArr[0];
+        }, console.error);
+        child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
+		'<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\');">' +
+		'<i class="fa fa-ellipsis-v"></i></a>' +
+		'<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, this.id);" id="' + resultArr[i].uri +
                 '"><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
 	} else {
             if (browseStack.length > 0) {
                 iconClass="fa fa-folder-o";
             }
-            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + 
+            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri +
                 '""><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
 	}
     };
@@ -156,11 +162,11 @@ function processGetPlaylists(resultArr) {
     var child, tmp = '',
         starredRegex = /spotify:user:.*:starred/g,
         iconClass, starred;
-    
+
 
     for (var i = 0; i < resultArr.length; i++) {
         iconClass = getMediaClass(resultArr[i].uri);
-        
+
         // Check if this is Spotify's "Starred" playlist
         if(starredRegex.test(resultArr[i].uri)) {
     	    starred = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">&#9733; Spotify Starred Tracks</a></li>';
