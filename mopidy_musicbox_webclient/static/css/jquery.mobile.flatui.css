@@ -346,6 +346,8 @@ input.ui-input-text.ui-slider-input {
 	border: 2px solid #eee !important;
 }
 
+#theme .ui-btn.ui-submit {display: inline-block; width: 45%}
+#theme-choose {color:white;margin-left:25%}
 /* corner rounding classes
 -----------------------------------------------------------------------------------------------------------*/
 

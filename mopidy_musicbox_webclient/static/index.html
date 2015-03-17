@@ -200,11 +200,10 @@ function get_cookie ( cookie_name )
 <!------------ right hand settings panel ------------>
 <div data-role="panel" id="panel2" data-position="right" data-theme="a" data-display="overlay" data-position-fixed="true" data-swipe-close="true" data-swipe-open="true">
   <ul class="ui-listview mainNav" data-role="listview" data-theme="a">
+<!--
           <h1 id="" >Players</h1>
 
-<!-- These hrefs should  be set in settings -->
       
-<!--<a href="#" data-rel="close" class="ui-icon ui-icon-delete ui-icon-shadow" >close</a>-->
         <li id="upstairs" data-icon="false">
             <a href="http://192.168.1.3">
                 <span class="navtxt">Upstairs </span><i class="fa  fa-music"></i></a>
@@ -218,7 +217,8 @@ function get_cookie ( cookie_name )
                 <span class="navtxt">Deck </span><i class="fa  fa-music"></i></a>
         </li>
       
-                <h1 id="" >&nbsp;</h1>
+-->
+        <h1 id="" >&nbsp;</h1>
 
         <li id="navSettings" data-icon="false">
                 <a href="/settings" onclick="toast('Loading...', 2000);">
@@ -235,18 +235,19 @@ function get_cookie ( cookie_name )
       
       </ul>
     <br>
-    	<a href="#"  data-role="button" data-rel="close" id="" data-transition="slidedown" data-theme="b">Close</a>
     <br>
     <br>
     <br>
     <br>
-        
     
-<form>
-<input type="submit" onclick="switch_style('dark');return false;" name="theme" value="Dark Theme" id="dark">
-<input type="submit" onclick="switch_style('light');return false;" name="theme" value="Light Theme" id="light">
-</form>
+<h4 id="theme-choose">Choose Theme</h4>    
+    <form id="theme">
+    <input type="submit" onclick="switch_style('dark');return false;" name="theme" value="Dark" id="dark">
+    <input type="submit" onclick="switch_style('light');return false;" name="theme" value="Light" id="light">
+    </form>
            
+        	<a href="#"  data-role="button" data-rel="close" id="" data-transition="slidedown" data-theme="b">Close</a>
+
 </div>
 <!------------ /right hand settings panel ------------>    
     
