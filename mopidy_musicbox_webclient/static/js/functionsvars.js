@@ -557,4 +557,4 @@ function isFavouritesPlaylist(playlist) {
 function isSpotifyStarredPlaylist(playlist) {
     var starredRegex = /spotify:user:.*:starred/g;
     return (starredRegex.test(playlist.uri) && playlist.name == 'Starred');
-}    
+}

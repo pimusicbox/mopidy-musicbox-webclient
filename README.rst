@@ -58,10 +58,22 @@ Project resources
 Changelog
 =========
 
+v2.2.0 (UNRELEASED)
+-------------------
+
+- Split vendor-provided JavaScript and CSS libraries into separate folders to make them easier to identify and maintain.
+  (Addresses: `#143 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/143>`_).
+- Upgrade Font-Awesome libraries to version 4.5.0.
+- Upgrade jQuery libraries to version 1.12.0.
+- Upgrade last.fm JavaScript libraries to the latest version available on the GitHub master branch of the repository.
+- Remove unused iScroll libraries and references.
+- Remove unused jQuery.Mobile.iScrollView libraries and references.
+- Remove unused jQuery.Truncate libraries and references.
+
 v2.1.1 (2016-02-04)
 -------------------
 
-- Replace Javascript for truncating text with more reliable CSS equivalent.
+- Replace Javascript for truncating text with more reliable CSS equivalent. (Fixes: `#155 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/155>`_).
 
 v2.1.0 (2016-02-04)
 -------------------
@@ -82,7 +94,7 @@ v2.1.0 (2016-02-04)
 - Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should
   be invalidated.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
-- Streams are now saved to the '[Radio Streams].m3u' playlist and are accessible from all clients. 
+- Streams are now saved to the '[Radio Streams].m3u' playlist and are accessible from all clients.
   Users with existing streamUris stored as browser cookies will be prompted to convert them to the new m3u backed scheme.
 - Mopidy-Musicbox-Webclient now requires at least Mopidy v1.1.0 or greater to be installed.
 
