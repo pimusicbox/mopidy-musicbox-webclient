@@ -289,7 +289,7 @@ function resultsToTables(results, target, uri) {
                         html += '<li class="smalldivider"> &nbsp;</li>';
                     }
                     iconClass = getMediaClass(newalbum[0].uri);
-                    var liID = targetmin + '-' + newalbum[j].uri;
+                    var liID = targetmin + '-' + newalbum[0].uri;
                     if (target == CURRENT_PLAYLIST_TABLE) {
                         html += '<li class="song albumli" id="' + liID + '" tlid="' + newtlids[0] + '">' +
                                 '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\',\'' + newtlids[0] + '\');">' +
