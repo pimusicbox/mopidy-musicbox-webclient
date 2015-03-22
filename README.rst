@@ -70,6 +70,10 @@ v2.2.0 (UNRELEASED)
 - Remove unused jQuery.Mobile.iScrollView libraries and references.
 - Remove unused jQuery.Truncate libraries and references.
 
+**Fixes**
+
+- Prevent mobile devices from scaling when used in landscape mode. (Fixes: `#157 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/157>`_).
+
 v2.1.1 (2016-02-04)
 -------------------
 
