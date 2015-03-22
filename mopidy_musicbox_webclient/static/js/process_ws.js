@@ -110,13 +110,13 @@ function processBrowseDir(resultArr) {
         iconClass = getMediaClass(resultArr[i].uri);
 	if(resultArr[i].type == 'track' ) {
 //	    console.log(resultArr[i]);
-            child += '<li id="browselisttracks-' + resultArr[i].uri + '"><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri + 
+            child += '<li id="browselisttracks-' + resultArr[i].uri + '"><a href="#" class="browsetrack" onclick="return playBrowsedTracks(0, this.id);" id="' + resultArr[i].uri +
                 '"><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
 	} else {
             if (browseStack.length > 0) {
                 iconClass="fa fa-folder-o";
             }
-            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + 
+            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri +
                 '""><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
 	}
     };
@@ -138,7 +138,7 @@ function processBrowseDir(resultArr) {
         $('#browsepath').html('');
     }
 
-    updatePlayIcons(songdata.uri);
+    updatePlayIcons(songdata.track.uri, songdata.tlid);
 
     showLoading(false);
 }
@@ -156,11 +156,11 @@ function processGetPlaylists(resultArr) {
     var child, tmp = '',
         starredRegex = /spotify:user:.*:starred/g,
         iconClass, starred;
-    
+
 
     for (var i = 0; i < resultArr.length; i++) {
         iconClass = getMediaClass(resultArr[i].uri);
-        
+
         // Check if this is Spotify's "Starred" playlist
         if(starredRegex.test(resultArr[i].uri)) {
     	    starred = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">&#9733; Spotify Starred Tracks</a></li>';
@@ -188,7 +188,7 @@ function processGetTracklist(resultArr) {
     var newplaylisturi = resultArr.uri;
 //console.log(resultArr);
     playlists[newplaylisturi] = resultArr;
-    setSongInfo();
+    // setSongInfo();
     resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     showLoading(false);
 }
@@ -198,9 +198,9 @@ function processGetTracklist(resultArr) {
  *********************************************************/
 function processCurrentPlaylist(resultArr) {
     currentplaylist = resultArr;
-    resultsToTables(resultArr, CURRENT_PLAYLIST_TABLE);
-    mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
-    updatePlayIcons(songdata.uri);
+    resultsToTables(currentplaylist, CURRENT_PLAYLIST_TABLE);
+    mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error);
+    updatePlayIcons(songdata.track.uri, songdata.tlid);
 }
 
 /********************************************************
@@ -219,7 +219,7 @@ function processArtistResults(resultArr) {
     var artistname = getArtist(resultArr);
     $('#h_artistname, #artistpopupname').html(artistname);
     getArtistImage(artistname, '#artistviewimage, #artistpopupimage', 'extralarge');
-    setSongInfo();
+    // setSongInfo();
     showLoading(false);
 }
 
@@ -242,7 +242,7 @@ function processAlbumResults(resultArr) {
     $('#h_albumartist').html(artistname);
     $('#coverpopupalbumname').html(albumname);
     $('#coverpopupartist').html(artistname);
-    setSongInfo();
+    // setSongInfo();
     getCover(resultArr[0].album, '#albumviewcover, #coverpopupimage', 'extralarge');
     showLoading(false);
 }
