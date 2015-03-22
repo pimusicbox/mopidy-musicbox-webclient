@@ -186,9 +186,12 @@ function popupTracks(e, listuri, trackuri, tlid) {
     if (divid == 'current') {
         $(".addqueue").hide();
 	var popupName = '#popupQueue';
+    } else if (divid == 'browse') {
+        $(".addqueue").show();
+	var popupName = '#popupBrowse';
     } else {
         $(".addqueue").show();
-	var popupName = '#popupTracks';
+    var popupName = '#popupTracks';
     }
 
     if (typeof tlid != 'undefined' && tlid != '') {
