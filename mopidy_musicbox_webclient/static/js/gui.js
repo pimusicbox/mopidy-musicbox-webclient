@@ -534,27 +534,9 @@ $(document).ready(function(event) {
     initStreams();
 
     if ($(window).width() < 980) {
-        //   drop all pane contents down to accomadte size of mobile header with volume slider
-        $(".pane").attr('style', 'padding-top:40px;');
-        
         $("#panel").panel("close");
-        // move volume slider to header if small screen for easy access and hide the now empty li's so not ugly and tidy up other related elements
-        $("#vol1").prependTo("#vol2");
-        $("#mutebt").attr('style', 'float:right');
-        $('#vol_li').hide();
-        $('#nowplay_li').hide();
-        $('#navnowPlaying').show();
-        $(".ui-panel-content-wrap").attr('style', 'top:30px');
-        e.preventDefault();
     }else{
         $("#panel").panel("open");
-        $('#navnowPlaying').hide();
-        //  move the trckslider up and into album cover when in full screen to save space and neaten up
-        $("#nowPlayingpaneInner").prependTo("#nowPlayingpaneSidePanel");
-        $("#slidercontainer").appendTo("#album-pic");
-        $("#slidercontainer").attr('style', 'margin-top:-21px;width:247px;margin-left:-4px');
-//      $("#album-pic").attr('style', 'height:174px');
-        e.preventDefault();
     }
 
     //hide fullscreen button if in UIWebview

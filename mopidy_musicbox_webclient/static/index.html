@@ -15,7 +15,7 @@
       if (wsLocation == location.hostname) {
           wsLocation = location.hostname + ':6680';
       }
-      var isMusicBox = true;   //set to true to remove buttons only for musicbox
+      var isMusicBox = {{musicbox}}; // Remove MusicBox only content (e.g. settings, system pages)
 
         $(document).bind("mobileinit", function () {
             $.extend($.mobile, {
@@ -30,7 +30,6 @@
             new FastClick(document.body);
         }, false);
 */
-        
 var style_cookie_name = "style" ;
 var style_cookie_duration = 30 ;
 
@@ -169,35 +168,28 @@ function get_cookie ( cookie_name )
             <a href="#">
                 <span class="navtxt"> Exit Fullscreen </span><i class="fa  fa-desktop"></i></a>
         </li>
-<!--
         <li id="navSettings" data-icon="false">
                 <a href="/settings/">
                 <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
         </li>
--->
 <!--
         <li id="navshutdown" data-icon="false">
             <a href="system.html">
                 <span class="navtxt">System </span><i class="fa  fa-power-off"></i></a>
         </li>
 -->
-        <li id="vol_li" data-icon="false">
-            <div id="vol1"><!-- slider for volume -->
-                <a href="#" onclick="doMute(); return false;"><i class="fa fa-volume-up" id="mutebt"></i></a>
-                <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
-                <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
-                       value="0" max="100" onchange="doVolume(this.value);"/>
-            </div>
+        <li id="" data-icon="false">
+          <div><!-- slider for volume -->
+            <a href="#" onclick="doMute(); return false;"><i class="fa fa-volume-up" id="mutebt"></i></a>
+            <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
+            <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
+                                                                                                             value="0" max="100" onchange="doVolume(this.value);"/>
+          </div>
         </li>
-         <li id="nowplay_li">
-            <!-- this is the empty div that the NowPlaying div get appended to if the screen is large -->
-            <div id="nowPlayingpaneSidePanel" style="font-size:0.8em;line-height:1em;text-align:center"></div>
-        </li>
-       
     </ul>
 </div>
 
-<!------------ right hand settings panel ------------>
+<!--  right hand settings panel -->
 <div data-role="panel" id="panel2" data-position="right" data-theme="a" data-display="overlay" data-position-fixed="true" data-swipe-close="true" data-swipe-open="true">
   <ul class="ui-listview mainNav" data-role="listview" data-theme="a">
 <!--
@@ -249,8 +241,7 @@ function get_cookie ( cookie_name )
         	<a href="#"  data-role="button" data-rel="close" id="" data-transition="slidedown" data-theme="b">Close</a>
 
 </div>
-<!------------ /right hand settings panel ------------>    
-    
+<!-- /right hand settings panel -->    
 <div id="coverpopup" data-role="popup" data-theme="c">
     <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
        class="ui-btn-right">Close</a>
@@ -332,8 +323,8 @@ function get_cookie ( cookie_name )
     <a href="#panel" style="margin-left: -12px; padding-top: 2px;" id="headermenubtn"><i class="fa fa-align-justify"></i></a>
     <h1 id="contentHeadline">Musicbox</h1>
     <a data-iconpos="notext" href="#panel2" data-role="button" data-icon="flat-settings" id="headermenubtn2"></a>
-<!-- this is the empty div that the Volume Slider get appended to if the screen is small -->
-    <div id="vol2" style="float:right;min-width:280px;width:100%;margin-left:15px;margin-right:15px"></div>    
+     <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;" title="Search">
+            <i class="fa fa-search"></i></a>
 </div>
 <!-- /header -->
 
@@ -394,8 +385,8 @@ function get_cookie ( cookie_name )
 
 
 <div id="nowPlayingpane" data-role="content" class="pane">
-<div id="nowPlayingpaneInner">
-    <div  id="album-pic" ><img id="controlspopupimage" src="images/default_cover.png" /></div>
+
+    <img id="controlspopupimage" src="images/default_cover.png" />
 
 
     <div class="nowPlaying-artistInfo">
@@ -412,7 +403,6 @@ function get_cookie ( cookie_name )
 <!--    <a onclick="return saveStreamUri(songdata.uri);" data-role="button">Add to saved streams</a>-->
 </div>
 
-
 </div>
 <!-- /nowplaying -->
 
@@ -421,7 +411,7 @@ function get_cookie ( cookie_name )
         <ul id="playlistslist" class="table"></ul>
     </div>
     <div class="ui-block-b scroll" id="playlisttracksdiv">
-        <div id="playlisttracksback"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
+        <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
         <ul class="table" id="playlisttracks"></ul>
     </div>
 
