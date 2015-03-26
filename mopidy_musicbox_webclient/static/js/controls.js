@@ -5,7 +5,7 @@ function playBrowsedTracks(addtoqueue, trackid) {
 
     //stop directly, for user feedback.
     if (addtoqueue == PLAY_ALL) {
-        mopidy.playback.stop(true);
+        mopidy.playback.stop();
         mopidy.tracklist.clear();
     }
     toast('Loading...');
@@ -97,7 +97,7 @@ function playTrack(addtoqueue) {
 
     //stop directly, for user feedback. If searchresults, also clear queue
     if (!addtoqueue || ((addtoqueue == PLAY_NOW) && (divid == 'search'))) {
-        mopidy.playback.stop(true);
+        mopidy.playback.stop();
         mopidy.tracklist.clear();
     }
     $('#popupTracks').popup('close');
@@ -179,7 +179,7 @@ function playTrackByUri(track_uri, playlist_uri) {
     }
 
     // Stop directly, for user feedback
-    mopidy.playback.stop(true);
+    mopidy.playback.stop();
     mopidy.tracklist.clear();
 
     //this is deprecated, remove when popuptracks is removed completly
@@ -217,7 +217,7 @@ function playTrackByUri(track_uri, playlist_uri) {
 function playTrackQueueByUri(uri, playlisturi) {
     //    console.log('playquuri');
     //stop directly, for user feedback
-    mopidy.playback.stop(true);
+    mopidy.playback.stop();
     $('#popupQueue').popup('close');
     toast('Loading...');
 
@@ -280,7 +280,7 @@ function clearQueue() {
  */
 
 function doShuffle() {
-    mopidy.playback.stop(true);
+    mopidy.playback.stop();
     mopidy.tracklist.shuffle();
     mopidy.playback.play();
 }
@@ -518,7 +518,7 @@ function playStreamUri(uri) {
     if (isServiceUri(nwuri) || isStreamUri(nwuri) || validUri(nwuri)) {
         toast('Playing...');
         //stop directly, for user feedback
-        mopidy.playback.stop(true);
+        mopidy.playback.stop();
         //hide ios/android keyboard
         document.activeElement.blur();
         $("input").blur();
