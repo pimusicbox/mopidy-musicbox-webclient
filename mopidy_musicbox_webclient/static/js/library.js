@@ -199,7 +199,6 @@ function processSearchResults(resultArr) {
 //    playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
     resultsToTables(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
 
-    // setSongInfo();
     showLoading(false);
 }
 
@@ -292,7 +291,6 @@ function showArtist(nwuri) {
     }, console.error);
     switchContent('artists', nwuri);
     scrollToTop();
-    // setSongInfo();
     return false;
 }
 
@@ -329,7 +327,6 @@ function showAlbum(uri) {
     //show page
     switchContent('albums', uri);
     scrollToTop();
-    // setSongInfo();
     return false;
 }
 

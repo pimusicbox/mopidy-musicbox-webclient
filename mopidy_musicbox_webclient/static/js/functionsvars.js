@@ -223,14 +223,9 @@ function resultsToTables(results, target, uri) {
     }
     var tlids = [];
     if (target == CURRENT_PLAYLIST_TABLE) {
-        var tmp = [];
         for (i = 0; i < results.length; i++) {
-            tmp[i] = results[i].track;
             tlids[i] = results[i].tlid;
-        }
-        results = [];
-        for (i = 0; i < tmp.length; i++) {
-            results[i] = tmp[i];
+            results[i] = results[i].track;
         }
     }
 

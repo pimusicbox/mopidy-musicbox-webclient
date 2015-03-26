@@ -102,8 +102,8 @@ function setSongInfo(data) {
         $("#songlength").html('');
         pausePosTimer();
         $('#trackslider').slider('disable');
-        // $('#streamnameinput').val(data['track'].name);
-        // $('#streamuriinput').val(data['track'].uri);
+        // $('#streamnameinput').val(data.track.name);
+        // $('#streamuriinput').val(data.track.uri);
     } else {
         songlength = data.track.length;
         $("#songlength").html(timeFromSeconds(data.track.length / 1000));
@@ -123,7 +123,7 @@ function setSongInfo(data) {
 	}
         arttmp = artistshtml;
     }
-    if (data.track.album && data['track'].album.name) {
+    if (data.track.album && data.track.album.name) {
         $("#modalalbum").html('<a href="#" onclick="return showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>');
         getCover(data.track.album, '#infocover, #controlspopupimage', 'extralarge');
     } else {

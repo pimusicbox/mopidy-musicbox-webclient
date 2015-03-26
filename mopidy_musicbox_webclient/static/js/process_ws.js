@@ -194,7 +194,6 @@ function processGetTracklist(resultArr) {
     var newplaylisturi = resultArr.uri;
 //console.log(resultArr);
     playlists[newplaylisturi] = resultArr;
-    // setSongInfo();
     resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
     showLoading(false);
 }
@@ -225,7 +224,6 @@ function processArtistResults(resultArr) {
     var artistname = getArtist(resultArr);
     $('#h_artistname, #artistpopupname').html(artistname);
     getArtistImage(artistname, '#artistviewimage, #artistpopupimage', 'extralarge');
-    // setSongInfo();
     showLoading(false);
 }
 
@@ -248,7 +246,6 @@ function processAlbumResults(resultArr) {
     $('#h_albumartist').html(artistname);
     $('#coverpopupalbumname').html(albumname);
     $('#coverpopupartist').html(artistname);
-    // setSongInfo();
     getCover(resultArr[0].album, '#albumviewcover, #coverpopupimage', 'extralarge');
     showLoading(false);
 }
