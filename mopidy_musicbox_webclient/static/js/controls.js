@@ -8,6 +8,7 @@ function playBrowsedTracks(addtoqueue, trackid) {
         mopidy.playback.stop();
         mopidy.tracklist.clear();
     }
+    $('#popupBrowse').popup('close');
     toast('Loading...');
 
     trackid = typeof trackid !== 'undefined' ? trackid : $('#popupBrowse').data("track");
