@@ -53,7 +53,7 @@ Project resources
 Changelog
 =========
 
-v1.2 (25-3-2015)
+v2.0 (26-3-2015)
 ----------------
 - Pausing a stream will now actually stop it.
 - Fix keyboard shortcuts in some browsers.
