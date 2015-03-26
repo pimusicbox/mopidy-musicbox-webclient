@@ -53,6 +53,18 @@ Project resources
 Changelog
 =========
 
+v2.0 (26-3-2015)
+----------------
+- Pausing a stream will now actually stop it.
+- Fix keyboard shortcuts in some browsers.
+- Use relative path for script files to fix proxy support.
+- Description text for control icons.
+- Added consume and single playback modes.
+- Changed from a static webclient to a dynamic webapp.
+- New musicbox config setting to hide Musicbox specific content.
+- Added popup tracks menu to the Browse interface.
+- Fixed wrong jQuery version on some pages.
+
 v1.0.4
 -------------------
 
