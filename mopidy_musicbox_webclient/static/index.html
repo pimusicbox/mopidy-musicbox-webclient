@@ -169,7 +169,7 @@
     <div data-role="collapsible-set">
         <ul data-role="listview" data-icon="false" id="popupTracksLv">
             <li>
-                <a href="#" onclick="return playTrack();">Play <span class="popupTrackName"></span></a>
+                <a href="#" onclick="return playTrack(PLAY_NOW);">Play <span class="popupTrackName"></span></a>
             </li>
             <li class="addqueue">
                 <a href="#" onclick="return playTrack(PLAY_NEXT);">Play Track Next</a>
@@ -304,7 +304,6 @@
         <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
         <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
     </div>
-
 </div>
 <!-- /nowplaying -->
 
@@ -429,7 +428,7 @@
                     Save
                 </button>
                 <br/>
-                <button class="btn" type="button" onclick="$('#streamuriinput').val(songdata.uri); return true;">
+                <button class="btn" type="button" onclick="$('#streamuriinput').val(songdata.track.uri); return true;">
                     Add currently playing url
                 </button>
             </form>

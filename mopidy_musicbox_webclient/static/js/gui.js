@@ -12,16 +12,18 @@ function resetSong() {
         setPlayState(false);
         setPosition(0);
         var data = new Object;
-        data.name = '';
-        data.artists = '';
-        data.length = 0;
-        data.uri = ' ';
+        data.tlid = -1;
+        data.track = new Object;
+        data.track.name = '';
+        data.track.artists = '';
+        data.track.length = 0;
+        data.track.uri = ' ';
         setSongInfo(data);
     }
 }
 
 function resizeMb() {
-    $("#infoname").html(songdata.name);
+    $("#infoname").html(songdata.track.name);
     $("#infoartist").html(artiststext);
 
     if ($(window).width() <= 960) {
@@ -72,68 +74,68 @@ function resizeMb() {
 function setSongInfo(data) {
 //    console.log(data, songdata);
     if (!data ) { return; }
-    if ( (data.uri == songdata.uri) ) { return;}
-    if (!data.name || data.name == '') {
-	var name = data.uri.split('/');
-	data.name = decodeURI(name[name.length - 1]);
+    if (data.tlid == songdata.tlid) { return; }
+    if (!data.track.name || data.track.name == '') {
+        var name = data.track.uri.split('/');
+        data.track.name = decodeURI(name[name.length - 1]);
     };
 
-    updatePlayIcons(data.uri);
+    updatePlayIcons(data.track.uri, data.tlid);
     artistshtml = '';
     artiststext = '';
 
-    if (validUri(data.name)) {
+    if (validUri(data.track.name)) {
         for (var key in streamUris) {
-	rs = streamUris[key];
-	if (rs && rs[1] == data.name) {
-	  data.name = (rs[0] || rs[1]);
-	}
-    };
+            rs = streamUris[key];
+            if (rs && rs[1] == data.track.name) {
+                data.track.name = (rs[0] || rs[1]);
+            }
+        };
     }
 
     songdata = data;
 
-    $("#modalname").html(data.name);
+    $("#modalname").html(data.track.name);
 
-    if (!data.length || data.length == 0) {
+    if (!data.track.length || data.track.length == 0) {
         songlength = 0;
-	$("#songlength").html('');
-	pausePosTimer();
-	$('#trackslider').slider('disable');
-//	$('#streamnameinput').val(data.name);
-//	$('#streamuriinput').val(data.uri);
+        $("#songlength").html('');
+        pausePosTimer();
+        $('#trackslider').slider('disable');
+        // $('#streamnameinput').val(data.track.name);
+        // $('#streamuriinput').val(data.track.uri);
     } else {
-        songlength = data.length;
-	$("#songlength").html(timeFromSeconds(data.length / 1000));
+        songlength = data.track.length;
+        $("#songlength").html(timeFromSeconds(data.track.length / 1000));
         $('#trackslider').slider('enable');
     }
 
     var arttmp = '';
 
-    if(data.artists) {
-	for (var j = 0; j < data.artists.length; j++) {
-    	    artistshtml += '<a href="#" onclick="return showArtist(\'' + data.artists[j].uri + '\');">' + data.artists[j].name + '</a>';
-    	    artiststext += data.artists[j].name;
-    	    if (j != data.artists.length - 1) {
+    if(data.track.artists) {
+	for (var j = 0; j < data.track.artists.length; j++) {
+    	    artistshtml += '<a href="#" onclick="return showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>';
+    	    artiststext += data.track.artists[j].name;
+    	    if (j != data.track.artists.length - 1) {
 	        artistshtml += ', ';
         	artiststext += ', ';
 	    }
 	}
         arttmp = artistshtml;
     }
-    if (data.album && data.album.name) {
-        $("#modalalbum").html('<a href="#" onclick="return showAlbum(\'' + data.album.uri + '\');">' + data.album.name + '</a>');
-        getCover(data.album, '#infocover, #controlspopupimage', 'extralarge');
+    if (data.track.album && data.track.album.name) {
+        $("#modalalbum").html('<a href="#" onclick="return showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>');
+        getCover(data.track.album, '#infocover, #controlspopupimage', 'extralarge');
     } else {
-	$("#modalalbum").html('');
-	$("#infocover").attr('src', 'images/default_cover.png');
+        $("#modalalbum").html('');
+        $("#infocover").attr('src', 'images/default_cover.png');
         $("#controlspopupimage").attr('src', 'images/default_cover.png');
     }
 
     $("#modalartist").html(arttmp);
 
     $("#trackslider").attr("min", 0);
-    $("#trackslider").attr("max", data.length);
+    $("#trackslider").attr("max", data.track.length);
 
     resizeMb();
 }
@@ -150,7 +152,7 @@ function closePopups() {
 }
 
 
-function popupTracks(e, listuri, trackuri) {
+function popupTracks(e, listuri, trackuri, tlid) {
     if (!e)
         var e = window.event;
     $('.popupTrackName').html(popupData[trackuri].name);
@@ -192,10 +194,18 @@ function popupTracks(e, listuri, trackuri) {
     var popupName = '#popupTracks';
     }
 
-    $(popupName).data("list", listuri).data("track", trackuri).popup("open", {
-        x : e.pageX,
-        y : e.pageY
-    });
+    if (typeof tlid != 'undefined' && tlid != '') {
+        $(popupName).data("list", listuri).data("track", trackuri).data("tlid", tlid).popup("open", {
+            x : e.pageX,
+            y : e.pageY
+        });
+    } else {
+        $(popupName).data("list", listuri).data("track", trackuri).popup("open", {
+            x : e.pageX,
+            y : e.pageY
+        });
+    }
+
     return false;
 }
 
@@ -230,12 +240,12 @@ function initSocketevents() {
     mopidy.on("event:trackPlaybackStarted", function(data) {
         mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
         setPlayState(true);
-        setSongInfo(data.tl_track.track);
+        setSongInfo(data.tl_track);
         initPosTimer();
     });
 
     mopidy.on("event:trackPlaybackPaused", function(data) {
-        //setSongInfo(data.tl_track.track);
+        //setSongInfo(data.tl_track);
         pausePosTimer();
         setPlayState(false);
     });
@@ -338,7 +348,7 @@ function setHeadline(site){
 //update timer
 function updateStatusTimer() {
 //    console.log('statustimer');
-    mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
+    mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error);
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     //TODO check offline?
 }
@@ -353,7 +363,7 @@ function updateOptions() {
 
 //update everything as if reloaded
 function updateStatusOfAll() {
-    mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
+    mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error);
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
 
@@ -567,10 +577,14 @@ $(document).ready(function(event) {
 		    } );
 });
 
-function updatePlayIcons (uri) {
+function updatePlayIcons (uri, tlid) {
     //update styles of listviews
     $('#currenttable li').each(function() {
-        if (this.id == 'currenttable-' + uri) {
+        var eachTlid = $(this).attr('tlid');
+        if (typeof eachTlid != 'undefined') {
+            eachTlid = parseInt(eachTlid);
+        }
+        if (this.id == 'currenttable-' + uri && eachTlid == tlid) {
             $(this).addClass('currenttrack');
         } else {
             $(this).removeClass("currenttrack");
