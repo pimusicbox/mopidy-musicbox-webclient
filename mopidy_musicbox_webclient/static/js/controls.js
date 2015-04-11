@@ -299,12 +299,14 @@ function doPlay() {
     toast('Please wait...', 250);
     if (!play) {
         mopidy.playback.play();
+        progressTimer.start();
     } else {
         if(isStreamUri(songdata.track.uri)) {
             mopidy.playback.stop();
         } else {
             mopidy.playback.pause();
         }
+        progressTimer.stop();
     }
     setPlayState(!play);
 }
@@ -394,9 +396,16 @@ function timerCallback(position, duration) {
     initgui = oldval;
 }
 
-function seekTo(position) {
-    newposition = Math.round($("#trackslider").val());
-    progressTimer.set(newposition);
+function doSeek(position) {
+    if (!initgui) {
+        newposition = Math.round($("#trackslider").val());
+        if (mopidy) {
+            posChanging = true;
+            mopidy.playback.seek(newposition);
+            posChanging = false;
+        }
+        progressTimer.set(newposition);
+    }
 }
 
 /********************

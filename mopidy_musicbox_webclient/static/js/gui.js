@@ -102,8 +102,8 @@ function setSongInfo(data) {
         // $('#streamnameinput').val(data.name);
         // $('#streamuriinput').val(data.uri);
     } else {
-        songlength = data.length;
-        $("#songlength").html(timeFromSeconds(data.length / 1000));
+        songlength = data.track.length;
+        $("#songlength").html(timeFromSeconds(songlength / 1000));
         $('#trackslider').slider('enable');
     }
 
@@ -132,7 +132,12 @@ function setSongInfo(data) {
     $("#modalartist").html(arttmp);
 
     $("#trackslider").attr("min", 0);
-    $("#trackslider").attr("max", data.track.length);
+    $("#trackslider").attr("max", songlength);
+    progressTimer.set(0, songlength);
+    if (songlength)
+        progressTimer.start();
+    else
+        progressTimer.stop();
 
     resizeMb();
 }
@@ -236,11 +241,11 @@ function initSocketevents() {
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
         setPlayState(true);
-        setSongInfo(data.tl_track.track);
+        setSongInfo(data.tl_track);
     });
 
     mopidy.on("event:trackPlaybackPaused", function(data) {
-        //setSongInfo(data.tl_track.track);
+        //setSongInfo(data.tl_track);
         setPlayState(false);
     });
 
