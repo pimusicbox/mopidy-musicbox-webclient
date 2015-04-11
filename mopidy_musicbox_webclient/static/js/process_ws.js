@@ -50,20 +50,11 @@ function processSingle(data) {
 }
 
 /********************************************************
- * process results of current position
- *********************************************************/
-function processCurrentposition(data) {
-    var pos = parseInt(data);
-    setPosition(pos);
-}
-
-/********************************************************
  * process results playstate
  *********************************************************/
 function processPlaystate(data) {
     if (data == 'playing') {
         setPlayState(true);
-        resumePosTimer();
     } else {
         setPlayState(false);
     }

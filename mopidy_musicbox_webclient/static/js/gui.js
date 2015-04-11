@@ -8,9 +8,7 @@
  ********************/
 function resetSong() {
     if (!posChanging) {
-        pausePosTimer();
         setPlayState(false);
-        setPosition(0);
         var data = new Object;
         data.name = '';
         data.artists = '';
@@ -97,14 +95,13 @@ function setSongInfo(data) {
 
     if (!data.length || data.length == 0) {
         songlength = 0;
-	$("#songlength").html('');
-	pausePosTimer();
-	$('#trackslider').slider('disable');
-//	$('#streamnameinput').val(data.name);
-//	$('#streamuriinput').val(data.uri);
+        $("#songlength").html('');
+        $('#trackslider').slider('disable');
+        // $('#streamnameinput').val(data.name);
+        // $('#streamuriinput').val(data.uri);
     } else {
         songlength = data.length;
-	$("#songlength").html(timeFromSeconds(data.length / 1000));
+        $("#songlength").html(timeFromSeconds(data.length / 1000));
         $('#trackslider').slider('enable');
     }
 
@@ -228,15 +225,12 @@ function initSocketevents() {
     mopidy.on("event:optionsChanged", updateOptions);
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
-        mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
         setPlayState(true);
         setSongInfo(data.tl_track.track);
-        initPosTimer();
     });
 
     mopidy.on("event:trackPlaybackPaused", function(data) {
         //setSongInfo(data.tl_track.track);
-        pausePosTimer();
         setPlayState(false);
     });
 
@@ -257,8 +251,6 @@ function initSocketevents() {
                 resetSong();
                 break;
             case "playing":
-                mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-                resumePosTimer();
                 setPlayState(true);
                 break;
         }
@@ -266,10 +258,6 @@ function initSocketevents() {
 
     mopidy.on("event:tracklistChanged", function(data) {
         getCurrentPlaylist();
-    });
-
-    mopidy.on("event:seeked", function(data) {
-        setPosition(parseInt(data["time_position"]));
     });
 }
 
@@ -339,7 +327,6 @@ function setHeadline(site){
 function updateStatusTimer() {
 //    console.log('statustimer');
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
-    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     //TODO check offline?
 }
 
@@ -354,7 +341,6 @@ function updateOptions() {
 //update everything as if reloaded
 function updateStatusOfAll() {
     mopidy.playback.getCurrentTrack().then(processCurrenttrack, console.error);
-    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
 
     updateOptions()
@@ -451,6 +437,8 @@ $(document).ready(function(event) {
     //end of workaround
 
     $(window).hashchange();
+
+    progressTimer = new ProgressTimer({callback: timerCallback});
 
     // Connect to server
 //    mopidy = new Mopidy();
