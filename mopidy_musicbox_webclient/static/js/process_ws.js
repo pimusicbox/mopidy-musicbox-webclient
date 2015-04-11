@@ -106,12 +106,14 @@ function processBrowseDir(resultArr) {
 	child += backHtml;
     }
 
+    browseTracks = [];
     for (var i = 0; i < resultArr.length; i++) {
         iconClass = getMediaClass(resultArr[i].uri);
 	if(resultArr[i].type == 'track' ) {
 //	    console.log(resultArr[i]);
         mopidy.library.lookup(resultArr[i].uri).then(function (resultArr) {
             popupData[resultArr[0].uri] = resultArr[0];
+            browseTracks.push(resultArr[0]);
         }, console.error);
         child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
 		'<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\');">' +
