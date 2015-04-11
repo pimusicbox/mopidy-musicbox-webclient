@@ -78,7 +78,7 @@ function processSearchResults(resultArr) {
     // TODO  should of coures have multiple tables
     var results = {'tracks': [], 'artists': [], 'albums': []};
     var j, emptyResult = true;
-    
+
 /*    for (var i = 0; i < resultArr.length; ++i) {
         for (var prop in results) {
             if (resultArr[i][prop] && resultArr[i][prop].length) {
@@ -199,7 +199,6 @@ function processSearchResults(resultArr) {
 //    playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
     resultsToTables(results.tracks, SEARCH_TRACK_TABLE, 'trackresultscache');
 
-    setSongInfo();
     showLoading(false);
 }
 
@@ -230,7 +229,7 @@ function getBrowseDir(rootdir) {
 }
 
 function getCurrentPlaylist() {
-    mopidy.tracklist.getTracks().then(processCurrentPlaylist, console.error);
+    mopidy.tracklist.getTlTracks().then(processCurrentPlaylist, console.error);
 }
 
 /********************************************************
@@ -292,7 +291,6 @@ function showArtist(nwuri) {
     }, console.error);
     switchContent('artists', nwuri);
     scrollToTop();
-    setSongInfo();
     return false;
 }
 
@@ -329,7 +327,6 @@ function showAlbum(uri) {
     //show page
     switchContent('albums', uri);
     scrollToTop();
-    setSongInfo();
     return false;
 }
 

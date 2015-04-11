@@ -122,7 +122,7 @@ function playTrack(addtoqueue) {
 
     //find track that is playing
     for (var playing = 0; playing < currentplaylist.length; playing++) {
-        if (currentplaylist[playing].uri == songdata.uri) {
+        if (currentplaylist[playing].tlid == songdata.tlid) {
             break;
         }
     }
@@ -212,25 +212,26 @@ function playTrackByUri(track_uri, playlist_uri) {
 /***
  * Plays a Track from a Playlist.
  * @param uri
- * @param playlisturi
+ * @param tlid
  * @returns {boolean}
  */
-function playTrackQueueByUri(uri, playlisturi) {
+function playTrackQueueByTlid(uri, tlid) {
     //    console.log('playquuri');
     //stop directly, for user feedback
     mopidy.playback.stop();
     $('#popupQueue').popup('close');
     toast('Loading...');
 
+    tlid = parseInt(tlid);
     mopidy.tracklist.filter({
-        'uri': [uri]
+        'tlid': [tlid]
     }).then(
         function(tltracks) {
             if (tltracks.length > 0) {
                 mopidy.playback.play(tltracks[0]);
                 return;
             }
-            console.log('Failed to play selected track ', uri);
+            console.log('Failed to play selected track ', tlid);
         }
     );
     return false;
@@ -242,9 +243,9 @@ function playTrackQueueByUri(uri, playlisturi) {
  */
 function playTrackQueue() {
     //    console.log('playqu');
-    playlisturi = $('#popupQueue').data("list");
     uri = $('#popupQueue').data("track");
-    return playTrackQueueByUri(uri, playlisturi);
+    tlid = $('#popupQueue').data("tlid");
+    return playTrackQueueByTlid(uri, tlid);
 }
 
 /********************************************************
@@ -254,18 +255,9 @@ function removeTrack() {
     $('#popupQueue').popup('close');
     toast('Deleting...');
 
-    uri = $('#popupQueue').data("track");
-    console.log(uri);
-
-    for (var i = 0; i < currentplaylist.length; i++) {
-        if (currentplaylist[i].uri == uri) {
-            break;
-        }
-    }
-    var track = {};
-    track.uri = [currentplaylist[i].uri];
-    mopidy.tracklist.remove({'uri':track.uri});
-    //    console.log(currentplaylist[i].uri);
+    tlid = parseInt($('#popupQueue').data("tlid"));
+    console.log(tlid);
+    mopidy.tracklist.remove({'tlid':[tlid]});
 }
 
 function clearQueue() {
@@ -308,7 +300,7 @@ function doPlay() {
     if (!play) {
         mopidy.playback.play();
     } else {
-        if(isStreamUri(songdata.uri)) {
+        if(isStreamUri(songdata.track.uri)) {
             mopidy.playback.stop();
         } else {
             mopidy.playback.pause();
