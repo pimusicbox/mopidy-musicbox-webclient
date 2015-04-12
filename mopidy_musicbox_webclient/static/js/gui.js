@@ -272,6 +272,10 @@ function initSocketevents() {
     mopidy.on("event:tracklistChanged", function(data) {
         getCurrentPlaylist();
     });
+
+    mopidy.on("event:seeked", function(data) {
+        progressTimer.set(parseInt(data["time_position"]));
+    });
 }
 
 $(document).bind("pageinit", function() {
@@ -340,6 +344,7 @@ function setHeadline(site){
 function updateStatusTimer() {
 //    console.log('statustimer');
     mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error);
+    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     //TODO check offline?
 }
 
@@ -355,6 +360,7 @@ function updateOptions() {
 function updateStatusOfAll() {
     mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
+    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
 
     updateOptions()
 
@@ -451,7 +457,7 @@ $(document).ready(function(event) {
 
     $(window).hashchange();
 
-    progressTimer = new ProgressTimer({callback: timerCallback});
+    progressTimer = new ProgressTimer(timerCallback);
 
     // Connect to server
 //    mopidy = new Mopidy();

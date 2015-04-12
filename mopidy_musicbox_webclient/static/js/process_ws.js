@@ -50,6 +50,16 @@ function processSingle(data) {
 }
 
 /********************************************************
+ * process results of current position
+ *********************************************************/
+function processCurrentposition(data) {
+    progressTimer.set(parseInt(data));
+    if (play) {
+        progressTimer.start();
+    }
+}
+
+/********************************************************
  * process results playstate
  *********************************************************/
 function processPlaystate(data) {
