@@ -48,9 +48,9 @@ function playBrowsedTracks(addtoqueue, trackid) {
                     if (this.id == trackid) {
                         selected = counter;
                     }
-                    mopidy.tracklist.add(null, null, this.id);
                     counter++;
                 });
+                mopidy.tracklist.add(browseTracks);
                 break;
             default:
                 break;

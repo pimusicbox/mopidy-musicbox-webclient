@@ -47,6 +47,7 @@ var customPlaylists = [];
 var customTracklists = [];
 
 var browseStack = [];
+var browseTracks = [];
 
 var ua = navigator.userAgent,
     isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua),
