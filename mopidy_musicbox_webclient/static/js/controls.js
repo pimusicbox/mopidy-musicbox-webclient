@@ -299,14 +299,12 @@ function doPlay() {
     toast('Please wait...', 250);
     if (!play) {
         mopidy.playback.play();
-        progressTimer.start();
     } else {
         if(isStreamUri(songdata.track.uri)) {
             mopidy.playback.stop();
         } else {
             mopidy.playback.pause();
         }
-        progressTimer.stop();
     }
     setPlayState(!play);
 }

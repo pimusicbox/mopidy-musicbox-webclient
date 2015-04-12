@@ -134,10 +134,6 @@ function setSongInfo(data) {
     $("#trackslider").attr("min", 0);
     $("#trackslider").attr("max", songlength);
     progressTimer.set(0, songlength);
-    if (songlength)
-        progressTimer.start();
-    else
-        progressTimer.stop();
 
     resizeMb();
 }
@@ -242,11 +238,7 @@ function initSocketevents() {
     mopidy.on("event:trackPlaybackStarted", function(data) {
         setPlayState(true);
         setSongInfo(data.tl_track);
-    });
-
-    mopidy.on("event:trackPlaybackPaused", function(data) {
-        //setSongInfo(data.tl_track);
-        setPlayState(false);
+        progressTimer.start();
     });
 
     mopidy.on("event:playlistsLoaded", function(data) {
@@ -264,9 +256,15 @@ function initSocketevents() {
         switch (data["new_state"]) {
             case "stopped":
                 resetSong();
+                progressTimer.reset();
                 break;
             case "playing":
                 setPlayState(true);
+                progressTimer.start();
+                break;
+            case "paused":
+                setPlayState(false);
+                progressTimer.stop();
                 break;
         }
     });
