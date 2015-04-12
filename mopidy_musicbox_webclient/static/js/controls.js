@@ -1,4 +1,16 @@
 /********************************************************
+ * Return TrackList ID for the currently playing track.
+ *********************************************************/
+function getNowPlayingTlid() {
+	for (var playing = 0; playing < currentplaylist.length; playing++) {
+		if (currentplaylist[playing].uri == songdata.uri) {
+			break;
+		}
+	}
+	return playing;
+}
+
+/********************************************************
  * play tracks from a browse list
  *********************************************************/
 function playBrowsedTracks(addtoqueue, trackid) {
@@ -23,12 +35,7 @@ function playBrowsedTracks(addtoqueue, trackid) {
         switch (addtoqueue) {
             case PLAY_NOW:
             case PLAY_NEXT:
-                //find track that is playing
-                for (var playing = 0; playing < currentplaylist.length; playing++) {
-                    if (currentplaylist[playing].uri == songdata.uri) {
-                        break;
-                    }
-                }
+                var playing = getNowPlayingTlid();
                 mopidy.tracklist.add(null, playing + 1, trackid);
                 break;
             case ADD_THIS_BOTTOM:
@@ -112,17 +119,11 @@ function playTrack(addtoqueue) {
     var trackslist = new Array();
     var track, tracksbefore, tracksafter;
     var tracks = getTracksFromUri(playlisturi);
+    var playing = getNowPlayingTlid();
 
     //find track that was selected
     for (var selected = 0; selected < tracks.length; selected++) {
         if (tracks[selected].uri == uri) {
-            break;
-        }
-    }
-
-    //find track that is playing
-    for (var playing = 0; playing < currentplaylist.length; playing++) {
-        if (currentplaylist[playing].tlid == songdata.tlid) {
             break;
         }
     }
