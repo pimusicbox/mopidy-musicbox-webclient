@@ -402,7 +402,7 @@ function doSeek(position) {
             mopidy.playback.seek(newposition);
             posChanging = false;
         }
-        progressTimer.set(newposition);
+        progressTimer.stop().set(newposition);
     }
 }
 

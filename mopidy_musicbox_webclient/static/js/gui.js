@@ -274,7 +274,7 @@ function initSocketevents() {
     });
 
     mopidy.on("event:seeked", function(data) {
-        progressTimer.set(parseInt(data["time_position"]));
+        progressTimer.set(parseInt(data["time_position"])).start();
     });
 }
 
