@@ -35,11 +35,10 @@ function playBrowsedTracks(addtoqueue, trackIndex) {
             mopidy.tracklist.add(browseTracks);
             break;
         case PLAY_ALL:
+            mopidy.tracklist.clear();
             // TODO: Use uris parameter in v1.0 API (faster?).
-            mopidy.tracklist.clear().then(function () {
-                mopidy.tracklist.add(browseTracks).then(function(tlTracks) {
-                    mopidy.playback.play(tlTracks[trackIndex]);
-                });
+            mopidy.tracklist.add(browseTracks).then(function(tlTracks) {
+                mopidy.playback.play(tlTracks[trackIndex]);
             });
             break;
         default:
