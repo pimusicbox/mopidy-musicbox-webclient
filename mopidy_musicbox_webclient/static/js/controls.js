@@ -12,10 +12,10 @@ function playBrowsedTracks(addtoqueue, trackIndex) {
 
     // For radio streams we just add the selected URI.
     // TODO: Why?
-    if (isStreamUri(trackUri)) {
-        mopidy.tracklist.add(null, null, trackUri);
-        return false;
-    }
+    //if (isStreamUri(trackUri)) {
+        //mopidy.tracklist.add(null, null, trackUri);
+        //return false;
+    //}
 
     switch (addtoqueue) {
         case PLAY_NOW:
