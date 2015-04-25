@@ -91,6 +91,7 @@ var uriClassList = [
     ['podcast', 'fa-rss-square'],
     ['dirble', 'fa-microphone'],
     ['tunein', 'fa-headphones'],
+    ['gs', 'fa-music'],
     ['soundcloud', 'fa-soundcloud'],
     ['sc', 'fa-soundcloud'],
     ['gmusic', 'fa-google'],
