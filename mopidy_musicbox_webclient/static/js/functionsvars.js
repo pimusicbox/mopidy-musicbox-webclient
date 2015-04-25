@@ -120,11 +120,6 @@ var uriHumanList = [
     ['subsonic', 'Subsonic']
 ];
 
-var uriServiceDetectList = [
-    ['youtube.com', 'yt'],
-    ['soundcloud.com', 'sc']
-];
-
 function scrollToTop() {
     var divtop = 0;
     $('body,html').animate({
