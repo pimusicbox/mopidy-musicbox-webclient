@@ -56,6 +56,8 @@ Changelog
 v2.0.1 (UNRELEASED)
 -------------------
 - Added optional websocket_host and websocket_port config settings.
+- Support for Mopidy-Grooveshark.
+- Fixed slow to start playing from a large tracklist of browsed tracks.
 
 v2.0.0 (26-3-2015)
 ------------------
