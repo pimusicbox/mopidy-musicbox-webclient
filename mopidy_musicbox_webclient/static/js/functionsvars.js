@@ -107,6 +107,7 @@ var uriHumanList = [
     ['spotify', 'Spotify'],
     ['spotifytunigo', 'Spotify Browse'],
     ['local', 'Local Files'],
+    ['grooveshark', 'Grooveshark'],
     ['podcast', 'Podcasts'],
     ['dirble', 'Dirble'],
     ['tunein', 'TuneIn'],
