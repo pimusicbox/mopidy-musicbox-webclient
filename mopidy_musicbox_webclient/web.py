@@ -48,16 +48,9 @@ class IndexHandler(tornado.web.RequestHandler):
             'websocket_url': ws_url
         }
         self.__path = path
-        self.__title = string.Template('MusicBox on $hostname')
 
     def get(self, path):
-        return self.render('index.html', title=self.get_title(), **self.__dict)
-
-    def get_title(self):
-        hostname, sep, port = self.request.host.rpartition(':')
-        if not sep or not port.isdigit():
-            hostname, port = self.request.host, '80'
-        return self.__title.safe_substitute(hostname=hostname, port=port)
+        return self.render('index.html', **self.__dict)
 
     def get_template_path(self):
         return self.__path
