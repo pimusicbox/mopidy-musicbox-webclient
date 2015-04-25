@@ -4,12 +4,6 @@
  * all kinds functions and vars
  */
 
-var baseurl = '/mopidy';
-var host = window.location.hostname;
-var port = window.location.port;
-var wsurl = host + ':' + port + baseurl
-var intv;
-var socket;
 var mopidy;
 
 //values for controls
