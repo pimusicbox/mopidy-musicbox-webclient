@@ -44,7 +44,7 @@ class IndexHandler(tornado.web.RequestHandler):
 
         self.__dict = {
             'version': MusicBoxExtension.version,
-            'musicbox': int(ext_config['musicbox']),
+            'musicbox': int(ext_config['musicbox'] or False),
             'websocket_url': ws_url
         }
         self.__path = path
