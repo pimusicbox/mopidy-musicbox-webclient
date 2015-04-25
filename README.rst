@@ -53,8 +53,12 @@ Project resources
 Changelog
 =========
 
-v2.0 (26-3-2015)
-----------------
+v2.0.1 (UNRELEASED)
+-------------------
+- Added optional websocket_host and websocket_port config settings.
+
+v2.0.0 (26-3-2015)
+------------------
 - Pausing a stream will now actually stop it.
 - Fix keyboard shortcuts in some browsers.
 - Use relative path for script files to fix proxy support.

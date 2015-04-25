@@ -29,9 +29,23 @@ class IndexHandler(tornado.web.RequestHandler):
 
     def initialize(self, config, path):
         ext_config = config[MusicBoxExtension.ext_name]
+        host, port = ext_config['websocket_host'], ext_config['websocket_port']
+        ws_url = ''
+        if host or port:
+            if not host:
+                host = self.request.host.partition(':')[0]
+                logger.warning('Musicbox websocket_host not specified, '
+                               'using %s', host)
+            elif not port:
+                port = config['http']['port']
+                logger.warning('Musicbox websocket_port not specified, '
+                               'using %s', port)
+            ws_url = "ws://%s:%d/mopidy/ws" % (host, port)
+
         self.__dict = {
             'version': MusicBoxExtension.version,
-            'musicbox': int(ext_config['musicbox'])
+            'musicbox': int(ext_config['musicbox']),
+            'websocket_url': ws_url
         }
         self.__path = path
         self.__title = string.Template('MusicBox on $hostname')

@@ -20,6 +20,8 @@ class MusicBoxExtension(ext.Extension):
     def get_config_schema(self):
         schema = super(MusicBoxExtension, self).get_config_schema()
         schema['musicbox'] = config.Boolean()
+        schema['websocket_host'] = config.Hostname(optional=True)
+        schema['websocket_port'] = config.Port(optional=True)
         return schema
 
     def setup(self, registry):

@@ -7,13 +7,10 @@
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css"/>
 <!--    <script type='application/javascript' src='js/fastclick.js'></script> -->
     <script>
-     //configuration
-//     var wsLocation = location.host + ':6680';  //for normal operation of mopidy http
-      var wsLocation = location.host;   //for running on port 80
-      if (wsLocation == location.hostname) {
-          wsLocation = location.hostname + ':6680';
-      }
-      var isMusicBox = {{musicbox}}; // Remove MusicBox only content (e.g. settings, system pages)
+        //configuration
+        var isMusicBox = {{musicbox}}; // Remove MusicBox only content (e.g. settings, system pages)
+        var websocketUrl = '{{websocket_url}}'
+        //{{title}}
 
         $(document).bind("mobileinit", function () {
             $.extend($.mobile, {
