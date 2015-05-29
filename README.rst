@@ -58,6 +58,7 @@ v2.0.1 (UNRELEASED)
 - Added optional websocket_host and websocket_port config settings.
 - Support for Mopidy-Grooveshark.
 - Fixed slow to start playing from a large tracklist of browsed tracks.
+- Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
 
 v2.0.0 (26-3-2015)
 ------------------
