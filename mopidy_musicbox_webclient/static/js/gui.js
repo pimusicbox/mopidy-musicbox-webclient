@@ -525,6 +525,7 @@ $(document).ready(function(event) {
     if (!hasAlarmClock) {
         $('#navAlarmClock').hide();
         $('#homeAlarmClock').hide();
+        $('#homeAlarmClock').nextAll().find('.ui-block-a, .ui-block-b').toggleClass('ui-block-a').toggleClass('ui-block-b');
     }
 
     //navigation stuff
