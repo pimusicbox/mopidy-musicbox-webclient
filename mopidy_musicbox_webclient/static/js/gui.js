@@ -521,6 +521,12 @@ $(document).ready(function(event) {
         $('#homeshutdown').hide();
     }
 
+    // remove Alarm Clock if it is not present
+    if (!hasAlarmClock) {
+        $('#navAlarmClock').hide();
+        $('#homeAlarmClock').hide();
+    }
+
     //navigation stuff
 
     $(document).keypress( function (event) {

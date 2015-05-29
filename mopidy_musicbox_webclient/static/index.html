@@ -9,7 +9,8 @@
     <script>
         //configuration
         var isMusicBox = {{musicbox}}; // Remove MusicBox only content (e.g. settings, system pages)
-        var websocketUrl = '{{websocket_url}}'
+        var websocketUrl = '{{websocket_url}}';
+        var hasAlarmClock = {{alarmclock}}; // Add Alarm Clock icons
 
         $(document).bind("mobileinit", function () {
             $.extend($.mobile, {
@@ -95,6 +96,10 @@
         <li id="navsearch" data-icon="false">
             <a href="#search" onclick="switchContent('search' ); return false;">
                 <span class="navtxt">Search </span><i class="fa fa-search"></i></a>
+        </li>
+        <li id="navAlarmClock" data-icon="false">
+                <a href="/alarmclock/">
+                <span class="navtxt"> Alarm Clock </span><i class="fa fa-clock-o"></i></a>
         </li>
         <li id="navEnterFullscreen" data-icon="false">
                 <a href="#">
@@ -264,6 +269,12 @@
             <div class="ui-block-b">
                 <i class="fa fa-search"></i>
                 <h4>Search</h4>
+            </div>
+        </a>
+        <a id="homeAlarmClock" href="/alarmclock/">
+            <div class="ui-block-a">
+                <i class="fa fa-clock-o"></i>
+                <h4>Alarm Clock</h4>
             </div>
         </a>
         <a id="homesettings" href="/settings/">
