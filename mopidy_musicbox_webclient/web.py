@@ -41,17 +41,11 @@ class IndexHandler(tornado.web.RequestHandler):
                                'using %s', port)
             ws_url = "ws://%s:%d/mopidy/ws" % (host, port)
 
-        alarmclock = False
-        try:
-            alarmclock = config['alarmclock']['enabled']
-        except:
-            pass
-
         self.__dict = {
             'version': MusicBoxExtension.version,
             'musicbox': int(ext_config['musicbox'] or False),
             'websocket_url': ws_url,
-            'alarmclock': int(alarmclock)
+            'alarmclock': int('alarmclock' in config and 'enabled' in config['alarmclock'] and config['alarmclock']['enabled'])
         }
         self.__path = path
 
