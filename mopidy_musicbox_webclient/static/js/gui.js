@@ -521,6 +521,13 @@ $(document).ready(function(event) {
         $('#homeshutdown').hide();
     }
 
+    // remove Alarm Clock if it is not present
+    if (!hasAlarmClock) {
+        $('#navAlarmClock').hide();
+        $('#homeAlarmClock').hide();
+        $('#homeAlarmClock').nextAll().find('.ui-block-a, .ui-block-b').toggleClass('ui-block-a').toggleClass('ui-block-b');
+    }
+
     //navigation stuff
 
     $(document).keypress( function (event) {
