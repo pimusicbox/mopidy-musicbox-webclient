@@ -227,6 +227,31 @@ function clearQueue() {
     return false;
 }
 
+function saveQueue() {
+    mopidy.tracklist.getTracks().then(function(tracks) {
+        if (tracks.length > 0) {
+            var plname = window.prompt("Playlist name:", "");
+            if (plname != null && plname.trim() != "") {
+                plname = plname.trim();
+                mopidy.playlists.filter({"name": plname}).then(function(existing) {
+                    var exists = false;
+                    for (var i = 0; i < existing.length; i++) {
+                        exists = exists || existing[i].uri.indexOf("m3u:") == 0 || existing[i].uri.indexOf("local:") == 0;
+                    }
+                    if (!exists || window.confirm("Overwrite existing playlist \"" + plname + "\"?")) {
+                        mopidy.playlists.create(plname, "local").then(function(playlist) {
+                             playlist.tracks = tracks;
+                             mopidy.playlists.save(playlist).then();
+                             getPlaylists();
+                        });
+                    }
+                });
+            }
+        }
+    });
+    return false;
+}
+
 /**********************
  * Buttons
  */
