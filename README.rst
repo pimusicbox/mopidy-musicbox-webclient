@@ -59,6 +59,7 @@ v2.0.1 (UNRELEASED)
 - Support for Mopidy-Grooveshark.
 - Fixed slow to start playing from a large tracklist of browsed tracks.
 - Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
+- Added ability to save Queue as local Playlist.
 
 v2.0.0 (26-3-2015)
 ------------------
