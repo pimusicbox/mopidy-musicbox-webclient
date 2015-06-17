@@ -238,7 +238,7 @@ function resultsToTables(results, target, uri) {
     for (i = 0; i < length; i++) {
         //create album if none extists
         if (!results[i].album) {
-            results[i].album = {};
+            results[i].album = {"__model__": "Album"};
         }
         //create album uri if there is none
         if (!results[i].album.uri) {
