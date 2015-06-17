@@ -410,7 +410,7 @@ function locationHashChanged() {
         case 'search':
             $('#navsearch a').addClass($.mobile.activeBtnClass);
             $("#searchinput").focus();
-            if (customTracklists['allresultscache'] == '') {
+            if (customTracklists['mbw:allresultscache'] == '') {
                 initSearch($('#searchinput').val());
             }
             break;

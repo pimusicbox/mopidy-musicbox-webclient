@@ -37,7 +37,6 @@ var playlistslistScroll;
 //array of cached playlists (not only user-playlists, also search, artist, album-playlists)
 var playlists = {};
 var currentplaylist;
-var customPlaylists = [];
 var customTracklists = [];
 
 var browseStack = [];
@@ -407,9 +406,6 @@ function playlisttotable(pl, target, uri) {
 function getPlaylistFromUri(uri) {
     if (playlists[uri]) {
         return playlists[uri];
-    }
-    if (customPlaylists[uri]) {
-        return customPlaylists[uri];
     }
 }
 

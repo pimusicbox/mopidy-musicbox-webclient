@@ -153,7 +153,7 @@ function playTrackByUri(track_uri, playlist_uri) {
     func = mopidy.tracklist.add(null, null, playlist_uri);
     func.then(
         function(tltracks) {
-            //check if tltracks is filled, some backends (gmusic) do not support adding by uri, it seems
+            //check if tltracks is filled, some backends (gmusic, m3u) do not support adding by uri, it seems
             if (tltracks.length == 0) {
                 var tracks = getTracksFromUri(playlist_uri);
                 mopidy.tracklist.add(tracks).then(findAndPlayTrack);
