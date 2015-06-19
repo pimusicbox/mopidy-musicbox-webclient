@@ -170,12 +170,12 @@ function processGetPlaylists(resultArr) {
         iconClass = getMediaClass(resultArr[i].uri);
 
         // Check if this is Spotify's "Starred" playlist
-        if(starredRegex.test(resultArr[i].uri)) {
+        if(starredRegex.test(resultArr[i].uri) && resultArr[i].name == "Starred") {
     	    starred = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">&#9733; Spotify Starred Tracks</a></li>';
-	} else {
-        child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</a></li>';
-        tmp += child;
-    }
+        } else {
+            child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</a></li>';
+            tmp += child;
+        }
     };
 
     // Move Spotify "Starred" playlist to top as this is the way Spotify does it
