@@ -107,7 +107,7 @@ function processBrowseDir(resultArr) {
     }
 
     browseTracks = [];
-    for (var i = 0; i < resultArr.length; i++) {
+    for (var i = 0, index = 0; i < resultArr.length; i++) {
         iconClass = getMediaClass(resultArr[i].uri);
         if (resultArr[i].type == 'track') {
             //console.log(resultArr[i]);
@@ -116,10 +116,11 @@ function processBrowseDir(resultArr) {
                 browseTracks.push(resultArr[0]);
             }, console.error);
             child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
-                     '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + i + '\');">' +
+                     '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + index + '\');">' +
                      '<i class="fa fa-ellipsis-v"></i></a>' +
-                     '<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, ' + i + ');" id="' + resultArr[i].uri +
+                     '<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, ' + index + ');" id="' + resultArr[i].uri +
                      '"><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
+            index++
         } else {
             if (browseStack.length > 0) {
                 iconClass="fa fa-folder-o";
