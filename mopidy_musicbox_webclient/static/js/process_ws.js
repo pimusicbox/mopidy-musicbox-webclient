@@ -156,34 +156,22 @@ function processBrowseDir(resultArr) {
  * process results of list of playlists of the user
  *********************************************************/
 function processGetPlaylists(resultArr) {
-    /*<p><ul><li>Donec id elit non mi porta</li><li>Gravida at eget metus. Fusce dapibus.</li><li>Tellus ac cursus commodo</li></p>
-     <p><a class="btn" href="#">More &raquo;</a></p>
-     */
     if ((!resultArr) || (resultArr == '')) {
         return;
     }
-    var child, tmp = '',
-        starredRegex = /spotify:user:.*:starred/g,
-        iconClass, starred;
-
+    var tmp = '',
+        starredRegex = /spotify:user:.*:starred/g;
 
     for (var i = 0; i < resultArr.length; i++) {
-        iconClass = getMediaClass(resultArr[i].uri);
-
-        // Check if this is Spotify's "Starred" playlist
+        var li_html = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '">';
         if(starredRegex.test(resultArr[i].uri) && resultArr[i].name == "Starred") {
-    	    starred = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"">&#9733; Spotify Starred Tracks</a></li>';
+            // Prepend the user's Spotify "Starred" playlist to the results (like Spotify official client).
+            tmp = li_html + '&#9733; Spotify Starred Tracks</a></li>' + tmp;
         } else {
-            child = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</a></li>';
-            tmp += child;
+            // Append everything else.
+            tmp = tmp + li_html + '<i class="' + getMediaClass(resultArr[i].uri) + '"></i> ' + resultArr[i].name + '</a></li>';
         }
     };
-
-    // Move Spotify "Starred" playlist to top as this is the way Spotify does it
-    if(starred)
-        tmp = starred + tmp;
-
-    $('#playlistslist').empty();
     $('#playlistslist').html(tmp);
     scrollToTracklist();
     showLoading(false);
@@ -234,7 +222,6 @@ function processArtistResults(resultArr) {
  * process results of an album lookup
  *********************************************************/
 function processAlbumResults(resultArr) {
-//    console.log(resultArr);
     if (!resultArr || (resultArr.length == 0)) {
         $('#h_albumname').text('Album not found...');
         getCover('', '#albumviewcover, #coverpopupimage', 'extralarge');
@@ -242,6 +229,7 @@ function processAlbumResults(resultArr) {
         return;
     }
     customTracklists[resultArr.uri] = resultArr;
+    
     albumTracksToTable(resultArr, ALBUM_TABLE, resultArr.uri);
     var albumname = getAlbum(resultArr);
     var artistname = getArtist(resultArr);
