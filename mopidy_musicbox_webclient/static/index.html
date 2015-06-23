@@ -8,9 +8,9 @@
 <!--    <script type='application/javascript' src='js/fastclick.js'></script> -->
     <script>
         //configuration
-        var isMusicBox = {{musicbox}}; // Remove MusicBox only content (e.g. settings, system pages)
-        var websocketUrl = '{{websocket_url}}';
-        var hasAlarmClock = {{alarmclock}}; // Add Alarm Clock icons
+        var isMusicBox = '{{musicbox}}' == 'True'; // Remove MusicBox only content (e.g. settings, system pages)
+        var websocketUrl = ('{{useWebsocketUrl}}' == 'True') ? '{{websocket_url}}' : ''
+        var hasAlarmClock = '{{alarmclock}}' == 'True'; // Add Alarm Clock icons
 
         $(document).bind("mobileinit", function () {
             $.extend($.mobile, {
