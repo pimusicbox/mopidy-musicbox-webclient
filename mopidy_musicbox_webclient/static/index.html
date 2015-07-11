@@ -314,15 +314,18 @@
 </div>
 <!-- /nowplaying -->
 
-<div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
-    <div class="ui-block-a scroll" id="playlistslistdiv">
-        <ul id="playlistslist" class="table"></ul>
-    </div>
-    <div class="ui-block-b scroll" id="playlisttracksdiv">
+<div data-role="content" id="playlistspane" class="pane">
+    <a style="float:right; padding: 1.2em 10px" onclick="return refreshPlaylists();"><i class="fa fa-refresh"></i></a>
+    <h4>Playlists</h4>
+    <div class="ui-grid-a pl-breakpoint">
+        <div class="ui-block-a scroll" id="playlistslistdiv">
+            <ul id="playlistslist" class="table"></ul>
+        </div>
+        <div class="ui-block-b scroll" id="playlisttracksdiv">
         <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
         <ul class="table" id="playlisttracks"></ul>
+        </div>
     </div>
-
 </div>
 <!--/playlistspane-->
 

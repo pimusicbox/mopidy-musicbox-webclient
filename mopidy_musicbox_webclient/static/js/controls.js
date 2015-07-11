@@ -251,6 +251,12 @@ function saveQueue() {
     return false;
 }
 
+
+function refreshPlaylists() {
+    mopidy.playlists.refresh();
+    return false;
+}
+
 /**********************
  * Buttons
  */
