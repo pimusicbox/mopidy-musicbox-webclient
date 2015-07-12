@@ -22,6 +22,10 @@ class MusicBoxExtension(ext.Extension):
         schema['musicbox'] = config.Boolean(optional=True)
         schema['websocket_host'] = config.Hostname(optional=True)
         schema['websocket_port'] = config.Port(optional=True)
+        schema['default_random'] = config.Boolean(optional=True)
+        schema['default_repeat'] = config.Boolean(optional=True)
+        schema['default_consume'] = config.Boolean(optional=True)
+        schema['default_single'] = config.Boolean(optional=True)
         return schema
 
     def setup(self, registry):
@@ -32,6 +36,16 @@ class MusicBoxExtension(ext.Extension):
         from tornado.web import RedirectHandler
         from .web import IndexHandler, StaticHandler
         path = os.path.join(os.path.dirname(__file__), 'static')
+
+        if type(config[MusicBoxExtension.ext_name]['default_random']) is bool:
+            core.tracklist.random = config[MusicBoxExtension.ext_name]['default_random']
+        if type(config[MusicBoxExtension.ext_name]['default_repeat']) is bool:
+            core.tracklist.repeat = config[MusicBoxExtension.ext_name]['default_repeat']
+        if type(config[MusicBoxExtension.ext_name]['default_consume']) is bool:
+            core.tracklist.consume = config[MusicBoxExtension.ext_name]['default_consume']
+        if type(config[MusicBoxExtension.ext_name]['default_single']) is bool:
+            core.tracklist.single = config[MusicBoxExtension.ext_name]['default_single']
+
         return [
             (r'/', RedirectHandler, {'url': 'index.html'}),
             (r'/(index.html)', IndexHandler, {'config': config, 'path': path}),
