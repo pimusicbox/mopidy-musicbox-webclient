@@ -16,9 +16,9 @@ This is a responsive webclient especially written for Mopidy, a music server. Re
 
 `Mopidy <http://www.mopidy.com/>`_ is a music server which can play music from Spotify, Google Music, SoundCloud, etc or from your hard drive. 
 
-If you want to run Mopidy with this webclient on a Raspberry Pi, do yourself a favor and use my custom built SD-image: `Pi MusicBox <http://www.woutervanwijk.nl/pimusicbox/>`_.
+If you want to run Mopidy with this webclient on a Raspberry Pi, do yourself a favor and use my custom built SD-image: `Pi MusicBox <http://www.pimusicbox.com/>`_.
 
-.. image:: https://github.com/woutervanwijk/Mopidy-MusicBox-Webclient/raw/master/screenshots/playlists_desktop.png
+.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/master/screenshots/playlists_desktop.png
 
 
 Installation
@@ -31,8 +31,8 @@ Install by running::
 
 Alternatively, clone the repository and run ``sudo python setup.py install`` from within the project directory. e.g. ::
 
-    $ git clone https://github.com/woutervanwijk/Mopidy-MusicBox-Webclient
-    $ cd Mopidy-MusicBox-Webclient
+    $ git clone https://github.com/pimusicbox/mopidy-musicbox-webclient
+    $ cd mopidy-musicbox-webclient
     $ sudo python setup.py install
 
 
@@ -45,9 +45,9 @@ Point your (modern) browser at Mopidy-MusicBox-Webclient running on your Mopidy 
 Project resources
 =================
 
-- `Source code <https://github.com/woutervanwijk/mopidy-musicbox-webclient>`_
-- `Issue tracker <https://github.com/woutervanwijk/mopidy-musicbox-webclient/issues>`_
-- `Download development snapshot <https://github.com/woutervanwijk/mopidy-musicbox-webclient/archive/master.tar.gz#egg=Mopidy-MusicBox-Webclient-dev>`_
+- `Source code <https://github.com/pimusicbox/mopidy-musicbox-webclient>`_
+- `Issue tracker <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues>`_
+- `Download development snapshot <https://github.com/pimusicbox/mopidy-musicbox-webclient/archive/develop.tar.gz#egg=Mopidy-MusicBox-Webclient-dev>`_
 
 
 Changelog
