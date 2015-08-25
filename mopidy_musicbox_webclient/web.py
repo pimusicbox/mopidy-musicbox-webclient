@@ -39,7 +39,10 @@ class IndexHandler(tornado.web.RequestHandler):
                 port = config['http']['port']
                 logger.warning('Musicbox websocket_port not specified, '
                                'using %s', port)
-            ws_url = "ws://%s:%d/mopidy/ws" % (host, port)
+            protocol = 'ws'
+            if self.request.protocol == 'https':
+                protocol = 'wss'
+            ws_url = "%s://%s:%d/mopidy/ws" % (protocol, host, port)
 
         self.__dict = {
             'version': MusicBoxExtension.version,
