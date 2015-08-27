@@ -65,6 +65,7 @@ PLAY_NEXT = 1;
 ADD_THIS_BOTTOM = 2;
 ADD_ALL_BOTTOM = 3;
 PLAY_ALL = 4;
+PLAY_NOW_SEARCH = 5;
 
 MAX_TABLEROWS = 50;
 
@@ -409,14 +410,28 @@ function getPlaylistFromUri(uri) {
     }
 }
 
-function getTracksFromUri(uri) {
-    var pl = getPlaylistFromUri(uri);
-    if (pl) {
-        return pl.tracks;
-    } else if (customTracklists[uri]) {
-        return customTracklists[uri];
+function getUris(tracks) {
+    var results = [];
+    for (var i = 0; i < tracks.length; i++) {
+        results.push(tracks[i].uri);
     }
-    return [];
+    return results;
+}
+
+function getTracksFromUri(uri, full_track_data) {
+    full_track_data = full_track_data || false;
+    var pl = getPlaylistFromUri(uri);
+    var tracks = [];
+    if (pl) {
+        tracks = pl.tracks;
+    } else if (customTracklists[uri]) {
+        tracks = customTracklists[uri];
+    }
+    if (full_track_data) {
+        return tracks;
+    } else {
+        return getUris(tracks);
+    }
 }
 
 //convert time to human readable format

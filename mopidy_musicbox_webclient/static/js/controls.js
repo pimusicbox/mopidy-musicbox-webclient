@@ -1,45 +1,59 @@
 /********************************************************
  * play tracks from a browse list
  *********************************************************/
-function playBrowsedTracks(addtoqueue, trackIndex) {
+function playBrowsedTracks(action, trackIndex) {
     $('#popupBrowse').popup('close');
     toast('Loading...');
 
     if (typeof trackIndex === 'undefined') {
         trackIndex = $('#popupBrowse').data("tlid");
     }
-    var trackUri = browseTracks[trackIndex].uri;
-
+    if (action == PLAY_ALL) {
+        mopidy.tracklist.clear();
+    }
+    var trackUris = [];
+    switch (action) {
+        case PLAY_NOW:
+        case PLAY_NEXT:
+        case ADD_THIS_BOTTOM:
+            trackUris.push(browseTracks[trackIndex].uri);
+            break;
+        case ADD_ALL_BOTTOM:
+        case PLAY_ALL:
+            trackUris = getUris(browseTracks);
+            break;
+        default:
+            break;
+    }
+        
     // For radio streams we just add the selected URI.
     // TODO: Why?
     //if (isStreamUri(trackUri)) {
         //mopidy.tracklist.add(null, null, trackUri);
         //return false;
     //}
-
-    switch (addtoqueue) {
+    
+    switch (action) {
         case PLAY_NOW:
         case PLAY_NEXT:
             mopidy.tracklist.index(songdata).then(function(currentIndex) {
-                mopidy.tracklist.add(null, currentIndex + 1, trackUri).then(function(tlTracks) {
-                    if (addtoqueue == PLAY_NOW) {
+                var addFunc = mopidy.tracklist.add(null, currentIndex + 1, null, trackUris);
+                if (action == PLAY_NOW) {
+                    addFunc.then(function(tlTracks) {
                         mopidy.playback.play(tlTracks[0]);
-                    }
-                });
+                    });
+                };
             });
             break;
         case ADD_THIS_BOTTOM:
-            mopidy.tracklist.add(null, null, trackUri);
-            break;
         case ADD_ALL_BOTTOM:
-            mopidy.tracklist.add(browseTracks);
-            break;
         case PLAY_ALL:
-            mopidy.tracklist.clear();
-            // TODO: Use uris parameter in v1.0 API (faster?).
-            mopidy.tracklist.add(browseTracks).then(function(tlTracks) {
-                mopidy.playback.play(tlTracks[trackIndex]);
-            });
+            var addFunc = mopidy.tracklist.add(null, null, null, trackUris);
+            if (action == PLAY_ALL) {
+                addFunc.then(function(tlTracks) {
+                    mopidy.playback.play(tlTracks[trackIndex]);
+                });
+            }
             break;
         default:
             break;
@@ -51,71 +65,56 @@ function playBrowsedTracks(addtoqueue, trackIndex) {
 /********************************************************
  * play an uri from a tracklist
  *********************************************************/
-function playTrack(addtoqueue) {
+function playTrack(action) {
     var hash = document.location.hash.split('?');
     var divid = hash[0].substr(1);
 
-    if (!addtoqueue) {
-        addtoqueue = PLAY_NOW;
-    }
-
-    //    console.log(addtoqueue, divid);
-
-    //stop directly, for user feedback. If searchresults, also clear queue
-    if (!addtoqueue || ((addtoqueue == PLAY_NOW) && (divid == 'search'))) {
+    // Clearing also stops playback.
+    if (action == PLAY_NOW) {
         mopidy.tracklist.clear();
+        if (divid == 'search') {
+            action = PLAY_NOW_SEARCH;
+        }
     }
+    
     $('#popupTracks').popup('close');
     $('#controlspopup').popup('close');
     toast('Loading...');
 
     playlisturi = $('#popupTracks').data("list");
-
     uri = $('#popupTracks').data("track");
 
-    var trackslist = new Array();
-    var track, tracksbefore, tracksafter;
-    var tracks = getTracksFromUri(playlisturi);
-
+    var trackUris = getTracksFromUri(playlisturi);
     //find track that was selected
-    for (var selected = 0; selected < tracks.length; selected++) {
-        if (tracks[selected].uri == uri) {
+    for (var selected = 0; selected < trackUris.length; selected++) {
+        if (trackUris[selected] == uri) {
             break;
         }
     }
-
-    //switch popup options
-    switch (addtoqueue) {
-        case PLAY_NOW:
-            if (divid == 'search') {
-                mopidy.tracklist.add(tracks.slice(selected, selected + 1));
-                mopidy.playback.play();
-                return false;
-            }
+    switch (action) {
         case ADD_THIS_BOTTOM:
-            mopidy.tracklist.add(tracks.slice(selected, selected + 1));
-            return false;
+        case PLAY_NEXT:
+        case PLAY_NOW_SEARCH:
+            trackUris = [trackUris[selected]];
+            selected = 0;
+    }
+    switch (action) {
+        case PLAY_NOW:
+        case PLAY_NOW_SEARCH:
+            mopidy.tracklist.add(null, null, null, trackUris).then(function(tlTracks) {
+                mopidy.playback.play(tlTracks[selected])
+            });
+            break;
         case PLAY_NEXT:
             mopidy.tracklist.index(songdata).then(function(currentIndex) {
-                mopidy.tracklist.add(tracks.slice(selected, selected + 1), currentIndex + 1);
+                mopidy.tracklist.add(null, currentIndex + 1, null, trackUris);
             });
-            return false;
+            break;
+        case ADD_THIS_BOTTOM:
         case ADD_ALL_BOTTOM:
-            mopidy.tracklist.add(tracks);
-            return false;
+            mopidy.tracklist.add(null, null, null, trackUris);
+            break;
     }
-    // PLAY_NOW, play the selected track
-    //    mopidy.tracklist.add(null, null, uri); //tracks);
-    mopidy.tracklist.add(tracks);
-
-    if (!addtoqueue) {
-        mopidy.playback.stop();
-        for (var i = 0; i <= selected; i++) {
-            mopidy.playback.next();
-        }
-        mopidy.playback.play();
-    }
-
     return false;
 }
 
@@ -155,8 +154,9 @@ function playTrackByUri(track_uri, playlist_uri) {
         function(tltracks) {
             //check if tltracks is filled, some backends (gmusic, m3u) do not support adding by uri, it seems
             if (tltracks.length == 0) {
+                console.log('failed to add by playlist, falling back');
                 var tracks = getTracksFromUri(playlist_uri);
-                mopidy.tracklist.add(tracks).then(findAndPlayTrack);
+                mopidy.tracklist.add(null, null, null, tracks).then(findAndPlayTrack);
             }
             findAndPlayTrack(tltracks);
         }

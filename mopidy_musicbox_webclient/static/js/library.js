@@ -220,10 +220,10 @@ function getBrowseDir(rootdir) {
     //  get directory to browse
     showLoading(true);
     if (!rootdir) {
-	browseStack.pop();
-	rootdir = browseStack[browseStack.length - 1];
+        browseStack.pop();
+        rootdir = browseStack[browseStack.length - 1];
     } else {
-	browseStack.push(rootdir);
+        browseStack.push(rootdir);
     }
     mopidy.library.browse(rootdir).then(processBrowseDir, console.error);
 }
@@ -300,7 +300,7 @@ function showAlbum(uri) {
     $('#controlsmodal').popup('close');
     $(ALBUM_TABLE).empty();
     //fill from cache
-    var pl = getTracksFromUri(uri);
+    var pl = getTracksFromUri(uri, true);
     if (pl.length>0) {
         albumTracksToTable(pl, ALBUM_TABLE, uri);
         var albumname = getAlbum(pl);
