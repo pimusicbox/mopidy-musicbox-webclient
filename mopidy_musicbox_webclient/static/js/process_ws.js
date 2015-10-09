@@ -159,19 +159,20 @@ function processGetPlaylists(resultArr) {
     if ((!resultArr) || (resultArr == '')) {
         return;
     }
-    var tmp = '',
-        starredRegex = /spotify:user:.*:starred/g;
+    var tmp = '', favourites = '', starred = '';
 
     for (var i = 0; i < resultArr.length; i++) {
         var li_html = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '">';
-        if(starredRegex.test(resultArr[i].uri) && resultArr[i].name == "Starred") {
-            // Prepend the user's Spotify "Starred" playlist to the results (like Spotify official client).
-            tmp = li_html + '&#9733; Spotify Starred Tracks</a></li>' + tmp;
+        if(isSpotifyStarredPlaylist(resultArr[i])) {
+            starred = li_html + '&#9733; Spotify Starred Tracks</a></li>' + tmp;
+        } else if (isFavouritesPlaylist(resultArr[i])) {
+            favourites = li_html + '&hearts; Musicbox Favourites</a></li>';
         } else {
-            // Append everything else.
             tmp = tmp + li_html + '<i class="' + getMediaClass(resultArr[i].uri) + '"></i> ' + resultArr[i].name + '</a></li>';
         }
     };
+    // Prepend the user's Spotify "Starred" playlist and favourites to the results. (like Spotify official client).
+    tmp = favourites + starred + tmp;
     $('#playlistslist').html(tmp);
     scrollToTracklist();
     showLoading(false);

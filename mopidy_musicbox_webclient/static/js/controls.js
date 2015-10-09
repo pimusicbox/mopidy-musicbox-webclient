@@ -286,7 +286,7 @@ function doPlay() {
         if(isStreamUri(songdata.track.uri)) {
             mopidy.playback.stop();
         } else {
-            mopidy.playback.pause();
+        mopidy.playback.pause();
         }
     }
     setPlayState(!play);
@@ -497,8 +497,8 @@ function playStreamUri(uri) {
         mopidy.playback.stop();
         //hide ios/android keyboard
         document.activeElement.blur();
-        $("input").blur();
         clearQueue();
+        $("input").blur();
         mopidy.tracklist.add(null, null, nwuri);
         mopidy.playback.play();
     } else {
@@ -507,71 +507,108 @@ function playStreamUri(uri) {
     return false;
 }
 
-function saveStreamUri(nwuri) {
-    var i = 0;
-    var name = $('#streamnameinput').val().trim();
-    var uri = nwuri || $('#streamuriinput').val().trim();
-    var service = $('#selectstreamservice').val();
-    if (service) {
-        uri = serviceupdateStreamUris + ':' + uri;
-    }
-    toast('Adding stream ' + uri, 500);
-    //add stream to list and check for doubles and add no more than 100
-    for (var key in streamUris) {
-        rs = streamUris[key];
-        if (i > 100) {
-            delete streamUris[key];
-            continue;
+function getCurrentlyPlaying() {
+    $('#streamuriinput').val(songdata.track.uri); 
+    var name = songdata.track.name;
+    if (songdata.track.artists) {
+        var artistStr = artistsToString(songdata.track.artists);
+        if (artistStr) {
+            name = artistStr + ' - ' + name;
         }
-        i++;
     }
-    streamUris.unshift([name, uri]);
-    $.cookie.json = true;
-    $.cookie('streamUris', streamUris);
-    updateStreamUris();
-    return false;
+    $('#streamnameinput').val(name); 
+    return true;
 }
 
-function deleteStreamUri(uri) {
-    var i = 0;
-    for (var key in streamUris) {
-        rs = streamUris[key];
-        if (rs && rs[1] == uri) {
-            if (confirm("About to remove " + rs[0] + ". Sure?")) {
-                delete streamUris[key];
+function getPlaylistByName(name, scheme, create) {
+    return mopidy.playlists.filter({"name": name}).then(function(plists) {
+        for (var i = 0; i < plists.length; i++) {
+            if (!scheme || getScheme(plists[i].uri) == scheme) {
+                return plists[i];
             }
         }
-    }
-    $.cookie.json = true;
-    $.cookie('streamUris', streamUris);
-    updateStreamUris();
-
-    return false;
-}
-
-function updateStreamUris() {
-    var tmp = '';
-    $('#streamuristable').empty();
-    var child = '';
-    for (var key in streamUris) {
-        var rs = streamUris[key];
-        if (rs) {
-            name = rs[0] || rs[1];
-            child = '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;"><a href="#" onclick="return deleteStreamUri(\'' + rs[1] + '\');">&nbsp;</a></span>' +
-                '<i class="fa fa-rss" style="float: left; padding: .5em; padding-top: 1em;"></i>' +
-                ' <a style="margin-left: 20px" href="#" onclick="return playStreamUri(\'' + rs[1] + '\');">';
-            child += '<h1>' + name + '</h1></a></li>';
-            tmp += child;
+        if (create) {
+            return mopidy.playlists.create(name, scheme).done(function(plist) {
+                console.log("Created playlist '%s'", plist.name);
+                return plist;
+            });
         }
-    }
-    $('#streamuristable').html(tmp);
+        console.log("Can't find playist '%s", name);
+    });
 }
 
-function initStreams() {
-    $.cookie.json = true;
-    tmpRS = $.cookie('streamUris');
-    streamUris = tmpRS || streamUris;
-    updateStreamUris();
+function getFavourites() {
+    return getPlaylistByName(STREAMS_PLAYLIST_NAME, 
+                             STREAMS_PLAYLIST_SCHEME,
+                             true).then(function(playlist) {
+        return playlist;
+    });
+}
+
+function addFavourite(uri, name) {
+    var uri = uri || $('#streamuriinput').val().trim();
+    var name = name || $('#streamnameinput').val().trim();
+    mopidy.library.lookup(null, [uri]).then(function(results) {
+        var newTracks = results[uri];
+        if (newTracks.length == 1) {
+            // TODO: Supporting adding an entire playlist?
+            if (name) {
+                newTracks[0].name = name; // User overrides name.
+            }
+            getFavourites().then(function(favourites) {
+                if (favourites) {
+                    if (favourites.tracks) {
+                        //Array.prototype.push.apply(favourites.tracks, newTracks)
+                        favourites.tracks.push(newTracks[0]);
+                    } else {
+                        favourites.tracks = [newTracks[0]];
+                    }
+                    mopidy.playlists.save(favourites).then(function(s) {
+                        showFavourites();
+                    });
+                }
+            });
+        } else {
+            if (newTracks.length == 0) {
+                console.log('No tracks to add');
+            } else {
+                console.log('Too many tracks (%d) to add', tracks.length);
+            }
+        }
+    });
+}
+
+function deleteFavourite(index) {
+    getFavourites().then(function(favourites) {
+        if (favourites && favourites.tracks && index < favourites.tracks.length) {
+            var name = favourites.tracks[index].name;
+            if (confirm("Are you sure you want to remove '" + name + "'?")) {
+                favourites.tracks.splice(index, 1);
+                mopidy.playlists.save(favourites).then(function(s) {
+                    showFavourites();
+                });
+            }
+        }
+    });
+}
+
+function showFavourites() {
+    $('#streamuristable').empty();
+    getFavourites().then(function(favourites) {
+        if (favourites && favourites.tracks) {
+            tracks = favourites.tracks;
+            var tmp = '';
+            var child = '';
+            for (var i = 0; i < tracks.length; i++) {
+                child = '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;"><a href="#" onclick="return deleteFavourite(\'' + i + '\');">&nbsp;</a></span>' +
+                    '<i class="fa fa-rss" style="float: left; padding: .5em; padding-top: 1em;"></i>' +
+                    ' <a style="margin-left: 20px" href="#" onclick="return playStreamUri(\'' + tracks[i].uri + '\');">';
+                child += '<h1>' + tracks[i].name + '</h1></a></li>';
+                tmp += child;
+            }
+            $('#streamuristable').html(tmp);
+        }
+    });    
 }
 
 function haltSystem() {

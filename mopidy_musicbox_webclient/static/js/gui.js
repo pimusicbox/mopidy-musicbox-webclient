@@ -114,11 +114,11 @@ function setSongInfo(data) {
 
     if(data.track.artists) {
 	for (var j = 0; j < data.track.artists.length; j++) {
-    	    artistshtml += '<a href="#" onclick="return showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>';
-    	    artiststext += data.track.artists[j].name;
-    	    if (j != data.track.artists.length - 1) {
-	        artistshtml += ', ';
-        	artiststext += ', ';
+        artistshtml += '<a href="#" onclick="return showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>';
+        artiststext += data.track.artists[j].name;
+        if (j != data.track.artists.length - 1) {
+            artistshtml += ', ';
+            artiststext += ', ';
 	    }
 	}
         arttmp = artistshtml;
@@ -224,6 +224,7 @@ function initSocketevents() {
         getCurrentPlaylist();
         updateStatusOfAll();
         getPlaylists();
+        showFavourites();
         getBrowseDir();
         getSearchSchemes();
         showLoading(false);
@@ -552,7 +553,7 @@ $(document).ready(function(event) {
 	    return true;
 	}
     });
-    initStreams();
+    
 
     if ($(window).width() < 980) {
         $("#panel").panel("close");

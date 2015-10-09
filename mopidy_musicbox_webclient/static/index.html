@@ -411,33 +411,22 @@
         <form>
         <div class="ui-grid-a pl-breakpoint">
         <div class="ui-block-a" style="padding: 5px">
-            <p>Select a service and add the URL of the stream you want to listen to.
-                <select id="selectstreamservice" data-native-menu="true">
-                    <option value="">Internet Radio (mp3, m3u, asx, etc)</option>
-                    <option value="yt">YouTube</option>
-                    <option value="">Spotify Uri</option>
-                    <option value="sc">SoundCloud</option>
-                    <option value="podcast">Podcast</option>
-                </select>
+            <p>Play a specific stream/track and optionally save it to your favourites.
+            <button class="btn" type="button" onclick="return getCurrentlyPlaying();">
+                Get currently playing
+            </button>
+            <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
+                   onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+            <button class="btn" type="button" onclick="return playStreamUri();">
+                Play
+            </button>
 
-                <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
-                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
-                <button class="btn" type="button" onclick="return playStreamUri();">
-                    Play
-                </button>
-
-            <p>Put in a name and hit the Save button to save the stream in your browser (not on the server yet). <!-- To find stations, use the Browse function with extensions like Dirble or TuneIn, the right values will appear in these boxes automatically. Or use websites like <a href="http://www.listenlive.eu/" target="_blank">Listenlive</a> or <a
-                        href="http://www.dirble.com/" target="_blank">Dirble</a>.</p> -->
-
-                <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
-                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
-                <button class="btn" type="button" onclick="return saveStreamUri();">
-                    Save
-                </button>
+            <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
+                   onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+            <button class="btn" type="button" onclick="return addFavourite();">
+                Save
+            </button>
                 <br/>
-                <button class="btn" type="button" onclick="$('#streamuriinput').val(songdata.track.uri); return true;">
-                    Add currently playing url
-                </button>
             </form>
         </div>
         <div class="ui-block-b" style="padding: 5px">
