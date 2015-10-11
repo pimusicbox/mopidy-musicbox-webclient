@@ -126,7 +126,7 @@ function scrollToTracklist() {
         playlistslistScroll.refresh();
     }
 */
-    var divtop = $("#playlisttracksdiv").offset().top - 50;
+    var divtop = $("#playlisttracksdiv").offset().top - 120;
     $('body,html').animate({
         scrollTop: divtop
     }, 250);
