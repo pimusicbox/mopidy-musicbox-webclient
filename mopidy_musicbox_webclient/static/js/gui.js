@@ -281,6 +281,11 @@ function initSocketevents() {
     mopidy.on("event:seeked", function(data) {
         setPosition(parseInt(data["time_position"]));
     });
+
+    mopidy.on("event:streamTitleChanged", function(data) {
+        songdata.track.name = data["title"];
+        setSongInfo(songdata)
+    });
 }
 
 $(document).bind("pageinit", function() {
