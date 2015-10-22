@@ -36,13 +36,22 @@ function playBrowsedTracks(action, trackIndex) {
     switch (action) {
         case PLAY_NOW:
         case PLAY_NEXT:
-            mopidy.tracklist.index(songdata).then(function(currentIndex) {
-                var addFunc = mopidy.tracklist.add(null, currentIndex + 1, null, trackUris);
+            var playNowOrNext = function(index) {
+                var addFunc = mopidy.tracklist.add(null, index, null, trackUris);
                 if (action == PLAY_NOW) {
                     addFunc.then(function(tlTracks) {
                         mopidy.playback.play(tlTracks[0]);
                     });
                 };
+            };
+            mopidy.tracklist.getTracks().then(function(tracks) {
+                if (tracks.length === 0) {
+                    playNowOrNext(0);
+                } else {
+                    mopidy.tracklist.index(songdata).then(function(currentIndex) {
+                        playNext(currentIndex + 1)
+                    });
+                }
             });
             break;
         case ADD_THIS_BOTTOM:
