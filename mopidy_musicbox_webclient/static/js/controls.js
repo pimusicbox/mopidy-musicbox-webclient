@@ -49,7 +49,7 @@ function playBrowsedTracks(action, trackIndex) {
                     playNowOrNext(0);
                 } else {
                     mopidy.tracklist.index(songdata).then(function(currentIndex) {
-                        playNext(currentIndex + 1)
+                        playNowOrNext(currentIndex + 1);
                     });
                 }
             });
