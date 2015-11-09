@@ -8,9 +8,6 @@ function playBrowsedTracks(action, trackIndex) {
     if (typeof trackIndex === 'undefined') {
         trackIndex = $('#popupBrowse').data("tlid");
     }
-    if (action == PLAY_ALL) {
-        mopidy.tracklist.clear();
-    }
     var trackUris = [];
     switch (action) {
         case PLAY_NOW:
@@ -18,13 +15,21 @@ function playBrowsedTracks(action, trackIndex) {
         case ADD_THIS_BOTTOM:
             trackUris.push(browseTracks[trackIndex].uri);
             break;
-        case ADD_ALL_BOTTOM:
         case PLAY_ALL:
+            mopidy.tracklist.clear();
+            // Don't break, fall through.
+        case ADD_ALL_BOTTOM:
             trackUris = getUris(browseTracks);
             break;
         default:
             break;
     }
+    var maybePlay = function(tlTracks) {
+        if (action === PLAY_NOW || action === PLAY_ALL) {
+            var playIndex = (action === PLAY_ALL) ? 0 trackIndex : 0;
+            mopidy.playback.play(tlTracks[playIndex]);
+        }
+    };
         
     // For radio streams we just add the selected URI.
     // TODO: Why?
@@ -36,24 +41,14 @@ function playBrowsedTracks(action, trackIndex) {
     switch (action) {
         case PLAY_NOW:
         case PLAY_NEXT:
-            var maybePlay = function(tlTracks) {
-                if (action === PLAY_NOW) {
-                    mopidy.playback.play(tlTracks[0]);
-                }
-            };
-            mopidy.tracklist.index().then(function (currentTrack) {
-                mopidy.tracklist.add(null, currentTrack + 1, null, trackUris).then(maybePlay);
+            mopidy.tracklist.index().then(function (currentIndex) {
+                mopidy.tracklist.add(null, currentIndex + 1, null, trackUris).then(maybePlay);
             });
             break;
         case ADD_THIS_BOTTOM:
         case ADD_ALL_BOTTOM:
         case PLAY_ALL:
-            var addFunc = mopidy.tracklist.add(null, null, null, trackUris);
-            if (action == PLAY_ALL) {
-                addFunc.then(function(tlTracks) {
-                    mopidy.playback.play(tlTracks[trackIndex]);
-                });
-            }
+            mopidy.tracklist.add(null, null, null, trackUris).then(maybePlay);
             break;
         default:
             break;
