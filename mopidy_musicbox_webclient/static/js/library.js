@@ -23,10 +23,10 @@ function initSearch() {
         document.activeElement.blur();
         $("input").blur();
 
-        delete customTracklists['mbw:allresultscache'];
-        delete customTracklists['mbw:artistresultscache'];
-        delete customTracklists['mbw:albumresultscache'];
-        delete customTracklists['mbw:trackresultscache'];
+        delete customTracklists[URI_SCHEME+':allresultscache'];
+        delete customTracklists[URI_SCHEME+':artistresultscache'];
+        delete customTracklists[URI_SCHEME+':albumresultscache'];
+        delete customTracklists[URI_SCHEME+':trackresultscache'];
         $("#searchresults").hide();
 
         if (searchService != 'all') {
@@ -113,7 +113,7 @@ function processSearchResults(resultArr) {
 
 
 
-    customTracklists['mbw:trackresultscache'] = results.tracks;
+    customTracklists[URI_SCHEME+':trackresultscache'] = results.tracks;
 
     if (emptyResult) {
         toast('No results');
@@ -196,8 +196,8 @@ function processSearchResults(resultArr) {
     $('#expandsearch').show();
 
     // Track results
-//    playlisttotable(results.tracks, SEARCH_TRACK_TABLE, 'mbw:trackresultscache');
-    resultsToTables(results.tracks, SEARCH_TRACK_TABLE, 'mbw:trackresultscache');
+//    playlisttotable(results.tracks, SEARCH_TRACK_TABLE, URI_SCHEME+':trackresultscache');
+    resultsToTables(results.tracks, SEARCH_TRACK_TABLE, URI_SCHEME+':trackresultscache');
 
     showLoading(false);
 }

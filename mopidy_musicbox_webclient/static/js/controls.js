@@ -121,20 +121,20 @@ function playTrack(action) {
  */
 function playTrackByUri(track_uri, playlist_uri) {
     function findAndPlayTrack(tltracks) {
-//        console.log('fa', tltracks, track_uri);
-        if (tltracks == []) { return;}
-        // Find track that was selected
-        for (var selected = 0; selected < tltracks.length; selected++) {
-            if (tltracks[selected].track.uri == track_uri) {
-                mopidy.playback.play(tltracks[selected]);
-                return;
+        if (tltracks.length > 0) {
+            // Find track that was selected
+            for (var selected = 0; selected < tltracks.length; selected++) {
+                if (tltracks[selected].track.uri == track_uri) {
+                    mopidy.playback.play(tltracks[selected]);
+                    return;
+                }
             }
         }
-        console.log('Failed to play selected track ', track_uri);
+        console.error('Failed to find and play selected track ', track_uri);
+        return;
     }
 
     // Stop directly, for user feedback
-    mopidy.playback.stop();
     mopidy.tracklist.clear();
 
     //this is deprecated, remove when popuptracks is removed completly
@@ -144,19 +144,15 @@ function playTrackByUri(track_uri, playlist_uri) {
 
     toast('Loading...');
 
-    var func;
-    func = mopidy.tracklist.add(null, null, playlist_uri);
-    func.then(
-        function(tltracks) {
-            //check if tltracks is filled, some backends (gmusic, m3u) do not support adding by uri, it seems
-            if (tltracks.length == 0) {
-                console.log('failed to add by playlist, falling back');
-                var tracks = getTracksFromUri(playlist_uri);
-                mopidy.tracklist.add(null, null, null, tracks).then(findAndPlayTrack);
-            }
+    mopidy.tracklist.add(null, null, playlist_uri).then(function(tltracks) {
+        // Can fail for all sorts of reasons. If so, just add individually. 
+        if (tltracks.length == 0) {
+            var trackUris = getTracksFromUri(playlist_uri, false);
+            mopidy.tracklist.add(null, null, null, trackUris).then(findAndPlayTrack);
+        } else {
             findAndPlayTrack(tltracks);
         }
-    ).then(getCurrentPlaylist()); // Updates some state
+    });
     return false;
 }
 

@@ -60,6 +60,8 @@ SEARCH_ALBUM_TABLE = '#albumresulttable';
 SEARCH_ARTIST_TABLE = '#artistresulttable';
 SEARCH_TRACK_TABLE = '#trackresulttable';
 
+URI_SCHEME = 'mbw';
+
 PLAY_NOW = 0;
 PLAY_NEXT = 1;
 ADD_THIS_BOTTOM = 2;
@@ -503,15 +505,18 @@ function validServiceUri(str) {
     return validUri(str) || isServiceUri(str);
 }
 
+function getSchemeFromUri(uri) {
+    return uri.split(":")[0].toLowerCase();
+}
+
 function isStreamUri(uri) {
-    var uriSplit = uri.split(":");
     var a = validUri(uri);
-    var b = radioExtensionsList.indexOf(uriSplit[0].toLowerCase()) >= 0;
+    var b = radioExtensionsList.indexOf(getSchemeFromUri(uri)) >= 0;
     return a || b;
 }
 
 function getMediaClass(uri) {
-    var uriSplit = uri.split(":")[0].toLowerCase();
+    var uriSplit = getSchemeFromUri(uri);
     for (var i = 0; i < uriClassList.length; i++) {
         if (uriSplit == uriClassList[i][0]) {
             return "fa " + uriClassList[i][1];
@@ -521,7 +526,7 @@ function getMediaClass(uri) {
 }
 
 function getMediaHuman(uri) {
-    var uriSplit = uri.split(":")[0].toLowerCase();
+    var uriSplit = getSchemeFromUri(uri);
     for (var i = 0; i < uriHumanList.length; i++) {
         if (uriSplit == uriHumanList[i][0]) {
             return uriHumanList[i][1];
@@ -531,7 +536,7 @@ function getMediaHuman(uri) {
 }
 
 function isServiceUri(uri) {
-    var uriSplit = uri.split(":")[0].toLowerCase();
+    var uriSplit = getSchemeFromUri(uri);
     var retVal = false;
 
     for (var i = 0; i < uriClassList.length; i++) {
