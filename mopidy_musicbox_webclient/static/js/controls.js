@@ -26,7 +26,7 @@ function playBrowsedTracks(action, trackIndex) {
     }
     var maybePlay = function(tlTracks) {
         if (action === PLAY_NOW || action === PLAY_ALL) {
-            var playIndex = (action === PLAY_ALL) ? 0 trackIndex : 0;
+            var playIndex = (action === PLAY_ALL) ? trackIndex : 0;
             mopidy.playback.play(tlTracks[playIndex]);
         }
     };
@@ -64,12 +64,9 @@ function playTrack(action) {
     var hash = document.location.hash.split('?');
     var divid = hash[0].substr(1);
 
-    // Clearing also stops playback.
-    if (action == PLAY_NOW) {
-        mopidy.tracklist.clear();
-        if (divid == 'search') {
-            action = PLAY_NOW_SEARCH;
-        }
+    // Search page default click behaviour adds and plays selected track only.
+    if (action == PLAY_NOW && divid == 'search') {
+        action = PLAY_NOW_SEARCH;
     }
     
     $('#popupTracks').popup('close');
@@ -96,12 +93,16 @@ function playTrack(action) {
     switch (action) {
         case PLAY_NOW:
         case PLAY_NOW_SEARCH:
-            mopidy.tracklist.add(null, null, null, trackUris).then(function(tlTracks) {
-                mopidy.playback.play(tlTracks[selected])
-            });
+            mopidy.tracklist.clear().then(
+                mopidy.tracklist.add(null, null, null, trackUris).then(
+                    function(tlTracks) {
+                        mopidy.playback.play(tlTracks[selected])
+                    }
+                )
+            );
             break;
         case PLAY_NEXT:
-            mopidy.tracklist.index(songdata).then(function(currentIndex) {
+            mopidy.tracklist.index().then(function(currentIndex) {
                 mopidy.tracklist.add(null, currentIndex + 1, null, trackUris);
             });
             break;
