@@ -71,6 +71,14 @@ function resizeMb() {
 */
 }
 
+function setSongTitle(title, refresh_ui) {
+    songdata.track.name = title;
+    $("#modalname").html(title);
+    if (refresh_ui) {
+        resizeMb();
+    }
+}
+
 function setSongInfo(data) {
 //    console.log(data, songdata);
     if (!data ) { return; }
@@ -95,7 +103,7 @@ function setSongInfo(data) {
 
     songdata = data;
 
-    $("#modalname").html(data.track.name);
+    setSongTitle(data.track.name, false);
 
     if (!data.track.length || data.track.length == 0) {
         songlength = 0;
@@ -284,9 +292,7 @@ function initSocketevents() {
     });
 
     mopidy.on("event:streamTitleChanged", function(data) {
-        songdata.track.name = data["title"];
-        console.log(songdata.track.name);
-        setSongInfo(songdata);
+        setSongTitle(data["title"], true);
     });
 }
 
