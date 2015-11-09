@@ -8,6 +8,13 @@ function playBrowsedTracks(action, trackIndex) {
     if (typeof trackIndex === 'undefined') {
         trackIndex = $('#popupBrowse').data("tlid");
     }
+    if (action == PLAY_ALL) {
+        mopidy.tracklist.clear();
+        // Default for radio streams is to just add the selected URI.
+        if (isStreamUri(browseTracks[trackIndex].uri)) {
+            action = PLAY_NOW;
+        }
+    }
     var trackUris = [];
     switch (action) {
         case PLAY_NOW:
@@ -16,8 +23,6 @@ function playBrowsedTracks(action, trackIndex) {
             trackUris.push(browseTracks[trackIndex].uri);
             break;
         case PLAY_ALL:
-            mopidy.tracklist.clear();
-            // Don't break, fall through.
         case ADD_ALL_BOTTOM:
             trackUris = getUris(browseTracks);
             break;
@@ -31,13 +36,6 @@ function playBrowsedTracks(action, trackIndex) {
         }
     };
         
-    // For radio streams we just add the selected URI.
-    // TODO: Why?
-    //if (isStreamUri(trackUri)) {
-        //mopidy.tracklist.add(null, null, trackUri);
-        //return false;
-    //}
-    
     switch (action) {
         case PLAY_NOW:
         case PLAY_NEXT:

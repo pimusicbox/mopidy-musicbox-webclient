@@ -284,7 +284,8 @@ function initSocketevents() {
 
     mopidy.on("event:streamTitleChanged", function(data) {
         songdata.track.name = data["title"];
-        setSongInfo(songdata)
+        console.log(songdata.track.name);
+        setSongInfo(songdata);
     });
 }
 
