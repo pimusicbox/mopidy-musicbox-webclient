@@ -34,6 +34,9 @@ var newposition = 0;
 var playlisttracksScroll;
 var playlistslistScroll;
 
+var STREAMS_PLAYLIST_NAME = '[Radio Streams]';
+var STREAMS_PLAYLIST_SCHEME = 'm3u';
+
 //array of cached playlists (not only user-playlists, also search, artist, album-playlists)
 var playlists = {};
 var currentplaylist;
@@ -153,6 +156,20 @@ function getAlbum(pl) {
             return pl[i].album.name;
         }
     };
+}
+
+function artistsToString(artists, max) {
+    var result = '';
+    max = max || 3;
+    for (var i = 0; i < artists.length && i < max; i++) {
+        if (artists[i].name) {
+            if (i > 0) {
+                result += ', ';
+            }
+            result += artists[i].name;
+        }
+    }
+    return result;
 }
 
 /********************************************************
@@ -505,20 +522,20 @@ function validServiceUri(str) {
     return validUri(str) || isServiceUri(str);
 }
 
-function getSchemeFromUri(uri) {
-    return uri.split(":")[0].toLowerCase();
+function getScheme(uri) {
+    return uri.split(':')[0].toLowerCase();
 }
 
 function isStreamUri(uri) {
     var a = validUri(uri);
-    var b = radioExtensionsList.indexOf(getSchemeFromUri(uri)) >= 0;
+    var b = radioExtensionsList.indexOf(getScheme(uri)) >= 0;
     return a || b;
 }
 
 function getMediaClass(uri) {
-    var uriSplit = getSchemeFromUri(uri);
+    var scheme = getScheme(uri);
     for (var i = 0; i < uriClassList.length; i++) {
-        if (uriSplit == uriClassList[i][0]) {
+        if (scheme == uriClassList[i][0]) {
             return "fa " + uriClassList[i][1];
         }
     }
@@ -526,9 +543,9 @@ function getMediaClass(uri) {
 }
 
 function getMediaHuman(uri) {
-    var uriSplit = getSchemeFromUri(uri);
+    var scheme = getScheme(uri);
     for (var i = 0; i < uriHumanList.length; i++) {
-        if (uriSplit == uriHumanList[i][0]) {
+        if (scheme == uriHumanList[i][0]) {
             return uriHumanList[i][1];
         }
     }
@@ -536,19 +553,26 @@ function getMediaHuman(uri) {
 }
 
 function isServiceUri(uri) {
-    var uriSplit = getSchemeFromUri(uri);
-    var retVal = false;
-
+    var scheme = getScheme(uri);
     for (var i = 0; i < uriClassList.length; i++) {
-        if (uriSplit == uriClassList[i][0]) {
-            retVal = true;
+        if (scheme == uriClassList[i][0]) {
+            return true;
         }
     }
-
     for (var i = 0; i < radioExtensionsList.length; i++) {
-        if (uriSplit == radioExtensionsList[i]) {
-            retVal = true;
+        if (scheme == radioExtensionsList[i]) {
+            return true;
         }
     }
-    return retVal;
+    return false;
 }
+
+function isFavouritesPlaylist(playlist) {
+    return (playlist.name == STREAMS_PLAYLIST_NAME &&
+            getScheme(playlist.uri) == STREAMS_PLAYLIST_SCHEME);
+}
+
+function isSpotifyStarredPlaylist(playlist) {
+    var starredRegex = /spotify:user:.*:starred/g;
+    return (starredRegex.test(playlist.uri) && playlist.name == 'Starred');
+}    
