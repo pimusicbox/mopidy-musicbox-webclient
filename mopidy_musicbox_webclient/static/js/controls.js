@@ -43,8 +43,6 @@ function playBrowsedTracks(action, trackIndex) {
             };
             mopidy.tracklist.index().then(function (currentTrack) {
                 mopidy.tracklist.add(null, currentTrack + 1, null, trackUris).then(maybePlay);
-            }, function() {
-                mopidy.tracklist.add(null, 0, null, trackUris).then(maybePlay);
             });
             break;
         case ADD_THIS_BOTTOM:
