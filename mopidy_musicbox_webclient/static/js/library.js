@@ -250,10 +250,11 @@ function togglePlaylists() {
 function showTracklist(uri) {
     $(PLAYLIST_TABLE).empty();
     togglePlaylists();
-    var pl = getPlaylistFromUri(uri);
+    var tracks = getPlaylistTracks(uri);
     //load from cache
-    if (pl) {
-        resultsToTables(pl.tracks, PLAYLIST_TABLE, uri);
+    if (tracks) {
+        resultsToTables(tracks, PLAYLIST_TABLE, uri);
+        return;
     } else {
         showLoading(true);
     }

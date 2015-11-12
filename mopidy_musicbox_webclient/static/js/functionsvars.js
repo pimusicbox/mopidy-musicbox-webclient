@@ -423,9 +423,9 @@ function playlisttotable(pl, target, uri) {
     $(target).attr('data', uri);
 }
 
-function getPlaylistFromUri(uri) {
-    if (playlists[uri]) {
-        return playlists[uri];
+function getPlaylistTracks(uri) {
+    if (playlists[uri] && playlists[uri].tracks) {
+        return playlists[uri].tracks;
     }
 }
 
@@ -439,11 +439,8 @@ function getUris(tracks) {
 
 function getTracksFromUri(uri, full_track_data) {
     full_track_data = full_track_data || false;
-    var pl = getPlaylistFromUri(uri);
-    var tracks = [];
-    if (pl) {
-        tracks = pl.tracks;
-    } else if (customTracklists[uri]) {
+    var tracks = getPlaylistTracks(uri);
+    if (!tracks && customTracklists[uri]) {
         tracks = customTracklists[uri];
     }
     if (full_track_data) {
