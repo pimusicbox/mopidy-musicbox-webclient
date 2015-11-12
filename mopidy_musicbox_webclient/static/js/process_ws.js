@@ -157,6 +157,7 @@ function processBrowseDir(resultArr) {
  *********************************************************/
 function processGetPlaylists(resultArr) {
     if ((!resultArr) || (resultArr == '')) {
+        $('#playlistslist').empty();
         return;
     }
     var tmp = '', favourites = '', starred = '';
@@ -179,15 +180,23 @@ function processGetPlaylists(resultArr) {
 }
 
 /********************************************************
- * process results of a returned playlist
+ * process results of a returned list of playlist track refs
  *********************************************************/
-function processGetTracklist(resultArr) {
-    //cache result
-    var newplaylisturi = resultArr.uri;
-//console.log(resultArr);
-    playlists[newplaylisturi] = resultArr;
-    resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
-    showLoading(false);
+function processPlaylistItems(resultDict) {
+    var trackUris = []
+    for (i = 0; i < resultDict.items.length; i++) {
+        trackUris.push(resultDict.items[i].uri);
+    }
+    return mopidy.library.lookup(null, trackUris).then(function(tracks) {
+        // Transform from dict to list and cache result
+        var newplaylisturi = resultDict.uri;
+        playlists[newplaylisturi] = {'uri':newplaylisturi, 'tracks':[]};
+        for (i = 0; i < trackUris.length; i++) {
+            playlists[newplaylisturi].tracks.push(tracks[trackUris[i]][0]);
+        }
+        resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
+        showLoading(false);
+    });
 }
 
 /********************************************************

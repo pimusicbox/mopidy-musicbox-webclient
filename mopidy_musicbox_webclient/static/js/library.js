@@ -213,7 +213,7 @@ function toggleSearch() {
 
 function getPlaylists() {
     //  get playlists without tracks
-    mopidy.playlists.getPlaylists(false).then(processGetPlaylists, console.error);
+    mopidy.playlists.asList().then(processGetPlaylists, console.error);
 }
 
 function getBrowseDir(rootdir) {
@@ -267,8 +267,9 @@ function showTracklist(uri) {
     });
 //    scrollToTracklist();
     //lookup recent tracklist
-
-    mopidy.playlists.lookup(uri).then(processGetTracklist, console.error);
+    mopidy.playlists.getItems(uri).then(function(refs) {
+        processPlaylistItems({'uri':uri, 'items':refs});
+    }, console.error);
     return false;
 }
 
