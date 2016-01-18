@@ -517,9 +517,11 @@ function getCurrentlyPlaying() {
 }
 
 function getPlaylistByName(name, scheme, create) {
-    return mopidy.playlists.filter({"name": name}).then(function(plists) {
+    var uri_scheme = scheme || '';
+    var uri = '';
+    return mopidy.playlists.asList().catch(console.error.bind(console)).then(function(plists) {
         for (var i = 0; i < plists.length; i++) {
-            if (!scheme || getScheme(plists[i].uri) == scheme) {
+            if ((plists[i].name === name) && (scheme === '' || getScheme(plists[i].uri) === scheme)) {
                 return plists[i];
             }
         }
@@ -533,11 +535,18 @@ function getPlaylistByName(name, scheme, create) {
     });
 }
 
+function getPlaylistFull(uri) {
+    return mopidy.playlists.lookup(uri).then(function(pl) {
+            playlists[uri] = pl;
+            return pl;
+    });
+}
+
 function getFavourites() {
     return getPlaylistByName(STREAMS_PLAYLIST_NAME, 
                              STREAMS_PLAYLIST_SCHEME,
                              true).then(function(playlist) {
-        return playlist;
+        return getPlaylistFull(playlist.uri);
     });
 }
 

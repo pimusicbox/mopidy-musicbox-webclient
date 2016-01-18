@@ -199,10 +199,10 @@ function processPlaylistItems(resultDict) {
         for (i = 0; i < trackUris.length; i++) {
             playlists[newplaylisturi].tracks.push(tracks[trackUris[i]][0]);
         }
-        resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
         showLoading(false);
+        return playlists[newplaylisturi].tracks;
     });
-    
+    return false;
 }
 
 /********************************************************

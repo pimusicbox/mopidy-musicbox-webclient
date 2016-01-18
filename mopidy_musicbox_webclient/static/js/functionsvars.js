@@ -425,7 +425,12 @@ function playlisttotable(pl, target, uri) {
 
 function getPlaylistTracks(uri) {
     if (playlists[uri] && playlists[uri].tracks) {
-        return playlists[uri].tracks;
+        return Mopidy.when(playlists[uri].tracks);
+    } else {
+        showLoading(true);
+        return mopidy.playlists.getItems(uri).then(function(refs) {
+            return processPlaylistItems({'uri':uri, 'items':refs});
+        }, console.error);
     }
 }
 
@@ -438,16 +443,15 @@ function getUris(tracks) {
 }
 
 function getTracksFromUri(uri, full_track_data) {
-    full_track_data = full_track_data || false;
-    var tracks = getPlaylistTracks(uri);
-    if (!tracks && customTracklists[uri]) {
-        tracks = customTracklists[uri];
+    var returnTracksOrUris = function(tracks) {
+        return (full_track_data || false) ? tracks : getUris(tracks);
     }
-    if (full_track_data) {
-        return tracks;
-    } else {
-        return getUris(tracks);
+    if (customTracklists[uri]) {
+        return returnTracksOrUris(customTracklists[uri]);
+    } else if (playlists[uri] && playlists[uri].tracks) {
+        return returnTracksOrUris(playlists[uri].tracks);
     }
+    return [];
 }
 
 //convert time to human readable format
