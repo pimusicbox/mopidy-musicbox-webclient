@@ -121,12 +121,6 @@
 }
 
 /**headers and controls**/
-
-
-#playimg {
-    margin-top: 2px;
-}
-
 #nextimg, #previmg, #backimg, #controlsimg {
     margin-top: 6px;
 }
@@ -339,24 +333,30 @@
 /*******************
  * Now Playing area
  *******************/
-.nowPlayingControls {
-    font-size: 25px;
+
+#nowPlayingFooter{
+    height: 50px;
     line-height: 48px;
-    padding-left: 10px;
+    text-align: center;
+}
+
+.footerControls {
+    height: 100%;
+    font-size: 25px;
     padding-right: 10px;
 }
 
-.nowPlayingControls span span {
+.footerControls div span {
     padding-left: 3px;
     padding-right: 3px;
 	height=100%;
 	vertical-align: middle;
 }
 
-.nowPlayingControls #btplayNowPlaying {
-    font-size: 190%;
-    margin-left: 15px;
-    margin-right: 15px;
+.footerControls #btplayNowPlaying {
+    font-size: 42px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 
@@ -396,10 +396,6 @@
     font-size: 24px;
     padding-right: 15px;
     margin-bottom: 15px;
-}
-
-#btplayNowPlaying {
-    padding-top: 15px;
 }
 
 #popupTracksLv li, #popupQueueLv li {
@@ -460,14 +456,14 @@ a {
 .ui-footer{
     border: 0px;
 }
+
 #normalFooter{
-    height: 48px;
-}
-#nowPlayingFooter{
-    height: 48px;
+    height: 50px;
+    line-height: 48px;
     text-align: center;
     color: white;
 }
+
 #infoname {
     overflow: hidden;
     white-space: nowrap;
@@ -482,51 +478,34 @@ a {
 }
 
 #infocover {
-    height: 48px;
-    width: 48px;
+    height: 50px;
+    width: 50px;
     position: absolute;
 }
 
+#btplay {
+    color: white;
+}
 
-.songinfo-text{
+.songinfo {
+    height: 100%;
+}
+
+.songinfo-text {
+    text-align: left;
+    line-height: 22px;
     display:inline-block;
     padding: 6px;
     color: white;
     position: absolute;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 55px;
+    padding-right: 55px;
 }
-.playPausebtn{
-    padding-right: 10px;
-    position: absolute;
-    right: 0px;
-}
-
-#controldiv{
-    background: none repeat scroll 0% 0% rgb(44, 62, 80);
-    height: 48px;
-    padding: 8px 8px 8px 8px;
-
-}
-
-#controldiv img {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-}
-
 
 #nowPlayingpane{
     text-align: center;
 }
 
-
-.footer {
-    position: fixed;
-    z-index: 1000;
-    bottom: 0;
-    width: 100%;
-}
 
 /*helper*/
 
@@ -597,7 +576,8 @@ a {
 
     .nowPlayingControls{
         font-size: 1.3em;
-        line-height: 50px;
+        height: 50px;
+        line-height: 48px;
     }
 }
 

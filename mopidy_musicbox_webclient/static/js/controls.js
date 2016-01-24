@@ -260,15 +260,15 @@ function doShuffle() {
 /* Toggle state of play button */
 function setPlayState(nwplay) {
     if (nwplay) {
-        $("#playimg").attr('src', 'images/icons/pause_32x32.png');
-        $("#playimg").attr('title', 'Pause');
         $("#btplayNowPlaying >i").removeClass('fa-play').addClass('fa-pause');
         $("#btplayNowPlaying").attr('title', 'Pause');
+        $("#btplay >i").removeClass('fa-play').addClass('fa-pause');
+        $("#btplay").attr('title', 'Pause');
     } else {
-        $("#playimg").attr('src', 'images/icons/play_alt_32x32.png');
-        $("#playimg").attr('title', 'Play');
         $("#btplayNowPlaying >i").removeClass('fa-pause').addClass('fa-play');
         $("#btplayNowPlaying").attr('title', 'Play');
+        $("#btplay >i").removeClass('fa-pause').addClass('fa-play');
+        $("#btplay").attr('title', 'Play');
     }
     play = nwplay;
 }

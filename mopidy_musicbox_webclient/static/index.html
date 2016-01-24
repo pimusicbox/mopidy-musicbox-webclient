@@ -439,35 +439,34 @@
 
 
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="normalFooter">
-        <div id="songinfo" class="">
-            <a href="#"><img id="infocover" src="images/default_cover.png" width="36" height="36"/></a>
-
-            <div class="songinfo-text">
-                <div id="infoname"></div>
-                <div id="infoartist"></div>
+        <div class="footerControls">
+            <div id="songinfo" style="float: left">
+                <a href="#"><div><img id="infocover" src="images/default_cover.png"/></div></a>
+                <div class="songinfo-text">
+                    <div id="infoname"></div>
+                    <div id="infoartist"></div>
+                </div>
             </div>
-        </div>
-        <div id="controldiv" class="playPausebtn">
-            <a href="#" onclick="doPlay(); return false"><span id="btplay"><img src="images/icons/pause_32x32.png"
-                                                                                alt="Play" id="playimg" title="Play"/></span></a>
+            <div style="float: right;">
+                <a href="#" onclick="doPlay(); return false"><span id="btplay" title="Play"><i class="fa fa-play"></i></span></a>
+            </div>
         </div>
 </div>
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="nowPlayingFooter">
-
-    <div class="nowPlayingControls">
-        <span style="float: left;">
-            <a href="#" onclick="doPrevious(); return false"><span id="btprev" title="Previous"><i class="fa fa-fast-backward"></i></span></a>
-            <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying" title="Play"><i class="fa fa-play"></i></span></a>
-            <a href="#" onclick="doNext(); return false"><span id="btnext" title="Next"><i class="fa fa-fast-forward"></i></span></a>
-        </span>
-        <span style="float: right; margin-right: 10px;">
-            <a href="#" onclick="doRandom(); return false"><span id="randombt" title="Random"><i class="fa fa-random"></i></span></a>
-            <a href="#" onclick="doRepeat(); return false"><span id="repeatbt" title="Repeat"><i class="fa fa-repeat"></i></span></a>
-            <a href="#" onclick="doConsume(); return false"><span id="consumebt" title="Consume"><i class="fa fa-cutlery"></i></span></a>
-            <a href="#" onclick="doSingle(); return false"><span id="singlebt" title="Single"><i class="fa fa-dot-circle-o"></i></span></a>
-            <a href="#" onclick="doShuffle(); return false"><span id="shufflebt" title="Shuffle"><i class="fa fa-arrows-v"></i></span></a>
-        </span>
-    </div>
+        <div class="footerControls" style="padding-left: 10px;">
+            <div style="float: left;">
+                <a href="#" onclick="doPrevious(); return false"><span id="btprev" title="Previous"><i class="fa fa-fast-backward"></i></span></a>
+                <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying" title="Play"><i class="fa fa-play"></i></span></a>
+                <a href="#" onclick="doNext(); return false"><span id="btnext" title="Next"><i class="fa fa-fast-forward"></i></span></a>
+            </div>
+            <div style="float: right; margin-right: 10px;">
+                <a href="#" onclick="doRandom(); return false"><span id="randombt" title="Random"><i class="fa fa-random"></i></span></a>
+                <a href="#" onclick="doRepeat(); return false"><span id="repeatbt" title="Repeat"><i class="fa fa-repeat"></i></span></a>
+                <a href="#" onclick="doConsume(); return false"><span id="consumebt" title="Consume"><i class="fa fa-cutlery"></i></span></a>
+                <a href="#" onclick="doSingle(); return false"><span id="singlebt" title="Single"><i class="fa fa-dot-circle-o"></i></span></a>
+                <a href="#" onclick="doShuffle(); return false"><span id="shufflebt" title="Shuffle"><i class="fa fa-arrows-v"></i></span></a>
+            </div>
+        </div>
 
 </div>
 <!-- /footer -->
