@@ -60,6 +60,9 @@ v2.0.1 (UNRELEASED)
 - Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
 - Added ability to save Queue as local Playlist.
 - Added ability to manually initiate refresh of Playlists.
+- Increase volume slider handle by 30% to make it easier to grab on mobile devices
+- Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should be invalidated.
+- Fix vertical alignment of playback control buttons in footer.
 
 v2.0.0 (26-3-2015)
 ------------------
@@ -74,13 +77,13 @@ v2.0.0 (26-3-2015)
 - Fixed wrong jQuery version on some pages.
 
 v1.0.4
--------------------
+------
 
 - Added AudioAddict icon
 - Bugfixes of course
 
 v1.0.2 
--------------------
+------
 
 - A friendlier welcome with a home page with buttons to the most used functions
 - Converted Radio Stations to Streams, so user can add streams for youtube, spotify, soundcloud, podcasts
@@ -92,12 +95,12 @@ v1.0.2
 - Bugfixes (search, popups, etc)
 
 v1.0.1 (20-9-2014)
--------------------
+------------------
 
 - Small fixes for Pypi distro
 
 v1.0.0 (20-9-2014)
--------------------
+------------------
 
 - Compatible with Mopidy v0.19
 - Made pip installable
