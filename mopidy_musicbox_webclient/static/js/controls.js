@@ -423,19 +423,28 @@ function doVolume(value) {
 }
 
 function triggerVolume() {
-    mopidy.playback.setVolume(parseInt(volumeChanging));
+    if (volumeChanging > 0) {
+        $("#mutebt").attr('class', 'fa fa-volume-off');
+        muteVolume = -1;
+    } else {
+        $("#mutebt").attr('class', 'fa fa-volume-up');
+        muteVolume = currentVolume;
+    }
+    mopidy.playback.setVolume(parseInt(volumeChanging)).then();
+    currentVolume = volumeChanging
     volumeChanging = 0;
 }
 
 function doMute() {
     //only emit the event, not the status
     if (muteVolume == -1) {
-        $("#mutebt").attr('src', 'images/icons/volume_mute_24x18.png');
-        muteVolume = currentVolume;
-        mopidy.playback.setVolume(0).then();
+        $("#mutebt").attr('class', 'fa fa-volume-up');
+        volumeChanging = 0;
+        triggerVolume();
     } else {
-        $("#mutebt").attr('src', 'images/icons/volume_24x18.png');
-        mopidy.playback.setVolume(muteVolume).then();
+        $("#mutebt").attr('class', 'fa fa-volume-off');
+        volumeChanging = muteVolume;
+        triggerVolume();
         muteVolume = -1;
     }
 

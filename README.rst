@@ -63,6 +63,7 @@ v2.0.1 (UNRELEASED)
 - Increase volume slider handle by 30% to make it easier to grab on mobile devices
 - Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should be invalidated.
 - Fix vertical alignment of playback control buttons in footer.
+- Swop mute/unmute icons and apply fix to restore volume levels after unmute.
 
 v2.0.0 (26-3-2015)
 ------------------
