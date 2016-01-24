@@ -2451,9 +2451,9 @@ input.ui-input-text.ui-slider-input {
 	outline: 0;
 }
 .ui-slider-track.ui-mini .ui-slider-handle {
-	height: 14px;
-	width: 14px;
-	margin: -8px 0 0 -7px;
+	height: 22px;
+	width: 22px;
+	margin: -12px 0 0 -12px;
 }
 .ui-slider-handle .ui-btn-inner {
 	padding: 0;
