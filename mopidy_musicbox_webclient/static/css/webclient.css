@@ -464,6 +464,7 @@ a {
     height: 48px;
 }
 #nowPlayingFooter{
+    height: 48px;
     text-align: center;
     color: white;
 }
