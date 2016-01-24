@@ -60,6 +60,8 @@ v2.0.1 (UNRELEASED)
 - Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
 - Added ability to save Queue as local Playlist.
 - Added ability to manually initiate refresh of Playlists.
+- Increase volume slider handle by 30% to make it easier to use on mobile devices
+- Add application cache manifest file for quicker loads and to allow client devices to detect changes.
 
 v2.0.0 (26-3-2015)
 ------------------
