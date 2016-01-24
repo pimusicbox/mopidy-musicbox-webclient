@@ -419,6 +419,8 @@ function doVolume(value) {
         volumeChanging = value;
         clearInterval(volumeTimer);
         volumeTimer = setTimeout(triggerVolume, 500);
+    } else {
+        currentVolume = value
     }
 }
 
