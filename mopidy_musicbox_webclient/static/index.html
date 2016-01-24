@@ -409,9 +409,9 @@
     <h4>Streams</h4>
 
     <div>
-        <form>
         <div class="ui-grid-a pl-breakpoint">
         <div class="ui-block-a" style="padding: 5px">
+        <form>
             <p>Play a specific stream/track and optionally save it to your favourites.
             <button class="btn" type="button" onclick="return getCurrentlyPlaying();">
                 Get currently playing
@@ -428,7 +428,7 @@
                 Save
             </button>
                 <br/>
-            </form>
+        </form>
         </div>
         <div class="ui-block-b" style="padding: 5px">
             <ul id="streamuristable" class="table"></ul>
@@ -454,19 +454,21 @@
 </div>
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="nowPlayingFooter">
 
-    <p id="buttons" style="float:right; margin-top: 20px; margin-right: 5px;">
-                   <a href="#" onclick="doRandom(); return false" title="Random"><i class="fa fa-random" id="randombt"></i></a>
-            &nbsp; <a href="#" onclick="doRepeat(); return false" title="Repeat"><i class="fa fa-repeat" id="repeatbt"></i></a>
-            &nbsp; <a href="#" onclick="doConsume(); return false" title="Consume"><i class="fa fa-cutlery" id="consumebt"></i></a>
-            &nbsp; <a href="#" onclick="doSingle(); return false" title="Single"><i class="fa fa-dot-circle-o" id="singlebt"></i></a>
-            &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><i class="fa fa-arrows-v" id="shufflebt"></i></a>
-    </p>
+    <div class="nowPlayingControls">
+        <span style="float: left;">
+            <a href="#" onclick="doPrevious(); return false"><span id="btprev" title="Previous"><i class="fa fa-fast-backward"></i></span></a>
+            <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying" title="Play"><i class="fa fa-play"></i></span></a>
+            <a href="#" onclick="doNext(); return false"><span id="btnext" title="Next"><i class="fa fa-fast-forward"></i></span></a>
+        </span>
+        <span style="float: right; margin-right: 10px;">
+            <a href="#" onclick="doRandom(); return false"><span id="randombt" title="Random"><i class="fa fa-random"></i></span></a>
+            <a href="#" onclick="doRepeat(); return false"><span id="repeatbt" title="Repeat"><i class="fa fa-repeat"></i></span></a>
+            <a href="#" onclick="doConsume(); return false"><span id="consumebt" title="Consume"><i class="fa fa-cutlery"></i></span></a>
+            <a href="#" onclick="doSingle(); return false"><span id="singlebt" title="Single"><i class="fa fa-dot-circle-o"></i></span></a>
+            <a href="#" onclick="doShuffle(); return false"><span id="shufflebt" title="Shuffle"><i class="fa fa-arrows-v"></i></span></a>
+        </span>
+    </div>
 
-        <div class="nowPlayingControls" style="float:left; margin-left: 5px;">
-                   <a href="#" onclick="doPrevious(); return false"><span id="btprev" title="Previous"><i class="fa fa-fast-backward"></i></span></a>
-            &nbsp; <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying" title="Play"><i class="fa fa-play"></i></span></a>
-            &nbsp; <a href="#" onclick="doNext(); return false"><span id="btnext" title="Next"><i class="fa fa-fast-forward"></i></span></a>
-        </div>
 </div>
 <!-- /footer -->
 

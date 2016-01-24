@@ -341,13 +341,18 @@
  *******************/
 .nowPlayingControls {
     font-size: 20px;
-    line-height: 45px;
-    padding-left: 10px;
+    line-height: 40px;
+    width: 100%;
 }
-.nowPlayingControls .fa{
-    vertical-align: -webkit-baseline-middle;
+
+.nowPlayingControls span span {
+    padding-left: 2px;
+    padding-right: 2px;
+	height=100%;
+	vertical-align: middle;
 }
-.nowPlayingControls #btplayNowPlaying{
+
+.nowPlayingControls #btplayNowPlaying {
     font-size: 190%;
     margin-left: 15px;
     margin-right: 15px;
