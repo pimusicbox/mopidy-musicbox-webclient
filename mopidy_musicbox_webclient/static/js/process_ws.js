@@ -183,6 +183,11 @@ function processGetPlaylists(resultArr) {
  * process results of a returned list of playlist track refs
  *********************************************************/
 function processPlaylistItems(resultDict) {
+    if (resultDict.items.length == 0) {
+        console.log('Playlist', resultDict.uri, 'is empty');
+        showLoading(false);
+        return;
+    }
     var trackUris = []
     for (i = 0; i < resultDict.items.length; i++) {
         trackUris.push(resultDict.items[i].uri);
@@ -194,9 +199,10 @@ function processPlaylistItems(resultDict) {
         for (i = 0; i < trackUris.length; i++) {
             playlists[newplaylisturi].tracks.push(tracks[trackUris[i]][0]);
         }
-        resultsToTables(playlists[newplaylisturi].tracks, PLAYLIST_TABLE, newplaylisturi);
         showLoading(false);
+        return playlists[newplaylisturi].tracks;
     });
+    return false;
 }
 
 /********************************************************

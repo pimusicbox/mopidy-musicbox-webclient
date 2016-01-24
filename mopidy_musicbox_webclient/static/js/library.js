@@ -250,14 +250,10 @@ function togglePlaylists() {
 function showTracklist(uri) {
     $(PLAYLIST_TABLE).empty();
     togglePlaylists();
-    var tracks = getPlaylistTracks(uri);
-    //load from cache
-    if (tracks) {
+    var tracks = getPlaylistTracks(uri).then(function(tracks) {
         resultsToTables(tracks, PLAYLIST_TABLE, uri);
-        return;
-    } else {
-        showLoading(true);
-    }
+    });
+    showLoading(false);
     updatePlayIcons(uri);
     $('#playlistslist li a').each(function() {
         $(this).removeClass("playlistactive");
@@ -266,10 +262,6 @@ function showTracklist(uri) {
         }
     });
 //    scrollToTracklist();
-    //lookup recent tracklist
-    mopidy.playlists.getItems(uri).then(function(refs) {
-        processPlaylistItems({'uri':uri, 'items':refs});
-    }, console.error);
     return false;
 }
 
