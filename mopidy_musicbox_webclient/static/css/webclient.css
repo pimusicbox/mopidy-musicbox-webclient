@@ -340,14 +340,15 @@
  * Now Playing area
  *******************/
 .nowPlayingControls {
-    font-size: 20px;
-    line-height: 40px;
-    width: 100%;
+    font-size: 25px;
+    line-height: 48px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .nowPlayingControls span span {
-    padding-left: 2px;
-    padding-right: 2px;
+    padding-left: 3px;
+    padding-right: 3px;
 	height=100%;
 	vertical-align: middle;
 }
