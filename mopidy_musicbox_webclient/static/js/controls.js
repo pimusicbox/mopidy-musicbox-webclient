@@ -408,30 +408,23 @@ function setPosition(pos) {
  */
 
 function setVolume(value) {
-    var oldval = initgui;
-    initgui = true;
-    $("#volumeslider").val(value).slider('refresh');
-    initgui = oldval;
+    if (value != currentVolume) {
+        $("#volumeslider").val(value).slider('refresh');
+        if (value > 0) {
+            $("#mutebt").attr('class', 'fa fa-volume-off');
+        } else {
+            $("#mutebt").attr('class', 'fa fa-volume-up');
+        }
+    }
 }
 
 function doVolume(value) {
-    if (!initgui) {
-        volumeChanging = value;
-        clearInterval(volumeTimer);
-        volumeTimer = setTimeout(triggerVolume, 500);
-    } else {
-        currentVolume = value
-    }
+    volumeChanging = value;
+    clearInterval(volumeTimer);
+    volumeTimer = setTimeout(triggerVolume, 500);
 }
 
 function triggerVolume() {
-    if (volumeChanging > 0) {
-        $("#mutebt").attr('class', 'fa fa-volume-off');
-        muteVolume = -1;
-    } else {
-        $("#mutebt").attr('class', 'fa fa-volume-up');
-        muteVolume = currentVolume;
-    }
     mopidy.playback.setVolume(parseInt(volumeChanging)).then();
     currentVolume = volumeChanging
     volumeChanging = 0;
@@ -439,17 +432,13 @@ function triggerVolume() {
 
 function doMute() {
     //only emit the event, not the status
-    if (muteVolume == -1) {
-        $("#mutebt").attr('class', 'fa fa-volume-up');
-        volumeChanging = 0;
-        triggerVolume();
+    if (currentVolume > 0) {
+        muteVolume = currentVolume
+        setVolume(0);
     } else {
-        $("#mutebt").attr('class', 'fa fa-volume-off');
-        volumeChanging = muteVolume;
-        triggerVolume();
+        setVolume(muteVolume);
         muteVolume = -1;
     }
-
 }
 
 /*******
