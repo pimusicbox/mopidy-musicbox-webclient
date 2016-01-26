@@ -420,13 +420,13 @@ function doVolume(value) {
 }
 
 function triggerVolume() {
-    mopidy.playback.setVolume(parseInt(volumeChanging)).then();
+    mopidy.playback.setVolume(parseInt(volumeChanging));
     volumeChanging = 0;
 }
 
-function doMute() {
+function toggleMute() {
     mopidy.mixer.getMute().then(function(mute) {
-        mopidy.mixer.setMute(!mute).then();
+        mopidy.mixer.setMute(!mute);
         if (!mute) {
             $("#mutebt").attr('class', 'fa fa-volume-up');
         } else {
