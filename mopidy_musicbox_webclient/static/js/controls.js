@@ -408,7 +408,7 @@ function setPosition(pos) {
  */
 
 function setVolume(value) {
-    if (value != currentVolume) {
+    if ($("#volumeslider").val() != value) {
         $("#volumeslider").val(value).slider('refresh');
     }
 }
@@ -421,12 +421,10 @@ function doVolume(value) {
 
 function triggerVolume() {
     mopidy.playback.setVolume(parseInt(volumeChanging)).then();
-    currentVolume = volumeChanging
     volumeChanging = 0;
 }
 
 function doMute() {
-    //only emit the event, not the status
     mopidy.mixer.getMute().then(function(mute) {
         mopidy.mixer.setMute(!mute).then();
         if (!mute) {
