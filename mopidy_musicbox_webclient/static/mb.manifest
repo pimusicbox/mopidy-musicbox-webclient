@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# 2016-01-24:v1
+# 2016-01-26:v1
 
 CACHE:
 index.html
@@ -41,6 +41,8 @@ images/icons/musicbox32.png
 images/icons/musicbox57.png
 images/icons/musicbox72.png
 images/icons/musicbox114.png
+images/icons/play_alt_12x12.png
+images/icons/play_alt_16x16.png
 
 images/default_cover.png
 images/empty.png
