@@ -408,18 +408,15 @@ function setPosition(pos) {
  */
 
 function setVolume(value) {
-    var oldval = initgui;
-    initgui = true;
-    $("#volumeslider").val(value).slider('refresh');
-    initgui = oldval;
+    if ($("#volumeslider").val() != value) {
+        $("#volumeslider").val(value).slider('refresh');
+    }
 }
 
 function doVolume(value) {
-    if (!initgui) {
-        volumeChanging = value;
-        clearInterval(volumeTimer);
-        volumeTimer = setTimeout(triggerVolume, 500);
-    }
+    volumeChanging = value;
+    clearInterval(volumeTimer);
+    volumeTimer = setTimeout(triggerVolume, 500);
 }
 
 function triggerVolume() {
@@ -427,18 +424,15 @@ function triggerVolume() {
     volumeChanging = 0;
 }
 
-function doMute() {
-    //only emit the event, not the status
-    if (muteVolume == -1) {
-        $("#mutebt").attr('src', 'images/icons/volume_mute_24x18.png');
-        muteVolume = currentVolume;
-        mopidy.playback.setVolume(0).then();
-    } else {
-        $("#mutebt").attr('src', 'images/icons/volume_24x18.png');
-        mopidy.playback.setVolume(muteVolume).then();
-        muteVolume = -1;
-    }
-
+function toggleMute() {
+    mopidy.mixer.getMute().then(function(mute) {
+        mopidy.mixer.setMute(!mute);
+        if (mute) {
+            $("#mutebt").attr('class', 'fa fa-volume-up');
+        } else {
+            $("#mutebt").attr('class', 'fa fa-volume-off');
+        }
+    });
 }
 
 /*******

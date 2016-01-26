@@ -174,6 +174,7 @@
  *  Volume Slider
  ***********************/
 #mutebt {
+    color: white;
     float: left;
     margin-left: 8px;
     margin-top: 8px;
@@ -551,7 +552,7 @@ a {
         max-height:90%;
     }
     .nowPlaying-artistInfo {
-           font-size: 12px;
+        font-size: 12px;
     }
     .nowPlaying-artistInfo h4{
         margin: 0px;
