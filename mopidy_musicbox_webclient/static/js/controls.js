@@ -410,11 +410,6 @@ function setPosition(pos) {
 function setVolume(value) {
     if (value != currentVolume) {
         $("#volumeslider").val(value).slider('refresh');
-        if (value > 0) {
-            $("#mutebt").attr('class', 'fa fa-volume-off');
-        } else {
-            $("#mutebt").attr('class', 'fa fa-volume-up');
-        }
     }
 }
 
@@ -432,13 +427,14 @@ function triggerVolume() {
 
 function doMute() {
     //only emit the event, not the status
-    if (currentVolume > 0) {
-        muteVolume = currentVolume
-        setVolume(0);
-    } else {
-        setVolume(muteVolume);
-        muteVolume = -1;
-    }
+    mopidy.mixer.getMute().then(function(mute) {
+        mopidy.mixer.setMute(!mute).then();
+        if (!mute) {
+            $("#mutebt").attr('class', 'fa fa-volume-up');
+        } else {
+            $("#mutebt").attr('class', 'fa fa-volume-off');
+        }
+    });
 }
 
 /*******
