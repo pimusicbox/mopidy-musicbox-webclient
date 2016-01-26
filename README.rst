@@ -63,7 +63,7 @@ v2.0.1 (UNRELEASED)
 - Increase volume slider handle by 30% to make it easier to grab on mobile devices
 - Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should be invalidated.
 - Fix vertical alignment of playback control buttons in footer.
-- Swop icons and use standard Mopidy methods to mute / un-mute playback.
+- Swop icons and use standard Mopidy mixer methods to mute / un-mute playback.
 
 v2.0.0 (26-3-2015)
 ------------------
