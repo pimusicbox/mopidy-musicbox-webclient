@@ -427,7 +427,7 @@ function triggerVolume() {
 function toggleMute() {
     mopidy.mixer.getMute().then(function(mute) {
         mopidy.mixer.setMute(!mute);
-        if (!mute) {
+        if (mute) {
             $("#mutebt").attr('class', 'fa fa-volume-up');
         } else {
             $("#mutebt").attr('class', 'fa fa-volume-off');
