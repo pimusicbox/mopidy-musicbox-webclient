@@ -270,6 +270,10 @@ function initSocketevents() {
         }
     });
 
+    mopidy.on("event:muteChanged", function(data) {
+        setMute(data["mute"]);
+    });
+
     mopidy.on("event:playbackStateChanged", function(data) {
         switch (data["new_state"]) {
             case "stopped":
@@ -383,6 +387,7 @@ function updateStatusOfAll() {
     updateOptions()
 
     mopidy.playback.getVolume().then(processVolume, console.error);
+    mopidy.mixer.getMute().then(processMute, console.error);
 }
 
 function locationHashChanged() {

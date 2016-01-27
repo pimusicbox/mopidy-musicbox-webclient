@@ -424,15 +424,19 @@ function triggerVolume() {
     volumeChanging = 0;
 }
 
-function toggleMute() {
-    mopidy.mixer.getMute().then(function(mute) {
-        mopidy.mixer.setMute(!mute);
+function setMute(nwmute) {
+    if (mute != nwmute) {
+        mute = nwmute;
         if (mute) {
-            $("#mutebt").attr('class', 'fa fa-volume-up');
-        } else {
             $("#mutebt").attr('class', 'fa fa-volume-off');
+        } else {
+            $("#mutebt").attr('class', 'fa fa-volume-up');
         }
-    });
+    }
+}
+
+function doMute() {
+    mopidy.mixer.setMute(!mute).then();
 }
 
 /*******
