@@ -55,6 +55,7 @@ Changelog
 
 v2.0.1 (UNRELEASED)
 -------------------
+
 - Added optional websocket_host and websocket_port config settings.
 - Fixed slow to start playing from a large tracklist of browsed tracks.
 - Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
@@ -65,8 +66,9 @@ v2.0.1 (UNRELEASED)
 - Fix vertical alignment of playback control buttons in footer.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
 
-v2.0.0 (26-3-2015)
-------------------
+v2.0.0 (2015-03-26)
+-------------------
+
 - Pausing a stream will now actually stop it.
 - Fix keyboard shortcuts in some browsers.
 - Use relative path for script files to fix proxy support.
@@ -77,8 +79,8 @@ v2.0.0 (26-3-2015)
 - Added popup tracks menu to the Browse interface.
 - Fixed wrong jQuery version on some pages.
 
-v1.0.4
-------
+v1.0.4 (2014-11-24)
+-------------------
 
 - Added AudioAddict icon
 - Bugfixes of course
@@ -95,13 +97,13 @@ v1.0.2
 - Youtube icons added
 - Bugfixes (search, popups, etc)
 
-v1.0.1 (20-9-2014)
-------------------
+v1.0.1 (2014-09-20)
+-------------------
 
-- Small fixes for Pypi distro
+- Small fixes for PyPI distro
 
-v1.0.0 (20-9-2014)
-------------------
+v1.0.0 (2014-09-20)
+-------------------
 
 - Compatible with Mopidy v0.19
 - Made pip installable
