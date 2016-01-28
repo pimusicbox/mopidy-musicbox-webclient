@@ -10,13 +10,17 @@ Mopidy-MusicBox-Webclient
     :target: https://pypi.python.org/pypi/Mopidy-MusicBox-Webclient/
     :alt: Number of PyPI downloads
 
-With Mopidy MusicBox Webclient, you can play your music on your computer (`Rapsberry Pi <http://www.raspberrypi.org/>`_) and remotely control it using your computer, tablet or phone.
+With Mopidy MusicBox Webclient, you can play your music on your computer (`Rapsberry Pi <http://www.raspberrypi.org/>`_)
+and remotely control it using your computer, tablet or phone.
 
-This is a responsive webclient especially written for Mopidy, a music server. Responsive, so it works on desktop and mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
+This is a responsive webclient especially written for Mopidy, a music server. Responsive, so it works on desktop and
+mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
 
-`Mopidy <http://www.mopidy.com/>`_ is a music server which can play music from Spotify, Google Music, SoundCloud, etc or from your hard drive. 
+`Mopidy <http://www.mopidy.com/>`_ is a music server which can play music from Spotify, Google Music, SoundCloud, etc.
+or from your hard drive.
 
-If you want to run Mopidy with this webclient on a Raspberry Pi, do yourself a favor and use my custom built SD-image: `Pi MusicBox <http://www.pimusicbox.com/>`_.
+If you want to run Mopidy with this webclient on a Raspberry Pi, do yourself a favor and use my custom built SD-image:
+`Pi MusicBox <http://www.pimusicbox.com/>`_.
 
 .. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/master/screenshots/playlists_desktop.png
 
@@ -39,7 +43,8 @@ Alternatively, clone the repository and run ``sudo python setup.py install`` fro
 Usage
 =====
 
-Point your (modern) browser at Mopidy-MusicBox-Webclient running on your Mopidy server e.g. http://localhost:6680/musicbox_webclient.
+Point your (modern) browser at Mopidy-MusicBox-Webclient running on your Mopidy server e.g.
+http://localhost:6680/musicbox_webclient.
 
 
 Project resources
@@ -53,16 +58,42 @@ Project resources
 Changelog
 =========
 
-v2.0.1 (UNRELEASED)
+v2.1.0 (UNRELEASED)
 -------------------
 
+- Ensure that only the currently playing track is highlighted in the queue.
+  (Fixes: `#81 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/81>`_).
 - Added optional websocket_host and websocket_port config settings.
 - Fixed slow to start playing from a large tracklist of browsed tracks.
+  (Fixes: `#85 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/85>`_).
+- Clean up unused Javascript code. (Fixes: `#100 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/100>`_).
 - Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
 - Added ability to save Queue as local Playlist.
+- Mopidy 1.1.0 compatibility fixes. (Fixes: `#109 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/109>`_,
+  `#111 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/111>`_,
+  `#123 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/123>`_).
+- Fix incorrect identification of user's Spotify starred playlist.
+  (Fixes:`#110 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/110>`_).
+- Initiating track playback from a folder that contains subfolders now correctly identifies the tracks that should be
+  played. (Fixes: `#112 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/112>`_).
+- Add support for ```static_dir``` configurations.
+  (Fixes: `#105 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/105>`_).
 - Added ability to manually initiate refresh of Playlists.
+  (Fixes: `#107 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/107>`_).
+- Now updates the track name when the stream title changes.
+- Adding search results to tracklist now works as expected.
+  (Fixes: `#49 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/49>`_ and
+  `#137 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/137>`_).
+- Adding a browsed radio station to the tracklist now also starts playback of the station.
+  (Fixes: `#98 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/08>`_).
+- Added ability to save playlists. (Fixes: `#106 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/106>`_
+  and `#121 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/121>`_).
+- Remove support for defunct Grooveshark service.
+  (Fixes: `#120 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/120>`_).
+- Fix Javascript syntax errors. (Fixes: `#122 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/122>`_).
 - Increase volume slider handle by 30% to make it easier to grab on mobile devices.
-- Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should be invalidated.
+- Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should
+  be invalidated.
 - Fix vertical alignment of playback control buttons in footer.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
 
