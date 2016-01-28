@@ -61,7 +61,7 @@ v2.0.1 (UNRELEASED)
 - Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
 - Added ability to save Queue as local Playlist.
 - Added ability to manually initiate refresh of Playlists.
-- Increase volume slider handle by 30% to make it easier to grab on mobile devices
+- Increase volume slider handle by 30% to make it easier to grab on mobile devices.
 - Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should be invalidated.
 - Fix vertical alignment of playback control buttons in footer.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
@@ -82,42 +82,42 @@ v2.0.0 (2015-03-26)
 v1.0.4 (2014-11-24)
 -------------------
 
-- Added AudioAddict icon
-- Bugfixes of course
+- Added AudioAddict icon.
+- Bugfixes of course.
 
 v1.0.2 
 ------
 
-- A friendlier welcome with a home page with buttons to the most used functions
-- Converted Radio Stations to Streams, so user can add streams for youtube, spotify, soundcloud, podcasts
-- Enhanced radio/streams interface
-- Search: select service to search
-- Fixed single quote bug #39
-- Better handling of coverart
-- Youtube icons added
-- Bugfixes (search, popups, etc)
+- A friendlier welcome with a home page with buttons to the most used functions.
+- Converted Radio Stations to Streams, so user can add streams for youtube, spotify, soundcloud, podcasts.
+- Enhanced radio/streams interface.
+- Search: select service to search.
+- Fixed single quote bug. (Fixes: `#39 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/39>`_).
+- Better handling of coverart.
+- Youtube icons added.
+- Bugfixes (search, popups, etc.).
 
 v1.0.1 (2014-09-20)
 -------------------
 
-- Small fixes for PyPI distro
+- Small fixes for PyPI distro.
 
 v1.0.0 (2014-09-20)
 -------------------
 
-- Compatible with Mopidy v0.19
-- Made pip installable
-- A lot of fixes
-- Works with mopidy-websettings extension
+- Compatible with Mopidy v0.19.
+- Made pip installable.
+- A lot of fixes.
+- Works with mopidy-websettings extension.
 
 v0.1.0 (2013-07-21)
 -------------------
 
-- Compatible with Mopidy 0.14+
-- More ways to add a song to the Queue (play next, add to bottom, etc)
-- Better Queue popup
-- Button to clear the Queue
-- A bit more speed
-- Local files show up in search
-- Bugs fixed
-- New instructions in the read me
+- Compatible with Mopidy 0.14+.
+- More ways to add a song to the Queue (play next, add to bottom, etc).
+- Better Queue popup.
+- Button to clear the Queue.
+- A bit more speed.
+- Local files show up in search.
+- Bugs fixed.
+- New instructions in the read me.
