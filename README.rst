@@ -61,41 +61,47 @@ Changelog
 v2.1.0 (UNRELEASED)
 -------------------
 
+**Enhancements and improvements**
+
+- Added optional websocket_host and websocket_port config settings.
+- Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
+- Added ability to save Queue as local Playlist.
+- Add support for ```static_dir``` configurations.
+  (See: `#105 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/105>`_).
+- Added ability to manually initiate refresh of Playlists.
+  (See: `#107 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/107>`_).
+- Now updates the track name when the stream title changes.
+- Adding a browsed radio station to the tracklist now also starts playback of the station.
+  (See: `#98 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/08>`_).
+- Added ability to save playlists. (See: `#106 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/106>`_).
+- Remove support for defunct Grooveshark service.
+  (See: `#120 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/120>`_).
+- Increase volume slider handle by 30% to make it easier to grab on mobile devices.
+- Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should
+  be invalidated.
+- Use standard Mopidy mixer methods to mute / un-mute playback.
+
+**Fixes**
+
 - Ensure that only the currently playing track is highlighted in the queue.
   (Fixes: `#81 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/81>`_).
-- Added optional websocket_host and websocket_port config settings.
 - Fixed slow to start playing from a large tracklist of browsed tracks.
   (Fixes: `#85 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/85>`_).
 - Clean up unused Javascript code. (Fixes: `#100 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/100>`_).
-- Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
-- Added ability to save Queue as local Playlist.
 - Mopidy 1.1.0 compatibility fixes. (Fixes: `#109 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/109>`_,
   `#111 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/111>`_,
+  `#121 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/121>`_, and
   `#123 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/123>`_).
 - Fix incorrect identification of user's Spotify starred playlist.
   (Fixes:`#110 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/110>`_).
 - Initiating track playback from a folder that contains subfolders now correctly identifies the tracks that should be
   played. (Fixes: `#112 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/112>`_).
-- Add support for ```static_dir``` configurations.
-  (Fixes: `#105 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/105>`_).
-- Added ability to manually initiate refresh of Playlists.
-  (Fixes: `#107 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/107>`_).
-- Now updates the track name when the stream title changes.
 - Adding search results to tracklist now works as expected.
   (Fixes: `#49 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/49>`_ and
   `#137 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/137>`_).
-- Adding a browsed radio station to the tracklist now also starts playback of the station.
-  (Fixes: `#98 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/08>`_).
-- Added ability to save playlists. (Fixes: `#106 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/106>`_
-  and `#121 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/121>`_).
-- Remove support for defunct Grooveshark service.
-  (Fixes: `#120 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/120>`_).
 - Fix Javascript syntax errors. (Fixes: `#122 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/122>`_).
-- Increase volume slider handle by 30% to make it easier to grab on mobile devices.
-- Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should
-  be invalidated.
 - Fix vertical alignment of playback control buttons in footer.
-- Use standard Mopidy mixer methods to mute / un-mute playback.
+
 
 v2.0.0 (2015-03-26)
 -------------------
