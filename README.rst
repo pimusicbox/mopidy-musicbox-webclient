@@ -63,10 +63,10 @@ v2.1.0 (UNRELEASED)
 
 **Enhancements and improvements**
 
-- Added optional websocket_host and websocket_port config settings.
+- Added optional ``websocket_host`` and ``websocket_port`` config settings.
 - Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
 - Added ability to save Queue as local Playlist.
-- Add support for ```static_dir``` configurations.
+- Add support for ``static_dir`` configurations.
   (Addresses: `#105 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/105>`_).
 - Added ability to manually initiate refresh of Playlists.
   (Addresses: `#107 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/107>`_).
