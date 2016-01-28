@@ -436,7 +436,7 @@ function setMute(nwmute) {
 }
 
 function doMute() {
-    mopidy.mixer.setMute(!mute).then();
+    mopidy.mixer.setMute(!mute);
 }
 
 /*******
