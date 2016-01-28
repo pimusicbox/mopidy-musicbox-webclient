@@ -65,7 +65,7 @@ v2.1.0 (UNRELEASED)
 
 - Added optional ``websocket_host`` and ``websocket_port`` config settings.
 - Added link to `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ (if present).
-- Added ability to save Queue as local Playlist.
+- Added ability to save Queue as local Playlist. (Addresses: `#106 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/106>`_).
 - Add support for ``static_dir`` configurations.
   (Addresses: `#105 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/105>`_).
 - Added ability to manually initiate refresh of Playlists.
@@ -73,7 +73,6 @@ v2.1.0 (UNRELEASED)
 - Now updates the track name when the stream title changes.
 - Adding a browsed radio station to the tracklist now also starts playback of the station.
   (Addresses: `#98 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/98>`_).
-- Added ability to save playlists. (Addresses: `#106 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/106>`_).
 - Remove support for defunct Grooveshark service.
   (Addresses: `#120 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/120>`_).
 - Increase volume slider handle by 30% to make it easier to grab on mobile devices.
