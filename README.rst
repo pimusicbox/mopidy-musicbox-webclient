@@ -101,6 +101,8 @@ v2.1.0 (UNRELEASED)
   `#135 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/135>`_).
 - Fix Javascript syntax errors. (Fixes: `#122 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/122>`_).
 - Fix vertical alignment of playback control buttons in footer.
+- Increase width of header so that more text can be rendered in the title bar.
+  (Fixes: `#144 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/144>`_).
 
 
 v2.0.0 (2015-03-26)
