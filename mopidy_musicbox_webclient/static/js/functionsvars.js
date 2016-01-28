@@ -13,7 +13,7 @@ var repeat;
 var consume;
 var single;
 var currentVolume = -1;
-var muteVolume = -1;
+var mute;
 var volumeChanging = false;
 var posChanging = false;
 

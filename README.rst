@@ -79,6 +79,7 @@ v2.1.0 (UNRELEASED)
 - Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should
   be invalidated.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
+- Added event handling for 'muteChanged' event. (Fixes: `#141 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/141>`_).
 
 **Fixes**
 

@@ -22,6 +22,13 @@ function processVolume(data) {
 }
 
 /********************************************************
+ * process results of mute
+ *********************************************************/
+function processMute(data) {
+    setMute(data);
+}
+
+/********************************************************
  * process results of a repeat
  *********************************************************/
 function processRepeat(data) {
