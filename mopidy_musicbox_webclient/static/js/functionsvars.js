@@ -17,9 +17,8 @@ var mute;
 var volumeChanging = false;
 var posChanging = false;
 
-var posTimer;
+var progressTimer;
 var volumeTimer;
-var seekTimer;
 var initgui = true;
 var currentpos = 0;
 var popupData = {};

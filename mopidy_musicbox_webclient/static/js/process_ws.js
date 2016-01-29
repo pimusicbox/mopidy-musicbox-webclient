@@ -60,8 +60,10 @@ function processSingle(data) {
  * process results of current position
  *********************************************************/
 function processCurrentposition(data) {
-    var pos = parseInt(data);
-    setPosition(pos);
+    progressTimer.set(parseInt(data));
+    if (play) {
+        progressTimer.start();
+    }
 }
 
 /********************************************************
@@ -70,7 +72,6 @@ function processCurrentposition(data) {
 function processPlaystate(data) {
     if (data == 'playing') {
         setPlayState(true);
-        resumePosTimer();
     } else {
         setPlayState(false);
     }

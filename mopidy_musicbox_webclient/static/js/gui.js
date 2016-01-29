@@ -8,9 +8,7 @@
  ********************/
 function resetSong() {
     if (!posChanging) {
-        pausePosTimer();
         setPlayState(false);
-        setPosition(0);
         var data = new Object;
         data.tlid = -1;
         data.track = new Object;
@@ -108,13 +106,12 @@ function setSongInfo(data) {
     if (!data.track.length || data.track.length == 0) {
         songlength = 0;
         $("#songlength").html('');
-        pausePosTimer();
         $('#trackslider').slider('disable');
-        // $('#streamnameinput').val(data.track.name);
-        // $('#streamuriinput').val(data.track.uri);
+        // $('#streamnameinput').val(data.name);
+        // $('#streamuriinput').val(data.uri);
     } else {
         songlength = data.track.length;
-        $("#songlength").html(timeFromSeconds(data.track.length / 1000));
+        $("#songlength").html(timeFromSeconds(songlength / 1000));
         $('#trackslider').slider('enable');
     }
 
@@ -143,7 +140,8 @@ function setSongInfo(data) {
     $("#modalartist").html(arttmp);
 
     $("#trackslider").attr("min", 0);
-    $("#trackslider").attr("max", data.track.length);
+    $("#trackslider").attr("max", songlength);
+    progressTimer.set(0, songlength);
 
     resizeMb();
 }
@@ -247,16 +245,9 @@ function initSocketevents() {
     mopidy.on("event:optionsChanged", updateOptions);
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
-        mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
         setPlayState(true);
         setSongInfo(data.tl_track);
-        initPosTimer();
-    });
-
-    mopidy.on("event:trackPlaybackPaused", function(data) {
-        //setSongInfo(data.tl_track);
-        pausePosTimer();
-        setPlayState(false);
+        progressTimer.start();
     });
 
     mopidy.on("event:playlistsLoaded", function(data) {
@@ -278,11 +269,15 @@ function initSocketevents() {
         switch (data["new_state"]) {
             case "stopped":
                 resetSong();
+                progressTimer.reset();
                 break;
             case "playing":
-                mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-                resumePosTimer();
                 setPlayState(true);
+                progressTimer.start();
+                break;
+            case "paused":
+                setPlayState(false);
+                progressTimer.stop();
                 break;
         }
     });
@@ -292,7 +287,7 @@ function initSocketevents() {
     });
 
     mopidy.on("event:seeked", function(data) {
-        setPosition(parseInt(data["time_position"]));
+        progressTimer.set(parseInt(data["time_position"])).start();
     });
 
     mopidy.on("event:streamTitleChanged", function(data) {
@@ -381,8 +376,8 @@ function updateOptions() {
 //update everything as if reloaded
 function updateStatusOfAll() {
     mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error);
-    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
+    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
 
     updateOptions()
 
@@ -479,6 +474,8 @@ $(document).ready(function(event) {
     //end of workaround
 
     $(window).hashchange();
+
+    progressTimer = new ProgressTimer(timerCallback);
 
     // Connect to server
     if (websocketUrl) {

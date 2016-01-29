@@ -362,44 +362,27 @@ function doSingle() {
  * Use a timer to prevent looping of commands
  *********************/
 
-function doSeekPos(value) {
-    var val = $("#trackslider").val();
-    newposition = Math.round(val);
-    if (!initgui) {
-        pausePosTimer();
-        //set timer to not trigger it too much
-        clearTimeout(seekTimer);
-        $("#songelapsed").html(timeFromSeconds(val / 1000));
-        seekTimer = setTimeout(triggerPos, 500);
-    }
-}
-
-function triggerPos() {
-    if (mopidy) {
-        posChanging = true;
-        //        mopidy.playback.pause();
-        //    console.log(newposition);
-        mopidy.playback.seek(newposition);
-        //        mopidy.playback.resume();
-        resumePosTimer();
-        posChanging = false;
-    }
-}
-
-function setPosition(pos) {
-    if (posChanging) {
-        return;
-    }
+function timerCallback(position, duration) {
+    $("#songelapsed").html(timeFromSeconds(position / 1000));
+    if (duration == Infinity)
+        duration = 0;
+    $("#songlength").html(timeFromSeconds(duration / 1000));
     var oldval = initgui;
-    if (pos > songlength) {
-        pos = songlength;
-        pausePosTimer();
-    }
-    currentposition = pos;
     initgui = true;
-    $("#trackslider").val(currentposition).slider('refresh');
+    $("#trackslider").val(position).slider('refresh');
     initgui = oldval;
-    $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
+}
+
+function doSeek(position) {
+    if (!initgui) {
+        newposition = Math.round($("#trackslider").val());
+        if (mopidy) {
+            posChanging = true;
+            mopidy.playback.seek(newposition);
+            posChanging = false;
+        }
+        progressTimer.stop().set(newposition);
+    }
 }
 
 /********************
@@ -437,34 +420,6 @@ function setMute(nwmute) {
 
 function doMute() {
     mopidy.mixer.setMute(!mute);
-}
-
-/*******
- * Track position timer
- */
-
-//timer function to update interface
-function updatePosTimer() {
-    currentposition += TRACK_TIMER;
-    setPosition(currentposition);
-    //    $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
-}
-
-function resumePosTimer() {
-    pausePosTimer();
-    if (songlength > 0) {
-        posTimer = setInterval(updatePosTimer, TRACK_TIMER);
-    }
-}
-
-function initPosTimer() {
-    pausePosTimer();
-    // setPosition(0);
-    resumePosTimer();
-}
-
-function pausePosTimer() {
-    clearInterval(posTimer);
 }
 
 /*********************************

@@ -1,0 +1,3 @@
+[submodule "mopidy_musicbox_webclient/static/js/media-progress-timer"]
+	path = mopidy_musicbox_webclient/static/js/media-progress-timer
+	url = https://github.com/adamcik/media-progress-timer.git
