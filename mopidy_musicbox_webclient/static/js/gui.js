@@ -484,10 +484,10 @@ $(document).ready(function(event) {
     if (websocketUrl) {
         mopidy = new Mopidy({
             webSocketUrl: websocketUrl, // wslocation is set in index.html from the extention config.
-            callingConvention: "by-position-or-by-name"
+            callingConvention: 'by-position-or-by-name'
         });
     } else {
-        mopidy = new Mopidy({callingConvention: "by-position-or-by-name"});
+        mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'});
     }
 //    mopidy.on(console.log.bind(console));  // Log all events
 //    mopidy.on(console.error.bind(console));

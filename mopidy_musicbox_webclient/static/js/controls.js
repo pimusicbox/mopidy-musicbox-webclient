@@ -225,7 +225,7 @@ function saveQueue() {
                         exists = exists || existing[i].uri.indexOf("m3u:") == 0 || existing[i].uri.indexOf("local:") == 0;
                     }
                     if (!exists || window.confirm("Overwrite existing playlist \"" + plname + "\"?")) {
-                        mopidy.playlists.create({'name': plname, 'uri_scheme': "local").then(function(playlist) {
+                        mopidy.playlists.create({'name': plname, 'uri_scheme': "local"}).then(function(playlist) {
                              playlist.tracks = tracks;
                              mopidy.playlists.save({'playlist': playlist}).then();
                              getPlaylists();

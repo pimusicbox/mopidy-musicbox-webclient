@@ -211,6 +211,9 @@ function getBrowseDir(rootdir) {
     } else {
         browseStack.push(rootdir);
     }
+    if (!rootdir) {
+        rootdir = null;
+    }
     mopidy.library.browse({'uri': rootdir}).then(processBrowseDir, console.error);
 }
 
