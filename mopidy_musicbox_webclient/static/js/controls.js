@@ -541,7 +541,7 @@ function getFavourites() {
 function addFavourite(uri, name) {
     var uri = uri || $('#streamuriinput').val().trim();
     var name = name || $('#streamnameinput').val().trim();
-    mopidy.library.lookup({'uris': [uri]}).then(function(results) {
+    mopidy.library.lookup({'uri': uri}).then(function(results) {
         var newTracks = results[uri];
         if (newTracks.length == 1) {
             // TODO: Supporting adding an entire playlist?

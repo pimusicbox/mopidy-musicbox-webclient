@@ -8,7 +8,7 @@ API_SECRET = '2c631802c2285d5d5d1502462fe42a2b';
 var fmcache;
 var lastfm;
 
-$(window).load(function () {
+$(window).load(function() {
     // create a Cache object
     fmcache = new LastFMCache();
     // create a LastFM object

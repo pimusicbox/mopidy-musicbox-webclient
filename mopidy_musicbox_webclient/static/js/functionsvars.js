@@ -411,7 +411,7 @@ function getPlaylistTracks(uri) {
     } else {
         showLoading(true);
         return mopidy.playlists.getItems({'uri': uri}).then(function(refs) {
-            return processPlaylistItems({'uri':uri, 'items':refs});
+            return processPlaylistItems({'uri': uri, 'items': refs});
         }, console.error);
     }
 }

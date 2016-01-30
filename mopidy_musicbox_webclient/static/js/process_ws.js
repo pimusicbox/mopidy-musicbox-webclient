@@ -118,7 +118,7 @@ function processBrowseDir(resultArr) {
         iconClass = getMediaClass(resultArr[i].uri);
         if (resultArr[i].type == 'track') {
             //console.log(resultArr[i]);
-            mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultArr) {
+            mopidy.library.lookup({'uri': resultArr[i].uri}).then(function (resultArr) {
                 popupData[resultArr[0].uri] = resultArr[0];
                 browseTracks.push(resultArr[0]);
             }, console.error);
