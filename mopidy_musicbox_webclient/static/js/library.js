@@ -30,7 +30,7 @@ function initSearch() {
         $("#searchresults").hide();
 
         if (searchService != 'all') {
-            mopidy.library.search({any:[value]}, [searchService + ':']).then(processSearchResults, console.error);
+            mopidy.library.search({'query': {any:[value]}, 'uris': [searchService + ':']}).then(processSearchResults, console.error);
         } else {
             mopidy.getUriSchemes().then(function (schemes) {
                 var query = {},
@@ -48,7 +48,7 @@ function initSearch() {
                 } else {
                     query = {any: [value]};
                 }
-                mopidy.library.search(query, uris).then(processSearchResults, console.error);
+                mopidy.library.search({'query': query, 'uris': uris}).then(processSearchResults, console.error);
             });
         }
     }
@@ -79,15 +79,6 @@ function processSearchResults(resultArr) {
     var results = {'tracks': [], 'artists': [], 'albums': []};
     var j, emptyResult = true;
 
-/*    for (var i = 0; i < resultArr.length; ++i) {
-        for (var prop in results) {
-            if (resultArr[i][prop] && resultArr[i][prop].length) {
-                results[prop] = results[prop].concat(resultArr[i][prop]);
-                emptyResult = false;
-            }
-        }
-    }
-*/
     for (var i = 0; i < resultArr.length; i++) {
         if (resultArr[i].tracks) {
             for (j = 0; j < resultArr[i].tracks.length; j++) {
@@ -108,10 +99,6 @@ function processSearchResults(resultArr) {
             }
         }
     }
-
-//    console.log(resultArr, results);
-
-
 
     customTracklists[URI_SCHEME+':trackresultscache'] = results.tracks;
 
@@ -196,7 +183,6 @@ function processSearchResults(resultArr) {
     $('#expandsearch').show();
 
     // Track results
-//    playlisttotable(results.tracks, SEARCH_TRACK_TABLE, URI_SCHEME+':trackresultscache');
     resultsToTables(results.tracks, SEARCH_TRACK_TABLE, URI_SCHEME+':trackresultscache');
 
     showLoading(false);
@@ -225,7 +211,7 @@ function getBrowseDir(rootdir) {
     } else {
         browseStack.push(rootdir);
     }
-    mopidy.library.browse(rootdir).then(processBrowseDir, console.error);
+    mopidy.library.browse({'uri': rootdir}).then(processBrowseDir, console.error);
 }
 
 function getCurrentPlaylist() {
@@ -261,7 +247,6 @@ function showTracklist(uri) {
             $(this).addClass('playlistactive');
         }
     });
-//    scrollToTracklist();
     return false;
 }
 
@@ -274,12 +259,11 @@ function showArtist(nwuri) {
     $('#popupTracks').popup('close');
     $('#controlsmodal').popup('close');
     $(ARTIST_TABLE).empty();
-    //fill from cache
-//    var pl = getTracksFromUri(nwuri);
+
 //TODO cache
     $('#h_artistname').html('');
     showLoading(true);
-    mopidy.library.lookup(nwuri).then(function(resultArr) {
+    mopidy.library.lookup({'uris': [nwuri]}).then(function(resultArr) {
         resultArr.uri = nwuri;
         processArtistResults(resultArr);
     }, console.error);
@@ -304,16 +288,15 @@ function showAlbum(uri) {
         $('#coverpopupalbumname').html(albumname);
         $('#coverpopupartist').html(artistname);
         showLoading(false);
-        mopidy.library.lookup(uri).then(function(resultArr) {
+        mopidy.library.lookup({'uris': [uri]}).then(function(resultArr) {
             resultArr.uri = uri;
             processAlbumResults(resultArr);
         }, console.error);
-//        getCover(pl, '#albumviewcover, #coverpopupimage', 'extralarge');
     } else {
         showLoading(true);
         $('#h_albumname').html('');
         $('#h_albumartist').html('');
-        mopidy.library.lookup(uri).then(function(resultArr) {
+        mopidy.library.lookup({'uris': [uri]}).then(function(resultArr) {
             resultArr.uri = uri;
             processAlbumResults(resultArr);
         }, console.error);

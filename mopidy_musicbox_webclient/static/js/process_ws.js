@@ -118,7 +118,7 @@ function processBrowseDir(resultArr) {
         iconClass = getMediaClass(resultArr[i].uri);
         if (resultArr[i].type == 'track') {
             //console.log(resultArr[i]);
-            mopidy.library.lookup(resultArr[i].uri).then(function (resultArr) {
+            mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultArr) {
                 popupData[resultArr[0].uri] = resultArr[0];
                 browseTracks.push(resultArr[0]);
             }, console.error);
@@ -139,14 +139,6 @@ function processBrowseDir(resultArr) {
 
     $('#browselist').html(child);
     if (browseStack.length > 0 ) {
-/*        child = '';
-        for (var i = 0; i < browseStack.length; i++) {
-            child += browseStack[i] + ' / ';
-        }
-
-        child = getMediaHuman(browseStack[0]);
-        iconClass = getMediaClass(browseStack[0]);
-*/
         child = getMediaHuman(resultArr[0].uri);
         iconClass = getMediaClass(resultArr[0].uri);
         $('#browsepath').html('<i class="' + iconClass + '"></i> ' + child);
@@ -199,7 +191,7 @@ function processPlaylistItems(resultDict) {
     for (i = 0; i < resultDict.items.length; i++) {
         trackUris.push(resultDict.items[i].uri);
     }
-    return mopidy.library.lookup(null, trackUris).then(function(tracks) {
+    return mopidy.library.lookup({'uris': trackUris}).then(function(tracks) {
         // Transform from dict to list and cache result
         var newplaylisturi = resultDict.uri;
         playlists[newplaylisturi] = {'uri':newplaylisturi, 'tracks':[]};
