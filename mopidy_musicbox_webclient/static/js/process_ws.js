@@ -118,9 +118,10 @@ function processBrowseDir(resultArr) {
         iconClass = getMediaClass(resultArr[i].uri);
         if (resultArr[i].type == 'track') {
             //console.log(resultArr[i]);
-            mopidy.library.lookup({'uri': resultArr[i].uri}).then(function (resultArr) {
-                popupData[resultArr[0].uri] = resultArr[0];
-                browseTracks.push(resultArr[0]);
+            mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultDict) {
+                var uri = Object.keys(resultDict)[0];
+                popupData[uri] = resultDict[uri][0];
+                browseTracks.push(resultDict[uri][0]);
             }, console.error);
             child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
                      '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + index + '\');">' +
