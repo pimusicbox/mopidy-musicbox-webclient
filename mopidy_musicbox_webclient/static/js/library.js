@@ -267,7 +267,7 @@ function showArtist(nwuri) {
     $('#h_artistname').html('');
     showLoading(true);
     mopidy.library.lookup({'uris': [nwuri]}).then(function(resultDict) {
-        var resultArr = resultDict[Object.keys(resultDict)[0]];
+        var resultArr = resultDict[nwuri];
         resultArr.uri = nwuri;
         processArtistResults(resultArr);
     }, console.error);
@@ -293,7 +293,7 @@ function showAlbum(uri) {
         $('#coverpopupartist').html(artistname);
         showLoading(false);
         mopidy.library.lookup({'uris': [uri]}).then(function(resultDict) {
-            var resultArr = resultDict[Object.keys(resultDict)[0]];
+            var resultArr = resultDict[uri];
             resultArr.uri = uri;
             processAlbumResults(resultArr);
         }, console.error);
@@ -302,7 +302,7 @@ function showAlbum(uri) {
         $('#h_albumname').html('');
         $('#h_albumartist').html('');
         mopidy.library.lookup({'uris': [uri]}).then(function(resultDict) {
-            var resultArr = resultDict[Object.keys(resultDict)[0]];
+            var resultArr = resultDict[uri];
             resultArr.uri = uri;
             processAlbumResults(resultArr);
         }, console.error);

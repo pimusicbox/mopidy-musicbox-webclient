@@ -119,9 +119,9 @@ function processBrowseDir(resultArr) {
         if (resultArr[i].type == 'track') {
             //console.log(resultArr[i]);
             mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultDict) {
-                var uri = Object.keys(resultDict)[0];
-                popupData[uri] = resultDict[uri][0];
-                browseTracks.push(resultDict[uri][0]);
+                var lookup_uri = Object.keys(resultDict)[0];
+                popupData[lookup_uri] = resultDict[lookup_uri][0];
+                browseTracks.push(resultDict[lookup_uri][0]);
             }, console.error);
             child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
                      '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + index + '\');">' +
@@ -140,8 +140,8 @@ function processBrowseDir(resultArr) {
 
     $('#browselist').html(child);
     if (browseStack.length > 0 ) {
-        child = getMediaHuman(resultArr[0].uri);
-        iconClass = getMediaClass(resultArr[0].uri);
+        child = getMediaHuman(uri);
+        iconClass = getMediaClass(uri);
         $('#browsepath').html('<i class="' + iconClass + '"></i> ' + child);
     } else {
         $('#browsepath').html('');
