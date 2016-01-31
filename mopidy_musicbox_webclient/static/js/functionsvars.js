@@ -28,7 +28,7 @@ var songlength = 0;
 var artistshtml = '';
 var artiststext = '';
 var songname = '';
-var songdata = {'track':{}, 'tlid':-1};
+var songdata = {'track': {}, 'tlid': -1};
 var newposition = 0;
 
 var playlisttracksScroll;
@@ -53,7 +53,6 @@ var ua = navigator.userAgent,
 
 //constants
 PROGRAM_NAME = 'MusicBox';
-//PROGRAM_NAME = 'Mopidy';
 ARTIST_TABLE = '#artiststable';
 ALBUM_TABLE = '#albumstable';
 PLAYLIST_TABLE = '#playlisttracks';
@@ -127,10 +126,6 @@ function scrollToTop() {
 }
 
 function scrollToTracklist() {
-    /*    if (isMobileWebkit) {
-        playlistslistScroll.refresh();
-    }
-*/
     var divtop = $("#playlisttracksdiv").offset().top - 120;
     $('body,html').animate({
         scrollTop: divtop
@@ -198,12 +193,10 @@ function renderSongLi(song, liID, uri) {
     } else {
         name = song.name;
     }
-    //    var iconClass = getMediaClass(liID.split('-')[1]);
     songLi = '<li class="song albumli" id="' + liID + '">' +
              '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + '\');">' +
              '<i class="fa fa-ellipsis-v"></i></a>' +
              '<a href="#" onclick="return playTrackByUri(\'' + song.uri + '\',\'' + uri + '\');">' +
-             // '<h1 class="trackname"><i class="' + iconClass + '"></i> ' + name + '</h1>' +
              '<h1 class="trackname">' + name + '</h1></a>' +
              '</li>';
     return songLi;
@@ -217,12 +210,10 @@ function renderQueueSongLi(song, liID, uri, tlid) {
     } else {
         name = song.name;
     }
-    //    var iconClass = getMediaClass(liID.split('-')[1]);
     songLi = '<li class="song albumli" id="' + liID + '" tlid="' + tlid + '">' +
              '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + '\',\'' + tlid + '\');">' +
              '<i class="fa fa-ellipsis-v"></i></a>' +
              '<a href="#" onclick="return playTrackQueueByTlid(\'' + song.uri + '\',\'' + tlid + '\');">' +
-             // '<h1 class="trackname"><i class="' + iconClass + '"></i> ' + name + '</h1>' +
              '<h1 class="trackname">' + name + '</h1></a>' +
              '</li>';
     return songLi;
@@ -310,7 +301,6 @@ function resultsToTables(results, target, uri) {
                                 '<h1><i class="' + iconClass + '"></i> ' + newalbum[0].name + "</h1><p>";
                     }
 
-                    /*                 '<span style="float: right;">' + timeFromSeconds(newalbum[0].length / 1000) + '</span>'; */
                     if (newalbum[0].artists) {
                         for (j = 0; j < newalbum[0].artists.length; j++) {
                             html += newalbum[0].artists[j].name;
@@ -333,7 +323,6 @@ function resultsToTables(results, target, uri) {
                     newtlids = [];
                 } else { //newalbum length
                     if (results[i].album.uri && results[i].album.name) {
-                        //                    iconClass = getMediaClass(results[i].album.uri);
                         iconClass = getMediaClass(newalbum[0].uri);
                         html += '<li class="albumdivider">';
                         html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' +
@@ -353,8 +342,6 @@ function resultsToTables(results, target, uri) {
                     html += '</p></a></li>';
                     for (j = 0; j < newalbum.length; j++) {
                         popupData[newalbum[j].uri] = newalbum[j];
-                        //                    html += '<li class="albumli" id="' + targetmin + '-' + newalbum[j].uri + '"><a href="#" onclick="return ' + popupMenu + '(event, \'' + uri + '\',\'' + newalbum[j].uri + '\');">';
-
                         //hERE!
                         var liID = targetmin + '-' + newalbum[j].uri;
                         if (target == CURRENT_PLAYLIST_TABLE) {
@@ -362,9 +349,6 @@ function resultsToTables(results, target, uri) {
                         } else {
                             html += renderSongLi(newalbum[j], liID, uri);
                         }
-
-                        //html += '<li class="albumli" id="' + targetmin + '-' + newalbum[j].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[j].uri + '\');">';
-                        //html += '<p class="pright">' + timeFromSeconds(newalbum[j].length / 1000) + '</p><h1>' + newalbum[j].name + '</h1></a></li>';
                     }
                     newalbum = [];
                     newtlids = [];
@@ -383,7 +367,6 @@ function resultsToTables(results, target, uri) {
     $(target).attr('data', uri);
     //retreive albumcovers
     for (i = 0; i < coversList.length; i++) {
-        //        console.log(coversList[i]);
         getCover(coversList[i][0], target + '-cover-' + coversList[i][1], 'small');
     }
 }
@@ -401,7 +384,6 @@ function playlisttotable(pl, target, uri) {
             child += '<h1>' + pl[i].name + "</h1>";
             child += '<p>';
             child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>';
-            // <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
             for (var j = 0; j < pl[i].artists.length; j++) {
                 if (pl[i].artists[j]) {
                     child += pl[i].artists[j].name;
@@ -463,7 +445,6 @@ function timeFromSeconds(length) {
     return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
 }
 
-
 /******* Toast ***/
 function toast(message, delay, textOnly) {
     textOnl = textOnly || false;
@@ -482,9 +463,9 @@ function toast(message, delay, textOnly) {
     }
 }
 
-/*****************
- * Modal dialogs
- *****************/
+/******************
+ * Modal dialogs  *
+ ******************/
 function showLoading(on) {
     if (on) {
         $("body").css("cursor", "progress");
@@ -515,7 +496,6 @@ function showOffline(on) {
 // from http://dzone.com/snippets/validate-url-regexp
 function validUri(str) {
     var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-    //    return regexp.test(str) || isServiceUri(str);
     return regexp.test(str);
 }
 
