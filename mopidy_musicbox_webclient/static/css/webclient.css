@@ -129,14 +129,11 @@
     color:white;
 }
 
-#headermenubtn{
-    width: 50px;
+#headermenubtn {
+    padding-top: 2px;
 }
-#headersearchbtn{
-    text-align: right;
-}
-#headersearchbtn .ui-btn-inner{
-    padding: 6px;
+
+#headersearchbtn span {
     font-size: 15px;
 }
 
