@@ -32,7 +32,7 @@ function playBrowsedTracks(action, trackIndex) {
     var maybePlay = function(tlTracks) {
         if (action === PLAY_NOW || action === PLAY_ALL) {
             var playIndex = (action === PLAY_ALL) ? trackIndex : 0;
-            mopidy.playback.play(tlTracks[playIndex]);
+            mopidy.playback.play({'tl_track': tlTracks[playIndex]});
         }
     };
         
@@ -40,13 +40,13 @@ function playBrowsedTracks(action, trackIndex) {
         case PLAY_NOW:
         case PLAY_NEXT:
             mopidy.tracklist.index().then(function (currentIndex) {
-                mopidy.tracklist.add(null, currentIndex + 1, null, trackUris).then(maybePlay);
+                mopidy.tracklist.add({'at_position': currentIndex + 1, 'uris': trackUris}).then(maybePlay);
             });
             break;
         case ADD_THIS_BOTTOM:
         case ADD_ALL_BOTTOM:
         case PLAY_ALL:
-            mopidy.tracklist.add(null, null, null, trackUris).then(maybePlay);
+            mopidy.tracklist.add({'uris': trackUris}).then(maybePlay);
             break;
         default:
             break;
@@ -91,21 +91,21 @@ function playTrack(action) {
         case PLAY_NOW:
         case PLAY_NOW_SEARCH:
             mopidy.tracklist.clear().then(
-                mopidy.tracklist.add(null, null, null, trackUris).then(
+                mopidy.tracklist.add({'uris': trackUris}).then(
                     function(tlTracks) {
-                        mopidy.playback.play(tlTracks[selected])
+                        mopidy.playback.play({'tl_track': tlTracks[selected]})
                     }
                 )
             );
             break;
         case PLAY_NEXT:
             mopidy.tracklist.index().then(function(currentIndex) {
-                mopidy.tracklist.add(null, currentIndex + 1, null, trackUris);
+                mopidy.tracklist.add({'at_position': currentIndex + 1, 'uris': trackUris});
             });
             break;
         case ADD_THIS_BOTTOM:
         case ADD_ALL_BOTTOM:
-            mopidy.tracklist.add(null, null, null, trackUris);
+            mopidy.tracklist.add({'uris': trackUris});
             break;
     }
     return false;
@@ -122,7 +122,7 @@ function playTrackByUri(track_uri, playlist_uri) {
             // Find track that was selected
             for (var selected = 0; selected < tltracks.length; selected++) {
                 if (tltracks[selected].track.uri == track_uri) {
-                    mopidy.playback.play(tltracks[selected]);
+                    mopidy.playback.play({'tl_track': tltracks[selected]});
                     return;
                 }
             }
@@ -141,11 +141,11 @@ function playTrackByUri(track_uri, playlist_uri) {
 
     toast('Loading...');
 
-    mopidy.tracklist.add(null, null, playlist_uri).then(function(tltracks) {
+    mopidy.tracklist.add({'uris': [playlist_uri]}).then(function(tltracks) {
         // Can fail for all sorts of reasons. If so, just add individually. 
         if (tltracks.length == 0) {
             var trackUris = getTracksFromUri(playlist_uri, false);
-            mopidy.tracklist.add(null, null, null, trackUris).then(findAndPlayTrack);
+            mopidy.tracklist.add({'uris': trackUris}).then(findAndPlayTrack);
         } else {
             findAndPlayTrack(tltracks);
         }
@@ -175,7 +175,7 @@ function playTrackQueueByTlid(uri, tlid) {
     }).then(
         function(tltracks) {
             if (tltracks.length > 0) {
-                mopidy.playback.play(tltracks[0]);
+                mopidy.playback.play({'tl_track': tltracks[0]});
                 return;
             }
             console.log('Failed to play selected track ', tlid);
@@ -203,7 +203,7 @@ function removeTrack() {
 
     tlid = parseInt($('#popupQueue').data("tlid"));
     console.log(tlid);
-    mopidy.tracklist.remove({'tlid':[tlid]});
+    mopidy.tracklist.remove({'tlid': [tlid]});
 }
 
 function clearQueue() {
@@ -225,9 +225,9 @@ function saveQueue() {
                         exists = exists || existing[i].uri.indexOf("m3u:") == 0 || existing[i].uri.indexOf("local:") == 0;
                     }
                     if (!exists || window.confirm("Overwrite existing playlist \"" + plname + "\"?")) {
-                        mopidy.playlists.create(plname, "local").then(function(playlist) {
+                        mopidy.playlists.create({'name': plname, 'uri_scheme': "local"}).then(function(playlist) {
                              playlist.tracks = tracks;
-                             mopidy.playlists.save(playlist).then();
+                             mopidy.playlists.save({'playlist': playlist}).then();
                              getPlaylists();
                         });
                     }
@@ -336,19 +336,19 @@ function setSingle(nwsingle) {
 }
 
 function doRandom() {
-    mopidy.tracklist.setRandom(!random).then();
+    mopidy.tracklist.setRandom({'value': !random}).then();
 }
 
 function doRepeat() {
-    mopidy.tracklist.setRepeat(!repeat).then();
+    mopidy.tracklist.setRepeat({'value': !repeat}).then();
 }
 
 function doConsume() {
-    mopidy.tracklist.setConsume(!consume).then();
+    mopidy.tracklist.setConsume({'value': !consume}).then();
 }
 
 function doSingle() {
-    mopidy.tracklist.setSingle(!single).then();
+    mopidy.tracklist.setSingle({'value': !single}).then();
 }
 
 
@@ -371,7 +371,7 @@ function doSeekPos(value) {
 function triggerPos() {
     if (mopidy) {
         posChanging = true;
-        mopidy.playback.seek(newposition);
+        mopidy.playback.seek({'time_position': newposition});
         resumePosTimer();
         posChanging = false;
     }
@@ -411,7 +411,7 @@ function doVolume(value) {
 }
 
 function triggerVolume() {
-    mopidy.playback.setVolume(parseInt(volumeChanging));
+    mopidy.playback.setVolume({'volume': parseInt(volumeChanging)});
     volumeChanging = 0;
 }
 
@@ -427,7 +427,7 @@ function setMute(nwmute) {
 }
 
 function doMute() {
-    mopidy.mixer.setMute(!mute);
+    mopidy.mixer.setMute({'mute': !mute});
 }
 
 /**************************
@@ -483,7 +483,7 @@ function playStreamUri(uri) {
         document.activeElement.blur();
         clearQueue();
         $("input").blur();
-        mopidy.tracklist.add(null, null, nwuri);
+        mopidy.tracklist.add({'uris': [nwuri]});
         mopidy.playback.play();
     } else {
         toast('No valid url!');
@@ -514,7 +514,7 @@ function getPlaylistByName(name, scheme, create) {
             }
         }
         if (create) {
-            return mopidy.playlists.create(name, scheme).done(function(plist) {
+            return mopidy.playlists.create({'name': name, 'uri_scheme': scheme}).done(function(plist) {
                 console.log("Created playlist '%s'", plist.name);
                 return plist;
             });
@@ -524,7 +524,7 @@ function getPlaylistByName(name, scheme, create) {
 }
 
 function getPlaylistFull(uri) {
-    return mopidy.playlists.lookup(uri).then(function(pl) {
+    return mopidy.playlists.lookup({'uri': uri}).then(function(pl) {
             playlists[uri] = pl;
             return pl;
     });
@@ -541,7 +541,7 @@ function getFavourites() {
 function addFavourite(uri, name) {
     var uri = uri || $('#streamuriinput').val().trim();
     var name = name || $('#streamnameinput').val().trim();
-    mopidy.library.lookup(null, [uri]).then(function(results) {
+    mopidy.library.lookup({'uris': [uri]}).then(function(results) {
         var newTracks = results[uri];
         if (newTracks.length == 1) {
             // TODO: Supporting adding an entire playlist?
@@ -556,7 +556,7 @@ function addFavourite(uri, name) {
                     } else {
                         favourites.tracks = [newTracks[0]];
                     }
-                    mopidy.playlists.save(favourites).then(function(s) {
+                    mopidy.playlists.save({'playlist': favourites}).then(function(s) {
                         showFavourites();
                     });
                 }
@@ -577,7 +577,7 @@ function deleteFavourite(index) {
             var name = favourites.tracks[index].name;
             if (confirm("Are you sure you want to remove '" + name + "'?")) {
                 favourites.tracks.splice(index, 1);
-                mopidy.playlists.save(favourites).then(function(s) {
+                mopidy.playlists.save({'playlist': favourites}).then(function(s) {
                     showFavourites();
                 });
             }

@@ -118,9 +118,10 @@ function processBrowseDir(resultArr) {
         iconClass = getMediaClass(resultArr[i].uri);
         if (resultArr[i].type == 'track') {
             //console.log(resultArr[i]);
-            mopidy.library.lookup(resultArr[i].uri).then(function (resultArr) {
-                popupData[resultArr[0].uri] = resultArr[0];
-                browseTracks.push(resultArr[0]);
+            mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultDict) {
+                var uri = Object.keys(resultDict)[0];
+                popupData[uri] = resultDict[uri][0];
+                browseTracks.push(resultDict[uri][0]);
             }, console.error);
             child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
                      '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + index + '\');">' +
@@ -191,7 +192,7 @@ function processPlaylistItems(resultDict) {
     for (i = 0; i < resultDict.items.length; i++) {
         trackUris.push(resultDict.items[i].uri);
     }
-    return mopidy.library.lookup(null, trackUris).then(function(tracks) {
+    return mopidy.library.lookup({'uris': trackUris}).then(function(tracks) {
         // Transform from dict to list and cache result
         var newplaylisturi = resultDict.uri;
         playlists[newplaylisturi] = {'uri':newplaylisturi, 'tracks':[]};

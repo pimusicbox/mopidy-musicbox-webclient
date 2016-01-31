@@ -479,10 +479,11 @@ $(document).ready(function(event) {
     // Connect to server
     if (websocketUrl) {
         mopidy = new Mopidy({
-            webSocketUrl: websocketUrl // wslocation is set in index.html from the extention config.
+            webSocketUrl: websocketUrl, // wslocation is set in index.html from the extention config.
+            callingConvention: 'by-position-or-by-name'
         });
     } else {
-        mopidy = new Mopidy();
+        mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'});
     }
 
     //initialize events
