@@ -1,6 +1,6 @@
-/********************************************************
- * play tracks from a browse list
- *********************************************************/
+/***********************************
+ * play tracks from a browse list  *
+ ***********************************/
 function playBrowsedTracks(action, trackIndex) {
     $('#popupBrowse').popup('close');
     toast('Loading...');
@@ -54,10 +54,9 @@ function playBrowsedTracks(action, trackIndex) {
     return false;
 }
 
-
-/********************************************************
- * play an uri from a tracklist
- *********************************************************/
+/*********************************
+ * play an uri from a tracklist  *
+ *********************************/
 function playTrack(action) {
     var hash = document.location.hash.split('?');
     var divid = hash[0].substr(1);
@@ -165,7 +164,6 @@ function playTrackByUri(track_uri, playlist_uri) {
  * @returns {boolean}
  */
 function playTrackQueueByTlid(uri, tlid) {
-    //    console.log('playquuri');
     //stop directly, for user feedback
     mopidy.playback.stop();
     $('#popupQueue').popup('close');
@@ -191,15 +189,14 @@ function playTrackQueueByTlid(uri, tlid) {
  * @returns {boolean}
  */
 function playTrackQueue() {
-    //    console.log('playqu');
     uri = $('#popupQueue').data("track");
     tlid = $('#popupQueue').data("tlid");
     return playTrackQueueByTlid(uri, tlid);
 }
 
-/********************************************************
- * remove a track from the queue
- *********************************************************/
+/***********************************
+ *  remove a track from the queue  *
+ ***********************************/
 function removeTrack() {
     $('#popupQueue').popup('close');
     toast('Deleting...');
@@ -241,15 +238,14 @@ function saveQueue() {
     return false;
 }
 
-
 function refreshPlaylists() {
     mopidy.playlists.refresh();
     return false;
 }
 
-/**********************
- * Buttons
- */
+/*************
+ *  Buttons  *
+ *************/
 
 function doShuffle() {
     mopidy.playback.stop();
@@ -303,10 +299,9 @@ function backbt() {
     return false;
 }
 
-/***************
- * Options
- ***************/
-
+/*************
+ *  Options  *
+ *************/
 function setTracklistOption(name, new_value) {
     if (!new_value) {
         $("#"+name+"bt").attr('style', 'color:#2489ce');
@@ -357,11 +352,10 @@ function doSingle() {
 }
 
 
-/*********************
- * Track Slider
- * Use a timer to prevent looping of commands
- *********************/
-
+/***********************************************
+ * Track Slider                                *
+ * Use a timer to prevent looping of commands  *
+ ***********************************************/
 function doSeekPos(value) {
     var val = $("#trackslider").val();
     newposition = Math.round(val);
@@ -377,10 +371,7 @@ function doSeekPos(value) {
 function triggerPos() {
     if (mopidy) {
         posChanging = true;
-        //        mopidy.playback.pause();
-        //    console.log(newposition);
         mopidy.playback.seek(newposition);
-        //        mopidy.playback.resume();
         resumePosTimer();
         posChanging = false;
     }
@@ -402,10 +393,10 @@ function setPosition(pos) {
     $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
 }
 
-/********************
- * Volume slider
- * Use a timer to prevent looping of commands
- */
+/***********************************************
+ * Volume slider                               *
+ * Use a timer to prevent looping of commands  *
+ ***********************************************/
 
 function setVolume(value) {
     if ($("#volumeslider").val() != value) {
@@ -439,15 +430,14 @@ function doMute() {
     mopidy.mixer.setMute(!mute);
 }
 
-/*******
- * Track position timer
- */
+/**************************
+ *  Track position timer  *
+ **************************/
 
 //timer function to update interface
 function updatePosTimer() {
     currentposition += TRACK_TIMER;
     setPosition(currentposition);
-    //    $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
 }
 
 function resumePosTimer() {
@@ -467,9 +457,9 @@ function pausePosTimer() {
     clearInterval(posTimer);
 }
 
-/*********************************
- * Stream
- *********************************/
+/************
+ *  Stream  *
+ ************/
 function streamPressed(key) {
     if (key == 13) {
         playStreamUri();
