@@ -103,6 +103,8 @@ v2.1.0 (UNRELEASED)
 - Fix vertical alignment of playback control buttons in footer.
 - Increase width of header so that more text can be rendered in the title bar.
   (Fixes: `#144 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/144>`_).
+- Re-align the menu and search buttons in the title bar.
+  (Fixes: `#148 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/148>`_).
 - Use explicit Mopidy.js calling convention. (Fixes: `#79 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/79>`_).
 
 
