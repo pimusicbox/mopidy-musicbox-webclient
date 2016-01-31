@@ -79,15 +79,6 @@ function processSearchResults(resultArr) {
     var results = {'tracks': [], 'artists': [], 'albums': []};
     var j, emptyResult = true;
 
-/*    for (var i = 0; i < resultArr.length; ++i) {
-        for (var prop in results) {
-            if (resultArr[i][prop] && resultArr[i][prop].length) {
-                results[prop] = results[prop].concat(resultArr[i][prop]);
-                emptyResult = false;
-            }
-        }
-    }
-*/
     for (var i = 0; i < resultArr.length; i++) {
         if (resultArr[i].tracks) {
             for (j = 0; j < resultArr[i].tracks.length; j++) {
@@ -108,10 +99,6 @@ function processSearchResults(resultArr) {
             }
         }
     }
-
-//    console.log(resultArr, results);
-
-
 
     customTracklists[URI_SCHEME+':trackresultscache'] = results.tracks;
 
@@ -196,7 +183,6 @@ function processSearchResults(resultArr) {
     $('#expandsearch').show();
 
     // Track results
-//    playlisttotable(results.tracks, SEARCH_TRACK_TABLE, URI_SCHEME+':trackresultscache');
     resultsToTables(results.tracks, SEARCH_TRACK_TABLE, URI_SCHEME+':trackresultscache');
 
     showLoading(false);
@@ -261,7 +247,6 @@ function showTracklist(uri) {
             $(this).addClass('playlistactive');
         }
     });
-//    scrollToTracklist();
     return false;
 }
 
@@ -274,8 +259,7 @@ function showArtist(nwuri) {
     $('#popupTracks').popup('close');
     $('#controlsmodal').popup('close');
     $(ARTIST_TABLE).empty();
-    //fill from cache
-//    var pl = getTracksFromUri(nwuri);
+
 //TODO cache
     $('#h_artistname').html('');
     showLoading(true);
@@ -308,7 +292,6 @@ function showAlbum(uri) {
             resultArr.uri = uri;
             processAlbumResults(resultArr);
         }, console.error);
-//        getCover(pl, '#albumviewcover, #coverpopupimage', 'extralarge');
     } else {
         showLoading(true);
         $('#h_albumname').html('');
