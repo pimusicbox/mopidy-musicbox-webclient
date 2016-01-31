@@ -168,6 +168,12 @@
     margin-right: 35px;
 }
 
+.ui-slider-track.ui-mini .ui-slider-handle {
+	height: 22px;
+	width: 22px;
+	margin: -12px 0 0 -12px;
+}
+
 .ui-slider-input {
     display: none !important;
 }
