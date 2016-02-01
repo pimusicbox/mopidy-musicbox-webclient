@@ -538,6 +538,21 @@ function getFavourites() {
     });
 }
 
+function addToFavourites(newTracks) {
+    getFavourites().then(function(favourites) {
+        if (favourites) {
+            if (favourites.tracks) {
+                Array.prototype.push.apply(favourites.tracks, newTracks)
+            } else {
+                favourites.tracks = [newTracks];
+            }
+            mopidy.playlists.save({'playlist': favourites}).then(function(s) {
+                showFavourites();
+            });
+        }
+    });
+}
+
 function addFavourite(uri, name) {
     var uri = uri || $('#streamuriinput').val().trim();
     var name = name || $('#streamnameinput').val().trim();
@@ -548,19 +563,7 @@ function addFavourite(uri, name) {
             if (name) {
                 newTracks[0].name = name; // User overrides name.
             }
-            getFavourites().then(function(favourites) {
-                if (favourites) {
-                    if (favourites.tracks) {
-                        //Array.prototype.push.apply(favourites.tracks, newTracks)
-                        favourites.tracks.push(newTracks[0]);
-                    } else {
-                        favourites.tracks = [newTracks[0]];
-                    }
-                    mopidy.playlists.save({'playlist': favourites}).then(function(s) {
-                        showFavourites();
-                    });
-                }
-            });
+            addToFavourites(newTracks);
         } else {
             if (newTracks.length == 0) {
                 console.log('No tracks to add');
@@ -587,9 +590,15 @@ function deleteFavourite(index) {
 
 function showFavourites() {
     $('#streamuristable').empty();
+    $.cookie.json = true;
+    if ($.cookie('streamUris')) {
+        toast('Converting streamUris...');
+        upgradeStreamUrisToFavourites();
+    }
     getFavourites().then(function(favourites) {
         if (favourites && favourites.tracks) {
             tracks = favourites.tracks;
+            
             var tmp = '';
             var child = '';
             for (var i = 0; i < tracks.length; i++) {
@@ -602,6 +611,36 @@ function showFavourites() {
             $('#streamuristable').html(tmp);
         }
     });    
+}
+
+function upgradeStreamUrisToFavourites() {
+    $.cookie.json = true;
+    var streamUris = $.cookie('streamUris'); // Read the cookie.
+    if (streamUris) {
+        var uris = []; // Prepare a list of uris to lookup.
+        for (var key in streamUris) {
+            var rs = streamUris[key];
+            if (rs) {
+                uris.push(rs[1]);
+            }
+        }
+        mopidy.library.lookup({'uris': uris}).then(function(results) {
+            var tracks = []; // Prepare a list of tracks to add.
+            for (var key in streamUris) {
+                var rs = streamUris[key];
+                if (rs) {
+                    var track = results[rs[1]][0];
+                    track.name = rs[0] || track.name; // Use custom name if provided.
+                    tracks.push(track);
+                }
+            }
+            addToFavourites(tracks);
+            $.cookie('streamUris', null); // Delete the cookie now we're done.
+            console.log(tracks.length + " streamUris added to favourites");
+        });
+    } else {
+        console.log("No streamUris cookie found");
+    }
 }
 
 function haltSystem() {
