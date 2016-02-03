@@ -590,22 +590,19 @@ function deleteFavourite(index) {
 
 function showFavourites() {
     $('#streamuristable').empty();
-    $.cookie.json = true;
-    if ($.cookie('streamUris')) {
-        toast('Converting streamUris...');
-        upgradeStreamUrisToFavourites();
-    }
     getFavourites().then(function(favourites) {
         if (favourites && favourites.tracks) {
-            tracks = favourites.tracks;
-            
             var tmp = '';
+            $.cookie.json = true;
+            if ($.cookie('streamUris')) {
+                tmp = '<li><a style="text-align: center" href="#" onclick="upgradeStreamUrisToFavourites();"><h1>Convert StreamUris to Favourites</h1></a></li>'
+            }
             var child = '';
-            for (var i = 0; i < tracks.length; i++) {
+            for (var i = 0; i < favourites.tracks.length; i++) {
                 child = '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;"><a href="#" onclick="return deleteFavourite(\'' + i + '\');">&nbsp;</a></span>' +
                     '<i class="fa fa-rss" style="float: left; padding: .5em; padding-top: 1em;"></i>' +
-                    ' <a style="margin-left: 20px" href="#" onclick="return playStreamUri(\'' + tracks[i].uri + '\');">';
-                child += '<h1>' + tracks[i].name + '</h1></a></li>';
+                    ' <a style="margin-left: 20px" href="#" onclick="return playStreamUri(\'' + favourites.tracks[i].uri + '\');">';
+                child += '<h1>' + favourites.tracks[i].name + '</h1></a></li>';
                 tmp += child;
             }
             $('#streamuristable').html(tmp);
@@ -614,6 +611,7 @@ function showFavourites() {
 }
 
 function upgradeStreamUrisToFavourites() {
+    toast('Converting streamUris...');
     $.cookie.json = true;
     var streamUris = $.cookie('streamUris'); // Read the cookie.
     if (streamUris) {
@@ -630,8 +628,12 @@ function upgradeStreamUrisToFavourites() {
                 var rs = streamUris[key];
                 if (rs) {
                     var track = results[rs[1]][0];
-                    track.name = rs[0] || track.name; // Use custom name if provided.
-                    tracks.push(track);
+                    if (track) {
+                        track.name = rs[0] || track.name; // Use custom name if provided.
+                        tracks.push(track);
+                    } else {
+                        console.log("Skipping unplayable streamUri " + rs[1]);
+                    }
                 }
             }
             addToFavourites(tracks);
