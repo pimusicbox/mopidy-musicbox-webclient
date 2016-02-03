@@ -168,6 +168,7 @@
     margin-right: 35px;
 }
 
+/* Increase slider handle by 30%. */
 .ui-slider-track.ui-mini .ui-slider-handle {
 	height: 22px;
 	width: 22px;
