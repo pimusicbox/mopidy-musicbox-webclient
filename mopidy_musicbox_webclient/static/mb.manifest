@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# 2016-02-4:v2
+# 2016-02-4:v5
 
 NETWORK:
 *
@@ -67,7 +67,6 @@ js/jquery.mobile.iscrollview-closure-min.js
 js/jquery.mobile.iscrollview-yui-min.js
 js/jquery.mobile.iscrollview.js
 js/jquery.touchwipe.min.js
-js/jquery.truncate.min.js
 js/lastfm.api.cache.js
 js/lastfm.api.js
 js/lastfm.api.md5.js

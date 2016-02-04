@@ -470,12 +470,14 @@ a {
     white-space: nowrap;
     font-weight: bold;
     font-size: 14px;
+    text-overflow: ellipsis;
 }
 
 #infoartist {
     overflow: hidden;
     font-size: 11px;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 #infocover {
