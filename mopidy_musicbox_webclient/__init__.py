@@ -4,7 +4,7 @@ import os
 
 from mopidy import config, ext
 
-__version__ = '2.1.0'
+__version__ = '2.1.1'
 
 
 class MusicBoxExtension(ext.Extension):
