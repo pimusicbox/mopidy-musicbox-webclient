@@ -58,6 +58,11 @@ Project resources
 Changelog
 =========
 
+v2.1.1 (2016-02-04)
+-------------------
+
+- Replace Javascript for truncating text with CSS equivalent for better reliability.
+
 v2.1.0 (2016-02-04)
 -------------------
 
@@ -109,7 +114,6 @@ v2.1.0 (2016-02-04)
 - Added event handling for 'muteChanged' event. (Fixes: `#141 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/141>`_).
 - Remove support for defunct Grooveshark service.
   (Fixes: `#120 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/120>`_).
-
 
 v2.0.0 (2015-03-26)
 -------------------

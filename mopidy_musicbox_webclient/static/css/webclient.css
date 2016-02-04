@@ -470,6 +470,7 @@ a {
     white-space: nowrap;
     font-weight: bold;
     font-size: 14px;
+    text-overflow: ellipses;
 }
 
 #infoartist {

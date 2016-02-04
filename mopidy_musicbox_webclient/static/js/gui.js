@@ -24,9 +24,7 @@ function resetSong() {
 
 function resizeMb() {
     $("#infoname").html(songdata.track.name);
-    $("#infoname").truncate();
     $("#infoartist").html(artiststext);
-    $("#infoartist").truncate();
 
     if ($(window).width() <= 960) {
 //        $('#playlisttracksdiv').hide();
