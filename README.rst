@@ -58,10 +58,10 @@ Project resources
 Changelog
 =========
 
-v2.1.1 (2016-02-04)
+v2.1.1 (UNRELEASED)
 -------------------
 
-- Replace Javascript for truncating text with CSS equivalent for better reliability.
+- Replace Javascript for truncating text with more reliable CSS equivalent.
 
 v2.1.0 (2016-02-04)
 -------------------
