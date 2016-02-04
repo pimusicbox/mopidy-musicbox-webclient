@@ -22,6 +22,13 @@ function processVolume(data) {
 }
 
 /********************************************************
+ * process results of mute
+ *********************************************************/
+function processMute(data) {
+    setMute(data);
+}
+
+/********************************************************
  * process results of a repeat
  *********************************************************/
 function processRepeat(data) {
@@ -111,9 +118,10 @@ function processBrowseDir(resultArr) {
         iconClass = getMediaClass(resultArr[i].uri);
         if (resultArr[i].type == 'track') {
             //console.log(resultArr[i]);
-            mopidy.library.lookup(resultArr[i].uri).then(function (resultArr) {
-                popupData[resultArr[0].uri] = resultArr[0];
-                browseTracks.push(resultArr[0]);
+            mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultDict) {
+                var lookup_uri = Object.keys(resultDict)[0];
+                popupData[lookup_uri] = resultDict[lookup_uri][0];
+                browseTracks.push(resultDict[lookup_uri][0]);
             }, console.error);
             child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
                      '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + index + '\');">' +
@@ -132,16 +140,8 @@ function processBrowseDir(resultArr) {
 
     $('#browselist').html(child);
     if (browseStack.length > 0 ) {
-/*        child = '';
-        for (var i = 0; i < browseStack.length; i++) {
-            child += browseStack[i] + ' / ';
-        }
-
-        child = getMediaHuman(browseStack[0]);
-        iconClass = getMediaClass(browseStack[0]);
-*/
-        child = getMediaHuman(resultArr[0].uri);
-        iconClass = getMediaClass(resultArr[0].uri);
+        child = getMediaHuman(uri);
+        iconClass = getMediaClass(uri);
         $('#browsepath').html('<i class="' + iconClass + '"></i> ' + child);
     } else {
         $('#browsepath').html('');
@@ -192,7 +192,7 @@ function processPlaylistItems(resultDict) {
     for (i = 0; i < resultDict.items.length; i++) {
         trackUris.push(resultDict.items[i].uri);
     }
-    return mopidy.library.lookup(null, trackUris).then(function(tracks) {
+    return mopidy.library.lookup({'uris': trackUris}).then(function(tracks) {
         // Transform from dict to list and cache result
         var newplaylisturi = resultDict.uri;
         playlists[newplaylisturi] = {'uri':newplaylisturi, 'tracks':[]};

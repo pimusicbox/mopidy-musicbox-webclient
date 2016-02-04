@@ -79,6 +79,9 @@ v2.1.0 (UNRELEASED)
 - Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should
   be invalidated.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
+- Added event handling for 'muteChanged' event. (Fixes: `#141 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/141>`_).
+- Streams are now saved to the '[Radio Streams].m3u' playlist and are accessible from all clients. 
+  Users with existing streamUris stored as browser cookies will be prompted to convert them to the new m3u backed scheme.
 
 **Fixes**
 
@@ -100,6 +103,11 @@ v2.1.0 (UNRELEASED)
   `#135 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/135>`_).
 - Fix Javascript syntax errors. (Fixes: `#122 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/122>`_).
 - Fix vertical alignment of playback control buttons in footer.
+- Increase width of header so that more text can be rendered in the title bar.
+  (Fixes: `#144 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/144>`_).
+- Re-align the menu and search buttons in the title bar.
+  (Fixes: `#148 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/148>`_).
+- Use explicit Mopidy.js calling convention. (Fixes: `#79 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/79>`_).
 
 
 v2.0.0 (2015-03-26)

@@ -18,51 +18,57 @@
     .header-breakpoint.ui-grid-b .ui-block-a {
         width: 30%;
     }
+
     .header-breakpoint.ui-grid-b .ui-block-b {
         width: 30%;
     }
+
     .header-breakpoint.ui-grid-b .ui-block-c {
         width: 30.1%;
     }
+
     /*playlists*/
     .pl-breakpoint.ui-grid-a .ui-block-a {
         width: 32.95%;
     }
+
     .pl-breakpoint.ui-grid-a .ui-block-b {
         width: 65.4%;
     }
+
     .pl-breakpoint.ui-grid-a .ui-block-a {
         clear: left;
     }
+
     .pl-breakpoint.ui-grid-a .ui-block-a {
         clear: left;
     }
+
     #playlisttracksdiv {
         margin-left: 10px;
     }
+
     #playlisttracksback {
         display:none;
     }
+
     #playlisttracksdiv {
         display:block;
     }
+
     #playlistslistdiv {
         display:block;
     }
+
     /*search*/
     .srch-breakpoint.ui-grid-a .ui-block-b {
         margin-left: .5em;
     }
+
     .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
         width: 49%;
     }
-/*    .scroll {
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-*/
 }
-
 
 /* phone landscape */
 @media all and (max-width: 960px) {
@@ -71,45 +77,50 @@
         width: 35%;
         clear: left;
     }
+
     .header-breakpoint.ui-grid-b .ui-block-b {
         display: none;
     }
+
     .header-breakpoint.ui-grid-b .ui-block-c {
         width: 33%;
     }
+
     /*playlists*/
     .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
         width: 100%;
     }
+
     /*search*/
     .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
         width: 100%;
     }
-/*    .scroll {
-        width: 100%;
-        heigth: 99%;
-    }
-*/
+
     #playlisttracksback {
         display:block;
     }
+
     #playlisttracksdiv {
         display:none;
     }
+
     #playlistslistdiv {
         display:block;
     }
+
 }
 
-/***********
- * Side Panel and Navigation
- */
+/*****************************
+ * Side Panel and Navigation *
+ *****************************/
 .mainNav .fa{
     float: right;
 }
+
 .mainNav .navtxt{
     float: left;
 }
+
 .mainNav .navtxt:after{
     clear: left;
 }
@@ -127,23 +138,19 @@
 
 #contentHeadline a {
     color:white;
-    margin-left: 20%;
 }
 
-#headermenubtn{
-    width: 50px;
+#headermenubtn {
+    padding-top: 2px;
 }
-#headersearchbtn{
-    text-align: right;
-}
-#headersearchbtn .ui-btn-inner{
-    padding: 6px;
+
+#headersearchbtn span {
     font-size: 15px;
 }
 
-/***********************
- *  Track Slider
- ***********************/
+/******************
+ *  Track Slider  *
+ ******************/
 
 #trackslider {
     display: inline;
@@ -159,6 +166,12 @@
 .ui-slider-track {
     margin-left: 38px;
     margin-right: 35px;
+}
+
+.ui-slider-track.ui-mini .ui-slider-handle {
+	height: 22px;
+	width: 22px;
+	margin: -12px 0 0 -12px;
 }
 
 .ui-slider-input {
@@ -184,9 +197,9 @@
     display: inline;
 }
 
-/***********
- * pages, content
- */
+/********************
+ *  Pages, content  *
+ ********************/
 #page{
     background-color: #fff;
 }
@@ -199,16 +212,13 @@
     display: none; 
 }
 
-
-
 #artistviewimage, #albumviewcover {
     float: right;
-    heigth: 90px;
+    height: 90px;
     max-width: 90%;
 }
 
 /*** home ***/
-
 #homerows div {
     text-align:center;
     background-color: #2C3E50;
@@ -221,9 +231,9 @@
 #homerows div i {
     font-size: 28px;
 }
-/*********************
- * listviews
- ********************/
+/***************
+ *  listviews  *
+ ***************/
 .table li a {
     color: #555 !important;
     font-size: 80% !important;
@@ -245,22 +255,7 @@
     list-style-type:none;
 }
 
-/*.table li:first-child {  */
-    /*-moz-border-radius-topleft: 2px;*/
-    /*-moz-border-radius-topright: 2px;*/
-    /*-webkit-border-top-left-radius: 2px;*/
-    /*-webkit-border-top-right-radius: 2px;*/
-    /*border-top-right-radius: 2px;*/
-    /*border-top-left-radius: 2px;*/
-/*}*/
-
 .table li:last-child {
-    /*-moz-border-radius-bottomleft: 2px;*/
-    /*-moz-border-radius-bottomright: 2px;*/
-    /*-webkit-border-bottom-left-radius: 2px;*/
-    /*-webkit-border-bottom-right-radius: 2px;*/
-    /*border-bottom-left-radius: 2px;*/
-    /*border-bottom-right-radius: 2px;*/
     border-bottom: 1px solid #CECECE;
 }
 
@@ -269,12 +264,12 @@
 }
 
 .albumdivider {
-        background-color: #ddd !important;
+    background-color: #ddd !important;
 }
 
 .smalldivider {
     font-size: 25% !important;
-    heigth: 5px !important;
+    height: 5px !important;
     background-color: #ddd !important;
 }
 
@@ -285,7 +280,6 @@
 #playlistslist, #playlisttracks {
     margin: 0 !important;
     padding: 0 !important;
-/*    border: 1px solid blue; */
 }
 
 .albumli {
@@ -299,7 +293,7 @@
 .artistcover {
     float: right;
     width: 30px;
-    heigth: 30px;
+    height: 30px;
     margin-right: 3px;
     margin-top: 3px;
 }
@@ -331,9 +325,9 @@
 }
 
 
-/*******************
- * Now Playing area
- *******************/
+/**********************
+ *  Now Playing area  *
+ **********************/
 
 #nowPlayingFooter{
     height: 50px;
@@ -350,7 +344,7 @@
 .footerControls div span {
     padding-left: 3px;
     padding-right: 3px;
-	height=100%;
+	height: 100%;
 	vertical-align: middle;
 }
 
@@ -360,10 +354,9 @@
     margin-right: 10px;
 }
 
-
-/*******************
- * Popups
- *******************/
+/************
+ *  Popups  *
+ ************/
 #modalalbum a, #modalartist a {
     color: #444;
     text-decoration: none;
@@ -411,14 +404,12 @@
 .ui-input-clear-hidden {
     display:block !important;
 }    
-  
 
-/***************
- *  common use
- ***************/
+/****************
+ *  Common use  *
+ ****************/
 
 #playlistspane {
-/*  height: 90% !important;*/
     margin: 0px !important;
 }
 
@@ -452,7 +443,7 @@ a {
     float: right;
 }
 /**********************
- *  Song information
+ *  Song information  *
  **********************/
 .ui-footer{
     border: 0px;
@@ -468,7 +459,7 @@ a {
 #infoname {
     overflow: hidden;
     white-space: nowrap;
-    font: bold;
+    font-weight: bold;
     font-size: 14px;
 }
 
@@ -507,16 +498,13 @@ a {
     text-align: center;
 }
 
-
 /*helper*/
-
 .hidden{
     display: none;
 }
 .ui-loader h1{
     color: #efefef;
 }
-
 
 .settingscoll label {
     font-size: 120%;
@@ -532,12 +520,14 @@ a {
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal {
         margin-right: 17em;
     }
+
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-push.ui-panel-content-fixed-toolbar-position-right,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-reveal.ui-panel-content-fixed-toolbar-position-right,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
         margin: 0 0 0 17em;
     }
+
     .ui-responsive-panel .ui-panel-dismiss-display-reveal {
         display: none;
     }
@@ -547,29 +537,34 @@ a {
     #nowPlayingpane{
         padding: 15px 25px 0px 25px;
     }
+
     #nowPlayingpane #controlspopupimage{
         max-width:90%;
         max-height:90%;
     }
+
     .nowPlaying-artistInfo {
         font-size: 12px;
     }
+
     .nowPlaying-artistInfo h4{
         margin: 0px;
         font-weight: normal;
         font-size:  12px;
     }
+
     .nowPlaying-artistInfo h3{
         margin: 0px 0px 3px 00px;
         white-space: nowrap;
         overflow: hidden;
-
     }
+
     #controlspopupimage{
         max-width:90%;
         max-height:90%;
         margin-bottom: 3px;
     }
+
     #nowPlayingpane #slidercontainer {
         margin-left: -5px;
         margin-right: -5px;
@@ -583,7 +578,6 @@ a {
 }
 
 /* disable text selection for mouse swipe */
-
 body * {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -591,22 +585,15 @@ body * {
     -o-user-select: none;
     user-select: none;
 }
+
 /* but fix for text input (safari certainly needs it)*/
 input[type=text] {
-  -moz-user-select: text;
-  -webkit-user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
     -o-user-select: text;
     user-select: text;
 }
-
-/* type/source of media in listviews */
-/*a[id^="spotify"] {
-    margin-left:20px;
-    background-image: url('../images/icons/play_alt_12x12.png');
-    border: 2px solid black;
-    display:block;
-}
-*/
 
 .mediaicon {
     float: right;

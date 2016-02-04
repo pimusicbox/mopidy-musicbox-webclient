@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <script src="js/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.min.css"/>
-<!--    <script type='application/javascript' src='js/fastclick.js'></script> -->
     <script>
         //configuration
         var isMusicBox = '{{musicbox}}' == 'True'; // Remove MusicBox only content (e.g. settings, system pages)
@@ -56,7 +55,7 @@
     <meta name="author" content="Wouter van Wijk" />
     <meta name="copyright" content="(c) 2012-2015 Wouter van Wijk" />
     <link href="css/webclient.css" rel="stylesheet" />
-    <link href="css/jquery.mobile.iscrollview.min.css" rel="stylesheet" />
+    <link href="css/jquery.mobile.iscrollview.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/font-awesome.min.css" />
 
 </head>
@@ -117,7 +116,7 @@
         </li>
         <li id="" data-icon="false">
             <div><!-- slider for volume -->
-                <a href="#" onclick="toggleMute(); return false;"><span title="Toggle mute"><i id="mutebt" class="fa fa-volume-up"></i></span></a>
+                <a href="#" onclick="doMute(); return false;"><span title="Toggle mute"><i id="mutebt" class="fa fa-volume-up"></i></span></a>
                 <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
                 <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
                        value="0" max="100" onchange="doVolume(this.value);"/>
@@ -223,11 +222,10 @@
 
 
 
-<div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint headerbtn">
-    <a href="#panel" style="margin-left: -12px; padding-top: 2px;" id="headermenubtn"><i class="fa fa-align-justify"></i></a>
+<div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">
+    <a id="headermenubtn" href="#panel"><i class="fa fa-align-justify"></i></a>
     <h1 id="contentHeadline">Musicbox</h1>
-     <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;" title="Search">
-            <i class="fa fa-search"></i></a>
+    <a id="headersearchbtn" href="#" onclick="switchContent('search' ); return false;" title="Search"><i class="fa fa-search"></i></a>
 </div>
 <!-- /header -->
 
@@ -476,15 +474,12 @@
 <!-- /page one -->
 <script type="text/javascript" src="../mopidy/mopidy.min.js"></script>
 <script type="text/javascript" src="js/iscroll-lite.js"></script>
-<!--        <script type="text/javascript" src="js/jquery.mobile.iscrollview-closure-min.js"></script> -->
 <script src="js/jquery.cookie.js"></script>
 <script src="js/jquery.truncate.min.js"></script>
-<!--        <script type="text/javascript" src="js/add2home.js" charset="utf-8"></script> -->
 <script src="js/controls.js"></script>
 <script src="js/library.js"></script>
 <script src="js/functionsvars.js"></script>
 <script src="js/process_ws.js"></script>
-<script src="js/streamuris.js"></script>
 
 <!-- use lastfm -->
 <script type="text/javascript" src="js/lastfm.api.md5.js"></script>
