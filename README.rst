@@ -58,7 +58,7 @@ Project resources
 Changelog
 =========
 
-v2.1.0 (UNRELEASED)
+v2.1.0 (2016-02-04)
 -------------------
 
 **Enhancements and improvements**
