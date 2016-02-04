@@ -630,7 +630,7 @@ function showFavourites() {
     });    
 }
 
-# TODO: Remove this upgrade path in next major release.
+// TODO: Remove this upgrade path in next major release.
 function upgradeStreamUrisToFavourites() {
     toast('Converting streamUris...');
     $.cookie.json = true;

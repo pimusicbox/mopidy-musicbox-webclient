@@ -80,6 +80,8 @@ v2.1.0 (UNRELEASED)
   be invalidated.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
 - Added event handling for 'muteChanged' event. (Fixes: `#141 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/141>`_).
+- Streams are now saved to the '[Radio Streams].m3u' playlist and are accessible from all clients. 
+  Users with existing streamUris stored as browser cookies will be prompted to convert them to the new m3u backed scheme.
 
 **Fixes**
 
