@@ -168,6 +168,7 @@
     margin-right: 35px;
 }
 
+/* Increase slider handle by 30%. */
 .ui-slider-track.ui-mini .ui-slider-handle {
 	height: 22px;
 	width: 22px;
@@ -204,7 +205,15 @@
     background-color: #fff;
 }
 
-#searchresults {
+#searchartists {
+    display: none;
+}
+
+#searchalbums {
+    display: none;
+}
+
+#searchtracks {
     display: none;
 }
 
@@ -472,7 +481,12 @@ a {
 #infocover {
     height: 50px;
     width: 50px;
-    position: absolute;
+}
+
+.playicon {
+    width: 10%;
+    float: right;
+    text-align: right;
 }
 
 #btplay {
@@ -481,17 +495,16 @@ a {
 
 .songinfo {
     height: 100%;
+    width: 90%;
+    float: left;
 }
 
 .songinfo-text {
     text-align: left;
     line-height: 22px;
-    display:inline-block;
-    padding: 6px;
     color: white;
-    position: absolute;
-    padding-left: 55px;
-    padding-right: 55px;
+    overflow: hidden;
+    padding: 3px;
 }
 
 #nowPlayingpane{

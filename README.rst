@@ -73,15 +73,13 @@ v2.1.0 (UNRELEASED)
 - Now updates the track name when the stream title changes.
 - Adding a browsed radio station to the tracklist now also starts playback of the station.
   (Addresses: `#98 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/98>`_).
-- Remove support for defunct Grooveshark service.
-  (Addresses: `#120 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/120>`_).
 - Increase volume slider handle by 30% to make it easier to grab on mobile devices.
 - Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should
   be invalidated.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
-- Added event handling for 'muteChanged' event. (Fixes: `#141 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/141>`_).
 - Streams are now saved to the '[Radio Streams].m3u' playlist and are accessible from all clients. 
   Users with existing streamUris stored as browser cookies will be prompted to convert them to the new m3u backed scheme.
+- Mopidy-Musicbox-Webclient now requires at least Mopidy v1.1.0 or greater to be installed.
 
 **Fixes**
 
@@ -108,6 +106,9 @@ v2.1.0 (UNRELEASED)
 - Re-align the menu and search buttons in the title bar.
   (Fixes: `#148 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/148>`_).
 - Use explicit Mopidy.js calling convention. (Fixes: `#79 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/79>`_).
+- Added event handling for 'muteChanged' event. (Fixes: `#141 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/141>`_).
+- Remove support for defunct Grooveshark service.
+  (Fixes: `#120 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/120>`_).
 
 
 v2.0.0 (2015-03-26)
