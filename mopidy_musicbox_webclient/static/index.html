@@ -357,48 +357,50 @@
 </div>
 
 <div data-role="content" class="pane" id="searchpane">
-    <div class="">
-        <form>
-            <select id="selectSearchService"> <!-- data-native-menu="false"> <!-- multiple="multiple" data-native-menu="false">
-                <option data-placeholder="true">Choose services</option> -->
-            </select>
-            <input id="searchinput" class="span2" data-clear-btn="true"
-                   onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text"/>
-            <button class="btn" type="button" onclick="return initSearch(event.value);">
-                Search!
-            </button>
-        </form>
+    <h4>Search</h4>
+
+    <div class="ui-grid pl-breakpoint">
+        <div class="ui-block">
+            <form>
+                <p>Search for artists, albums, or specific tracks.
+                <select id="selectSearchService"> <!-- data-native-menu="false"> <!-- multiple="multiple" data-native-menu="false">
+                    <option data-placeholder="true">Choose services</option> -->
+                </select>
+                <input id="searchinput" placeholder="Search term" class="span2" data-clear-btn="true"
+                       onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                <button class="btn" type="button" onclick="return initSearch(event.value);">
+                    Search!
+                </button>
+            </form>
+        </div>
     </div>
 
-
-    <div id="searchresults">
-        <div class="ui-grid-a srch-breakpoint">
-            <div class="ui-block-a" id="searchartists">
-                <div data-role="listview" data-inset="true">
-                    <div data-role="header">
-                        <h4>Artists</h4>
-                    </div>
-                    <div data-role="content">
-                        <ul data-role="listview" id="artistresulttable"></ul>
-                    </div>
+    <div class="ui-grid-a srch-breakpoint">
+        <div class="ui-block-a" id="searchartists">
+            <div data-role="listview" data-inset="true">
+                <div data-role="header">
+                    <h4>Artists</h4>
                 </div>
-            </div>
-            <div class="ui-block-b" id="searchalbums">
-                <div data-role="listview" data-inset="true">
-                    <div data-role="header">
-                        <h4>Albums</h4>
-                    </div>
-                    <div data-role="content">
-                        <ul data-role="listview" id="albumresulttable"></ul>
-                    </div>
+                <div data-role="content">
+                    <ul data-role="listview" id="artistresulttable"></ul>
                 </div>
             </div>
         </div>
-
-        <div class="" id="searchtracks">
-            <h4>Tracks</h4>
-            <ul id="trackresulttable" class="table"></ul>
+        <div class="ui-block-b" id="searchalbums">
+            <div data-role="listview" data-inset="true">
+                <div data-role="header">
+                    <h4>Albums</h4>
+                </div>
+                <div data-role="content">
+                    <ul data-role="listview" id="albumresulttable"></ul>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="" id="searchtracks">
+        <h4>Tracks</h4>
+        <ul id="trackresulttable" class="table"></ul>
     </div>
 </div>
 <!-- search div -->
@@ -406,49 +408,47 @@
 <div data-role="content" class="pane" id="streampane">
     <h4>Streams</h4>
 
-    <div>
-        <div class="ui-grid-a pl-breakpoint">
+    <div class="ui-grid-a pl-breakpoint">
         <div class="ui-block-a" style="padding: 5px">
-        <form>
-            <p>Play a specific stream/track and optionally save it to your favourites.
-            <button class="btn" type="button" onclick="return getCurrentlyPlaying();">
-                Get currently playing
-            </button>
-            <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
-                   onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
-            <button class="btn" type="button" onclick="return playStreamUri();">
-                Play
-            </button>
+            <form>
+                <p>Play a specific stream/track and optionally save it to your favourites.
+                <button class="btn" type="button" onclick="return getCurrentlyPlaying();">
+                    Get currently playing
+                </button>
+                <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
+                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                <button class="btn" type="button" onclick="return playStreamUri();">
+                    Play
+                </button>
 
-            <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
-                   onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
-            <button class="btn" type="button" onclick="return addFavourite();">
-                Save
-            </button>
-                <br/>
-        </form>
+                <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
+                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                <button class="btn" type="button" onclick="return addFavourite();">
+                    Save
+                </button>
+                    <br/>
+            </form>
         </div>
         <div class="ui-block-b" style="padding: 5px">
             <ul id="streamuristable" class="table"></ul>
-        </div>
         </div>
     </div>
 </div>
 
 
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="normalFooter">
-        <div class="footerControls">
-            <div id="songinfo" style="float: left">
-                <a href="#"><div><img id="infocover" src="images/default_cover.png"/></div></a>
-                <div class="songinfo-text">
-                    <div id="infoname"></div>
-                    <div id="infoartist"></div>
-                </div>
-            </div>
-            <div style="float: right;">
-                <a href="#" onclick="doPlay(); return false"><span id="btplay" title="Play"><i class="fa fa-play"></i></span></a>
+    <div class="footerControls">
+        <div id="songinfo" style="float: left">
+            <a href="#"><div><img id="infocover" src="images/default_cover.png"/></div></a>
+            <div class="songinfo-text">
+                <div id="infoname"></div>
+                <div id="infoartist"></div>
             </div>
         </div>
+        <div style="float: right;">
+            <a href="#" onclick="doPlay(); return false"><span id="btplay" title="Play"><i class="fa fa-play"></i></span></a>
+        </div>
+    </div>
 </div>
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="nowPlayingFooter">
         <div class="footerControls" style="padding-left: 10px;">
