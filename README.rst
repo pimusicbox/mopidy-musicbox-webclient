@@ -77,6 +77,7 @@ v2.1.0 (UNRELEASED)
 - Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should
   be invalidated.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
+- Mopidy-Musicbox-Webclient now requires at least Mopidy v1.1.0 or greater to be installed.
 
 **Fixes**
 
