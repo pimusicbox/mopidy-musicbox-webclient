@@ -504,22 +504,35 @@ function getCurrentlyPlaying() {
     return true;
 }
 
+function getUriSchemes() {
+    uriSchemes = {};
+    return mopidy.getUriSchemes().then(function(schemes) {
+        for (var i = 0; i < schemes.length; i++) {
+            uriSchemes[schemes[i].toLowerCase()] = true;
+        }
+    });
+}
+
 function getPlaylistByName(name, scheme, create) {
     var uri_scheme = scheme || '';
     var uri = '';
+    if (uri_scheme && !uriSchemes[uri_scheme]) {
+        return Mopidy.when(false);
+    }
     return mopidy.playlists.asList().catch(console.error.bind(console)).then(function(plists) {
         for (var i = 0; i < plists.length; i++) {
-            if ((plists[i].name === name) && (scheme === '' || getScheme(plists[i].uri) === scheme)) {
+            if ((plists[i].name === name) && (uri_scheme === '' || getScheme(plists[i].uri) === uri_scheme)) {
                 return plists[i];
             }
         }
         if (create) {
-            return mopidy.playlists.create({'name': name, 'uri_scheme': scheme}).done(function(plist) {
+            return mopidy.playlists.create({'name': name, 'uri_scheme': uri_scheme}).done(function(plist) {
                 console.log("Created playlist '%s'", plist.name);
                 return plist;
             });
         }
         console.log("Can't find playist '%s", name);
+        return Mopidy.when(false);
     });
 }
 
@@ -534,12 +547,15 @@ function getFavourites() {
     return getPlaylistByName(STREAMS_PLAYLIST_NAME, 
                              STREAMS_PLAYLIST_SCHEME,
                              true).then(function(playlist) {
-        return getPlaylistFull(playlist.uri);
+        if (playlist) {
+            return getPlaylistFull(playlist.uri);
+        }
+        return Mopidy.when(false);
     });
 }
 
 function addToFavourites(newTracks) {
-    getFavourites().then(function(favourites) {
+    getFavourites().catch(console.error.bind(console)).then(function(favourites) {
         if (favourites) {
             if (favourites.tracks) {
                 Array.prototype.push.apply(favourites.tracks, newTracks)
@@ -591,12 +607,16 @@ function deleteFavourite(index) {
 function showFavourites() {
     $('#streamuristable').empty();
     getFavourites().then(function(favourites) {
+        if (!favourites) {
+            return;
+        }
         var tmp = '';
+        
         $.cookie.json = true;
         if ($.cookie('streamUris')) {
             tmp = '<button class="btn" style="padding: 5px; width: 100%" type="button" onclick="return upgradeStreamUrisToFavourites();">Convert StreamUris</button>'
         }
-        if (favourites && favourites.tracks) {
+        if (favourites.tracks) {
             var child = '';
             for (var i = 0; i < favourites.tracks.length; i++) {
                 child = '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;"><a href="#" onclick="return deleteFavourite(\'' + i + '\');">&nbsp;</a></span>' +

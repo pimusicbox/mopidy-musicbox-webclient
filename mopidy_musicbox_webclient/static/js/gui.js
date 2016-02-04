@@ -231,7 +231,9 @@ function initSocketevents() {
         getCurrentPlaylist();
         updateStatusOfAll();
         getPlaylists();
-        showFavourites();
+        getUriSchemes().then(function() {
+            showFavourites();
+        });            
         getBrowseDir();
         getSearchSchemes();
         showLoading(false);

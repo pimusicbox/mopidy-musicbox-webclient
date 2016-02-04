@@ -36,6 +36,7 @@ var playlistslistScroll;
 
 var STREAMS_PLAYLIST_NAME = '[Radio Streams]';
 var STREAMS_PLAYLIST_SCHEME = 'm3u';
+var uriSchemes = {};
 
 //array of cached playlists (not only user-playlists, also search, artist, album-playlists)
 var playlists = {};
