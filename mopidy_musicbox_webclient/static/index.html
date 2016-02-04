@@ -438,14 +438,14 @@
 
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="normalFooter">
     <div class="footerControls">
-        <div id="songinfo" style="float: left">
-            <a href="#"><div><img id="infocover" src="images/default_cover.png"/></div></a>
+        <div class="songinfo" id="songinfo">
+            <a href="#"><div style="float: left"><img id="infocover" src="images/default_cover.png"/></div></a>
             <div class="songinfo-text">
                 <div id="infoname"></div>
                 <div id="infoartist"></div>
             </div>
         </div>
-        <div style="float: right;">
+        <div class="playicon">
             <a href="#" onclick="doPlay(); return false"><span id="btplay" title="Play"><i class="fa fa-play"></i></span></a>
         </div>
     </div>
