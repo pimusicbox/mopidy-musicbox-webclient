@@ -544,7 +544,7 @@ function addToFavourites(newTracks) {
             if (favourites.tracks) {
                 Array.prototype.push.apply(favourites.tracks, newTracks)
             } else {
-                favourites.tracks = [newTracks];
+                favourites.tracks = newTracks;
             }
             mopidy.playlists.save({'playlist': favourites}).then(function(s) {
                 showFavourites();
@@ -591,12 +591,12 @@ function deleteFavourite(index) {
 function showFavourites() {
     $('#streamuristable').empty();
     getFavourites().then(function(favourites) {
+        var tmp = '';
+        $.cookie.json = true;
+        if ($.cookie('streamUris')) {
+            tmp = '<button class="btn" style="padding: 5px; width: 100%" type="button" onclick="return upgradeStreamUrisToFavourites();">Convert StreamUris</button>'
+        }
         if (favourites && favourites.tracks) {
-            var tmp = '';
-            $.cookie.json = true;
-            if ($.cookie('streamUris')) {
-                tmp = '<li><a style="text-align: center" href="#" onclick="upgradeStreamUrisToFavourites();"><h1>Convert StreamUris to Favourites</h1></a></li>'
-            }
             var child = '';
             for (var i = 0; i < favourites.tracks.length; i++) {
                 child = '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;"><a href="#" onclick="return deleteFavourite(\'' + i + '\');">&nbsp;</a></span>' +
@@ -605,8 +605,8 @@ function showFavourites() {
                 child += '<h1>' + favourites.tracks[i].name + '</h1></a></li>';
                 tmp += child;
             }
-            $('#streamuristable').html(tmp);
         }
+        $('#streamuristable').html(tmp);
     });    
 }
 
