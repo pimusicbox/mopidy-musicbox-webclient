@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 import logging
-import string
 
 import tornado.web
 
@@ -29,21 +28,33 @@ class IndexHandler(tornado.web.RequestHandler):
 
     def initialize(self, config, path):
         ext_config = config[MusicBoxExtension.ext_name]
+        host, port = ext_config['websocket_host'], ext_config['websocket_port']
+        ws_url = ''
+        if host or port:
+            if not host:
+                host = self.request.host.partition(':')[0]
+                logger.warning('Musicbox websocket_host not specified, '
+                               'using %s', host)
+            elif not port:
+                port = config['http']['port']
+                logger.warning('Musicbox websocket_port not specified, '
+                               'using %s', port)
+            protocol = 'ws'
+            if self.request.protocol == 'https':
+                protocol = 'wss'
+            ws_url = "%s://%s:%d/mopidy/ws" % (protocol, host, port)
+
         self.__dict = {
             'version': MusicBoxExtension.version,
-            'musicbox': int(ext_config['musicbox'])
+            'musicbox': ext_config.get('musicbox', False),
+            'useWebsocketUrl': ws_url != '',
+            'websocket_url': ws_url,
+            'alarmclock': config.get('alarmclock', {}).get('enabled', False),
         }
         self.__path = path
-        self.__title = string.Template('MusicBox on $hostname')
 
     def get(self, path):
-        return self.render('index.html', title=self.get_title(), **self.__dict)
-
-    def get_title(self):
-        hostname, sep, port = self.request.host.rpartition(':')
-        if not sep or not port.isdigit():
-            hostname, port = self.request.host, '80'
-        return self.__title.safe_substitute(hostname=hostname, port=port)
+        return self.render('index.html', **self.__dict)
 
     def get_template_path(self):
         return self.__path

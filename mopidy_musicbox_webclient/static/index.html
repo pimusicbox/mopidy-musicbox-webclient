@@ -1,19 +1,14 @@
 <!DOCTYPE html>
-<!-- <html manifest="mb.manifest"> -->
-<html>
+<html manifest="mb.manifest">
 <head>
     <meta charset="utf-8">
     <script src="js/jquery-1.11.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css"/>
-<!--    <script type='application/javascript' src='js/fastclick.js'></script> -->
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.min.css"/>
     <script>
-     //configuration
-//     var wsLocation = location.host + ':6680';  //for normal operation of mopidy http
-      var wsLocation = location.host;   //for running on port 80
-      if (wsLocation == location.hostname) {
-          wsLocation = location.hostname + ':6680';
-      }
-      var isMusicBox = {{musicbox}}; // Remove MusicBox only content (e.g. settings, system pages)
+        //configuration
+        var isMusicBox = '{{musicbox}}' == 'True'; // Remove MusicBox only content (e.g. settings, system pages)
+        var websocketUrl = ('{{useWebsocketUrl}}' == 'True') ? '{{websocket_url}}' : ''
+        var hasAlarmClock = '{{alarmclock}}' == 'True'; // Add Alarm Clock icons
 
         $(document).bind("mobileinit", function () {
             $.extend($.mobile, {
@@ -58,12 +53,11 @@
     <script src="js/jquery.mobile-1.3.2.min.js"></script>
     <meta name="description" content="MusicBox" />
     <meta name="author" content="Wouter van Wijk" />
-    <meta name="copyright" content="(c) 2012-2013 Wouter van Wijk" />
+    <meta name="copyright" content="(c) 2012-2015 Wouter van Wijk" />
     <link href="css/webclient.css" rel="stylesheet" />
     <link href="css/jquery.mobile.iscrollview.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/font-awesome.min.css" />
 
-    <!--        <link rel="stylesheet" href="css/add2home.css"> -->
 </head>
 
 <body>
@@ -100,6 +94,10 @@
             <a href="#search" onclick="switchContent('search' ); return false;">
                 <span class="navtxt">Search </span><i class="fa fa-search"></i></a>
         </li>
+        <li id="navAlarmClock" data-icon="false">
+                <a href="/alarmclock/">
+                <span class="navtxt"> Alarm Clock </span><i class="fa fa-clock-o"></i></a>
+        </li>
         <li id="navEnterFullscreen" data-icon="false">
                 <a href="#">
                 <span class="navtxt"> Fullscreen </span><i class="fa  fa-desktop"></i></a>
@@ -118,7 +116,7 @@
         </li>
         <li id="" data-icon="false">
             <div><!-- slider for volume -->
-                <a href="#" onclick="doMute(); return false;"><i class="fa fa-volume-up" id="mutebt"></i></a>
+                <a href="#" onclick="doMute(); return false;"><span title="Toggle mute"><i id="mutebt" class="fa fa-volume-up"></i></span></a>
                 <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
                 <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
                        value="0" max="100" onchange="doVolume(this.value);"/>
@@ -169,7 +167,7 @@
     <div data-role="collapsible-set">
         <ul data-role="listview" data-icon="false" id="popupTracksLv">
             <li>
-                <a href="#" onclick="return playTrack();">Play <span class="popupTrackName"></span></a>
+                <a href="#" onclick="return playTrack(PLAY_NOW);">Play <span class="popupTrackName"></span></a>
             </li>
             <li class="addqueue">
                 <a href="#" onclick="return playTrack(PLAY_NEXT);">Play Track Next</a>
@@ -224,11 +222,10 @@
 
 
 
-<div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="ui-grid-b header-breakpoint headerbtn">
-    <a href="#panel" style="margin-left: -12px; padding-top: 2px;" id="headermenubtn"><i class="fa fa-align-justify"></i></a>
+<div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">
+    <a id="headermenubtn" href="#panel"><i class="fa fa-align-justify"></i></a>
     <h1 id="contentHeadline">Musicbox</h1>
-     <a id="headersearchbtn" href="#" class="ui-btn-icon-right headerbtn" onclick="switchContent('search' ); return false;" title="Search">
-            <i class="fa fa-search"></i></a>
+    <a id="headersearchbtn" href="#" onclick="switchContent('search' ); return false;" title="Search"><i class="fa fa-search"></i></a>
 </div>
 <!-- /header -->
 
@@ -270,14 +267,20 @@
                 <h4>Search</h4>
             </div>
         </a>
-        <a id="homesettings" href="/settings/">
+        <a id="homeAlarmClock" href="/alarmclock/">
             <div class="ui-block-a">
+                <i class="fa fa-clock-o"></i>
+                <h4>Alarm Clock</h4>
+            </div>
+        </a>
+        <a id="homesettings" href="/settings/">
+            <div class="ui-block-b">
                 <i class="fa fa-gear"></i>
                 <h4>Settings</h4>
             </div>
         </a>
         <a id="homeshutdown" href="system.html">
-            <div class="ui-block-b">
+            <div class="ui-block-a">
                 <i class="fa fa-power-off"></i>
                 <h4>System</h4>
             </div>
@@ -304,31 +307,34 @@
         <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
         <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
     </div>
-
 </div>
 <!-- /nowplaying -->
 
-<div data-role="content" id="playlistspane" class="pane ui-grid-a pl-breakpoint">
-    <div class="ui-block-a scroll" id="playlistslistdiv">
-        <ul id="playlistslist" class="table"></ul>
-    </div>
-    <div class="ui-block-b scroll" id="playlisttracksdiv">
+<div data-role="content" id="playlistspane" class="pane">
+    <a style="float:right; padding: 1.2em 10px" onclick="return refreshPlaylists();"><i class="fa fa-refresh"></i></a>
+    <h4>Playlists</h4>
+    <div class="ui-grid-a pl-breakpoint">
+        <div class="ui-block-a scroll" id="playlistslistdiv">
+            <ul id="playlistslist" class="table"></ul>
+        </div>
+        <div class="ui-block-b scroll" id="playlisttracksdiv">
         <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
         <ul class="table" id="playlisttracks"></ul>
+        </div>
     </div>
-
 </div>
 <!--/playlistspane-->
 
 <div data-role="content" id="browsepane" class="pane">
-    <h3>Browse</h3>
-    <h4 id="browsepath"></h4>
+    <h4>Browse</h4>
+    <h5 id="browsepath"></h5>
         <ul id="browselist" class="table"></ul>
 </div>
 <!--/browsepane-->
 
 <div data-role="content" class="pane" id="currentpane">
-    <a style="float:right" onclick="return clearQueue();" data-role="button">Clear</a><h4>Play Queue</h4>
+    <a style="float:right" onclick="return clearQueue();" data-role="button">Clear</a>
+    <a style="float:right; margin-right: 0.5em" onclick="return saveQueue();" data-role="button">Save</a><h4>Play Queue</h4>
     <!--                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul>
                     <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul> -->
     <ul class="table" id="currenttable"></ul>
@@ -351,48 +357,50 @@
 </div>
 
 <div data-role="content" class="pane" id="searchpane">
-    <div class="">
-        <form>
-            <select id="selectSearchService"> <!-- data-native-menu="false"> <!-- multiple="multiple" data-native-menu="false">
-                <option data-placeholder="true">Choose services</option> -->
-            </select>
-            <input id="searchinput" class="span2" data-clear-btn="true"
-                   onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text"/>
-            <button class="btn" type="button" onclick="return initSearch(event.value);">
-                Search!
-            </button>
-        </form>
+    <h4>Search</h4>
+
+    <div class="ui-grid pl-breakpoint">
+        <div class="ui-block">
+            <form>
+                <p>Search for artists, albums, or specific tracks.
+                <select id="selectSearchService"> <!-- data-native-menu="false"> <!-- multiple="multiple" data-native-menu="false">
+                    <option data-placeholder="true">Choose services</option> -->
+                </select>
+                <input id="searchinput" placeholder="Search term" class="span2" data-clear-btn="true"
+                       onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                <button class="btn" type="button" onclick="return initSearch(event.value);">
+                    Search!
+                </button>
+            </form>
+        </div>
     </div>
 
-
-    <div id="searchresults">
-        <div class="ui-grid-a srch-breakpoint">
-            <div class="ui-block-a" id="searchartists">
-                <div data-role="listview" data-inset="true">
-                    <div data-role="header">
-                        <h4>Artists</h4>
-                    </div>
-                    <div data-role="content">
-                        <ul data-role="listview" id="artistresulttable"></ul>
-                    </div>
+    <div class="ui-grid-a srch-breakpoint">
+        <div class="ui-block-a" id="searchartists">
+            <div data-role="listview" data-inset="true">
+                <div data-role="header">
+                    <h4>Artists</h4>
                 </div>
-            </div>
-            <div class="ui-block-b" id="searchalbums">
-                <div data-role="listview" data-inset="true">
-                    <div data-role="header">
-                        <h4>Albums</h4>
-                    </div>
-                    <div data-role="content">
-                        <ul data-role="listview" id="albumresulttable"></ul>
-                    </div>
+                <div data-role="content">
+                    <ul data-role="listview" id="artistresulttable"></ul>
                 </div>
             </div>
         </div>
-
-        <div class="" id="searchtracks">
-            <h4>Tracks</h4>
-            <ul id="trackresulttable" class="table"></ul>
+        <div class="ui-block-b" id="searchalbums">
+            <div data-role="listview" data-inset="true">
+                <div data-role="header">
+                    <h4>Albums</h4>
+                </div>
+                <div data-role="content">
+                    <ul data-role="listview" id="albumresulttable"></ul>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="" id="searchtracks">
+        <h4>Tracks</h4>
+        <ul id="trackresulttable" class="table"></ul>
     </div>
 </div>
 <!-- search div -->
@@ -400,77 +408,64 @@
 <div data-role="content" class="pane" id="streampane">
     <h4>Streams</h4>
 
-    <div>
-        <form>
-        <div class="ui-grid-a pl-breakpoint">
+    <div class="ui-grid-a pl-breakpoint">
         <div class="ui-block-a" style="padding: 5px">
-            <p>Add an url of a stream that you want to listen to in the box below. You can add uri's for Spotify, SoundCloud, YouTube, Podcasts.
-                <select id="selectstreamservice" data-native-menu="true">
-                    <option value="">Internet Radio (mp3, m3u, asx, etc)</option>
-                    <option value="yt">YouTube</option>
-                    <option value="">Spotify Uri</option>
-                    <option value="sc">SoundCloud</option>
-                    <option value="podcast">Podcast</option>
-                </select>
-
+            <form>
+                <p>Play a specific stream/track and optionally save it to your favourites.
+                <button class="btn" type="button" onclick="return getCurrentlyPlaying();">
+                    Get currently playing
+                </button>
                 <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
                        onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
                 <button class="btn" type="button" onclick="return playStreamUri();">
                     Play
                 </button>
 
-            <p>Put in a name and hit the Save button to save the url (locally, in the browser not
-                on the server yet). <!-- To find stations, use the Browse function with extensions like Dirble or TuneIn, the right values will appear in these boxes automatically. Or use websites like <a href="http://www.listenlive.eu/" target="_blank">Listenlive</a> or <a
-                        href="http://www.dirble.com/" target="_blank">Dirble</a>.</p> -->
-
                 <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
                        onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
-                <button class="btn" type="button" onclick="return saveStreamUri();">
+                <button class="btn" type="button" onclick="return addFavourite();">
                     Save
                 </button>
-                <br/>
-                <button class="btn" type="button" onclick="$('#streamuriinput').val(songdata.uri); return true;">
-                    Add currently playing url
-                </button>
+                    <br/>
             </form>
         </div>
         <div class="ui-block-b" style="padding: 5px">
             <ul id="streamuristable" class="table"></ul>
-        </div>
         </div>
     </div>
 </div>
 
 
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="normalFooter">
-        <div id="songinfo" class="">
-            <a href="#"><img id="infocover" src="images/default_cover.png" width="36" height="36"/></a>
-
+    <div class="footerControls">
+        <div class="songinfo" id="songinfo">
+            <a href="#"><div style="float: left"><img id="infocover" src="images/default_cover.png"/></div></a>
             <div class="songinfo-text">
                 <div id="infoname"></div>
                 <div id="infoartist"></div>
             </div>
         </div>
-        <div id="controldiv" class="playPausebtn">
-            <a href="#" onclick="doPlay(); return false"><span id="btplay"><img src="images/icons/pause_32x32.png"
-                                                                                alt="Play" id="playimg" title="Play"/></span></a>
+        <div class="playicon">
+            <a href="#" onclick="doPlay(); return false"><span id="btplay" title="Play"><i class="fa fa-play"></i></span></a>
         </div>
+    </div>
 </div>
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="nowPlayingFooter">
-
-    <p id="buttons" style="float:right; margin-top: 20px; margin-right: 5px;">
-                   <a href="#" onclick="doRandom(); return false" title="Random"><i class="fa fa-random" id="randombt"></i></a>
-            &nbsp; <a href="#" onclick="doRepeat(); return false" title="Repeat"><i class="fa fa-repeat" id="repeatbt"></i></a>
-            &nbsp; <a href="#" onclick="doConsume(); return false" title="Consume"><i class="fa fa-cutlery" id="consumebt"></i></a>
-            &nbsp; <a href="#" onclick="doSingle(); return false" title="Single"><i class="fa fa-dot-circle-o" id="singlebt"></i></a>
-            &nbsp; <a href="#" onclick="doShuffle(); return false" title="Shuffle"><i class="fa fa-arrows-v" id="shufflebt"></i></a>
-    </p>
-
-        <div class="nowPlayingControls" style="float:left; margin-left: 5px;">
-                   <a href="#" onclick="doPrevious(); return false"><span id="btprev" title="Previous"><i class="fa fa-fast-backward"></i></span></a>
-            &nbsp; <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying" title="Play"><i class="fa fa-play"></i></span></a>
-            &nbsp; <a href="#" onclick="doNext(); return false"><span id="btnext" title="Next"><i class="fa fa-fast-forward"></i></span></a>
+        <div class="footerControls" style="padding-left: 10px;">
+            <div style="float: left;">
+                <a href="#" onclick="doPrevious(); return false"><span id="btprev" title="Previous"><i class="fa fa-fast-backward"></i></span></a>
+                <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying" title="Play"><i class="fa fa-play"></i></span></a>
+                <a href="#" onclick="doNext(); return false"><span id="btnext" title="Next"><i class="fa fa-fast-forward"></i></span></a>
+            </div>
+            <div style="float: right; margin-right: 10px;">
+                <a href="#" onclick="doRandom(); return false"><span id="randombt" title="Random"><i class="fa fa-random"></i></span></a>
+                <a href="#" onclick="doRepeat(); return false"><span id="repeatbt" title="Repeat"><i class="fa fa-repeat"></i></span></a>
+                <a href="#" onclick="doConsume(); return false"><span id="consumebt" title="Consume"><i class="fa fa-cutlery"></i></span></a>
+                <a href="#" onclick="doSingle(); return false"><span id="singlebt" title="Single"><i class="fa fa-dot-circle-o"></i></span></a>
+                <a href="#" onclick="doShuffle(); return false"><span id="shufflebt" title="Shuffle"><i class="fa fa-arrows-v"></i></span></a>
+            </div>
         </div>
+
 </div>
 <!-- /footer -->
 
@@ -479,15 +474,12 @@
 <!-- /page one -->
 <script type="text/javascript" src="../mopidy/mopidy.min.js"></script>
 <script type="text/javascript" src="js/iscroll-lite.js"></script>
-<!--        <script type="text/javascript" src="js/jquery.mobile.iscrollview-closure-min.js"></script> -->
 <script src="js/jquery.cookie.js"></script>
 <script src="js/jquery.truncate.min.js"></script>
-<!--        <script type="text/javascript" src="js/add2home.js" charset="utf-8"></script> -->
 <script src="js/controls.js"></script>
 <script src="js/library.js"></script>
 <script src="js/functionsvars.js"></script>
 <script src="js/process_ws.js"></script>
-<script src="js/streamuris.js"></script>
 
 <!-- use lastfm -->
 <script type="text/javascript" src="js/lastfm.api.md5.js"></script>
