@@ -27,7 +27,9 @@ function initSearch() {
         delete customTracklists[URI_SCHEME+':artistresultscache'];
         delete customTracklists[URI_SCHEME+':albumresultscache'];
         delete customTracklists[URI_SCHEME+':trackresultscache'];
-        $("#searchresults").hide();
+        $("#searchartists").hide();
+        $("#searchalbums").hide();
+        $("#searchtracks").hide();
 
         if (searchService != 'all') {
             mopidy.library.search({'query': {any:[value]}, 'uris': [searchService + ':']}).then(processSearchResults, console.error);
@@ -108,7 +110,17 @@ function processSearchResults(resultArr) {
         return false;
     }
 
-    $("#searchresults").show();
+    if (results.artists.length > 0) {
+        $("#searchartists").show();
+    }
+
+    if (results.albums.length > 0) {
+        $("#searchalbums").show();
+    }
+
+    if (results.tracks.length > 0) {
+        $("#searchtracks").show();
+    }
 
     // Returns a string where {x} in template is replaced by tokens[x].
     function theme(template, tokens) {

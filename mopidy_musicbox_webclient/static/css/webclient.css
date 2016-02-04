@@ -205,7 +205,15 @@
     background-color: #fff;
 }
 
-#searchresults {
+#searchartists {
+    display: none;
+}
+
+#searchalbums {
+    display: none;
+}
+
+#searchtracks {
     display: none;
 }
 
