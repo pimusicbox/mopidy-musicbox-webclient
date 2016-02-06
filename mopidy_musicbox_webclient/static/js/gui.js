@@ -356,8 +356,8 @@ function switchContent(divid, uri) {
 function setHeadline(site){
     site = site.trim();
     str = $('.mainNav').find('a[href$='+site+']').text();
-    if(str==""){
-        str=site;
+    if(str == ""){
+        str = site.charAt(0).toUpperCase() + site.slice(1);;
     }
     $('#contentHeadline').html('<a href="#home" onclick="switchContent(\'home\'); return false;">' + str + '</a>');
 }
