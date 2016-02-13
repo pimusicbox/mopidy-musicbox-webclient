@@ -117,12 +117,12 @@ function playTrack(action) {
  * @returns {boolean}
  */
 function playTrackByUri(track_uri, playlist_uri) {
-    function findAndPlayTrack(tltracks) {
-        if (tltracks.length > 0) {
+    function findAndPlayTrack(tlTracks) {
+        if (tlTracks.length > 0) {
             // Find track that was selected
-            for (var selected = 0; selected < tltracks.length; selected++) {
-                if (tltracks[selected].track.uri == track_uri) {
-                    mopidy.playback.play({'tl_track': tltracks[selected]});
+            for (var selected = 0; selected < tlTracks.length; selected++) {
+                if (tlTracks[selected].track.uri == track_uri) {
+                    mopidy.playback.play({'tl_track': tlTracks[selected]});
                     return;
                 }
             }
@@ -141,13 +141,13 @@ function playTrackByUri(track_uri, playlist_uri) {
 
     toast('Loading...');
 
-    mopidy.tracklist.add({'uris': [playlist_uri]}).then(function(tltracks) {
+    mopidy.tracklist.add({'uris': [playlist_uri]}).then(function(tlTracks) {
         // Can fail for all sorts of reasons. If so, just add individually. 
-        if (tltracks.length == 0) {
+        if (tlTracks.length == 0) {
             var trackUris = getTracksFromUri(playlist_uri, false);
             mopidy.tracklist.add({'uris': trackUris}).then(findAndPlayTrack);
         } else {
-            findAndPlayTrack(tltracks);
+            findAndPlayTrack(tlTracks);
         }
     });
     return false;
@@ -173,9 +173,9 @@ function playTrackQueueByTlid(uri, tlid) {
     mopidy.tracklist.filter({
         'tlid': [tlid]
     }).then(
-        function(tltracks) {
-            if (tltracks.length > 0) {
-                mopidy.playback.play({'tl_track': tltracks[0]});
+        function(tlTracks) {
+            if (tlTracks.length > 0) {
+                mopidy.playback.play({'tl_track': tlTracks[0]});
                 return;
             }
             console.log('Failed to play selected track ', tlid);
