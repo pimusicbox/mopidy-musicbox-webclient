@@ -14,9 +14,8 @@ var consume;
 var single;
 var currentVolume = -1;
 var mute;
-var volumeChanging = false;
+var volumeChanging;
 
-var volumeTimer;
 var initgui = true;
 var currentpos = 0;
 var popupData = {};

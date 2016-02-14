@@ -257,9 +257,10 @@ function initSocketevents() {
     });
 
     mopidy.on("event:volumeChanged", function(data) {
-        if (!volumeChanging) {
-            setVolume(data["volume"]);
+        if (volumeChanging && volumeChanging == data["volume"]) {
+            volumeChanging = null;
         }
+        setVolume(data["volume"]);
     });
 
     mopidy.on("event:muteChanged", function(data) {
@@ -573,7 +574,6 @@ $(document).ready(function(event) {
 
     $( "#trackslider" ).on( "slidestart", function() { progressTimer.stop(); } )
     $( "#trackslider" ).on( "slidestop", function() { doSeekPos( $(this).val() ); } );
-
 });
 
 function updatePlayIcons (uri, tlid) {

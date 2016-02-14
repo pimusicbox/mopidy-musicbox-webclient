@@ -375,20 +375,18 @@ function setPosition(pos) {
  ***********************************************/
 
 function setVolume(value) {
-    if ($("#volumeslider").val() != value) {
+    if (!volumeChanging && $("#volumeslider").val() != value) {
+        $( "#volumeslider" ).off( "change" );
         $("#volumeslider").val(value).slider('refresh');
+        $( "#volumeslider" ).on( "change", function() { doVolume( $(this).val() ); } )
     }
 }
 
 function doVolume(value) {
-    volumeChanging = value;
-    clearInterval(volumeTimer);
-    volumeTimer = setTimeout(triggerVolume, 500);
-}
-
-function triggerVolume() {
-    mopidy.playback.setVolume({'volume': parseInt(volumeChanging)});
-    volumeChanging = 0;
+    if (!volumeChanging) {
+        volumeChanging = value;
+        mopidy.playback.setVolume({'volume': parseInt(value)});
+    }
 }
 
 function setMute(nwmute) {

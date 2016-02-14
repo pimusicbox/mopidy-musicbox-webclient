@@ -16,9 +16,7 @@ function processCurrenttrack(data) {
  * process results of volume
  *********************************************************/
 function processVolume(data) {
-    if (!volumeChanging) {
-        setVolume(data);
-    }
+    setVolume(data);
 }
 
 /********************************************************
