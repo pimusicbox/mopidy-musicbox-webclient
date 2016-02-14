@@ -308,42 +308,34 @@ $(document).bind("pageinit", function() {
 /**************
  * gui stuff  *
  **************/
-function enterFullscreen() {
+function toggleFullscreen() {
     if (isMobileSafari) { alert ("To get this app in Full Screen, you have to add it to your home-screen using the Share button."); exit(); }
-    var elem = document.querySelector("#page");
-    elem.onwebkitfullscreenchange = onFullScreenEnter;
-    elem.onmozfullscreenchange = onFullScreenEnter;
-    elem.onfullscreenchange = onFullScreenEnter;
-    if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-    } else {
-        if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-        } else {
-            elem.requestFullscreen();
+    if (!document.fullscreenElement &&    // alternative standard method
+        !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+        var docElm = document.documentElement;
+        if (docElm.requestFullscreen) {
+            docElm.requestFullscreen();
+        } else if (docElm.msRequestFullscreen) {
+            docElm.msRequestFullscreen();
+        } else if (docElm.mozRequestFullScreen) {
+            docElm.mozRequestFullScreen();
+        } else if (docElm.webkitRequestFullScreen) {
+            docElm.webkitRequestFullScreen();
         }
+        document.getElementById("toggletxt").innerHTML = "Exit Fullscreen";
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        }
+        document.getElementById("toggletxt").innerHTML = "Fullscreen";
     }
 }
-
-function exitFullscreen() {
-    document.webkitExitFullscreen();
-    document.mozCancelFullscreen();
-    document.exitFullscreen();
-}
-
-function onFullScreenEnter() {
-    var elem = document.querySelector("#page");
-    $('#navExitFullscreen').show();
-    $('#navEnterFullscreen').hide();
-    elem.onwebkitfullscreenchange = onFullScreenExit;
-    elem.onmozfullscreenchange = onFullScreenExit;
-};
-
-// Called whenever the browser exits fullscreen.
-function onFullScreenExit() {
-    $('#navExitFullscreen').hide();
-    $('#navEnterFullscreen').show();
-};
 
 function switchContent(divid, uri) {
     var hash = divid;
@@ -521,11 +513,8 @@ $(document).ready(function(event) {
     $('#controlspopupimage').click(
 	function() {
 	    return switchContent('current')}   );
-    $('#navEnterFullscreen').click(function(){
-        enterFullscreen();
-    });
-    $('#navExitFullscreen').click(function(){
-        exitFullscreen();
+    $('#navToggleFullscreen').click(function(){
+        toggleFullscreen();
     });
 
 // remove buttons only for MusicBox
@@ -573,11 +562,6 @@ $(document).ready(function(event) {
         $("#panel").panel("close");
     }else{
         $("#panel").panel("open");
-    }
-
-    //hide fullscreen button if in UIWebview
-    if (window.navigator.standalone) {
-        $('#navExitFullscreen').hide();
     }
 
     $.event.special.swipe.horizontalDistanceThreshold = 125; // (default: 30px)  Swipe horizontal displacement must be more than this.
