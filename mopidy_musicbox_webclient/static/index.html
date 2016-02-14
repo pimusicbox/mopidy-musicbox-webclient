@@ -297,10 +297,10 @@
     </div>
 
     <div id="slidercontainer"><!-- slider for track position -->
-        <span id="songelapsed" class="pull-left"> 0:00 </span>
-        <span id="songlength" class="pull-right"> 0:00 </span>
+        <span id="songelapsed" class="pull-left"></span>
+        <span id="songlength" class="pull-right"></span>
         <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
-        <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
+        <input id="trackslider" name="trackslider" data-mini="true" type="range" />
     </div>
 </div>
 <!-- /nowplaying -->
@@ -469,6 +469,8 @@
 <!-- /page one -->
 <script type="text/javascript" src="../mopidy/mopidy.min.js"></script>
 <script src="vendors/jquery_cookie/jquery.cookie.js"></script>
+<script src="vendors/media_progress_timer/timer.js"></script>
+<script src="js/progress_timer.js"></script>
 <script src="js/controls.js"></script>
 <script src="js/library.js"></script>
 <script src="js/functionsvars.js"></script>

@@ -260,11 +260,14 @@ function setPlayState(nwplay) {
         $("#btplayNowPlaying").attr('title', 'Pause');
         $("#btplay >i").removeClass('fa-play').addClass('fa-pause');
         $("#btplay").attr('title', 'Pause');
+        mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
+        startProgressTimer();
     } else {
         $("#btplayNowPlaying >i").removeClass('fa-pause').addClass('fa-play');
         $("#btplayNowPlaying").attr('title', 'Play');
         $("#btplay >i").removeClass('fa-pause').addClass('fa-play');
         $("#btplay").attr('title', 'Play');
+        progressTimer.stop();
     }
     play = nwplay;
 }
@@ -357,40 +360,13 @@ function doSingle() {
  * Use a timer to prevent looping of commands  *
  ***********************************************/
 function doSeekPos(value) {
-    var val = $("#trackslider").val();
-    newposition = Math.round(val);
-    if (!initgui) {
-        pausePosTimer();
-        //set timer to not trigger it too much
-        clearTimeout(seekTimer);
-        $("#songelapsed").html(timeFromSeconds(val / 1000));
-        seekTimer = setTimeout(triggerPos, 500);
-    }
-}
-
-function triggerPos() {
     if (mopidy) {
-        posChanging = true;
-        mopidy.playback.seek({'time_position': newposition});
-        resumePosTimer();
-        posChanging = false;
+        mopidy.playback.seek({'time_position': Math.round(value)});
     }
 }
 
 function setPosition(pos) {
-    if (posChanging) {
-        return;
-    }
-    var oldval = initgui;
-    if (pos > songlength) {
-        pos = songlength;
-        pausePosTimer();
-    }
-    currentposition = pos;
-    initgui = true;
-    $("#trackslider").val(currentposition).slider('refresh');
-    initgui = oldval;
-    $("#songelapsed").html(timeFromSeconds(currentposition / 1000));
+    setProgressTimer(pos);
 }
 
 /***********************************************
@@ -428,33 +404,6 @@ function setMute(nwmute) {
 
 function doMute() {
     mopidy.mixer.setMute({'mute': !mute});
-}
-
-/**************************
- *  Track position timer  *
- **************************/
-
-//timer function to update interface
-function updatePosTimer() {
-    currentposition += TRACK_TIMER;
-    setPosition(currentposition);
-}
-
-function resumePosTimer() {
-    pausePosTimer();
-    if (songlength > 0) {
-        posTimer = setInterval(updatePosTimer, TRACK_TIMER);
-    }
-}
-
-function initPosTimer() {
-    pausePosTimer();
-    // setPosition(0);
-    resumePosTimer();
-}
-
-function pausePosTimer() {
-    clearInterval(posTimer);
 }
 
 /************

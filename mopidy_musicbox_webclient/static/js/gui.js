@@ -7,19 +7,17 @@
  * Song Info Sreen  *
  ********************/
 function resetSong() {
-    if (!posChanging) {
-        pausePosTimer();
-        setPlayState(false);
-        setPosition(0);
-        var data = new Object;
-        data.tlid = -1;
-        data.track = new Object;
-        data.track.name = '';
-        data.track.artists = '';
-        data.track.length = 0;
-        data.track.uri = ' ';
-        setSongInfo(data);
-    }
+    resetProgressTimer();
+    setPlayState(false);
+    setPosition(0);
+    var data = new Object;
+    data.tlid = -1;
+    data.track = new Object;
+    data.track.name = '';
+    data.track.artists = '';
+    data.track.length = 0;
+    data.track.uri = ' ';
+    setSongInfo(data);
 }
 
 function resizeMb() {
@@ -104,18 +102,18 @@ function setSongInfo(data) {
     songdata = data;
 
     setSongTitle(data.track.name, false);
+    songlength = Infinity;
 
     if (!data.track.length || data.track.length == 0) {
-        songlength = 0;
-        $("#songlength").html('');
-        pausePosTimer();
+        resetProgressTimer();
+        $('#trackslider').next().find('.ui-slider-handle').hide();
         $('#trackslider').slider('disable');
         // $('#streamnameinput').val(data.track.name);
         // $('#streamuriinput').val(data.track.uri);
     } else {
         songlength = data.track.length;
-        $("#songlength").html(timeFromSeconds(data.track.length / 1000));
         $('#trackslider').slider('enable');
+        $('#trackslider').next().find('.ui-slider-handle').show();
     }
 
     var arttmp = '';
@@ -143,7 +141,8 @@ function setSongInfo(data) {
     $("#modalartist").html(arttmp);
 
     $("#trackslider").attr("min", 0);
-    $("#trackslider").attr("max", data.track.length);
+    $("#trackslider").attr("max", songlength);
+    progressTimer.reset().set(0, songlength);
 
     resizeMb();
 }
@@ -248,15 +247,8 @@ function initSocketevents() {
     mopidy.on("event:optionsChanged", updateOptions);
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
-        mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-        setPlayState(true);
         setSongInfo(data.tl_track);
-        initPosTimer();
-    });
-
-    mopidy.on("event:trackPlaybackPaused", function(data) {
-        pausePosTimer();
-        setPlayState(false);
+        setPlayState(true);
     });
 
     mopidy.on("event:playlistsLoaded", function(data) {
@@ -276,12 +268,11 @@ function initSocketevents() {
 
     mopidy.on("event:playbackStateChanged", function(data) {
         switch (data["new_state"]) {
+            case "paused":
             case "stopped":
-                resetSong();
+                setPlayState(false);
                 break;
             case "playing":
-                mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-                resumePosTimer();
                 setPlayState(true);
                 break;
         }
@@ -293,6 +284,9 @@ function initSocketevents() {
 
     mopidy.on("event:seeked", function(data) {
         setPosition(parseInt(data["time_position"]));
+        if (play) {
+            startProgressTimer();
+        }
     });
 
     mopidy.on("event:streamTitleChanged", function(data) {
@@ -352,13 +346,6 @@ function setHeadline(site){
         str = site.charAt(0).toUpperCase() + site.slice(1);;
     }
     $('#contentHeadline').html('<a href="#home" onclick="switchContent(\'home\'); return false;">' + str + '</a>');
-}
-
-//update timer
-function updateStatusTimer() {
-    mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error);
-    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-    //TODO check offline?
 }
 
 //update tracklist options.
@@ -483,6 +470,11 @@ $(document).ready(function(event) {
     //initialize events
     initSocketevents();
 
+    progressTimer = new ProgressTimer({
+        callback: timerCallback,
+        //updateRate: 2000,
+    });
+
     resetSong();
 
     if (location.hash.length < 2) {
@@ -491,9 +483,6 @@ $(document).ready(function(event) {
 
     initgui = false;
     window.onhashchange = locationHashChanged;
-
-    //update gui status every x seconds from mopdidy
-    setInterval(updateStatusTimer, STATUS_TIMER);
 
     //only show backbutton if in UIWebview
     if (window.navigator.standalone) {
@@ -581,6 +570,10 @@ $(document).ready(function(event) {
 			$("#panel").panel("close");
 			event.stopImmediatePropagation(); }
 		    } );
+
+    $( "#trackslider" ).on( "slidestart", function() { progressTimer.stop(); } )
+    $( "#trackslider" ).on( "slidestop", function() { doSeekPos( $(this).val() ); } );
+
 });
 
 function updatePlayIcons (uri, tlid) {
