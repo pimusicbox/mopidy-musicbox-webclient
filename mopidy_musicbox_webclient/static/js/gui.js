@@ -574,8 +574,6 @@ $(document).ready(function(event) {
 
     $( "#trackslider" ).on( "slidestart", function() { progressTimer.stop(); } )
     $( "#trackslider" ).on( "slidestop", function() { doSeekPos( $(this).val() ); } );
-
-
 });
 
 function updatePlayIcons (uri, tlid) {
