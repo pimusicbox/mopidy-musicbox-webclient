@@ -574,6 +574,10 @@ $(document).ready(function(event) {
 
     $( "#trackslider" ).on( "slidestart", function() { progressTimer.stop(); } )
     $( "#trackslider" ).on( "slidestop", function() { doSeekPos( $(this).val() ); } );
+
+    $( "#volumeslider" ).on( "slidestart", function() { volumeSliding = true; } )
+    $( "#volumeslider" ).on( "slidestop", function() { volumeSliding = false; } );
+    $( "#volumeslider" ).on( "change", function() { doVolume( $(this).val() ); } )
 });
 
 function updatePlayIcons (uri, tlid) {

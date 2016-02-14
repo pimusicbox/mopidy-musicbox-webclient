@@ -375,10 +375,8 @@ function setPosition(pos) {
  ***********************************************/
 
 function setVolume(value) {
-    if (!volumeChanging && $("#volumeslider").val() != value) {
-        $( "#volumeslider" ).off( "change" );
-        $("#volumeslider").val(value).slider('refresh');
-        $( "#volumeslider" ).on( "change", function() { doVolume( $(this).val() ); } )
+    if (!volumeChanging && !volumeSliding && $("#volumeslider").val() != value) {
+        $( "#volumeslider" ).val(value).slider('refresh');
     }
 }
 

@@ -15,6 +15,7 @@ var single;
 var currentVolume = -1;
 var mute;
 var volumeChanging;
+var volumeSliding;
 
 var initgui = true;
 var currentpos = 0;
