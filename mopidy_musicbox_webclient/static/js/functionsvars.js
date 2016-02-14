@@ -15,11 +15,8 @@ var single;
 var currentVolume = -1;
 var mute;
 var volumeChanging = false;
-var posChanging = false;
 
-var posTimer;
 var volumeTimer;
-var seekTimer;
 var initgui = true;
 var currentpos = 0;
 var popupData = {};
@@ -73,12 +70,6 @@ PLAY_ALL = 4;
 PLAY_NOW_SEARCH = 5;
 
 MAX_TABLEROWS = 50;
-
-//update track slider timer, milliseconds
-TRACK_TIMER = 1000;
-
-//check status timer, every 5 or 10 sec
-STATUS_TIMER = 10000;
 
 // the first part of Mopidy extensions which serve radio streams
 var radioExtensionsList = ['somafm', 'tunein', 'dirble', 'audioaddict'];

@@ -179,11 +179,6 @@
     display: none !important;
 }
 
-#songelapsed, #songlength {
-    font-size: 10px;
-    margin-top: 12px;
-}
-
 /************************
  *  Volume Slider
  ***********************/
@@ -432,10 +427,14 @@ a {
 
 .pull-right {
     float: right;
+    font-size: 10px;
+    margin-top: 12px;
 }
 
 .pull-left {
     float: left;
+    font-size: 10px;
+    margin-top: 12px;
 }
 
 .hidden, #allresultloader, .loader {

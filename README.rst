@@ -69,6 +69,7 @@ v2.2.0 (UNRELEASED)
 - Remove unused iScroll libraries and references.
 - Remove unused jQuery.Mobile.iScrollView libraries and references.
 - Remove unused jQuery.Truncate libraries and references.
+- Avoid polling for current track and time changes. (Fixes: `#40 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/40>`_).
 
 **Fixes**
 
