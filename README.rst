@@ -73,6 +73,7 @@ v2.2.0 (UNRELEASED)
 **Fixes**
 
 - Prevent mobile devices from scaling when used in landscape mode. (Fixes: `#157 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/157>`_).
+- Scrolling now works in full screen mode for Chrome and Safari as well. (Fixes: `#53 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/53>`_).
 
 v2.1.1 (2016-02-04)
 -------------------
