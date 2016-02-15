@@ -66,13 +66,13 @@ v2.2.0 (UNRELEASED)
 - Upgrade Font-Awesome libraries to version 4.5.0.
 - Upgrade jQuery libraries to version 1.12.0.
 - Upgrade last.fm JavaScript libraries to the latest version available on the GitHub master branch of the repository.
+
+**Fixes**
+
 - Remove unused iScroll libraries and references.
 - Remove unused jQuery.Mobile.iScrollView libraries and references.
 - Remove unused jQuery.Truncate libraries and references.
 - Avoid polling for current track and time changes. (Fixes: `#40 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/40>`_).
-
-**Fixes**
-
 - Prevent mobile devices from scaling when used in landscape mode. (Fixes: `#157 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/157>`_).
 - Scrolling now works in full screen mode for Chrome and Safari as well. (Fixes: `#53 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/53>`_).
 - No longer interferes with changes to Mopidy's volume levels that are triggered externally. (Fixes: `#162 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/162>`_).
