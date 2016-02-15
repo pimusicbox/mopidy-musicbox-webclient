@@ -360,13 +360,18 @@ function doSingle() {
  * Use a timer to prevent looping of commands  *
  ***********************************************/
 function doSeekPos(value) {
-    if (mopidy) {
-        mopidy.playback.seek({'time_position': Math.round(value)});
+    if (!positionChanging) {
+        positionChanging = value;
+        mopidy.playback.seek({'time_position': Math.round(value)}).then( function() {
+            positionChanging = null;
+        });;
     }
 }
 
 function setPosition(pos) {
-    setProgressTimer(pos);
+    if (!positionChanging && $("#trackslider").val() != pos) {
+        setProgressTimer(pos);
+    }
 }
 
 /***********************************************

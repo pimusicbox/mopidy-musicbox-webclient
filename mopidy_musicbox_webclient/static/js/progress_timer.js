@@ -112,7 +112,7 @@ function format(milliseconds) {
     if (milliseconds === Infinity) {
         return '(n/a)';
     } else if (milliseconds == 0) {
-        return '';
+        return '0:00';
     }
 
     var seconds = Math.floor(milliseconds / 1000);
@@ -158,6 +158,10 @@ function setProgressTimer(pos) {
         positionNode.nodeValue = format(pos);
         $("#trackslider").val(pos).slider('refresh');
     }
+}
+
+function updatePosition(pos) {
+    positionNode.nodeValue = format(pos);
 }
 
 function startProgressTimer() {

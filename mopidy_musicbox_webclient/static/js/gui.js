@@ -569,8 +569,15 @@ $(document).ready(function(event) {
 			event.stopImmediatePropagation(); }
 		    } );
 
-    $( "#trackslider" ).on( "slidestart", function() { progressTimer.stop(); } );
-    $( "#trackslider" ).on( "slidestop", function() { doSeekPos( $(this).val() ); } );
+    $( "#trackslider" ).on( "slidestart", function() {
+        progressTimer.stop();
+        $( "#trackslider" ).on( "change", function() { updatePosition( $(this).val() ); } );
+        } );
+
+    $( "#trackslider" ).on( "slidestop", function() {
+        $( "#trackslider" ).off( "change");
+        doSeekPos( $(this).val() );
+        } );
 
     $( "#volumeslider" ).on( "slidestart", function() { volumeSliding = true; } );
     $( "#volumeslider" ).on( "slidestop", function() { volumeSliding = false; } );
