@@ -12,13 +12,11 @@ var random;
 var repeat;
 var consume;
 var single;
-var currentVolume = -1;
 var mute;
 var volumeChanging;
 var volumeSliding;
 
 var initgui = true;
-var currentpos = 0;
 var popupData = {};
 var songlength = 0;
 
@@ -26,7 +24,6 @@ var artistshtml = '';
 var artiststext = '';
 var songname = '';
 var songdata = {'track': {}, 'tlid': -1};
-var newposition = 0;
 
 var playlisttracksScroll;
 var playlistslistScroll;
