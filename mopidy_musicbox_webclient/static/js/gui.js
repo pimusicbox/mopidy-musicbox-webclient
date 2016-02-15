@@ -257,9 +257,6 @@ function initSocketevents() {
     });
 
     mopidy.on("event:volumeChanged", function(data) {
-        if (volumeChanging && volumeChanging == data["volume"]) {
-            volumeChanging = null;
-        }
         setVolume(data["volume"]);
     });
 
@@ -572,12 +569,12 @@ $(document).ready(function(event) {
 			event.stopImmediatePropagation(); }
 		    } );
 
-    $( "#trackslider" ).on( "slidestart", function() { progressTimer.stop(); } )
+    $( "#trackslider" ).on( "slidestart", function() { progressTimer.stop(); } );
     $( "#trackslider" ).on( "slidestop", function() { doSeekPos( $(this).val() ); } );
 
-    $( "#volumeslider" ).on( "slidestart", function() { volumeSliding = true; } )
+    $( "#volumeslider" ).on( "slidestart", function() { volumeSliding = true; } );
     $( "#volumeslider" ).on( "slidestop", function() { volumeSliding = false; } );
-    $( "#volumeslider" ).on( "change", function() { doVolume( $(this).val() ); } )
+    $( "#volumeslider" ).on( "change", function() { doVolume( $(this).val() ); } );
 });
 
 function updatePlayIcons (uri, tlid) {

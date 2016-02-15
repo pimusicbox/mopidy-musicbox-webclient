@@ -376,14 +376,18 @@ function setPosition(pos) {
 
 function setVolume(value) {
     if (!volumeChanging && !volumeSliding && $("#volumeslider").val() != value) {
+        $( "#volumeslider" ).off( "change");
         $( "#volumeslider" ).val(value).slider('refresh');
+        $( "#volumeslider" ).on( "change", function() { doVolume( $(this).val() ); } );
     }
 }
 
 function doVolume(value) {
     if (!volumeChanging) {
         volumeChanging = value;
-        mopidy.playback.setVolume({'volume': parseInt(value)});
+        mopidy.playback.setVolume({'volume': parseInt(volumeChanging)}).then( function() {
+            volumeChanging = null;
+        });
     }
 }
 
