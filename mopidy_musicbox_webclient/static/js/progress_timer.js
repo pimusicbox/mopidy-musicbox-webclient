@@ -1,7 +1,7 @@
 var progressTimer;
 var progressElement = document.getElementById('trackslider');
-var positionNode = document.createTextNode('0:00');
-var durationNode = document.createTextNode('0:00');
+var positionNode = document.createTextNode('');
+var durationNode = document.createTextNode('');
 
 var START_BEATS = 5 // 0.5 seconds, needs to be less than 1s to prevent unwanted updates.
 var RUN_BEATS = 300  // 30 seconds assuming default timer update rate of 100ms
@@ -48,20 +48,19 @@ function updateTimers(position, duration, isRunning) {
         positionNode.nodeValue = '';
         durationNode.nodeValue = '';
         $("#trackslider").val(0).slider('refresh');
-    } else if (syncing) {
-        if (!targetPosition) {
-            // Waiting for Mopidy to provide a target position.
-            positionNode.nodeValue = '(wait)';
-        } else {
-            // Busy seeking to new target position.
-            positionNode.nodeValue = '(sync)';
+    } else {
+        durationNode.nodeValue = format(duration || Infinity);
+        if (syncing) {
+            if (!targetPosition) {
+                // Waiting for Mopidy to provide a target position.
+                positionNode.nodeValue = '(wait)';
+            } else {
+                // Busy seeking to new target position.
+                positionNode.nodeValue = '(sync)';
+            }
+        } else if (synced || streaming) {
+            positionNode.nodeValue = format(position);;
         }
-    } else if (streaming) {
-        positionNode.nodeValue = format(position);;
-        durationNode.nodeValue = '(n/a)';
-    } else if (synced) {
-        positionNode.nodeValue = format(position);
-        durationNode.nodeValue = format(duration || 0);
     }
 
     if (ok) {
@@ -111,7 +110,9 @@ function toInt(value) {
 
 function format(milliseconds) {
     if (milliseconds === Infinity) {
-        return '0:00';
+        return '(n/a)';
+    } else if (milliseconds == 0) {
+        return '';
     }
 
     var seconds = Math.floor(milliseconds / 1000);
