@@ -115,9 +115,9 @@ function processBrowseDir(resultArr) {
         if (resultArr[i].type == 'track') {
             //console.log(resultArr[i]);
             mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultDict) {
-                var lookup_uri = Object.keys(resultDict)[0];
-                popupData[lookup_uri] = resultDict[lookup_uri][0];
-                browseTracks.push(resultDict[lookup_uri][0]);
+                var lookupUri = Object.keys(resultDict)[0];
+                popupData[lookupUri] = resultDict[lookupUri][0];
+                browseTracks.push(resultDict[lookupUri][0]);
             }, console.error);
             child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
                      '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + index + '\');">' +
@@ -249,6 +249,6 @@ function processAlbumResults(resultArr) {
     $('#h_albumartist').html(artistname);
     $('#coverpopupalbumname').html(albumname);
     $('#coverpopupartist').html(artistname);
-    getCover(resultArr[0].album, '#albumviewcover, #coverpopupimage', 'extralarge');
+    getCover(resultArr[0].uri, '#albumviewcover, #coverpopupimage', 'extralarge');
     showLoading(false);
 }

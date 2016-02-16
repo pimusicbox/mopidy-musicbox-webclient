@@ -19,31 +19,65 @@ $(window).load(function () {
     });
 });
 
-function getCover(album, images, size) {
+function getCover(uri, images, size) {
     var defUrl = 'images/default_cover.png';
     $(images).attr('src', defUrl);
-    if (!album) {
+    if (!uri) {
         return;
     }
-    var albumname = album.name || '';
-    var artistname = '';
-    if ( album.artists && (album.artists.length > 0) ) {
-        artistname = album.artists[0].name;
+
+    mopidy.library.getImages({'uris': [uri]}).then(function(imageResults) {
+        var uri = Object.keys(imageResults)[0];
+        if (imageResults[uri].length > 0) {
+            $(images).attr('src', imageResults[uri][0].uri);
+        } else {
+            // Also check deprecated 'album.images' in case backend does not
+            // implement mopidy.library.getImages yet...
+            getCoverFromAlbum(uri, images, size);
+        }
+    });
+}
+
+// Note that this approach has been deprecated in Mopidy
+// TODO: Remove when Mopidy no longer supports getting images
+//       with 'album.images'.
+function getCoverFromAlbum(uri, images, size) {
+    mopidy.library.lookup({'uris': [uri]}).then(function(resultDict) {
+        var uri = Object.keys(resultDict)[0];
+        var track = resultDict[uri][0];
+        if (track.album && track.album.images && (track.album.images.length > 0) ) {
+            $(images).attr('src', track.album.images[0]);
+        } else {
+            // Fallback to last.fm
+            getCoverFromLastFm(track, images, size);
+        }
+    });
+}
+
+function getCoverFromLastFm(track, images, size) {
+    var defUrl = 'images/default_cover.png';
+    if (!(track.album || track.artist)) {
+        return;
     }
-    if (album.images && (album.images.length > 0) ) {
-        $(images).attr('src', album.images[0]);
-    } else {
-        lastfm.album.getInfo( {artist: artistname, album: albumname},
-            { success: function(data){
-                for (var i = 0; i < data.album.image.length; i++) {
-                    if ( data.album.image[i]['size'] == size) {
-                        $(images).attr('src', data.album.image[i]['#text'] || defUrl);
-                    }
+    var albumname = track.album.name || '';
+    var artistname = '';
+    if ( track.album.artists && (track.album.artists.length > 0) ) {
+        // First look for the artist in the album
+        artistname = track.album.artists[0].name;
+    } else if (track.artists && (track.artists.length > 0) ) {
+        // Fallback to using artists for specific track
+        artistname = track.artists[0].name;
+    }
+
+    lastfm.album.getInfo( {artist: artistname, album: albumname},
+        { success: function(data) {
+            for (var i = 0; i < data.album.image.length; i++) {
+                if ( data.album.image[i]['size'] == size) {
+                    $(images).attr('src', data.album.image[i]['#text'] || defUrl);
                 }
             }
-        });
-
-   }
+        }
+    });
 }
 
 function getArtistImage(nwartist, image, size) {
