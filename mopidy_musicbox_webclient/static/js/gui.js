@@ -7,7 +7,6 @@
  * Song Info Sreen  *
  ********************/
 function resetSong() {
-    resetProgressTimer();
     setPlayState(false);
     setPosition(0);
     var data = new Object;
@@ -105,7 +104,6 @@ function setSongInfo(data) {
     songlength = Infinity;
 
     if (!data.track.length || data.track.length == 0) {
-        resetProgressTimer();
         $('#trackslider').next().find('.ui-slider-handle').hide();
         $('#trackslider').slider('disable');
         // $('#streamnameinput').val(data.track.name);
@@ -142,7 +140,11 @@ function setSongInfo(data) {
 
     $("#trackslider").attr("min", 0);
     $("#trackslider").attr("max", songlength);
-    progressTimer.reset().set(0, songlength);
+    resetProgressTimer();
+    progressTimer.set(0, songlength);
+    if (play) {
+        startProgressTimer();
+    }
 
     resizeMb();
 }
