@@ -462,12 +462,20 @@ $(document).ready(function(event) {
 
     // Connect to server
     if (websocketUrl) {
-        mopidy = new Mopidy({
-            webSocketUrl: websocketUrl, // wslocation is set in index.html from the extention config.
-            callingConvention: 'by-position-or-by-name'
-        });
+        try {
+            mopidy = new Mopidy({
+                webSocketUrl: websocketUrl,
+                callingConvention: 'by-position-or-by-name'
+            });
+        } catch (e) {
+          showOffline(true);
+        }
     } else {
-        mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'});
+        try {
+            mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'});
+       } catch (e) {
+          showOffline(true);
+        }
     }
 
     //initialize events
