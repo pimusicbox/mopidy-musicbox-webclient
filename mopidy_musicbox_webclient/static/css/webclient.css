@@ -550,9 +550,6 @@ a {
 @media (max-width: 35em){
     #nowPlayingpane{
         padding: 15px 25px 0px 25px;
-    }
-
-    #nowPlayingpane #controlspopupimage{
         max-width:90%;
         max-height:90%;
     }
