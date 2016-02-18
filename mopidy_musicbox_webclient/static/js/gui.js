@@ -302,10 +302,10 @@ $(document).bind("pageinit", function() {
 /**************
  * gui stuff  *
  **************/
+
 function toggleFullscreen() {
     if (isMobileSafari) { alert ("To get this app in Full Screen, you have to add it to your home-screen using the Share button."); exit(); }
-    if (!document.fullscreenElement &&    // alternative standard method
-        !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+    if (!isFullscreen() ) {  // current working methods
         var docElm = document.documentElement;
         if (docElm.requestFullscreen) {
             docElm.requestFullscreen();
@@ -316,7 +316,6 @@ function toggleFullscreen() {
         } else if (docElm.webkitRequestFullScreen) {
             docElm.webkitRequestFullScreen();
         }
-        document.getElementById("toggletxt").innerHTML = "Exit Fullscreen";
     } else {
         if (document.exitFullscreen) {
             document.exitFullscreen();
@@ -327,8 +326,12 @@ function toggleFullscreen() {
         } else if (document.webkitCancelFullScreen) {
             document.webkitCancelFullScreen();
         }
-        document.getElementById("toggletxt").innerHTML = "Fullscreen";
     }
+}
+
+function isFullscreen() {
+    return (document.fullscreenElement ||    // alternative standard method
+        document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement )  // current working methods
 }
 
 function switchContent(divid, uri) {
@@ -506,7 +509,16 @@ $(document).ready(function(event) {
         toggleFullscreen();
     });
 
-// remove buttons only for MusicBox
+    // event handlers for full screen mode
+    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange, MSFullscreenChange', function(e) {
+        if (isFullscreen()) {
+            document.getElementById("toggletxt").innerHTML = "Exit Fullscreen";
+        } else {
+            document.getElementById("toggletxt").innerHTML = "Fullscreen";
+        }
+    });
+
+    // remove buttons only for MusicBox
     if (!isMusicBox) {
         $('#navSettings').hide();
         $('#navshutdown').hide();
