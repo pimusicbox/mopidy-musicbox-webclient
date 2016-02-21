@@ -343,10 +343,10 @@ function resultsToTables(results, target, uri) {
                     }
                     newalbum = [];
                     newtlids = [];
+                    if (results[i].album) {
+                        coversList.push([results[i].uri, i]);
+                    }
                 } //newalbum length
-                if (results[i].album) {
-                    coversList.push([results[i].uri, i]);
-                }
             } //albums name
         }
     }
