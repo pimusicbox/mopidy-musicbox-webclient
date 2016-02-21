@@ -224,7 +224,7 @@ function resultsToTables(results, target, uri) {
 
     var newalbum = [];
     var newtlids = [];
-    //keep a list of albums for retreiving of covers
+    //keep a list of track URIs for retrieving of covers
     var coversList = [];
     var nextname = '';
     var count = 0;
@@ -344,19 +344,16 @@ function resultsToTables(results, target, uri) {
                     newalbum = [];
                     newtlids = [];
                     if (results[i].album) {
-                        coversList.push([results[i].album, i]);
+                        coversList.push([results[i].uri, i]);
                     }
                 } //newalbum length
-                if (results[i].album) {
-                    coversList.push([results[i].album, i]);
-                }
             } //albums name
         }
     }
     tableid = "#" + tableid;
     $(target).html(html);
     $(target).attr('data', uri);
-    //retreive albumcovers
+    //retrieve albumcovers
     for (i = 0; i < coversList.length; i++) {
         getCover(coversList[i][0], target + '-cover-' + coversList[i][1], 'small');
     }

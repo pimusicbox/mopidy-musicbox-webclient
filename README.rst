@@ -77,6 +77,7 @@ v2.2.0 (UNRELEASED)
 - Scrolling now works in full screen mode for Chrome and Safari as well. (Fixes: `#53 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/53>`_).
 - No longer interferes with changes to Mopidy's volume levels that are triggered externally. (Fixes: `#162 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/162>`_).
 - Volume slider now works with Mopidy-ALSAMixer again. (Fixes: `#168 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/168>`_).
+- Now falls back to track artist if album artist is not available for rendering cover art. (Fixes: `#128 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/128>`_).
 
 v2.1.1 (2016-02-04)
 -------------------
