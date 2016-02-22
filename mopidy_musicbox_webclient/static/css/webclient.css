@@ -378,6 +378,10 @@
     border: 1px solid #aaa;
 }
 
+.popupDialog {
+    padding: 10px;
+}
+
 /*dont hide clear buttons in text input */
 .ui-input-clear-hidden {
     display: block !important;
