@@ -111,7 +111,11 @@ ProgressTimer.prototype._update = function(timestamp) {
         }
         this._scheduleUpdate(timestamp);
     } else {
-        this._running = false;
+        // Workaround for https://github.com/adamcik/media-progress-timer/issues/3
+        // This causes the timer to die unexpectedly if the position goes
+        // over the duration slightly.
+
+        // this._running = false;
         this._callback(duration, duration, this._running);
     }
 };
