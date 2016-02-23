@@ -66,6 +66,7 @@ v2.2.0 (UNRELEASED)
 - Upgrade Font-Awesome libraries to version 4.5.0.
 - Upgrade jQuery libraries to version 1.12.0.
 - Upgrade last.fm JavaScript libraries to the latest version available on the GitHub master branch of the repository.
+- Mopidy-Musicbox-Webclient is now distributed with a vendor copy of Mopidy.js. (Addresses: `#175 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/175>`_).
 
 **Fixes**
 

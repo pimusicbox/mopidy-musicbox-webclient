@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# 2016-02-22:v1
+# 2016-02-23:v1
 
 NETWORK:
 *
@@ -101,3 +101,5 @@ vendors/lastfm/lastfm.api.cache.js
 vendors/lastfm/lastfm.api.js
 vendors/lastfm/lastfm.api.md5.js
 vendors/media_progress_timer/timer.js
+vendors/mopidy/mopidy.js
+vendors/mopidy/mopidy.min.js
