@@ -16,6 +16,7 @@ function resetSong() {
     data.track.artists = '';
     data.track.length = 0;
     data.track.uri = ' ';
+    setSongInfo(data);
 }
 
 function resizeMb() {
