@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html manifest="mb.appcache">
 <head>
+    <title>Musicbox</title>
     <meta charset="utf-8">
     <script type="text/javascript" src="vendors/jquery/jquery-1.12.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="vendors/jquery_mobile_flat_ui_theme/jquery.mobile.flatui.min.css"/>
@@ -99,9 +100,9 @@
         </li>
         <li id="navshutdown" data-icon="false">
             <a href="system.html">
-                <span class="navtxt">System </span><i class="fa  fa-power-off"></i></a>
+                <span class="navtxt">System </span><i class="fa fa-power-off"></i></a>
         </li>
-        <li id="" data-icon="false">
+        <li data-icon="false">
             <div><!-- slider for volume -->
                 <a href="#" onclick="doMute(); return false;"><span title="Toggle mute"><i id="mutebt" class="fa fa-volume-up"></i></span></a>
                 <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
@@ -118,14 +119,14 @@
 
     <h3 id="coverpopupalbumname"></h3>
     <h4 id="coverpopupartist"></h4>
-    <a href="#" onclick="closePopups();"><img id="coverpopupimage" src=""/></a>
+    <a href="#" onclick="closePopups();"><img id="coverpopupimage" src="" alt="Album cover"/></a>
 </div>
 
 <div id="artistpopup" data-role="popup" data-theme="c">
     <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
        class="ui-btn-right">Close</a>
     <h4 id="artistpopupname">&nbsp;</h4>
-    <a href="#" onclick="closePopups();"><img id="artistpopupimage" src=""/></a>
+    <a href="#" onclick="closePopups();"><img id="artistpopupimage" src="" alt="Album artist"/></a>
 </div>
 
 <div data-role="popup" data-transition="none" data-theme="c" id="popupBrowse">
@@ -170,8 +171,7 @@
                 <a href="#" onclick="showAlbumPopup('#popupTracks')">Show Album <span class="popupAlbumName"></span></a>
             </li>
             <li id="popupArtistsLi">
-                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span
-                        class="popupArtistName"></span>
+                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                 </a>
             </li>
             <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">
@@ -195,8 +195,7 @@
                 <a href="#" onclick="showAlbumPopup('#popupQueue')">Show Album <span class="popupAlbumName"></span></a>
             </li>
             <li id="popupArtistsLi">
-                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span
-                        class="popupArtistName"></span>
+                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                 </a>
             </li>
             <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">
@@ -280,7 +279,7 @@
 
 <div id="nowPlayingpane" data-role="content" class="pane">
 
-    <img id="controlspopupimage" src="images/default_cover.png" />
+    <img id="controlspopupimage" src="images/default_cover.png" alt="Album cover"/>
 
 
     <div class="nowPlaying-artistInfo">
@@ -305,8 +304,10 @@
             <ul id="playlistslist" class="table"></ul>
         </div>
         <div class="ui-block-b scroll" id="playlisttracksdiv">
-        <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
-        <ul class="table" id="playlisttracks"></ul>
+            <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;">
+                <a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a>
+            </div>
+            <ul class="table" id="playlisttracks"></ul>
         </div>
     </div>
 </div>
@@ -328,7 +329,7 @@
 </div>
 
 <div data-role="content" class="pane" id="albumspane">
-    <a href="#coverpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="albumviewcover"/></a>
+    <a href="#coverpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="albumviewcover" alt="Album cover"/></a>
 
     <h3 id="h_albumname"></h3>
     <h5 id="h_albumartist"></h5>
@@ -337,7 +338,7 @@
 </div>
 
 <div data-role="content" class="pane" id="artistspane">
-    <a href="#artistpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="artistviewimage"/></a>
+    <a href="#artistpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="artistviewimage" alt="Album artist"/></a>
 
     <h3 id="h_artistname"></h3>
     <ul class="table" id="artiststable"></ul>
@@ -350,11 +351,13 @@
         <div class="ui-block">
             <form>
                 <p>Search for artists, albums, or specific tracks.
-                <select id="selectSearchService"> <!-- data-native-menu="false"> <!-- multiple="multiple" data-native-menu="false">
+                <select id="selectSearchService"> 
+                    <!-- data-native-menu="false"> 
+                    multiple="multiple" data-native-menu="false">
                     <option data-placeholder="true">Choose services</option> -->
                 </select>
                 <input id="searchinput" placeholder="Search term" class="span2" data-clear-btn="true"
-                       onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                       onkeypress="return searchPressed(event.keyCode);" type="text"/>
                 <button class="btn" type="button" onclick="return initSearch(event.value);">
                     Search!
                 </button>
@@ -403,13 +406,13 @@
                     Get currently playing
                 </button>
                 <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
-                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                       onkeypress="return streamPressed(event.keyCode);" type="text"/>
                 <button class="btn" type="button" onclick="return playStreamUri();">
                     Play
                 </button>
 
                 <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
-                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                       onkeypress="return streamPressed(event.keyCode);" type="text"/>
                 <button class="btn" type="button" onclick="return addFavourite();">
                     Save
                 </button>
@@ -426,7 +429,7 @@
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="normalFooter">
     <div class="footerControls">
         <div class="songinfo" id="songinfo">
-            <a href="#"><div style="float: left"><img id="infocover" src="images/default_cover.png"/></div></a>
+            <a href="#"><div style="float: left"><img id="infocover" src="images/default_cover.png" alt="Album cover"/></div></a>
             <div class="songinfo-text">
                 <div id="infoname"></div>
                 <div id="infoartist"></div>
