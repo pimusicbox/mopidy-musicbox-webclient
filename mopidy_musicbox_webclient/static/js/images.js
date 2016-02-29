@@ -72,7 +72,7 @@ function getCoverFromLastFm(track, images, size) {
     lastfm.album.getInfo( {artist: artistname, album: albumname},
         { success: function(data) {
             for (var i = 0; i < data.album.image.length; i++) {
-                if ( data.album.image[i]['size'] == size) {
+                if ( data.album.image[i].size == size) {
                     $(images).attr('src', data.album.image[i]['#text'] || defUrl);
                 }
             }
@@ -84,7 +84,7 @@ function getArtistImage(nwartist, image, size) {
     var defUrl = 'images/user_24x32.png';
     lastfm.artist.getInfo({artist: nwartist}, {success: function(data){
         for (var i = 0; i < data.artist.image.length; i++) {
-            if ( data.artist.image[i]['size'] == size) {
+            if ( data.artist.image[i].size == size) {
                 $(image).attr('src', data.artist.image[i]['#text'] || defUrl);
             }
         }

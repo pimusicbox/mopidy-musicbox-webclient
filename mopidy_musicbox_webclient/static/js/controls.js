@@ -93,7 +93,7 @@ function playTrack(action) {
             mopidy.tracklist.clear().then(
                 mopidy.tracklist.add({'uris': trackUris}).then(
                     function(tlTracks) {
-                        mopidy.playback.play({'tl_track': tlTracks[selected]})
+                        mopidy.playback.play({'tl_track': tlTracks[selected]});
                     }
                 )
             );
@@ -143,7 +143,7 @@ function playTrackByUri(track_uri, playlist_uri) {
 
     mopidy.tracklist.add({'uris': [playlist_uri]}).then(function(tlTracks) {
         // Can fail for all sorts of reasons. If so, just add individually. 
-        if (tlTracks.length == 0) {
+        if (tlTracks.length === 0) {
             var trackUris = getTracksFromUri(playlist_uri, false);
             mopidy.tracklist.add({'uris': trackUris}).then(findAndPlayTrack);
         } else {
@@ -311,7 +311,7 @@ function setTracklistOption(name, new_value) {
     } else {
         $("#"+name+"bt").attr('style', 'color:#66DD33');
     }
-    return new_value
+    return new_value;
 }
 
 function setRepeat(nwrepeat) {
@@ -364,7 +364,7 @@ function doSeekPos(value) {
         positionChanging = value;
         mopidy.playback.seek({'time_position': Math.round(value)}).then( function() {
             positionChanging = null;
-        });;
+        });
     }
 }
 
@@ -512,7 +512,7 @@ function addToFavourites(newTracks) {
     getFavourites().catch(console.error.bind(console)).then(function(favourites) {
         if (favourites) {
             if (favourites.tracks) {
-                Array.prototype.push.apply(favourites.tracks, newTracks)
+                Array.prototype.push.apply(favourites.tracks, newTracks);
             } else {
                 favourites.tracks = newTracks;
             }
@@ -535,7 +535,7 @@ function addFavourite(uri, name) {
             }
             addToFavourites(newTracks);
         } else {
-            if (newTracks.length == 0) {
+            if (newTracks.length === 0) {
                 console.log('No tracks to add');
             } else {
                 console.log('Too many tracks (%d) to add', tracks.length);
@@ -568,7 +568,7 @@ function showFavourites() {
         
         $.cookie.json = true;
         if ($.cookie('streamUris')) {
-            tmp = '<button class="btn" style="padding: 5px; width: 100%" type="button" onclick="return upgradeStreamUrisToFavourites();">Convert StreamUris</button>'
+            tmp = '<button class="btn" style="padding: 5px; width: 100%" type="button" onclick="return upgradeStreamUrisToFavourites();">Convert StreamUris</button>';
         }
         if (favourites.tracks) {
             var child = '';
