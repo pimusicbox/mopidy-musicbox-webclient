@@ -262,14 +262,14 @@ function initSocketevents() {
     mopidy.on("event:playlistChanged", function(data) {
         $('#playlisttracksdiv').hide();
         $('#playlistslistdiv').show();
-        delete playlists[data["playlist"].uri];
+        delete playlists[data.playlist.uri];
         getPlaylists();
     });
 
     mopidy.on("event:playlistDeleted", function(data) {
         $('#playlisttracksdiv').hide();
         $('#playlistslistdiv').show();
-        delete playlists[data["uri"]];
+        delete playlists[data.uri];
         getPlaylists();
     });
 

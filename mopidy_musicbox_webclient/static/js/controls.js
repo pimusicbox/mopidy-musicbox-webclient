@@ -234,7 +234,7 @@ function showSavePopup(){
 function saveQueue() {
     mopidy.tracklist.getTracks().then(function(tracks) {
         var playlistName = $('#saveinput').val().trim();
-        if (playlistName != null && playlistName != "") {
+        if (playlistName !== null && playlistName !== "") {
             getPlaylistByName(playlistName, 'm3u', false).then(function(exists) {
                 if (exists) {
                     $('#popupSave').popup('close');
