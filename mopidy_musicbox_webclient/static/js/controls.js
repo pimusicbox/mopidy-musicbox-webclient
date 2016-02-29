@@ -207,39 +207,67 @@ function removeTrack() {
 }
 
 function clearQueue() {
-    mopidy.playback.stop();
-    resetSong();
-    mopidy.tracklist.clear();
-    resetSong();
+    mopidy.tracklist.clear().then(
+        resetSong()
+    );
     return false;
+}
+
+function savePressed(key) {
+    if (key == 13) {
+        saveQueue();
+        return false;
+    }
+    return true;
+}
+
+function showSavePopup(){
+    mopidy.tracklist.getTracks().then(function(tracks) {
+        if (tracks.length > 0) {
+            $('#saveinput').val('');
+            $('#popupSave').popup('open');
+        }
+    });
+
 }
 
 function saveQueue() {
     mopidy.tracklist.getTracks().then(function(tracks) {
-        if (tracks.length > 0) {
-            var plname = window.prompt("Playlist name:", "").trim();
-            if (plname != null && plname != "") {
-                mopidy.playlists.filter({"name": plname}).then(function(existing) {
-                    var exists = false;
-                    for (var i = 0; i < existing.length; i++) {
-                        exists = exists || existing[i].uri.indexOf("m3u:") == 0 || existing[i].uri.indexOf("local:") == 0;
-                    }
-                    if (!exists || window.confirm("Overwrite existing playlist \"" + plname + "\"?")) {
-                        mopidy.playlists.create({'name': plname, 'uri_scheme': "local"}).then(function(playlist) {
-                             playlist.tracks = tracks;
-                             mopidy.playlists.save({'playlist': playlist}).then();
-                             getPlaylists();
-                        });
-                    }
-                });
-            }
+        var playlistName = $('#saveinput').val().trim();
+        if (playlistName != null && playlistName != "") {
+            getPlaylistByName(playlistName, 'm3u', false).then(function(exists) {
+                if (exists) {
+                    $('#popupSave').popup('close');
+                    $('#popupOverwrite').popup('open');
+                    $('#overwriteConfirmBtn').click(function() {
+                        initSave(playlistName, tracks);
+                    });
+                } else {
+                    initSave(playlistName, tracks);
+                }
+            });
         }
     });
     return false;
 }
 
+function initSave(playlistName, tracks) {
+    $('#popupOverwrite').popup('close');
+    $('#popupSave').popup('close');
+    $('#saveinput').val('');
+    toast('Saving...');
+    mopidy.playlists.create({'name': playlistName, 'uri_scheme': "m3u"}).then(function(playlist) {
+         playlist.tracks = tracks;
+         mopidy.playlists.save({'playlist': playlist}).then();
+     });
+}
+
 function refreshPlaylists() {
-    mopidy.playlists.refresh();
+    mopidy.playlists.refresh().then(function() {
+        playlists = {};
+        $('#playlisttracksdiv').hide();
+        $('#playlistslistdiv').show();
+    });
     return false;
 }
 

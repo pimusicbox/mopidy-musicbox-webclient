@@ -79,6 +79,9 @@ v2.2.0 (UNRELEASED)
 - No longer interferes with changes to Mopidy's volume levels that are triggered externally. (Fixes: `#162 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/162>`_).
 - Volume slider now works with Mopidy-ALSAMixer again. (Fixes: `#168 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/168>`_).
 - Now falls back to track artist if album artist is not available for rendering cover art. (Fixes: `#128 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/128>`_).
+- Replace Javascript prompt with jQuery Mobile equivalent. (Fixes: `#113 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/113>`_).
+- Fix playlist refresh button. (Fixes: `#173 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/173>`_).
+- Update save queue functionality to use 'm3u' format. (Fixes: `#177 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/177>`_).
 
 v2.1.1 (2016-02-04)
 -------------------

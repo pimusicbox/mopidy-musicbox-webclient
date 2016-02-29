@@ -259,6 +259,20 @@ function initSocketevents() {
         getPlaylists();
     });
 
+    mopidy.on("event:playlistChanged", function(data) {
+        $('#playlisttracksdiv').hide();
+        $('#playlistslistdiv').show();
+        delete playlists[data["playlist"].uri];
+        getPlaylists();
+    });
+
+    mopidy.on("event:playlistDeleted", function(data) {
+        $('#playlisttracksdiv').hide();
+        $('#playlistslistdiv').show();
+        delete playlists[data["uri"]];
+        getPlaylists();
+    });
+
     mopidy.on("event:volumeChanged", function(data) {
         setVolume(data.volume);
     });

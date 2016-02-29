@@ -207,6 +207,37 @@
 </div>
 
 
+<div data-role="popup" data-theme="b" id="popupSave" class="popupDialog">
+    <form>
+        <p>Save current queue to a playlist.
+        <input id="saveinput" placeholder="Playlist name" class="span2" data-clear-btn="true"
+               onkeypress="return savePressed(event.keyCode);" type="text"/>
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" onclick="return saveQueue();">
+                Ok
+            </button>
+            <button class="btn" type="button" onclick="return $('#popupSave').popup('close');">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+<!--/save queue to playlist-->
+
+
+<div data-role="popup" data-theme="b" id="popupOverwrite" class="popupDialog">
+    <form>
+        <p>Overwrite existing playlist with same name?
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" id="overwriteConfirmBtn">
+                Ok
+            </button>
+            <button class="btn" type="button" onclick="$('#popupOverwrite').popup('close'); return $('#popupSave').popup('open');">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div><!--/overwrite existing playlist-->
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">
     <a id="headermenubtn" href="#panel"><i class="fa fa-align-justify"></i></a>
@@ -297,8 +328,16 @@
 <!-- /nowplaying -->
 
 <div data-role="content" id="playlistspane" class="pane">
-    <a style="float:right; padding: 1.2em 10px" onclick="return refreshPlaylists();"><i class="fa fa-refresh"></i></a>
-    <h4>Playlists</h4>
+    <div class="ui-grid-a">
+        <div class="ui-block-a">
+            <h4>Playlists</h4>
+        </div>
+        <div align="right" class="ui-block-b" data-role="controlgroup" data-type="horizontal">
+            <button class="btn" type="button" title="Refresh playlists" onclick="return refreshPlaylists();">
+                <i class="fa fa-refresh"></i>
+            </button>
+        </div>
+    </div>
     <div class="ui-grid-a pl-breakpoint">
         <div class="ui-block-a scroll" id="playlistslistdiv">
             <ul id="playlistslist" class="table"></ul>
@@ -307,7 +346,9 @@
             <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;">
                 <a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a>
             </div>
-            <ul class="table" id="playlisttracks"></ul>
+            <div>
+                <ul class="table" id="playlisttracks"></ul>
+            </div>
         </div>
     </div>
 </div>
@@ -321,11 +362,22 @@
 <!--/browsepane-->
 
 <div data-role="content" class="pane" id="currentpane">
-    <a style="float:right" onclick="return clearQueue();" data-role="button">Clear</a>
-    <a style="float:right; margin-right: 0.5em" onclick="return saveQueue();" data-role="button">Save</a><h4>Play Queue</h4>
-    <!--                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul>
-                    <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul> -->
-    <ul class="table" id="currenttable"></ul>
+    <div class="ui-grid-a">
+        <div class="ui-block-a">
+            <h4>Play Queue</h4>
+        </div>
+        <div align="right" class="ui-block-b" data-role="controlgroup" data-type="horizontal">
+            <button class="btn" type="button" title="Save queue to playlist" onclick="return showSavePopup();">
+                <i class="fa fa-floppy-o"></i>
+            </button>
+            <button class="btn" type="button" title="Clear queue" onclick="return clearQueue();">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </div>
+    </div>
+    <div class="ui-grid">
+        <ul class="table" id="currenttable"></ul>
+    </div>
 </div>
 
 <div data-role="content" class="pane" id="albumspane">
