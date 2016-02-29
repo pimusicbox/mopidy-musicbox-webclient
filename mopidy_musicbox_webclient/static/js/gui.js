@@ -194,13 +194,13 @@ function popupTracks(e, listuri, trackuri, tlid) {
     var popupName = '';
     if (divid == 'current') {
         $(".addqueue").hide();
-	popupName = '#popupQueue';
+        popupName = '#popupQueue';
     } else if (divid == 'browse') {
         $(".addqueue").show();
-	popupName = '#popupBrowse';
+        popupName = '#popupBrowse';
     } else {
         $(".addqueue").show();
-    popupName = '#popupTracks';
+        popupName = '#popupTracks';
     }
 
     if (typeof tlid != 'undefined' && tlid !== '') {
@@ -522,15 +522,13 @@ $(document).ready(function(event) {
     });
 
     //navigation temporary, rewrite this!
-    $('#songinfo').click(
-	function() {
+    $('#songinfo').click(function() {
         return switchContent('nowPlaying');
     });
-    $('#controlspopupimage').click(
-	function() {
-	    return switchContent('current');
+    $('#controlspopupimage').click(function() {
+        return switchContent('current');
     });
-    $('#navToggleFullscreen').click(function(){
+    $('#navToggleFullscreen').click(function() {
         toggleFullscreen();
     });
 
