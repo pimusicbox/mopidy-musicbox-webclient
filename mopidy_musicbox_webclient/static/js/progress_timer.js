@@ -3,8 +3,8 @@ var progressElement = document.getElementById('trackslider');
 var positionNode = document.createTextNode('');
 var durationNode = document.createTextNode('');
 
-var START_BEATS = 5 // 0.5 seconds, needs to be less than 1s to prevent unwanted updates.
-var RUN_BEATS = 300  // 30 seconds assuming default timer update rate of 100ms
+var START_BEATS = 5; // 0.5 seconds, needs to be less than 1s to prevent unwanted updates.
+var RUN_BEATS = 300;  // 30 seconds assuming default timer update rate of 100ms
 var callbackHeartbeats = 0;  // Timer will check syncs on every n-number of calls.
 var targetPosition = null;
 
@@ -19,7 +19,7 @@ document.getElementById('songlength').appendChild(durationNode);
 function timerCallback(position, duration, isRunning) {
     updateTimers(position, duration, isRunning);
 
-    if (callbackHeartbeats == 0) {
+    if (callbackHeartbeats === 0) {
         callbackHeartbeats = getHeartbeat();
     }
 
@@ -38,7 +38,7 @@ function timerCallback(position, duration, isRunning) {
 }
 
 function updateTimers(position, duration, isRunning) {
-    var ready = !(duration == Infinity && position == 0 && !isRunning);  // Timer has been properly initialized.
+    var ready = !(duration == Infinity && position === 0 && !isRunning);  // Timer has been properly initialized.
     var streaming = (duration == Infinity && position > 0); // Playing a stream.
     var ok = synced && isRunning;  // Normal operation.
     var syncing = !synced && isRunning; // Busy syncing.
@@ -59,7 +59,7 @@ function updateTimers(position, duration, isRunning) {
                 positionNode.nodeValue = '(sync)';
             }
         } else if (synced || streaming) {
-            positionNode.nodeValue = format(position);;
+            positionNode.nodeValue = format(position);
         }
     }
 
@@ -71,10 +71,10 @@ function updateTimers(position, duration, isRunning) {
 }
 
 function getHeartbeat() {
-    if (syncsLeft > 0 && callbackHeartbeats == 0) {
+    if (syncsLeft > 0 && callbackHeartbeats === 0) {
         // Step back exponentially while increasing heartbeat.
         return Math.round(delay_exponential(5, 2, MAX_SYNCS - syncsLeft));
-    } else if (syncsLeft == 0 && callbackHeartbeats == 0) {
+    } else if (syncsLeft === 0 && callbackHeartbeats === 0) {
         // Sync completed, keep checking using maximum number of heartbeats.
         return RUN_BEATS;
     } else {
@@ -111,7 +111,7 @@ function toInt(value) {
 function format(milliseconds) {
     if (milliseconds === Infinity) {
         return '(n/a)';
-    } else if (milliseconds == 0) {
+    } else if (milliseconds === 0) {
         return '0:00';
     }
 

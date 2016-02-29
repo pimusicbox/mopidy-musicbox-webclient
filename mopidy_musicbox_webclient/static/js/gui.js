@@ -9,9 +9,9 @@
 function resetSong() {
     setPlayState(false);
     setPosition(0);
-    var data = new Object;
+    var data = new Object({});
     data.tlid = -1;
-    data.track = new Object;
+    data.track = new Object({});
     data.track.name = '';
     data.track.artists = '';
     data.track.length = 0;
@@ -80,10 +80,10 @@ function setSongInfo(data) {
 //    console.log(data, songdata);
     if (!data ) { return; }
     if (data.tlid == songdata.tlid) { return; }
-    if (!data.track.name || data.track.name == '') {
+    if (!data.track.name || data.track.name === '') {
         var name = data.track.uri.split('/');
         data.track.name = decodeURI(name[name.length - 1]);
-    };
+    }
 
     updatePlayIcons(data.track.uri, data.tlid);
     artistshtml = '';
@@ -95,7 +95,7 @@ function setSongInfo(data) {
             if (rs && rs[1] == data.track.name) {
                 data.track.name = (rs[0] || rs[1]);
             }
-        };
+        }
     }
 
     songdata = data;
@@ -103,7 +103,7 @@ function setSongInfo(data) {
     setSongTitle(data.track.name, false);
     songlength = Infinity;
 
-    if (!data.track.length || data.track.length == 0) {
+    if (!data.track.length || data.track.length === 0) {
         $('#trackslider').next().find('.ui-slider-handle').hide();
         $('#trackslider').slider('disable');
         // $('#streamnameinput').val(data.track.name);
@@ -162,7 +162,7 @@ function closePopups() {
 
 function popupTracks(e, listuri, trackuri, tlid) {
     if (!e)
-        var e = window.event;
+        e = window.event;
     $('.popupTrackName').html(popupData[trackuri].name);
     $('.popupAlbumName').html(popupData[trackuri].album.name);
     var child = "";
@@ -191,18 +191,19 @@ function popupTracks(e, listuri, trackuri, tlid) {
 
     var hash = document.location.hash.split('?');
     var divid = hash[0].substr(1);
+    var popupName = '';
     if (divid == 'current') {
         $(".addqueue").hide();
-	var popupName = '#popupQueue';
+	popupName = '#popupQueue';
     } else if (divid == 'browse') {
         $(".addqueue").show();
-	var popupName = '#popupBrowse';
+	popupName = '#popupBrowse';
     } else {
         $(".addqueue").show();
-    var popupName = '#popupTracks';
+    popupName = '#popupTracks';
     }
 
-    if (typeof tlid != 'undefined' && tlid != '') {
+    if (typeof tlid != 'undefined' && tlid !== '') {
         $(popupName).data("list", listuri).data("track", trackuri).data("tlid", tlid).popup("open", {
             x : e.pageX,
             y : e.pageY
@@ -259,15 +260,15 @@ function initSocketevents() {
     });
 
     mopidy.on("event:volumeChanged", function(data) {
-        setVolume(data["volume"]);
+        setVolume(data.volume);
     });
 
     mopidy.on("event:muteChanged", function(data) {
-        setMute(data["mute"]);
+        setMute(data.mute);
     });
 
     mopidy.on("event:playbackStateChanged", function(data) {
-        switch (data["new_state"]) {
+        switch (data.new_state) {
             case "paused":
             case "stopped":
                 setPlayState(false);
@@ -283,14 +284,14 @@ function initSocketevents() {
     });
 
     mopidy.on("event:seeked", function(data) {
-        setPosition(parseInt(data["time_position"]));
+        setPosition(parseInt(data.time_position));
         if (play) {
             startProgressTimer();
         }
     });
 
     mopidy.on("event:streamTitleChanged", function(data) {
-        setSongTitle(data["title"], true);
+        setSongTitle(data.title, true);
     });
 }
 
@@ -331,7 +332,7 @@ function toggleFullscreen() {
 
 function isFullscreen() {
     return (document.fullscreenElement ||    // alternative standard method
-        document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement )  // current working methods
+        document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement ); // current working methods
 }
 
 function switchContent(divid, uri) {
@@ -345,8 +346,8 @@ function switchContent(divid, uri) {
 function setHeadline(site){
     site = site.trim();
     str = $('.mainNav').find('a[href$='+site+']').text();
-    if(str == ""){
-        str = site.charAt(0).toUpperCase() + site.slice(1);;
+    if(str === ""){
+        str = site.charAt(0).toUpperCase() + site.slice(1);
     }
     $('#contentHeadline').html('<a href="#home" onclick="switchContent(\'home\'); return false;">' + str + '</a>');
 }
@@ -365,7 +366,7 @@ function updateStatusOfAll() {
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
 
-    updateOptions()
+    updateOptions();
 
     mopidy.playback.getVolume().then(processVolume, console.error);
     mopidy.mixer.getMute().then(processMute, console.error);
@@ -409,7 +410,7 @@ function locationHashChanged() {
         case 'search':
             $('#navsearch a').addClass($.mobile.activeBtnClass);
             $("#searchinput").focus();
-            if (customTracklists['mbw:allresultscache'] == '') {
+            if (customTracklists['mbw:allresultscache'] === '') {
                 initSearch($('#searchinput').val());
             }
             break;
@@ -417,12 +418,12 @@ function locationHashChanged() {
             $('#navstream a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;
         case 'artists':
-            if (uri != '') {
+            if (uri !== '') {
                 showArtist(uri);
             }
             break;
         case 'albums':
-            if (uri != '') {
+            if (uri !== '') {
                 showAlbum(uri);
             }
             break;
@@ -508,11 +509,13 @@ $(document).ready(function(event) {
 
     //navigation temporary, rewrite this!
     $('#songinfo').click(
-	function()
-    	 {return switchContent('nowPlaying')}   );
+	function() {
+        return switchContent('nowPlaying');
+    });
     $('#controlspopupimage').click(
 	function() {
-	    return switchContent('current')}   );
+	    return switchContent('current');
+    });
     $('#navToggleFullscreen').click(function(){
         toggleFullscreen();
     });

@@ -128,20 +128,20 @@ function scrollToTracklist() {
 function getArtist(pl) {
     for (var i = 0; i < pl.length; i++) {
         for (var j = 0; j < pl[i].artists.length; j++) {
-            if (pl[i].artists[j].name != '') {
+            if (pl[i].artists[j].name !== '') {
                 return pl[i].artists[j].name;
             }
         }
-    };
+    }
 }
 
 //A hack to find the first album of a playlist. this is not yet returned by mopidy
 function getAlbum(pl) {
     for (var i = 0; i < pl.length; i++) {
-        if (pl[i].album.name != '') {
+        if (pl[i].album.name !== '') {
             return pl[i].album.name;
         }
-    };
+    }
 }
 
 function artistsToString(artists, max) {
@@ -170,7 +170,7 @@ function albumTracksToTable(pl, target, uri) {
         popupData[pl[i].uri] = pl[i];
         liID = targetmin + '-' + pl[i].uri;
         tmp += renderSongLi(pl[i], liID, uri);
-    };
+    }
     tmp += '</ul>';
     $(target).html(tmp);
     $(target).attr('data', uri);
@@ -178,7 +178,7 @@ function albumTracksToTable(pl, target, uri) {
 
 function renderSongLi(song, liID, uri) {
     var name;
-    if (!song.name || song.name == '') {
+    if (!song.name || song.name === '') {
         name = uri.split('/');
         name = decodeURI(name[name.length - 1]);
     } else {
@@ -195,7 +195,7 @@ function renderSongLi(song, liID, uri) {
 
 function renderQueueSongLi(song, liID, uri, tlid) {
     var name;
-    if (!song.name || song.name == '') {
+    if (!song.name || song.name === '') {
         name = uri.split('/');
         name = decodeURI(name[name.length - 1]);
     } else {
@@ -212,7 +212,7 @@ function renderQueueSongLi(song, liID, uri, tlid) {
 
 function resultsToTables(results, target, uri) {
     if (!results) {
-        return
+        return;
     }
     var tlids = [];
     if (target == CURRENT_PLAYLIST_TABLE) {
@@ -249,7 +249,7 @@ function resultsToTables(results, target, uri) {
             results[i].album.name = '';
         }
         //create name if there is no one
-        if (!results[i].name || results[i].name == '') {
+        if (!results[i].name || results[i].name === '') {
             name = results[i].uri.split('/');
             results[i].name = decodeURI(name[name.length - 1]) || 'Track ' + String(i);
         }
@@ -269,11 +269,11 @@ function resultsToTables(results, target, uri) {
             newtlids = [];
             nextname = '';
         } else {
-            if ((results[i].album.name != nextname) || (nextname == '')) {
+            if ((results[i].album.name != nextname) || (nextname === '')) {
                 tableid = 'art' + i;
                 //render differently if only one track in the album
                 if (newalbum.length == 1) {
-                    if (i != 0) {
+                    if (i !== 0) {
                         html += '<li class="smalldivider"> &nbsp;</li>';
                     }
                     iconClass = getMediaClass(newalbum[0].uri);
@@ -303,7 +303,7 @@ function resultsToTables(results, target, uri) {
                             }
                         }
                     }
-                    if (newalbum[0].album.name != '') {
+                    if (newalbum[0].album.name !== '') {
                         html += ' / ';
                     }
                     html += '<em>' + newalbum[0].album.name + '</em></p>';
@@ -387,7 +387,7 @@ function playlisttotable(pl, target, uri) {
             child += '</a></li>';
             tmp += child;
         }
-    };
+    }
 
     $(target).html(tmp);
     $(target).attr('data', uri);
@@ -415,7 +415,7 @@ function getUris(tracks) {
 function getTracksFromUri(uri, full_track_data) {
     var returnTracksOrUris = function(tracks) {
         return (full_track_data || false) ? tracks : getUris(tracks);
-    }
+    };
     if (customTracklists[uri]) {
         return returnTracksOrUris(customTracklists[uri]);
     } else if (playlists[uri] && playlists[uri].tracks) {
@@ -483,7 +483,7 @@ function showOffline(on) {
 
 // from http://dzone.com/snippets/validate-url-regexp
 function validUri(str) {
-    var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
     return regexp.test(str);
 }
 
