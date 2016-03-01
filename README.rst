@@ -58,7 +58,7 @@ Project resources
 Changelog
 =========
 
-v2.2.0 (UNRELEASED)
+v2.2.0 (2016-03-01)
 -------------------
 
 - Split vendor-provided JavaScript and CSS libraries into separate folders to make them easier to identify and maintain.
