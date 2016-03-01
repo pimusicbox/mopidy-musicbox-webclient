@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html manifest="mb.manifest">
+<html manifest="mb.appcache">
 <head>
+    <title>Musicbox</title>
     <meta charset="utf-8">
-    <script src="js/jquery-1.11.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.min.css"/>
+    <script type="text/javascript" src="vendors/jquery/jquery-1.12.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="vendors/jquery_mobile_flat_ui_theme/jquery.mobile.flatui.min.css"/>
     <script>
         //configuration
         var isMusicBox = '{{musicbox}}' == 'True'; // Remove MusicBox only content (e.g. settings, system pages)
@@ -30,33 +31,24 @@
     <link rel="apple-touch-icon" sizes="114x114" href="images/icons/musicbox114.png" />
     <link rel="shortcut icon" type="image/x-icon" href="images/icons/musicbox32.gif" />
 
-    <!-- Tile icon for Win8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="mopidy/favicon.png" />
-    <meta name="msapplication-TileColor" content="#eee" />
-
-
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <link rel="apple-touch-startup-image" href="images/startup.png" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="MusicBox" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="HandheldFriendly" content="True" />
     <meta name="MobileOptimized" content="320" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="MusicBox" />
     <meta http-equiv="imagetoolbar" content="no" />
     <meta content="true" name="MSSmartTagsPreventParsing" />
 
     <meta http-equiv="cleartype" content="on" />
 
-    <script src="js/jquery.mobile-1.3.2.min.js"></script>
+    <script src="vendors/jquery_mobile/jquery.mobile-1.3.2.min.js"></script>
     <meta name="description" content="MusicBox" />
     <meta name="author" content="Wouter van Wijk" />
-    <meta name="copyright" content="(c) 2012-2015 Wouter van Wijk" />
-    <link href="css/webclient.css" rel="stylesheet" />
-    <link href="css/jquery.mobile.iscrollview.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <meta name="copyright" content="(c) 2012-2016 Wouter van Wijk" />
+    <link rel="stylesheet" type="text/css" href="css/webclient.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/font_awesome/css/font-awesome.min.css" />
 
 </head>
 
@@ -98,13 +90,9 @@
                 <a href="/alarmclock/">
                 <span class="navtxt"> Alarm Clock </span><i class="fa fa-clock-o"></i></a>
         </li>
-        <li id="navEnterFullscreen" data-icon="false">
+        <li id="navToggleFullscreen" data-icon="false">
                 <a href="#">
-                <span class="navtxt"> Fullscreen </span><i class="fa  fa-desktop"></i></a>
-        </li>
-        <li id="navExitFullscreen" class="hidden" data-icon="false">
-            <a href="#">
-                <span class="navtxt"> Exit Fullscreen </span><i class="fa  fa-desktop"></i></a>
+                <span class="navtxt" id="toggletxt"> Fullscreen </span><i class="fa fa-desktop"></i></a>
         </li>
         <li id="navSettings" data-icon="false">
                 <a href="/settings/">
@@ -112,14 +100,14 @@
         </li>
         <li id="navshutdown" data-icon="false">
             <a href="system.html">
-                <span class="navtxt">System </span><i class="fa  fa-power-off"></i></a>
+                <span class="navtxt">System </span><i class="fa fa-power-off"></i></a>
         </li>
-        <li id="" data-icon="false">
+        <li data-icon="false">
             <div><!-- slider for volume -->
                 <a href="#" onclick="doMute(); return false;"><span title="Toggle mute"><i id="mutebt" class="fa fa-volume-up"></i></span></a>
                 <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
                 <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
-                       value="0" max="100" onchange="doVolume(this.value);"/>
+                       value="0" max="100"/>
             </div>
         </li>
     </ul>
@@ -131,14 +119,14 @@
 
     <h3 id="coverpopupalbumname"></h3>
     <h4 id="coverpopupartist"></h4>
-    <a href="#" onclick="closePopups();"><img id="coverpopupimage" src=""/></a>
+    <a href="#" onclick="closePopups();"><img id="coverpopupimage" src="" alt="Album cover"/></a>
 </div>
 
 <div id="artistpopup" data-role="popup" data-theme="c">
     <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
        class="ui-btn-right">Close</a>
     <h4 id="artistpopupname">&nbsp;</h4>
-    <a href="#" onclick="closePopups();"><img id="artistpopupimage" src=""/></a>
+    <a href="#" onclick="closePopups();"><img id="artistpopupimage" src="" alt="Album artist"/></a>
 </div>
 
 <div data-role="popup" data-transition="none" data-theme="c" id="popupBrowse">
@@ -183,8 +171,7 @@
                 <a href="#" onclick="showAlbumPopup('#popupTracks')">Show Album <span class="popupAlbumName"></span></a>
             </li>
             <li id="popupArtistsLi">
-                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span
-                        class="popupArtistName"></span>
+                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                 </a>
             </li>
             <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">
@@ -208,8 +195,7 @@
                 <a href="#" onclick="showAlbumPopup('#popupQueue')">Show Album <span class="popupAlbumName"></span></a>
             </li>
             <li id="popupArtistsLi">
-                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span
-                        class="popupArtistName"></span>
+                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                 </a>
             </li>
             <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">
@@ -221,6 +207,37 @@
 </div>
 
 
+<div data-role="popup" data-theme="b" id="popupSave" class="popupDialog">
+    <form>
+        <p>Save current queue to a playlist.
+        <input id="saveinput" placeholder="Playlist name" class="span2" data-clear-btn="true"
+               onkeypress="return savePressed(event.keyCode);" type="text"/>
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" onclick="return saveQueue();">
+                Ok
+            </button>
+            <button class="btn" type="button" onclick="return $('#popupSave').popup('close');">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+<!--/save queue to playlist-->
+
+
+<div data-role="popup" data-theme="b" id="popupOverwrite" class="popupDialog">
+    <form>
+        <p>Overwrite existing playlist with same name?
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" id="overwriteConfirmBtn">
+                Ok
+            </button>
+            <button class="btn" type="button" onclick="$('#popupOverwrite').popup('close'); return $('#popupSave').popup('open');">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div><!--/overwrite existing playlist-->
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">
     <a id="headermenubtn" href="#panel"><i class="fa fa-align-justify"></i></a>
@@ -293,7 +310,7 @@
 
 <div id="nowPlayingpane" data-role="content" class="pane">
 
-    <img id="controlspopupimage" src="images/default_cover.png" />
+    <img id="controlspopupimage" src="images/default_cover.png" alt="Album cover"/>
 
 
     <div class="nowPlaying-artistInfo">
@@ -302,24 +319,36 @@
     </div>
 
     <div id="slidercontainer"><!-- slider for track position -->
-        <span id="songelapsed" class="pull-left"> 0:00 </span>
-        <span id="songlength" class="pull-right"> 0:00 </span>
+        <span id="songelapsed" class="pull-left"></span>
+        <span id="songlength" class="pull-right"></span>
         <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
-        <input id="trackslider" name="trackslider" data-mini="true" type="range" onchange="doSeekPos(this.value);" />
+        <input id="trackslider" name="trackslider" data-mini="true" type="range" />
     </div>
 </div>
 <!-- /nowplaying -->
 
 <div data-role="content" id="playlistspane" class="pane">
-    <a style="float:right; padding: 1.2em 10px" onclick="return refreshPlaylists();"><i class="fa fa-refresh"></i></a>
-    <h4>Playlists</h4>
+    <div class="ui-grid-a">
+        <div class="ui-block-a">
+            <h4>Playlists</h4>
+        </div>
+        <div align="right" class="ui-block-b" data-role="controlgroup" data-type="horizontal">
+            <button class="btn" type="button" title="Refresh playlists" onclick="return refreshPlaylists();">
+                <i class="fa fa-refresh"></i>
+            </button>
+        </div>
+    </div>
     <div class="ui-grid-a pl-breakpoint">
         <div class="ui-block-a scroll" id="playlistslistdiv">
             <ul id="playlistslist" class="table"></ul>
         </div>
         <div class="ui-block-b scroll" id="playlisttracksdiv">
-        <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;"><a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a></div>
-        <ul class="table" id="playlisttracks"></ul>
+            <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;">
+                <a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a>
+            </div>
+            <div>
+                <ul class="table" id="playlisttracks"></ul>
+            </div>
         </div>
     </div>
 </div>
@@ -333,15 +362,26 @@
 <!--/browsepane-->
 
 <div data-role="content" class="pane" id="currentpane">
-    <a style="float:right" onclick="return clearQueue();" data-role="button">Clear</a>
-    <a style="float:right; margin-right: 0.5em" onclick="return saveQueue();" data-role="button">Save</a><h4>Play Queue</h4>
-    <!--                <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul>
-                    <ul data-role="listview" data-icon="false" data-theme="d" data-inset="true" id="currenttable"></ul> -->
-    <ul class="table" id="currenttable"></ul>
+    <div class="ui-grid-a">
+        <div class="ui-block-a">
+            <h4>Play Queue</h4>
+        </div>
+        <div align="right" class="ui-block-b" data-role="controlgroup" data-type="horizontal">
+            <button class="btn" type="button" title="Save queue to playlist" onclick="return showSavePopup();">
+                <i class="fa fa-floppy-o"></i>
+            </button>
+            <button class="btn" type="button" title="Clear queue" onclick="return clearQueue();">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </div>
+    </div>
+    <div class="ui-grid">
+        <ul class="table" id="currenttable"></ul>
+    </div>
 </div>
 
 <div data-role="content" class="pane" id="albumspane">
-    <a href="#coverpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="albumviewcover"/></a>
+    <a href="#coverpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="albumviewcover" alt="Album cover"/></a>
 
     <h3 id="h_albumname"></h3>
     <h5 id="h_albumartist"></h5>
@@ -350,7 +390,7 @@
 </div>
 
 <div data-role="content" class="pane" id="artistspane">
-    <a href="#artistpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="artistviewimage"/></a>
+    <a href="#artistpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="artistviewimage" alt="Album artist"/></a>
 
     <h3 id="h_artistname"></h3>
     <ul class="table" id="artiststable"></ul>
@@ -363,11 +403,13 @@
         <div class="ui-block">
             <form>
                 <p>Search for artists, albums, or specific tracks.
-                <select id="selectSearchService"> <!-- data-native-menu="false"> <!-- multiple="multiple" data-native-menu="false">
+                <select id="selectSearchService"> 
+                    <!-- data-native-menu="false"> 
+                    multiple="multiple" data-native-menu="false">
                     <option data-placeholder="true">Choose services</option> -->
                 </select>
                 <input id="searchinput" placeholder="Search term" class="span2" data-clear-btn="true"
-                       onkeypress="return searchPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                       onkeypress="return searchPressed(event.keyCode);" type="text"/>
                 <button class="btn" type="button" onclick="return initSearch(event.value);">
                     Search!
                 </button>
@@ -416,13 +458,13 @@
                     Get currently playing
                 </button>
                 <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
-                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                       onkeypress="return streamPressed(event.keyCode);" type="text"/>
                 <button class="btn" type="button" onclick="return playStreamUri();">
                     Play
                 </button>
 
                 <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
-                       onkeypress="return streamPressed(event.keyCode);" id="appendedInputButton" type="text"/>
+                       onkeypress="return streamPressed(event.keyCode);" type="text"/>
                 <button class="btn" type="button" onclick="return addFavourite();">
                     Save
                 </button>
@@ -439,7 +481,7 @@
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="normalFooter">
     <div class="footerControls">
         <div class="songinfo" id="songinfo">
-            <a href="#"><div style="float: left"><img id="infocover" src="images/default_cover.png"/></div></a>
+            <a href="#"><div style="float: left"><img id="infocover" src="images/default_cover.png" alt="Album cover"/></div></a>
             <div class="songinfo-text">
                 <div id="infoname"></div>
                 <div id="infoartist"></div>
@@ -472,21 +514,22 @@
 
 </div>
 <!-- /page one -->
-<script type="text/javascript" src="../mopidy/mopidy.min.js"></script>
-<script type="text/javascript" src="js/iscroll-lite.js"></script>
-<script src="js/jquery.cookie.js"></script>
-<script src="js/controls.js"></script>
-<script src="js/library.js"></script>
-<script src="js/functionsvars.js"></script>
-<script src="js/process_ws.js"></script>
+<script type="text/javascript" src="vendors/mopidy/mopidy.min.js"></script>
+<script type="text/javascript" src="vendors/jquery_cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="vendors/media_progress_timer/timer.js"></script>
+<script type="text/javascript" src="js/progress_timer.js"></script>
+<script type="text/javascript" src="js/controls.js"></script>
+<script type="text/javascript" src="js/library.js"></script>
+<script type="text/javascript" src="js/functionsvars.js"></script>
+<script type="text/javascript" src="js/process_ws.js"></script>
 
 <!-- use lastfm -->
-<script type="text/javascript" src="js/lastfm.api.md5.js"></script>
-<script type="text/javascript" src="js/lastfm.api.js"></script>
-<script type="text/javascript" src="js/lastfm.api.cache.js"></script>
+<script type="text/javascript" src="vendors/lastfm/lastfm.api.md5.js"></script>
+<script type="text/javascript" src="vendors/lastfm/lastfm.api.js"></script>
+<script type="text/javascript" src="vendors/lastfm/lastfm.api.cache.js"></script>
 
-<script src="js/images.js"></script>
+<script type="text/javascript" src="js/images.js"></script>
 
-<script src="js/gui.js"></script>
+<script type="text/javascript" src="js/gui.js"></script>
 </body>
 </html>

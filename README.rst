@@ -58,10 +58,35 @@ Project resources
 Changelog
 =========
 
+v2.2.0 (2016-03-01)
+-------------------
+
+- Split vendor-provided JavaScript and CSS libraries into separate folders to make them easier to identify and maintain.
+  (Addresses: `#143 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/143>`_).
+- Upgrade Font-Awesome libraries to version 4.5.0.
+- Upgrade jQuery libraries to version 1.12.0.
+- Upgrade last.fm JavaScript libraries to the latest version available on the GitHub master branch of the repository.
+- Mopidy-Musicbox-Webclient is now distributed with a vendor copy of Mopidy.js. (Addresses: `#175 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/175>`_).
+
+**Fixes**
+
+- Remove unused iScroll libraries and references.
+- Remove unused jQuery.Mobile.iScrollView libraries and references.
+- Remove unused jQuery.Truncate libraries and references.
+- Avoid polling for current track and time changes. (Fixes: `#40 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/40>`_).
+- Prevent mobile devices from scaling when used in landscape mode. (Fixes: `#157 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/157>`_).
+- Scrolling now works in full screen mode for Chrome and Safari as well. (Fixes: `#53 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/53>`_).
+- No longer interferes with changes to Mopidy's volume levels that are triggered externally. (Fixes: `#162 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/162>`_).
+- Volume slider now works with Mopidy-ALSAMixer again. (Fixes: `#168 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/168>`_).
+- Now falls back to track artist if album artist is not available for rendering cover art. (Fixes: `#128 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/128>`_).
+- Replace Javascript prompt with jQuery Mobile equivalent. (Fixes: `#113 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/113>`_).
+- Fix playlist refresh button. (Fixes: `#173 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/173>`_).
+- Update save queue functionality to use 'm3u' format. (Fixes: `#177 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/177>`_).
+
 v2.1.1 (2016-02-04)
 -------------------
 
-- Replace Javascript for truncating text with more reliable CSS equivalent.
+- Replace Javascript for truncating text with more reliable CSS equivalent. (Fixes: `#155 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/155>`_).
 
 v2.1.0 (2016-02-04)
 -------------------
@@ -82,7 +107,7 @@ v2.1.0 (2016-02-04)
 - Add application cache manifest file for quicker loads and to allow client devices to detect when local caches should
   be invalidated.
 - Use standard Mopidy mixer methods to mute / un-mute playback.
-- Streams are now saved to the '[Radio Streams].m3u' playlist and are accessible from all clients. 
+- Streams are now saved to the '[Radio Streams].m3u' playlist and are accessible from all clients.
   Users with existing streamUris stored as browser cookies will be prompted to convert them to the new m3u backed scheme.
 - Mopidy-Musicbox-Webclient now requires at least Mopidy v1.1.0 or greater to be installed.
 

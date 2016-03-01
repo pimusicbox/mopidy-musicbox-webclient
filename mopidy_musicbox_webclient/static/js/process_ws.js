@@ -16,9 +16,7 @@ function processCurrenttrack(data) {
  * process results of volume
  *********************************************************/
 function processVolume(data) {
-    if (!volumeChanging) {
-        setVolume(data);
-    }
+    setVolume(data);
 }
 
 /********************************************************
@@ -60,8 +58,7 @@ function processSingle(data) {
  * process results of current position
  *********************************************************/
 function processCurrentposition(data) {
-    var pos = parseInt(data);
-    setPosition(pos);
+    setPosition(parseInt(data));
 }
 
 /********************************************************
@@ -70,7 +67,6 @@ function processCurrentposition(data) {
 function processPlaystate(data) {
     if (data == 'playing') {
         setPlayState(true);
-        resumePosTimer();
     } else {
         setPlayState(false);
     }
@@ -80,8 +76,8 @@ function processPlaystate(data) {
  * process results of a browse list
  *********************************************************/
 function processBrowseDir(resultArr) {
-    var backHtml = '<li style="background-color:#ccc"><a href="#" onclick="return getBrowseDir();"><h1 class="trackname"><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>'
-    if ( (!resultArr) || (resultArr == '') || (resultArr.length == 0) ) {
+    var backHtml = '<li style="background-color:#ccc"><a href="#" onclick="return getBrowseDir();"><h1 class="trackname"><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>';
+    if ( (!resultArr) || (resultArr === '') || (resultArr.length === 0) ) {
         $('#browsepath').html('No tracks found...');
         $('#browselist').html(backHtml);
         showLoading(false);
@@ -119,16 +115,16 @@ function processBrowseDir(resultArr) {
         if (resultArr[i].type == 'track') {
             //console.log(resultArr[i]);
             mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultDict) {
-                var lookup_uri = Object.keys(resultDict)[0];
-                popupData[lookup_uri] = resultDict[lookup_uri][0];
-                browseTracks.push(resultDict[lookup_uri][0]);
+                var lookupUri = Object.keys(resultDict)[0];
+                popupData[lookupUri] = resultDict[lookupUri][0];
+                browseTracks.push(resultDict[lookupUri][0]);
             }, console.error);
             child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
                      '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + index + '\');">' +
                      '<i class="fa fa-ellipsis-v"></i></a>' +
                      '<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, ' + index + ');" id="' + resultArr[i].uri +
                      '"><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
-            index++
+            index++;
         } else {
             if (browseStack.length > 0) {
                 iconClass="fa fa-folder-o";
@@ -156,7 +152,7 @@ function processBrowseDir(resultArr) {
  * process results of list of playlists of the user
  *********************************************************/
 function processGetPlaylists(resultArr) {
-    if ((!resultArr) || (resultArr == '')) {
+    if ((!resultArr) || (resultArr === '')) {
         $('#playlistslist').empty();
         return;
     }
@@ -171,7 +167,7 @@ function processGetPlaylists(resultArr) {
         } else {
             tmp = tmp + li_html + '<i class="' + getMediaClass(resultArr[i].uri) + '"></i> ' + resultArr[i].name + '</a></li>';
         }
-    };
+    }
     // Prepend the user's Spotify "Starred" playlist and favourites to the results. (like Spotify official client).
     tmp = favourites + starred + tmp;
     $('#playlistslist').html(tmp);
@@ -183,12 +179,12 @@ function processGetPlaylists(resultArr) {
  * process results of a returned list of playlist track refs
  *********************************************************/
 function processPlaylistItems(resultDict) {
-    if (resultDict.items.length == 0) {
+    if (resultDict.items.length === 0) {
         console.log('Playlist', resultDict.uri, 'is empty');
         showLoading(false);
         return;
     }
-    var trackUris = []
+    var trackUris = [];
     for (i = 0; i < resultDict.items.length; i++) {
         trackUris.push(resultDict.items[i].uri);
     }
@@ -202,7 +198,6 @@ function processPlaylistItems(resultDict) {
         showLoading(false);
         return playlists[newplaylisturi].tracks;
     });
-    return false;
 }
 
 /********************************************************
@@ -219,7 +214,7 @@ function processCurrentPlaylist(resultArr) {
  * process results of an artist lookup
  *********************************************************/
 function processArtistResults(resultArr) {
-    if (!resultArr || (resultArr.length == 0)) {
+    if (!resultArr || (resultArr.length === 0)) {
         $('#h_artistname').text('Artist not found...');
         getCover('', '#artistviewimage, #artistpopupimage', 'extralarge');
         showLoading(false);
@@ -238,7 +233,7 @@ function processArtistResults(resultArr) {
  * process results of an album lookup
  *********************************************************/
 function processAlbumResults(resultArr) {
-    if (!resultArr || (resultArr.length == 0)) {
+    if (!resultArr || (resultArr.length === 0)) {
         $('#h_albumname').text('Album not found...');
         getCover('', '#albumviewcover, #coverpopupimage', 'extralarge');
         showLoading(false);
@@ -253,6 +248,6 @@ function processAlbumResults(resultArr) {
     $('#h_albumartist').html(artistname);
     $('#coverpopupalbumname').html(albumname);
     $('#coverpopupartist').html(artistname);
-    getCover(resultArr[0].album, '#albumviewcover, #coverpopupimage', 'extralarge');
+    getCover(resultArr[0].uri, '#albumviewcover, #coverpopupimage', 'extralarge');
     showLoading(false);
 }

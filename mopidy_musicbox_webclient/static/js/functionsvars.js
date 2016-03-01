@@ -12,16 +12,13 @@ var random;
 var repeat;
 var consume;
 var single;
-var currentVolume = -1;
 var mute;
-var volumeChanging = false;
-var posChanging = false;
+var volumeChanging;
+var volumeSliding = false;
 
-var posTimer;
-var volumeTimer;
-var seekTimer;
+var positionChanging;
+
 var initgui = true;
-var currentpos = 0;
 var popupData = {};
 var songlength = 0;
 
@@ -29,7 +26,6 @@ var artistshtml = '';
 var artiststext = '';
 var songname = '';
 var songdata = {'track': {}, 'tlid': -1};
-var newposition = 0;
 
 var playlisttracksScroll;
 var playlistslistScroll;
@@ -73,12 +69,6 @@ PLAY_ALL = 4;
 PLAY_NOW_SEARCH = 5;
 
 MAX_TABLEROWS = 50;
-
-//update track slider timer, milliseconds
-TRACK_TIMER = 1000;
-
-//check status timer, every 5 or 10 sec
-STATUS_TIMER = 10000;
 
 // the first part of Mopidy extensions which serve radio streams
 var radioExtensionsList = ['somafm', 'tunein', 'dirble', 'audioaddict'];
@@ -138,20 +128,20 @@ function scrollToTracklist() {
 function getArtist(pl) {
     for (var i = 0; i < pl.length; i++) {
         for (var j = 0; j < pl[i].artists.length; j++) {
-            if (pl[i].artists[j].name != '') {
+            if (pl[i].artists[j].name !== '') {
                 return pl[i].artists[j].name;
             }
         }
-    };
+    }
 }
 
 //A hack to find the first album of a playlist. this is not yet returned by mopidy
 function getAlbum(pl) {
     for (var i = 0; i < pl.length; i++) {
-        if (pl[i].album.name != '') {
+        if (pl[i].album.name !== '') {
             return pl[i].album.name;
         }
-    };
+    }
 }
 
 function artistsToString(artists, max) {
@@ -180,7 +170,7 @@ function albumTracksToTable(pl, target, uri) {
         popupData[pl[i].uri] = pl[i];
         liID = targetmin + '-' + pl[i].uri;
         tmp += renderSongLi(pl[i], liID, uri);
-    };
+    }
     tmp += '</ul>';
     $(target).html(tmp);
     $(target).attr('data', uri);
@@ -188,7 +178,7 @@ function albumTracksToTable(pl, target, uri) {
 
 function renderSongLi(song, liID, uri) {
     var name;
-    if (!song.name || song.name == '') {
+    if (!song.name || song.name === '') {
         name = uri.split('/');
         name = decodeURI(name[name.length - 1]);
     } else {
@@ -205,7 +195,7 @@ function renderSongLi(song, liID, uri) {
 
 function renderQueueSongLi(song, liID, uri, tlid) {
     var name;
-    if (!song.name || song.name == '') {
+    if (!song.name || song.name === '') {
         name = uri.split('/');
         name = decodeURI(name[name.length - 1]);
     } else {
@@ -222,7 +212,7 @@ function renderQueueSongLi(song, liID, uri, tlid) {
 
 function resultsToTables(results, target, uri) {
     if (!results) {
-        return
+        return;
     }
     var tlids = [];
     if (target == CURRENT_PLAYLIST_TABLE) {
@@ -234,7 +224,7 @@ function resultsToTables(results, target, uri) {
 
     var newalbum = [];
     var newtlids = [];
-    //keep a list of albums for retreiving of covers
+    //keep a list of track URIs for retrieving of covers
     var coversList = [];
     var nextname = '';
     var count = 0;
@@ -259,7 +249,7 @@ function resultsToTables(results, target, uri) {
             results[i].album.name = '';
         }
         //create name if there is no one
-        if (!results[i].name || results[i].name == '') {
+        if (!results[i].name || results[i].name === '') {
             name = results[i].uri.split('/');
             results[i].name = decodeURI(name[name.length - 1]) || 'Track ' + String(i);
         }
@@ -279,11 +269,11 @@ function resultsToTables(results, target, uri) {
             newtlids = [];
             nextname = '';
         } else {
-            if ((results[i].album.name != nextname) || (nextname == '')) {
+            if ((results[i].album.name != nextname) || (nextname === '')) {
                 tableid = 'art' + i;
                 //render differently if only one track in the album
                 if (newalbum.length == 1) {
-                    if (i != 0) {
+                    if (i !== 0) {
                         html += '<li class="smalldivider"> &nbsp;</li>';
                     }
                     iconClass = getMediaClass(newalbum[0].uri);
@@ -313,7 +303,7 @@ function resultsToTables(results, target, uri) {
                             }
                         }
                     }
-                    if (newalbum[0].album.name != '') {
+                    if (newalbum[0].album.name !== '') {
                         html += ' / ';
                     }
                     html += '<em>' + newalbum[0].album.name + '</em></p>';
@@ -354,19 +344,16 @@ function resultsToTables(results, target, uri) {
                     newalbum = [];
                     newtlids = [];
                     if (results[i].album) {
-                        coversList.push([results[i].album, i]);
+                        coversList.push([results[i].uri, i]);
                     }
                 } //newalbum length
-                if (results[i].album) {
-                    coversList.push([results[i].album, i]);
-                }
             } //albums name
         }
     }
     tableid = "#" + tableid;
     $(target).html(html);
     $(target).attr('data', uri);
-    //retreive albumcovers
+    //retrieve albumcovers
     for (i = 0; i < coversList.length; i++) {
         getCover(coversList[i][0], target + '-cover-' + coversList[i][1], 'small');
     }
@@ -400,7 +387,7 @@ function playlisttotable(pl, target, uri) {
             child += '</a></li>';
             tmp += child;
         }
-    };
+    }
 
     $(target).html(tmp);
     $(target).attr('data', uri);
@@ -428,7 +415,7 @@ function getUris(tracks) {
 function getTracksFromUri(uri, full_track_data) {
     var returnTracksOrUris = function(tracks) {
         return (full_track_data || false) ? tracks : getUris(tracks);
-    }
+    };
     if (customTracklists[uri]) {
         return returnTracksOrUris(customTracklists[uri]);
     } else if (playlists[uri] && playlists[uri].tracks) {
@@ -496,7 +483,7 @@ function showOffline(on) {
 
 // from http://dzone.com/snippets/validate-url-regexp
 function validUri(str) {
-    var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
     return regexp.test(str);
 }
 
@@ -557,4 +544,4 @@ function isFavouritesPlaylist(playlist) {
 function isSpotifyStarredPlaylist(playlist) {
     var starredRegex = /spotify:user:.*:starred/g;
     return (starredRegex.test(playlist.uri) && playlist.name == 'Starred');
-}    
+}

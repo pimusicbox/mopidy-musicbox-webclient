@@ -14,18 +14,6 @@
  ****************************/
 
 @media all and (min-width: 961px) {
-    /*header*/
-    .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 30%;
-    }
-
-    .header-breakpoint.ui-grid-b .ui-block-b {
-        width: 30%;
-    }
-
-    .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 30.1%;
-    }
 
     /*playlists*/
     .pl-breakpoint.ui-grid-a .ui-block-a {
@@ -49,15 +37,15 @@
     }
 
     #playlisttracksback {
-        display:none;
+        display: none;
     }
 
     #playlisttracksdiv {
-        display:block;
+        display: block;
     }
 
     #playlistslistdiv {
-        display:block;
+        display: block;
     }
 
     /*search*/
@@ -65,81 +53,60 @@
         margin-left: .5em;
     }
 
-    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
+    .srch-breakpoint.ui-grid-a .ui-block-a,
+    .srch-breakpoint.ui-grid-a .ui-block-b {
         width: 49%;
     }
 }
 
 /* phone landscape */
 @media all and (max-width: 960px) {
-    /*header*/
-    .header-breakpoint.ui-grid-b .ui-block-a {
-        width: 35%;
-        clear: left;
-    }
-
-    .header-breakpoint.ui-grid-b .ui-block-b {
-        display: none;
-    }
-
-    .header-breakpoint.ui-grid-b .ui-block-c {
-        width: 33%;
-    }
 
     /*playlists*/
-    .pl-breakpoint .ui-block-a, .pl-breakpoint .ui-block-b {
+    .pl-breakpoint .ui-block-a,
+    .pl-breakpoint .ui-block-b {
         width: 100%;
-    }
+  }
 
     /*search*/
-    .srch-breakpoint.ui-grid-a .ui-block-a, .srch-breakpoint.ui-grid-a .ui-block-b {
+    .srch-breakpoint.ui-grid-a .ui-block-a,
+    .srch-breakpoint.ui-grid-a .ui-block-b {
         width: 100%;
     }
 
     #playlisttracksback {
-        display:block;
+        display: block;
     }
 
     #playlisttracksdiv {
-        display:none;
+        display: none;
     }
 
     #playlistslistdiv {
-        display:block;
+        display: block;
     }
-
 }
 
 /*****************************
  * Side Panel and Navigation *
  *****************************/
-.mainNav .fa{
+.mainNav .fa {
     float: right;
 }
 
-.mainNav .navtxt{
+.mainNav .navtxt {
     float: left;
 }
 
-.mainNav .navtxt:after{
+.mainNav .navtxt:after {
     clear: left;
-}
-
-.bottom{
-    width: 100%;
-    margin: -15px;
-    margin-top: 30px;
-}
-
-/**headers and controls**/
-#nextimg, #previmg, #backimg, #controlsimg {
-    margin-top: 6px;
 }
 
 #contentHeadline a {
     color:white;
 }
 
+/**headers and controls**/
 #headermenubtn {
     padding-top: 2px;
 }
@@ -170,18 +137,13 @@
 
 /* Increase slider handle by 30%. */
 .ui-slider-track.ui-mini .ui-slider-handle {
-	height: 22px;
-	width: 22px;
-	margin: -12px 0 0 -12px;
+    height: 22px;
+    width: 22px;
+    margin: -12px 0 0 -12px;
 }
 
 .ui-slider-input {
     display: none !important;
-}
-
-#songelapsed, #songlength {
-    font-size: 10px;
-    margin-top: 12px;
 }
 
 /************************
@@ -201,7 +163,7 @@
 /********************
  *  Pages, content  *
  ********************/
-#page{
+#page {
     background-color: #fff;
 }
 
@@ -217,11 +179,16 @@
     display: none;
 }
 
-#currentpane, #searchpane, #albumspane, #artistspane, #streampane {
-    display: none; 
+#currentpane,
+#searchpane,
+#albumspane,
+#artistspane,
+#streampane {
+    display: none;
 }
 
-#artistviewimage, #albumviewcover {
+#artistviewimage,
+#albumviewcover {
     float: right;
     height: 90px;
     max-width: 90%;
@@ -229,7 +196,7 @@
 
 /*** home ***/
 #homerows div {
-    text-align:center;
+    text-align: center;
     background-color: #2C3E50;
     padding: 2px;
     padding-top: 20px;
@@ -261,7 +228,7 @@
 
 .table {
     padding: 0;
-    list-style-type:none;
+    list-style-type: none;
 }
 
 .table li:last-child {
@@ -313,7 +280,7 @@
     background-position: 4px 51%;
 }
 .currenttrack {
-    background-image: url('../images/icons/play_alt_16x16.png'); 
+    background-image: url('../images/icons/play_alt_16x16.png');
     background-repeat: no-repeat;
     background-color: #eee;
     background-position: 4px 50%;
@@ -338,7 +305,7 @@
  *  Now Playing area  *
  **********************/
 
-#nowPlayingFooter{
+#nowPlayingFooter {
     height: 50px;
     line-height: 48px;
     text-align: center;
@@ -353,8 +320,8 @@
 .footerControls div span {
     padding-left: 3px;
     padding-right: 3px;
-	height: 100%;
-	vertical-align: middle;
+    height: 100%;
+    vertical-align: middle;
 }
 
 .footerControls #btplayNowPlaying {
@@ -371,11 +338,15 @@
     text-decoration: none;
 }
 
-.popupArtistName, .popupTrackName, .popupAlbumName, .popupArtistName {
+.popupArtistName,
+.popupTrackName,
+.popupAlbumName,
+.popupArtistName {
     font-style: oblique;
 }
 
-#controlspopup, #artistpopup, #coverpopup {
+#artistpopup,
+#coverpopup {
     max-width: 90%;
     background: white;
     padding: 5px;
@@ -386,79 +357,68 @@
     margin-top: 10px;
 }
 
-#buttons, #controlspopupimage, #coverpopupimage, #artistpopupimage {
+#controlspopupimage,
+#coverpopupimage,
+#artistpopupimage {
     display: block;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 10px;
-    max-width:90%;
-    max-height:90%;
+    max-width: 90%;
+    max-height: 90%;
 }
 
-#buttons {
-    font-size: 24px;
-    padding-right: 15px;
-    margin-bottom: 15px;
-}
-
-#popupTracksLv li, #popupQueueLv li {
+#popupTracksLv li,
+#popupQueueLv li {
     border-bottom: 1px solid #aaa;
 }
 
-#popupTracksLv, #popupQueueLv {
+#popupTracksLv,
+#popupQueueLv {
     border: 1px solid #aaa;
+}
+
+.popupDialog {
+    padding: 10px;
 }
 
 /*dont hide clear buttons in text input */
 .ui-input-clear-hidden {
-    display:block !important;
-}    
+    display: block !important;
+}
 
 /****************
  *  Common use  *
  ****************/
 
 #playlistspane {
-    margin: 0px !important;
+    margin: 0 !important;
 }
 
 a {
     text-decoration: none !important;
 }
 
-.nobreak, .btsquare {
-    display: inline !important;
-}
-
 .pull-right {
     float: right;
+    font-size: 10px;
+    margin-top: 12px;
 }
 
 .pull-left {
     float: left;
+    font-size: 10px;
+    margin-top: 12px;
 }
 
-.hidden, #allresultloader, .loader {
-    display: none;
-}
-
-.breakafter {
-    margin-right: 15px;
-}
-
-.pright {
-    display: inline;
-    margin-top: 4px;
-    float: right;
-}
 /**********************
  *  Song information  *
  **********************/
-.ui-footer{
+.ui-footer {
     border: 0px;
 }
 
-#normalFooter{
+#normalFooter {
     height: 50px;
     line-height: 48px;
     text-align: center;
@@ -509,22 +469,14 @@ a {
     padding: 3px;
 }
 
-#nowPlayingpane{
+#nowPlayingpane {
     text-align: center;
 }
 
 /*helper*/
-.hidden{
-    display: none;
-}
-.ui-loader h1{
-    color: #efefef;
-}
 
-.settingscoll label {
-    font-size: 120%;
-    font-weight: bold;
-    padding-top: 30px;
+.ui-loader h1 {
+    color: #efefef;
 }
 
 /* panel workaround to make it responsive wrap push on wide viewports once open */
@@ -548,35 +500,26 @@ a {
     }
 }
 /*smartphones*/
-@media (max-width: 35em){
-    #nowPlayingpane{
-        padding: 15px 25px 0px 25px;
-    }
-
-    #nowPlayingpane #controlspopupimage{
-        max-width:90%;
-        max-height:90%;
+@media (max-width: 35em) {
+    #nowPlayingpane {
+        padding: 15px 25px 0 25px;
+        max-width: 90%;
+        max-height: 90%;
     }
 
     .nowPlaying-artistInfo {
         font-size: 12px;
     }
 
-    .nowPlaying-artistInfo h4{
-        margin: 0px;
-        font-weight: normal;
-        font-size:  12px;
-    }
-
-    .nowPlaying-artistInfo h3{
-        margin: 0px 0px 3px 00px;
+    .nowPlaying-artistInfo h3 {
+        margin: 0 0 3px 0;
         white-space: nowrap;
         overflow: hidden;
     }
 
-    #controlspopupimage{
-        max-width:90%;
-        max-height:90%;
+    #controlspopupimage {
+        max-width: 90%;
+        max-height: 90%;
         margin-bottom: 3px;
     }
 
@@ -608,8 +551,4 @@ input[type=text] {
     -ms-user-select: text;
     -o-user-select: text;
     user-select: text;
-}
-
-.mediaicon {
-    float: right;
 }

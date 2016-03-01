@@ -7,19 +7,16 @@
  * Song Info Sreen  *
  ********************/
 function resetSong() {
-    if (!posChanging) {
-        pausePosTimer();
-        setPlayState(false);
-        setPosition(0);
-        var data = new Object;
-        data.tlid = -1;
-        data.track = new Object;
-        data.track.name = '';
-        data.track.artists = '';
-        data.track.length = 0;
-        data.track.uri = ' ';
-        setSongInfo(data);
-    }
+    setPlayState(false);
+    setPosition(0);
+    var data = new Object({});
+    data.tlid = -1;
+    data.track = new Object({});
+    data.track.name = '';
+    data.track.artists = '';
+    data.track.length = 0;
+    data.track.uri = ' ';
+    setSongInfo(data);
 }
 
 function resizeMb() {
@@ -83,10 +80,10 @@ function setSongInfo(data) {
 //    console.log(data, songdata);
     if (!data ) { return; }
     if (data.tlid == songdata.tlid) { return; }
-    if (!data.track.name || data.track.name == '') {
+    if (!data.track.name || data.track.name === '') {
         var name = data.track.uri.split('/');
         data.track.name = decodeURI(name[name.length - 1]);
-    };
+    }
 
     updatePlayIcons(data.track.uri, data.tlid);
     artistshtml = '';
@@ -98,24 +95,23 @@ function setSongInfo(data) {
             if (rs && rs[1] == data.track.name) {
                 data.track.name = (rs[0] || rs[1]);
             }
-        };
+        }
     }
 
     songdata = data;
 
     setSongTitle(data.track.name, false);
+    songlength = Infinity;
 
-    if (!data.track.length || data.track.length == 0) {
-        songlength = 0;
-        $("#songlength").html('');
-        pausePosTimer();
+    if (!data.track.length || data.track.length === 0) {
+        $('#trackslider').next().find('.ui-slider-handle').hide();
         $('#trackslider').slider('disable');
         // $('#streamnameinput').val(data.track.name);
         // $('#streamuriinput').val(data.track.uri);
     } else {
         songlength = data.track.length;
-        $("#songlength").html(timeFromSeconds(data.track.length / 1000));
         $('#trackslider').slider('enable');
+        $('#trackslider').next().find('.ui-slider-handle').show();
     }
 
     var arttmp = '';
@@ -133,7 +129,7 @@ function setSongInfo(data) {
     }
     if (data.track.album && data.track.album.name) {
         $("#modalalbum").html('<a href="#" onclick="return showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>');
-        getCover(data.track.album, '#infocover, #controlspopupimage', 'extralarge');
+        getCover(data.track.uri, '#infocover, #controlspopupimage', 'extralarge');
     } else {
         $("#modalalbum").html('');
         $("#infocover").attr('src', 'images/default_cover.png');
@@ -143,7 +139,12 @@ function setSongInfo(data) {
     $("#modalartist").html(arttmp);
 
     $("#trackslider").attr("min", 0);
-    $("#trackslider").attr("max", data.track.length);
+    $("#trackslider").attr("max", songlength);
+    resetProgressTimer();
+    progressTimer.set(0, songlength);
+    if (play) {
+        startProgressTimer();
+    }
 
     resizeMb();
 }
@@ -161,7 +162,7 @@ function closePopups() {
 
 function popupTracks(e, listuri, trackuri, tlid) {
     if (!e)
-        var e = window.event;
+        e = window.event;
     $('.popupTrackName').html(popupData[trackuri].name);
     $('.popupAlbumName').html(popupData[trackuri].album.name);
     var child = "";
@@ -190,18 +191,19 @@ function popupTracks(e, listuri, trackuri, tlid) {
 
     var hash = document.location.hash.split('?');
     var divid = hash[0].substr(1);
+    var popupName = '';
     if (divid == 'current') {
         $(".addqueue").hide();
-	var popupName = '#popupQueue';
+        popupName = '#popupQueue';
     } else if (divid == 'browse') {
         $(".addqueue").show();
-	var popupName = '#popupBrowse';
+        popupName = '#popupBrowse';
     } else {
         $(".addqueue").show();
-    var popupName = '#popupTracks';
+        popupName = '#popupTracks';
     }
 
-    if (typeof tlid != 'undefined' && tlid != '') {
+    if (typeof tlid != 'undefined' && tlid !== '') {
         $(popupName).data("list", listuri).data("track", trackuri).data("tlid", tlid).popup("open", {
             x : e.pageX,
             y : e.pageY
@@ -248,15 +250,8 @@ function initSocketevents() {
     mopidy.on("event:optionsChanged", updateOptions);
 
     mopidy.on("event:trackPlaybackStarted", function(data) {
-        mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-        setPlayState(true);
         setSongInfo(data.tl_track);
-        initPosTimer();
-    });
-
-    mopidy.on("event:trackPlaybackPaused", function(data) {
-        pausePosTimer();
-        setPlayState(false);
+        setPlayState(true);
     });
 
     mopidy.on("event:playlistsLoaded", function(data) {
@@ -264,24 +259,35 @@ function initSocketevents() {
         getPlaylists();
     });
 
+    mopidy.on("event:playlistChanged", function(data) {
+        $('#playlisttracksdiv').hide();
+        $('#playlistslistdiv').show();
+        delete playlists[data.playlist.uri];
+        getPlaylists();
+    });
+
+    mopidy.on("event:playlistDeleted", function(data) {
+        $('#playlisttracksdiv').hide();
+        $('#playlistslistdiv').show();
+        delete playlists[data.uri];
+        getPlaylists();
+    });
+
     mopidy.on("event:volumeChanged", function(data) {
-        if (!volumeChanging) {
-            setVolume(data["volume"]);
-        }
+        setVolume(data.volume);
     });
 
     mopidy.on("event:muteChanged", function(data) {
-        setMute(data["mute"]);
+        setMute(data.mute);
     });
 
     mopidy.on("event:playbackStateChanged", function(data) {
-        switch (data["new_state"]) {
+        switch (data.new_state) {
+            case "paused":
             case "stopped":
-                resetSong();
+                setPlayState(false);
                 break;
             case "playing":
-                mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-                resumePosTimer();
                 setPlayState(true);
                 break;
         }
@@ -292,11 +298,14 @@ function initSocketevents() {
     });
 
     mopidy.on("event:seeked", function(data) {
-        setPosition(parseInt(data["time_position"]));
+        setPosition(parseInt(data.time_position));
+        if (play) {
+            startProgressTimer();
+        }
     });
 
     mopidy.on("event:streamTitleChanged", function(data) {
-        setSongTitle(data["title"], true);
+        setSongTitle(data.title, true);
     });
 }
 
@@ -308,42 +317,37 @@ $(document).bind("pageinit", function() {
 /**************
  * gui stuff  *
  **************/
-function enterFullscreen() {
+
+function toggleFullscreen() {
     if (isMobileSafari) { alert ("To get this app in Full Screen, you have to add it to your home-screen using the Share button."); exit(); }
-    var elem = document.querySelector("#page");
-    elem.onwebkitfullscreenchange = onFullScreenEnter;
-    elem.onmozfullscreenchange = onFullScreenEnter;
-    elem.onfullscreenchange = onFullScreenEnter;
-    if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+    if (!isFullscreen() ) {  // current working methods
+        var docElm = document.documentElement;
+        if (docElm.requestFullscreen) {
+            docElm.requestFullscreen();
+        } else if (docElm.msRequestFullscreen) {
+            docElm.msRequestFullscreen();
+        } else if (docElm.mozRequestFullScreen) {
+            docElm.mozRequestFullScreen();
+        } else if (docElm.webkitRequestFullScreen) {
+            docElm.webkitRequestFullScreen();
+        }
     } else {
-        if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-        } else {
-            elem.requestFullscreen();
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
         }
     }
 }
 
-function exitFullscreen() {
-    document.webkitExitFullscreen();
-    document.mozCancelFullscreen();
-    document.exitFullscreen();
+function isFullscreen() {
+    return (document.fullscreenElement ||    // alternative standard method
+        document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement ); // current working methods
 }
-
-function onFullScreenEnter() {
-    var elem = document.querySelector("#page");
-    $('#navExitFullscreen').show();
-    $('#navEnterFullscreen').hide();
-    elem.onwebkitfullscreenchange = onFullScreenExit;
-    elem.onmozfullscreenchange = onFullScreenExit;
-};
-
-// Called whenever the browser exits fullscreen.
-function onFullScreenExit() {
-    $('#navExitFullscreen').hide();
-    $('#navEnterFullscreen').show();
-};
 
 function switchContent(divid, uri) {
     var hash = divid;
@@ -356,17 +360,10 @@ function switchContent(divid, uri) {
 function setHeadline(site){
     site = site.trim();
     str = $('.mainNav').find('a[href$='+site+']').text();
-    if(str==""){
-        str=site;
+    if(str === ""){
+        str = site.charAt(0).toUpperCase() + site.slice(1);
     }
     $('#contentHeadline').html('<a href="#home" onclick="switchContent(\'home\'); return false;">' + str + '</a>');
-}
-
-//update timer
-function updateStatusTimer() {
-    mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error);
-    mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
-    //TODO check offline?
 }
 
 //update tracklist options.
@@ -383,7 +380,7 @@ function updateStatusOfAll() {
     mopidy.playback.getTimePosition().then(processCurrentposition, console.error);
     mopidy.playback.getState().then(processPlaystate, console.error);
 
-    updateOptions()
+    updateOptions();
 
     mopidy.playback.getVolume().then(processVolume, console.error);
     mopidy.mixer.getMute().then(processMute, console.error);
@@ -427,7 +424,7 @@ function locationHashChanged() {
         case 'search':
             $('#navsearch a').addClass($.mobile.activeBtnClass);
             $("#searchinput").focus();
-            if (customTracklists['mbw:allresultscache'] == '') {
+            if (customTracklists['mbw:allresultscache'] === '') {
                 initSearch($('#searchinput').val());
             }
             break;
@@ -435,12 +432,12 @@ function locationHashChanged() {
             $('#navstream a').addClass('ui-state-active ui-state-persist ui-btn-active');
             break;
         case 'artists':
-            if (uri != '') {
+            if (uri !== '') {
                 showArtist(uri);
             }
             break;
         case 'albums':
-            if (uri != '') {
+            if (uri !== '') {
                 showAlbum(uri);
             }
             break;
@@ -480,16 +477,29 @@ $(document).ready(function(event) {
 
     // Connect to server
     if (websocketUrl) {
-        mopidy = new Mopidy({
-            webSocketUrl: websocketUrl, // wslocation is set in index.html from the extention config.
-            callingConvention: 'by-position-or-by-name'
-        });
+        try {
+            mopidy = new Mopidy({
+                webSocketUrl: websocketUrl,
+                callingConvention: 'by-position-or-by-name'
+            });
+        } catch (e) {
+          showOffline(true);
+        }
     } else {
-        mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'});
+        try {
+            mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'});
+       } catch (e) {
+          showOffline(true);
+        }
     }
 
     //initialize events
     initSocketevents();
+
+    progressTimer = new ProgressTimer({
+        callback: timerCallback,
+        //updateRate: 2000,
+    });
 
     resetSong();
 
@@ -499,9 +509,6 @@ $(document).ready(function(event) {
 
     initgui = false;
     window.onhashchange = locationHashChanged;
-
-    //update gui status every x seconds from mopdidy
-    setInterval(updateStatusTimer, STATUS_TIMER);
 
     //only show backbutton if in UIWebview
     if (window.navigator.standalone) {
@@ -515,20 +522,26 @@ $(document).ready(function(event) {
     });
 
     //navigation temporary, rewrite this!
-    $('#songinfo').click(
-	function()
-    	 {return switchContent('nowPlaying')}   );
-    $('#controlspopupimage').click(
-	function() {
-	    return switchContent('current')}   );
-    $('#navEnterFullscreen').click(function(){
-        enterFullscreen();
+    $('#songinfo').click(function() {
+        return switchContent('nowPlaying');
     });
-    $('#navExitFullscreen').click(function(){
-        exitFullscreen();
+    $('#controlspopupimage').click(function() {
+        return switchContent('current');
+    });
+    $('#navToggleFullscreen').click(function() {
+        toggleFullscreen();
     });
 
-// remove buttons only for MusicBox
+    // event handlers for full screen mode
+    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange, MSFullscreenChange', function(e) {
+        if (isFullscreen()) {
+            document.getElementById("toggletxt").innerHTML = "Exit Fullscreen";
+        } else {
+            document.getElementById("toggletxt").innerHTML = "Fullscreen";
+        }
+    });
+
+    // remove buttons only for MusicBox
     if (!isMusicBox) {
         $('#navSettings').hide();
         $('#navshutdown').hide();
@@ -575,11 +588,6 @@ $(document).ready(function(event) {
         $("#panel").panel("open");
     }
 
-    //hide fullscreen button if in UIWebview
-    if (window.navigator.standalone) {
-        $('#navExitFullscreen').hide();
-    }
-
     $.event.special.swipe.horizontalDistanceThreshold = 125; // (default: 30px)  Swipe horizontal displacement must be more than this.
     $.event.special.swipe.verticalDistanceThreshold = 50; // (default: 75px)  Swipe vertical displacement must be less than this.
     $.event.special.swipe.durationThreshold = 500;
@@ -597,6 +605,20 @@ $(document).ready(function(event) {
 			$("#panel").panel("close");
 			event.stopImmediatePropagation(); }
 		    } );
+
+    $( "#trackslider" ).on( "slidestart", function() {
+        progressTimer.stop();
+        $( "#trackslider" ).on( "change", function() { updatePosition( $(this).val() ); } );
+        } );
+
+    $( "#trackslider" ).on( "slidestop", function() {
+        $( "#trackslider" ).off( "change");
+        doSeekPos( $(this).val() );
+        } );
+
+    $( "#volumeslider" ).on( "slidestart", function() { volumeSliding = true; } );
+    $( "#volumeslider" ).on( "slidestop", function() { volumeSliding = false; } );
+    $( "#volumeslider" ).on( "change", function() { doVolume( $(this).val() ); } );
 });
 
 function updatePlayIcons (uri, tlid) {
