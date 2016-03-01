@@ -1,0 +1,33 @@
+{
+  "name": "Mopidy-MusicBox-Webclient",
+  "version": "2.1.1",
+  "description": "Mopidy MusicBox web extension",
+  "main": "gui.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint mopidy_musicbox_webclient/static/js/**.js",
+    "csslint": "csslint mopidy_musicbox_webclient/static/css/**.css",
+    "tidy": "node tidy.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pimusicbox/mopidy-musicbox-webclient.git"
+  },
+  "author": "Wouter van Wijk",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/pimusicbox/mopidy-musicbox-webclient/issues"
+  },
+  "devDependencies": {
+    "eslint": "latest",
+    "eslint-config-standard": "latest",
+    "eslint-plugin-standard": "latest",
+    "eslint-plugin-promise": "latest",
+    "csslint": "latest",
+    "tidy-html5": "latest"
+  },
+  "homepage": "https://github.com/pimusicbox/mopidy-musicbox-webclient#readme"
+}

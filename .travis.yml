@@ -8,6 +8,9 @@ python:
 env:
   - TOX_ENV=py27
   - TOX_ENV=flake8
+  - TOX_ENV=eslint
+  - TOX_ENV=csslint
+  - TOX_ENV=tidy
 
 install:
   - "pip install tox"

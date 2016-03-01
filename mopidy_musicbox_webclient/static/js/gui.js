@@ -235,7 +235,7 @@ function initSocketevents() {
         getPlaylists();
         getUriSchemes().then(function() {
             showFavourites();
-        });            
+        });
         getBrowseDir();
         getSearchSchemes();
         showLoading(false);
@@ -580,7 +580,7 @@ $(document).ready(function(event) {
 	    return true;
 	}
     });
-    
+
 
     if ($(window).width() < 980) {
         $("#panel").panel("close");

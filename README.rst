@@ -10,14 +10,26 @@ Mopidy-MusicBox-Webclient
     :target: https://pypi.python.org/pypi/Mopidy-MusicBox-Webclient/
     :alt: Number of PyPI downloads
 
-With Mopidy MusicBox Webclient, you can play your music on your computer (`Rapsberry Pi <http://www.raspberrypi.org/>`_)
+.. image:: https://img.shields.io/travis/pimusicbox/mopidy-musicbox-webclient/develop.svg?style=flat
+    :target: https://travis-ci.org/rectalogic/mopidy-pandora
+    :alt: Travis CI build status
+
+.. image:: https://img.shields.io/coveralls/pimusicbox/mopidy-musicbox-webclient/develop.svg?style=flat
+   :target: https://coveralls.io/r/rectalogic/mopidy-pandora?branch=develop
+   :alt: Test coverage
+
+.. image:: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat
+    :target: http://standardjs.com/
+    :alt: JavaScript Standard Style
+
+With Mopidy MusicBox Webclient (MMW), you can play your music on your computer (`Rapsberry Pi <http://www.raspberrypi.org/>`_)
 and remotely control it using your computer, tablet or phone.
 
-This is a responsive webclient especially written for Mopidy, a music server. Responsive, so it works on desktop and
-mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
+This is a responsive webclient especially written for `Mopidy <http://www.mopidy.com/>`_: a music server that can play
+music from many different sources including Spotify, Google Music, SoundCloud, etc. or from your hard drive. The
+webclient is responsive, so it works on desktop and mobile browsers. You can browse, search and play albums, artists,
+playlists, and it has cover art from Last.fm.
 
-`Mopidy <http://www.mopidy.com/>`_ is a music server which can play music from Spotify, Google Music, SoundCloud, etc.
-or from your hard drive.
 
 If you want to run Mopidy with this webclient on a Raspberry Pi, do yourself a favor and use my custom built SD-image:
 `Pi MusicBox <http://www.pimusicbox.com/>`_.
@@ -30,7 +42,7 @@ Installation
 
 Install by running::
 
-    pip install Mopidy-MusicBox-Webclient
+    pip install mopidy-musicbox-webclient
 
 
 Alternatively, clone the repository and run ``sudo python setup.py install`` from within the project directory. e.g. ::
@@ -57,6 +69,11 @@ Project resources
 
 Changelog
 =========
+
+v2.3.0 (UNRELEASED)
+-------------------
+
+- Enhance build workflow to include style checks and syntax validation for HTML, CSS, and Javascript.
 
 v2.2.0 (2016-03-01)
 -------------------
