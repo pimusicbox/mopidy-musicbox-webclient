@@ -11,11 +11,11 @@ Mopidy-MusicBox-Webclient
     :alt: Number of PyPI downloads
 
 .. image:: https://img.shields.io/travis/pimusicbox/mopidy-musicbox-webclient/develop.svg?style=flat
-    :target: https://travis-ci.org/rectalogic/mopidy-pandora
+    :target: https://travis-ci.org/pimusicbox/mopidy-musicbox-webclient
     :alt: Travis CI build status
 
 .. image:: https://img.shields.io/coveralls/pimusicbox/mopidy-musicbox-webclient/develop.svg?style=flat
-   :target: https://coveralls.io/r/rectalogic/mopidy-pandora?branch=develop
+   :target: https://coveralls.io/r/pimusicbox/mopidy-musicbox-webclient?branch=develop
    :alt: Test coverage
 
 .. image:: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat
