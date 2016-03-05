@@ -240,7 +240,7 @@ function processAlbumResults(resultArr) {
         return;
     }
     customTracklists[resultArr.uri] = resultArr;
-    
+
     albumTracksToTable(resultArr, ALBUM_TABLE, resultArr.uri);
     var albumname = getAlbum(resultArr);
     var artistname = getArtist(resultArr);
