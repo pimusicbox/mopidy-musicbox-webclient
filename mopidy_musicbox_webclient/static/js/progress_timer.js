@@ -25,7 +25,7 @@ function timerCallback (position, duration, isRunning) {
 
     if (mopidy && position > 0) {
         // Mopidy and timer are both initialized.
-        if (callbackHeartbeats-- == 1) {
+        if (callbackHeartbeats-- === 1) {
             // Get time position from Mopidy on every nth callback until
             // synced.
             mopidy.playback.getTimePosition().then(
@@ -38,8 +38,8 @@ function timerCallback (position, duration, isRunning) {
 }
 
 function updateTimers (position, duration, isRunning) {
-    var ready = !(duration == Infinity && position === 0 && !isRunning)  // Timer has been properly initialized.
-    var streaming = (duration == Infinity && position > 0) // Playing a stream.
+    var ready = !(duration === Infinity && position === 0 && !isRunning)  // Timer has been properly initialized.
+    var streaming = (duration === Infinity && position > 0) // Playing a stream.
     var ok = synced && isRunning  // Normal operation.
     var syncing = !synced && isRunning // Busy syncing.
 
@@ -88,7 +88,7 @@ function syncTimer (current, target) {
         if (drift <= 500) {
             syncsLeft--
             // Less than 500ms == in sync.
-            if (++consecutiveSyncs == 2) {
+            if (++consecutiveSyncs === 2) {
                 // Need at least two consecutive syncs to know that Mopidy
                 // is progressing playback and we are in sync.
                 synced = true
@@ -133,7 +133,7 @@ function delay_exponential (base, growthFactor, attempts) {
     0 and 1 will be used as the base.
     Base must be greater than 0.
     */
-    if (base == 'rand') {
+    if (base === 'rand') {
         base = Math.random()
     }
     beats = base * (Math.pow(growthFactor, (attempts - 1)))

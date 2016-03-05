@@ -65,7 +65,7 @@ function processCurrentposition (data) {
  * process results playstate
  *********************************************************/
 function processPlaystate (data) {
-    if (data == 'playing') {
+    if (data === 'playing') {
         setPlayState(true)
     } else {
         setPlayState(false)
@@ -86,7 +86,9 @@ function processBrowseDir (resultArr) {
 
     $('#browselist').empty()
 
-    var child = '', rooturi = '', uri = resultArr[0].uri
+    var child = ''
+    var rooturi = ''
+    var uri = resultArr[0].uri
 
     // check root uri
     // find last : or / (spltting the result)
@@ -96,7 +98,7 @@ function processBrowseDir (resultArr) {
 
     var lastindex = (colonindex > slashindex) ? colonindex : slashindex
     rooturi = uri.slice(0, lastindex)
-    if (resultArr[0].type == 'track') {
+    if (resultArr[0].type === 'track') {
         rooturi = rooturi.replace(':track:', ':directory:')
     }
     colonindex = rooturi.lastIndexOf(':')
@@ -112,7 +114,7 @@ function processBrowseDir (resultArr) {
     browseTracks = []
     for (var i = 0, index = 0; i < resultArr.length; i++) {
         iconClass = getMediaClass(resultArr[i].uri)
-        if (resultArr[i].type == 'track') {
+        if (resultArr[i].type === 'track') {
             // console.log(resultArr[i]);
             mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultDict) {
                 var lookupUri = Object.keys(resultDict)[0]
@@ -127,7 +129,7 @@ function processBrowseDir (resultArr) {
             index++
         } else {
             if (browseStack.length > 0) {
-                iconClass = "fa fa-folder-o"
+                iconClass = 'fa fa-folder-o'
             }
             child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri +
                      '""><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>'
@@ -156,7 +158,9 @@ function processGetPlaylists (resultArr) {
         $('#playlistslist').empty()
         return
     }
-    var tmp = '', favourites = '', starred = ''
+    var tmp = ''
+    var favourites = ''
+    var starred = ''
 
     for (var i = 0; i < resultArr.length; i++) {
         var li_html = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '">'
@@ -191,7 +195,7 @@ function processPlaylistItems (resultDict) {
     return mopidy.library.lookup({'uris': trackUris}).then(function (tracks) {
         // Transform from dict to list and cache result
         var newplaylisturi = resultDict.uri
-        playlists[newplaylisturi] = {'uri':newplaylisturi, 'tracks':[]}
+        playlists[newplaylisturi] = {'uri': newplaylisturi, 'tracks': []}
         for (i = 0; i < trackUris.length; i++) {
             playlists[newplaylisturi].tracks.push(tracks[trackUris[i]][0])
         }

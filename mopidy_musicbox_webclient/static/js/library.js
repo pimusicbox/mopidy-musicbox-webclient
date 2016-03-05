@@ -5,7 +5,7 @@ function searchPressed (key) {
     var value = $('#searchinput').val()
     switchContent('search')
 
-    if (key == 13) {
+    if (key === 13) {
         initSearch()
         return false
     }
@@ -31,12 +31,12 @@ function initSearch () {
         $('#searchalbums').hide()
         $('#searchtracks').hide()
 
-        if (searchService != 'all') {
-            mopidy.library.search({'query': {any:[value]}, 'uris': [searchService + ':']}).then(processSearchResults, console.error)
+        if (searchService !== 'all') {
+            mopidy.library.search({'query': {any: [value]}, 'uris': [searchService + ':']}).then(processSearchResults, console.error)
         } else {
             mopidy.getUriSchemes().then(function (schemes) {
-                var query = {},
-                    uris = []
+                var query = {}
+                var uris = []
 
                 var regexp = $.map(schemes, function (scheme) {
                     return '^' + scheme + ':'
@@ -79,9 +79,10 @@ function processSearchResults (resultArr) {
     // Merge results from different backends.
     // TODO  should of coures have multiple tables
     var results = {'tracks': [], 'artists': [], 'albums': []}
-    var j, emptyResult = true
+    var i, j
+    var emptyResult = true
 
-    for (var i = 0; i < resultArr.length; i++) {
+    for (i = 0; i < resultArr.length; i++) {
         if (resultArr[i].tracks) {
             for (j = 0; j < resultArr[i].tracks.length; j++) {
                 results.tracks.push(resultArr[i].tracks[j])
@@ -137,7 +138,7 @@ function processSearchResults (resultArr) {
     var pattern = '<li><a href="#" onclick="return showArtist(this.id)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>'
     var tokens
 
-    for (var i = 0; i < results.artists.length; i++) {
+    for (i = 0; i < results.artists.length; i++) {
         tokens = {
             'id': results.artists[i].uri,
             'name': results.artists[i].name,
@@ -145,7 +146,7 @@ function processSearchResults (resultArr) {
         }
 
         // Add 'Show all' item after a certain number of hits.
-        if (i == 4 && results.artists.length > 5) {
+        if (i === 4 && results.artists.length > 5) {
             child += theme(showMorePattern, {'count': results.artists.length - i})
             pattern = pattern.replace('<li>', '<li class="overflow">')
         }
@@ -163,7 +164,7 @@ function processSearchResults (resultArr) {
     pattern += '<p data-role="desc">{artistName}</p>'
     pattern += '</a></li>'
 
-    for (var i = 0; i < results.albums.length; i++) {
+    for (i = 0; i < results.albums.length; i++) {
         tokens = {
             'albumId': results.albums[i].uri,
             'albumName': results.albums[i].name,
@@ -172,7 +173,7 @@ function processSearchResults (resultArr) {
             'class': getMediaClass(results.albums[i].uri)
         }
         if (results.albums[i].artists) {
-            for (var j = 0; j < results.albums[i].artists.length; j++) {
+            for (j = 0; j < results.albums[i].artists.length; j++) {
                 if (results.albums[i].artists[j].name) {
                     tokens.artistName += results.albums[i].artists[j].name + ' '
                 }
@@ -182,7 +183,7 @@ function processSearchResults (resultArr) {
             tokens.artistName += '(' + tokens.albumYear + ')'
         }
         // Add 'Show all' item after a certain number of hits.
-        if (i == 4 && results.albums.length > 5) {
+        if (i === 4 && results.albums.length > 5) {
             child += theme(showMorePattern, {'count': results.albums.length - i})
             pattern = pattern.replace('<li>', '<li class="overflow">')
         }
@@ -258,7 +259,7 @@ function showTracklist (uri) {
     updatePlayIcons(uri)
     $('#playlistslist li a').each(function () {
         $(this).removeClass('playlistactive')
-        if (this.id == uri) {
+        if (this.id === uri) {
             $(this).addClass('playlistactive')
         }
     })
@@ -333,12 +334,12 @@ function getSearchSchemes () {
             $('#selectSearchService').append(new Option('All services', 'all'))
             for (var i = 0; i < schemesArray.length; i++) {
                 for (var j = 0; j < uriHumanList.length; j++) {
-                    if (uriHumanList[j][0] == schemesArray[i].toLowerCase()) {
+                    if (uriHumanList[j][0] === schemesArray[i].toLowerCase()) {
                         $('#selectSearchService').append(new Option(uriHumanList[j][1], schemesArray[i]))
                     }
                 }
             }
-            $('#selectSearchService').selectmenu( 'refresh', true)
+            $('#selectSearchService').selectmenu('refresh', true)
         }, console.error
     )
 }

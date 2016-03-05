@@ -8,7 +8,7 @@ function playBrowsedTracks (action, trackIndex) {
     if (typeof trackIndex === 'undefined') {
         trackIndex = $('#popupBrowse').data('tlid')
     }
-    if (action == PLAY_ALL) {
+    if (action === PLAY_ALL) {
         mopidy.tracklist.clear()
         // Default for radio streams is to just add the selected URI.
         if (isStreamUri(browseTracks[trackIndex].uri)) {
@@ -62,8 +62,8 @@ function playTrack (action) {
     var divid = hash[0].substr(1)
 
     // Search page default click behaviour adds and plays selected track only.
-    if (action == PLAY_NOW && divid == 'search') {
-        action = PLAY_NOW_SEARCH
+    if (action === PLAY_NOW && divid === 'search') {
+        action === PLAY_NOW_SEARCH
     }
 
     $('#popupTracks').popup('close')
@@ -76,7 +76,7 @@ function playTrack (action) {
     var trackUris = getTracksFromUri(playlisturi)
     // find track that was selected
     for (var selected = 0; selected < trackUris.length; selected++) {
-        if (trackUris[selected] == uri) {
+        if (trackUris[selected] === uri) {
             break
         }
     }
@@ -121,7 +121,7 @@ function playTrackByUri (track_uri, playlist_uri) {
         if (tlTracks.length > 0) {
             // Find track that was selected
             for (var selected = 0; selected < tlTracks.length; selected++) {
-                if (tlTracks[selected].track.uri == track_uri) {
+                if (tlTracks[selected].track.uri === track_uri) {
                     mopidy.playback.play({'tl_track': tlTracks[selected]})
                     return
                 }
@@ -214,7 +214,7 @@ function clearQueue () {
 }
 
 function savePressed (key) {
-    if (key == 13) {
+    if (key === 13) {
         saveQueue()
         return false
     }
@@ -228,7 +228,6 @@ function showSavePopup () {
             $('#popupSave').popup('open')
         }
     })
-
 }
 
 function saveQueue () {
@@ -335,33 +334,33 @@ function backbt () {
  *************/
 function setTracklistOption (name, new_value) {
     if (!new_value) {
-        $("#" + name+'bt').attr('style', 'color:#2489ce')
+        $('#' + name + 'bt').attr('style', 'color:#2489ce')
     } else {
-        $("#" + name+'bt').attr('style', 'color:#66DD33')
+        $('#' + name + 'bt').attr('style', 'color:#66DD33')
     }
     return new_value
 }
 
 function setRepeat (nwrepeat) {
-    if (repeat != nwrepeat) {
+    if (repeat !== nwrepeat) {
         repeat = setTracklistOption('repeat', nwrepeat)
     }
 }
 
 function setRandom (nwrandom) {
-    if (random != nwrandom) {
+    if (random !== nwrandom) {
         random = setTracklistOption('random', nwrandom)
     }
 }
 
 function setConsume (nwconsume) {
-    if (consume != nwconsume) {
+    if (consume !== nwconsume) {
         consume = setTracklistOption('consume', nwconsume)
     }
 }
 
 function setSingle (nwsingle) {
-    if (single != nwsingle) {
+    if (single !== nwsingle) {
         single = setTracklistOption('single', nwsingle)
     }
 }
@@ -382,7 +381,6 @@ function doSingle () {
     mopidy.tracklist.setSingle({'value': !single}).then()
 }
 
-
 /** *********************************************
  * Track Slider                                *
  * Use a timer to prevent looping of commands  *
@@ -397,7 +395,7 @@ function doSeekPos (value) {
 }
 
 function setPosition (pos) {
-    if (!positionChanging && $('#trackslider').val() != pos) {
+    if (!positionChanging && $('#trackslider').val() !== pos) {
         setProgressTimer(pos)
     }
 }
@@ -408,10 +406,10 @@ function setPosition (pos) {
  ***********************************************/
 
 function setVolume (value) {
-    if (!volumeChanging && !volumeSliding && $('#volumeslider').val() != value) {
-        $("#volumeslider").off( 'change')
-        $("#volumeslider").val(value).slider('refresh')
-        $("#volumeslider").on( 'change', function () { doVolume($(this).val()) })
+    if (!volumeChanging && !volumeSliding && $('#volumeslider').val() !== value) {
+        $('#volumeslider').off('change')
+        $('#volumeslider').val(value).slider('refresh')
+        $('#volumeslider').on('change', function () { doVolume($(this).val()) })
     }
 }
 
@@ -425,7 +423,7 @@ function doVolume (value) {
 }
 
 function setMute (nwmute) {
-    if (mute != nwmute) {
+    if (mute !== nwmute) {
         mute = nwmute
         if (mute) {
             $('#mutebt').attr('class', 'fa fa-volume-off')
@@ -443,7 +441,7 @@ function doMute () {
  *  Stream  *
  ************/
 function streamPressed (key) {
-    if (key == 13) {
+    if (key === 13) {
         playStreamUri()
         return false
     }
@@ -530,8 +528,8 @@ function getFavourites () {
                              STREAMS_PLAYLIST_SCHEME,
                              true).then(function (playlist) {
                                  if (playlist) {
-            return getPlaylistFull(playlist.uri)
-        }
+                                     return getPlaylistFull(playlist.uri)
+                                 }
                                  return Mopidy.when(false)
                              })
 }
@@ -552,11 +550,11 @@ function addToFavourites (newTracks) {
 }
 
 function addFavourite (uri, name) {
-    var uri = uri || $('#streamuriinput').val().trim()
-    var name = name || $('#streamnameinput').val().trim()
+    uri = uri || $('#streamuriinput').val().trim()
+    name = name || $('#streamnameinput').val().trim()
     mopidy.library.lookup({'uris': [uri]}).then(function (results) {
         var newTracks = results[uri]
-        if (newTracks.length == 1) {
+        if (newTracks.length === 1) {
             // TODO: Supporting adding an entire playlist?
             if (name) {
                 newTracks[0].name = name // User overrides name.

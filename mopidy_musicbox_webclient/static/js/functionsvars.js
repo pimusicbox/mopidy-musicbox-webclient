@@ -42,11 +42,11 @@ var customTracklists = []
 var browseStack = []
 var browseTracks = []
 
-var ua = navigator.userAgent,
-    isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua),
-    isMobileWebkit = /WebKit/.test(ua) && /Mobile/.test(ua),
-    isMobile = /Mobile/.test(ua),
-    isWebkit = /WebKit/.test(ua)
+var ua = navigator.userAgent
+var isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua)
+var isMobileWebkit = /WebKit/.test(ua) && /Mobile/.test(ua)
+var isMobile = /Mobile/.test(ua)
+var isWebkit = /WebKit/.test(ua)
 
 // constants
 PROGRAM_NAME = 'MusicBox'
@@ -215,7 +215,7 @@ function resultsToTables (results, target, uri) {
         return
     }
     var tlids = []
-    if (target == CURRENT_PLAYLIST_TABLE) {
+    if (target === CURRENT_PLAYLIST_TABLE) {
         for (i = 0; i < results.length; i++) {
             tlids[i] = results[i].tlid
             results[i] = results[i].track
@@ -255,7 +255,7 @@ function resultsToTables (results, target, uri) {
         }
 
         // leave out unplayable items
-        if (results[i].name.substring(0, 12) == '[unplayable]') continue
+        if (results[i].name.substring(0, 12) === '[unplayable]') continue
 
         newalbum.push(results[i])
         newtlids.push(tlids[i])
@@ -263,39 +263,40 @@ function resultsToTables (results, target, uri) {
         if ((i < length - 1) && results[i + 1].album && results[i + 1].album.name) {
             nextname = results[i + 1].album.name
         }
-        if (results[i].length == -1) {
+        if (results[i].length === -1) {
             html += '<li class="albumli"><a href="#"><h1><i class="' + iconClass + '"></i> ' + results[i].name + ' [Stream]</h1></a></li>'
             newalbum = []
             newtlids = []
             nextname = ''
         } else {
-            if ((results[i].album.name != nextname) || (nextname === '')) {
+            if ((results[i].album.name !== nextname) || (nextname === '')) {
                 tableid = 'art' + i
                 // render differently if only one track in the album
-                if (newalbum.length == 1) {
+                if (newalbum.length === 1) {
+                    var liID = ''
                     if (i !== 0) {
                         html += '<li class="smalldivider"> &nbsp;</li>'
                     }
                     iconClass = getMediaClass(newalbum[0].uri)
-                    var liID = targetmin + '-' + newalbum[0].uri
-                    if (target == CURRENT_PLAYLIST_TABLE) {
+                    liID = targetmin + '-' + newalbum[0].uri
+                    if (target === CURRENT_PLAYLIST_TABLE) {
                         html += '<li class="song albumli" id="' + liID + '" tlid="' + newtlids[0] + '">' +
                                 '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\',\'' + newtlids[0] + '\');">' +
                                 '<i class="fa fa-ellipsis-v"></i></a>' +
                                 '<a href="#" onclick="return playTrackQueueByTlid(\'' + newalbum[0].uri + '\',\'' + newtlids[0] + '\');">' +
-                                '<h1><i class="' + iconClass + '"></i> ' + newalbum[0].name + "</h1><p>"
+                                '<h1><i class="' + iconClass + '"></i> ' + newalbum[0].name + '</h1><p>'
                     } else {
                         html += '<li class="song albumli" id="' + liID + '">' +
                                 '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\');">' +
                                 '<i class="fa fa-ellipsis-v"></i></a>' +
                                 '<a href="#" onclick="return playTrackByUri(\'' + newalbum[0].uri + '\',\'' + uri + '\');">' +
-                                '<h1><i class="' + iconClass + '"></i> ' + newalbum[0].name + "</h1><p>"
+                                '<h1><i class="' + iconClass + '"></i> ' + newalbum[0].name + '</h1><p>'
                     }
 
                     if (newalbum[0].artists) {
                         for (j = 0; j < newalbum[0].artists.length; j++) {
                             html += newalbum[0].artists[j].name
-                            html += (j == newalbum[0].artists.length - 1) ? '' : ' / '
+                            html += (j === newalbum[0].artists.length - 1) ? '' : ' / '
                             // stop after 3
                             if (j > 2) {
                                 html += '...'
@@ -322,7 +323,7 @@ function resultsToTables (results, target, uri) {
                     if (results[i].album.artists) {
                         for (j = 0; j < results[i].album.artists.length; j++) {
                             html += results[i].album.artists[j].name
-                            html += (j == results[i].album.artists.length - 1) ? '' : ' / '
+                            html += (j === results[i].album.artists.length - 1) ? '' : ' / '
                             // stop after 3
                             if (j > 2) {
                                 child += '...'
@@ -334,8 +335,8 @@ function resultsToTables (results, target, uri) {
                     for (j = 0; j < newalbum.length; j++) {
                         popupData[newalbum[j].uri] = newalbum[j]
                         // hERE!
-                        var liID = targetmin + '-' + newalbum[j].uri
-                        if (target == CURRENT_PLAYLIST_TABLE) {
+                        liID = targetmin + '-' + newalbum[j].uri
+                        if (target === CURRENT_PLAYLIST_TABLE) {
                             html += renderQueueSongLi(newalbum[j], liID, uri, newtlids[j])
                         } else {
                             html += renderSongLi(newalbum[j], liID, uri)
@@ -369,13 +370,13 @@ function playlisttotable (pl, target, uri) {
         if (pl[i]) {
             popupData[pl[i].uri] = pl[i]
             child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">'
-            child += '<h1>' + pl[i].name + "</h1>"
+            child += '<h1>' + pl[i].name + 'h1>'
             child += '<p>'
             child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>'
             for (var j = 0; j < pl[i].artists.length; j++) {
                 if (pl[i].artists[j]) {
                     child += pl[i].artists[j].name
-                    child += (j == pl[i].artists.length - 1) ? '' : ' / '
+                    child += (j === pl[i].artists.length - 1) ? '' : ' / '
                     // stop after 3
                     if (j > 2) {
                         child += '...'
@@ -436,7 +437,7 @@ function timeFromSeconds (length) {
 /** ***** Toast ***/
 function toast (message, delay, textOnly) {
     textOnl = textOnly || false
-    message = message || "Loading..."
+    message = message || 'Loading...'
     delay = delay || 1000
     $.mobile.loading('show', {
         text: message,
@@ -480,7 +481,6 @@ function showOffline (on) {
     }
 }
 
-
 // from http://dzone.com/snippets/validate-url-regexp
 function validUri (str) {
     var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
@@ -504,7 +504,7 @@ function isStreamUri (uri) {
 function getMediaClass (uri) {
     var scheme = getScheme(uri)
     for (var i = 0; i < uriClassList.length; i++) {
-        if (scheme == uriClassList[i][0]) {
+        if (scheme === uriClassList[i][0]) {
             return 'fa ' + uriClassList[i][1]
         }
     }
@@ -514,7 +514,7 @@ function getMediaClass (uri) {
 function getMediaHuman (uri) {
     var scheme = getScheme(uri)
     for (var i = 0; i < uriHumanList.length; i++) {
-        if (scheme == uriHumanList[i][0]) {
+        if (scheme === uriHumanList[i][0]) {
             return uriHumanList[i][1]
         }
     }
@@ -523,13 +523,14 @@ function getMediaHuman (uri) {
 
 function isServiceUri (uri) {
     var scheme = getScheme(uri)
-    for (var i = 0; i < uriClassList.length; i++) {
-        if (scheme == uriClassList[i][0]) {
+    var i = 0
+    for (i = 0; i < uriClassList.length; i++) {
+        if (scheme === uriClassList[i][0]) {
             return true
         }
     }
-    for (var i = 0; i < radioExtensionsList.length; i++) {
-        if (scheme == radioExtensionsList[i]) {
+    for (i = 0; i < radioExtensionsList.length; i++) {
+        if (scheme === radioExtensionsList[i]) {
             return true
         }
     }
@@ -537,11 +538,11 @@ function isServiceUri (uri) {
 }
 
 function isFavouritesPlaylist (playlist) {
-    return (playlist.name == STREAMS_PLAYLIST_NAME &&
-            getScheme(playlist.uri) == STREAMS_PLAYLIST_SCHEME)
+    return (playlist.name === STREAMS_PLAYLIST_NAME &&
+            getScheme(playlist.uri) === STREAMS_PLAYLIST_SCHEME)
 }
 
 function isSpotifyStarredPlaylist (playlist) {
     var starredRegex = /spotify:user:.*:starred/g
-    return (starredRegex.test(playlist.uri) && playlist.name == 'Starred')
+    return (starredRegex.test(playlist.uri) && playlist.name === 'Starred')
 }

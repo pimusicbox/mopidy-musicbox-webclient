@@ -9,9 +9,9 @@
 function resetSong () {
     setPlayState(false)
     setPosition(0)
-    var data = new Object({})
+    var data = {}
     data.tlid = -1
-    data.track = new Object({})
+    data.track = {}
     data.track.name = ''
     data.track.artists = ''
     data.track.length = 0
@@ -60,7 +60,6 @@ function resizeMb () {
         $('#playlistslistdiv').show();
     }
 
-
     if (isMobileWebkit && ($(window).width() > 480)) {
         playlistslistScroll.refresh();
         playlisttracksScroll.refresh();
@@ -79,7 +78,7 @@ function setSongTitle (title, refresh_ui) {
 function setSongInfo (data) {
 //    console.log(data, songdata);
     if (!data) { return }
-    if (data.tlid == songdata.tlid) { return }
+    if (data.tlid === songdata.tlid) { return }
     if (!data.track.name || data.track.name === '') {
         var name = data.track.uri.split('/')
         data.track.name = decodeURI(name[name.length - 1])
@@ -92,7 +91,7 @@ function setSongInfo (data) {
     if (validUri(data.track.name)) {
         for (var key in streamUris) {
             rs = streamUris[key]
-            if (rs && rs[1] == data.track.name) {
+            if (rs && rs[1] === data.track.name) {
                 data.track.name = (rs[0] || rs[1])
             }
         }
@@ -117,14 +116,14 @@ function setSongInfo (data) {
     var arttmp = ''
 
     if (data.track.artists) {
-	        for (var j = 0; j < data.track.artists.length; j++) {
-    artistshtml += '<a href="#" onclick="return showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>'
-    artiststext += data.track.artists[j].name
-    if (j != data.track.artists.length - 1) {
-            artistshtml += ', '
-            artiststext += ', '
-	            }
-	}
+        for (var j = 0; j < data.track.artists.length; j++) {
+            artistshtml += '<a href="#" onclick="return showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>'
+            artiststext += data.track.artists[j].name
+            if (j !== data.track.artists.length - 1) {
+                artistshtml += ', '
+                artiststext += ', '
+            }
+        }
         arttmp = artistshtml
     }
     if (data.track.album && data.track.album.name) {
@@ -161,14 +160,15 @@ function closePopups () {
 }
 
 function popupTracks (e, listuri, trackuri, tlid) {
-    if (!e)
+    if (!e) {
         e = window.event
+    }
     $('.popupTrackName').html(popupData[trackuri].name)
     $('.popupAlbumName').html(popupData[trackuri].album.name)
-    var child = ""
+    var child = ''
 
     if (popupData[trackuri].artists) {
-        if (popupData[trackuri].artists.length == 1) {
+        if (popupData[trackuri].artists.length === 1) {
             child = '<a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'
             $('.popupArtistName').html(popupData[trackuri].artists[0].name)
             $('.popupArtistHref').attr('onclick', 'showArtist("' + popupData[trackuri].artists[0].uri + '");')
@@ -192,10 +192,10 @@ function popupTracks (e, listuri, trackuri, tlid) {
     var hash = document.location.hash.split('?')
     var divid = hash[0].substr(1)
     var popupName = ''
-    if (divid == 'current') {
+    if (divid === 'current') {
         $('.addqueue').hide()
         popupName = '#popupQueue'
-    } else if (divid == 'browse') {
+    } else if (divid === 'browse') {
         $('.addqueue').show()
         popupName = '#popupBrowse'
     } else {
@@ -203,15 +203,15 @@ function popupTracks (e, listuri, trackuri, tlid) {
         popupName = '#popupTracks'
     }
 
-    if (typeof tlid != 'undefined' && tlid !== '') {
+    if (typeof tlid !== 'undefined' && tlid !== '') {
         $(popupName).data('list', listuri).data('track', trackuri).data('tlid', tlid).popup('open', {
-            x : e.pageX,
-            y : e.pageY
+            x: e.pageX,
+            y: e.pageY
         })
     } else {
         $(popupName).data('list', listuri).data('track', trackuri).popup('open', {
-            x : e.pageX,
-            y : e.pageY
+            x: e.pageX,
+            y: e.pageY
         })
     }
 
@@ -311,7 +311,6 @@ function initSocketevents () {
 
 $(document).bind('pageinit', function () {
     resizeMb()
-
 })
 
 /** ************
@@ -392,7 +391,6 @@ function locationHashChanged () {
     var divid = hash[0].substr(1)
     setHeadline(divid)
 
-
     var uri = hash[1]
     $('.mainNav a').removeClass('ui-state-active ui-state-persist ui-btn-active')
     // i don't know why some li elements have those classes, but they do, so we need to remove them
@@ -470,7 +468,7 @@ $(document).ready(function (event) {
     }
 
     // workaround for a bug in jQuery Mobile, without that the panel doesn't close on mobile devices...
-    $('.ui-panel-dismiss').on( 'tap', function () { $('#panel').panel('close') })
+    $('.ui-panel-dismiss').on('tap', function () { $('#panel').panel('close') })
     // end of workaround
 
     $(window).hashchange()
@@ -489,16 +487,15 @@ $(document).ready(function (event) {
         try {
             mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'})
         } catch (e) {
-           showOffline(true)
-       }
+            showOffline(true)
+        }
     }
 
     // initialize events
     initSocketevents()
 
     progressTimer = new ProgressTimer({
-        callback: timerCallback,
-        // updateRate: 2000,
+        callback: timerCallback
     })
 
     resetSong()
@@ -535,9 +532,9 @@ $(document).ready(function (event) {
     // event handlers for full screen mode
     $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange, MSFullscreenChange', function (e) {
         if (isFullscreen()) {
-            document.getElementById('toggletxt').innerHTML = "Exit Fullscreen"
+            document.getElementById('toggletxt').innerHTML = 'Exit Fullscreen'
         } else {
-            document.getElementById('toggletxt').innerHTML = "Fullscreen"
+            document.getElementById('toggletxt').innerHTML = 'Fullscreen'
         }
     })
 
@@ -560,27 +557,26 @@ $(document).ready(function (event) {
 
     $(document).keypress(function (event) {
 	// console.log('kp:    '+event);
-	        if (event.target.tagName != 'INPUT') {
-	        var unicode = event.keyCode ? event.keyCode : event.charCode
-	        var actualkey = String.fromCharCode(unicode)
-	        switch (actualkey) {
-	            case ' ':
-    		        doPlay()
-    		        event.preventDefault()
-		            break
-		    case '>':
-    		        doNext()
-    		        event.preventDefault()
-		            break
-		    case '<':
-    		        doPrevious()
-    		        event.preventDefault()
-		            break
-	    }
-	        return true
-	}
+        if (event.target.tagName !== 'INPUT') {
+            var unicode = event.keyCode ? event.keyCode : event.charCode
+            var actualkey = String.fromCharCode(unicode)
+            switch (actualkey) {
+                case ' ':
+                    doPlay()
+                    event.preventDefault()
+                    break
+                case '>':
+                    doNext()
+                    event.preventDefault()
+                    break
+                case '<':
+                    doPrevious()
+                    event.preventDefault()
+                    break
+            }
+            return true
+        }
     })
-
 
     if ($(window).width() < 980) {
         $('#panel').panel('close')
@@ -593,84 +589,86 @@ $(document).ready(function (event) {
     $.event.special.swipe.durationThreshold = 500
 
     // swipe songinfo and panel
-    $("#normalFooter, #nowPlayingFooter").on( 'swiperight', doPrevious)
-    $("#normalFooter, #nowPlayingFooter").on( 'swipeleft', doNext)
-    $("#nowPlayingpane, .ui-body-c, #header, #panel, .pane").on( 'swiperight', function () {
-		            if (!$(event.target).is('#normalFooter') && !$(event.target).is('#nowPlayingFooter')) {
-			    $('#panel').panel('open')
-			    event.stopImmediatePropagation() }
-		        })
-    $("#nowPlayingpane, .ui-body-c, #header, #panel, .pane").on( 'swipeleft', function () {
-		            if (!$(event.target).is('#normalFooter') && !$(event.target).is('#nowPlayingFooter')) {
-			    $('#panel').panel('close')
-			    event.stopImmediatePropagation() }
-		        })
-
-    $("#trackslider").on( 'slidestart', function () {
-        progressTimer.stop()
-        $("#trackslider").on( 'change', function () { updatePosition($(this).val()) })
+    $('#normalFooter, #nowPlayingFooter').on('swiperight', doPrevious)
+    $('#normalFooter, #nowPlayingFooter').on('swipeleft', doNext)
+    $('#nowPlayingpane, .ui-body-c, #header, #panel, .pane').on('swiperight', function () {
+        if (!$(event.target).is('#normalFooter') && !$(event.target).is('#nowPlayingFooter')) {
+            $('#panel').panel('open')
+            event.stopImmediatePropagation()
+        }
+    })
+    $('#nowPlayingpane, .ui-body-c, #header, #panel, .pane').on('swipeleft', function () {
+        if (!$(event.target).is('#normalFooter') && !$(event.target).is('#nowPlayingFooter')) {
+            $('#panel').panel('close')
+            event.stopImmediatePropagation()
+        }
     })
 
-    $("#trackslider").on( 'slidestop', function () {
-        $("#trackslider").off( 'change')
+    $('#trackslider').on('slidestart', function () {
+        progressTimer.stop()
+        $('#trackslider').on('change', function () { updatePosition($(this).val()) })
+    })
+
+    $('#trackslider').on('slidestop', function () {
+        $('#trackslider').off('change')
         doSeekPos($(this).val())
     })
 
-    $("#volumeslider").on( 'slidestart', function () { volumeSliding = true })
-    $("#volumeslider").on( 'slidestop', function () { volumeSliding = false })
-    $("#volumeslider").on( 'change', function () { doVolume($(this).val()) })
+    $('#volumeslider').on('slidestart', function () { volumeSliding = true })
+    $('#volumeslider').on('slidestop', function () { volumeSliding = false })
+    $('#volumeslider').on('change', function () { doVolume($(this).val()) })
 })
 
 function updatePlayIcons (uri, tlid) {
     // update styles of listviews
     $('#currenttable li').each(function () {
         var eachTlid = $(this).attr('tlid')
-        if (typeof eachTlid != 'undefined') {
+        if (typeof eachTlid !== 'undefined') {
             eachTlid = parseInt(eachTlid)
         }
-        if (this.id == 'currenttable-' + uri && eachTlid == tlid) {
+        if (this.id === 'currenttable-' + uri && eachTlid === tlid) {
             $(this).addClass('currenttrack')
         } else {
             $(this).removeClass('currenttrack')
-	        }
+        }
     })
 
     $('#playlisttracks li').each(function () {
-        if (this.id == 'playlisttracks-' + uri) {
+        if (this.id === 'playlisttracks-' + uri) {
             $(this).addClass('currenttrack2')
         } else {
             $(this).removeClass('currenttrack2')
-	        }
+        }
     })
 
     $('#trackresulttable li').each(function () {
-        if (this.id == 'trackresulttable-' + uri) {
+        if (this.id === 'trackresulttable-' + uri) {
             $(this).addClass('currenttrack2')
         } else {
-	                $(this).removeClass('currenttrack2')
-	        }
+            $(this).removeClass('currenttrack2')
+        }
     })
 
     $('#artiststable li').each(function () {
-        if (this.id == 'artiststable-' + uri) {
+        if (this.id === 'artiststable-' + uri) {
             $(this).addClass('currenttrack2')
         } else {
             $(this).removeClass('currenttrack2')
-	        }
+        }
     })
 
     $('#albumstable li').each(function () {
-        if (this.id == 'albumstable-' + uri) {
+        if (this.id === 'albumstable-' + uri) {
             $(this).addClass('currenttrack2')
         } else {
             $(this).removeClass('currenttrack2')
-	        }
+        }
     })
     $('#browselist li').each(function () {
-        if (this.id == 'browselisttracks-' + uri) {
+        if (this.id === 'browselisttracks-' + uri) {
             $(this).addClass('currenttrack2')
         } else {
             $(this).removeClass('currenttrack2')
-	        }
+        }
     })
 }
