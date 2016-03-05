@@ -1,167 +1,167 @@
-/*********************************
+/** *******************************
  * Search
  *********************************/
-function searchPressed(key) {
-    var value = $('#searchinput').val();
-    switchContent('search');
+function searchPressed (key) {
+    var value = $('#searchinput').val()
+    switchContent('search')
 
     if (key == 13) {
-        initSearch();
-        return false;
+        initSearch()
+        return false
     }
-    return true;
+    return true
 }
 
-//init search
-function initSearch() {
-    var value = $('#searchinput').val();
-    var searchService = $('#selectSearchService').val();
+// init search
+function initSearch () {
+    var value = $('#searchinput').val()
+    var searchService = $('#selectSearchService').val()
 
     if ((value.length < 100) && (value.length > 0)) {
-        showLoading(true);
-        //hide ios/android keyboard
-        document.activeElement.blur();
-        $("input").blur();
+        showLoading(true)
+        // hide ios/android keyboard
+        document.activeElement.blur()
+        $('input').blur()
 
-        delete customTracklists[URI_SCHEME+':allresultscache'];
-        delete customTracklists[URI_SCHEME+':artistresultscache'];
-        delete customTracklists[URI_SCHEME+':albumresultscache'];
-        delete customTracklists[URI_SCHEME+':trackresultscache'];
-        $("#searchartists").hide();
-        $("#searchalbums").hide();
-        $("#searchtracks").hide();
+        delete customTracklists[URI_SCHEME + ':allresultscache']
+        delete customTracklists[URI_SCHEME + ':artistresultscache']
+        delete customTracklists[URI_SCHEME + ':albumresultscache']
+        delete customTracklists[URI_SCHEME + ':trackresultscache']
+        $('#searchartists').hide()
+        $('#searchalbums').hide()
+        $('#searchtracks').hide()
 
         if (searchService != 'all') {
-            mopidy.library.search({'query': {any:[value]}, 'uris': [searchService + ':']}).then(processSearchResults, console.error);
+            mopidy.library.search({'query': {any:[value]}, 'uris': [searchService + ':']}).then(processSearchResults, console.error)
         } else {
             mopidy.getUriSchemes().then(function (schemes) {
                 var query = {},
-                    uris = [];
+                    uris = []
 
                 var regexp = $.map(schemes, function (scheme) {
-                    return '^' + scheme + ':';
-                }).join('|');
+                    return '^' + scheme + ':'
+                }).join('|')
 
-                var match = value.match(regexp);
+                var match = value.match(regexp)
                 if (match) {
-                    var scheme = match[0];
-                    query = {uri: [value]};
-                    uris = [scheme];
+                    var scheme = match[0]
+                    query = {uri: [value]}
+                    uris = [scheme]
                 } else {
-                    query = {any: [value]};
+                    query = {any: [value]}
                 }
-                mopidy.library.search({'query': query, 'uris': uris}).then(processSearchResults, console.error);
-            });
+                mopidy.library.search({'query': query, 'uris': uris}).then(processSearchResults, console.error)
+            })
         }
     }
 }
 
-/********************************************************
+/** ******************************************************
  * process results of a search
  *********************************************************/
 
-//# speed clone http://jsperf.com/cloning-an-object/2
-function clone(obj) {
-    var target = {};
+// # speed clone http://jsperf.com/cloning-an-object/2
+function clone (obj) {
+    var target = {}
     for (var i in obj) {
         if (obj.hasOwnProperty(i)) {
-            target[i] = obj[i];
+            target[i] = obj[i]
         }
     }
-    return target;
+    return target
 }
 
-function processSearchResults(resultArr) {
-    $(SEARCH_TRACK_TABLE).empty();
-    $(SEARCH_ARTIST_TABLE).empty();
-    $(SEARCH_ALBUM_TABLE).empty();
+function processSearchResults (resultArr) {
+    $(SEARCH_TRACK_TABLE).empty()
+    $(SEARCH_ARTIST_TABLE).empty()
+    $(SEARCH_ALBUM_TABLE).empty()
 
     // Merge results from different backends.
     // TODO  should of coures have multiple tables
-    var results = {'tracks': [], 'artists': [], 'albums': []};
-    var j, emptyResult = true;
+    var results = {'tracks': [], 'artists': [], 'albums': []}
+    var j, emptyResult = true
 
     for (var i = 0; i < resultArr.length; i++) {
         if (resultArr[i].tracks) {
             for (j = 0; j < resultArr[i].tracks.length; j++) {
-                results.tracks.push(resultArr[i].tracks[j]);
-                emptyResult = false;
+                results.tracks.push(resultArr[i].tracks[j])
+                emptyResult = false
             }
         }
         if (resultArr[i].artists) {
             for (j = 0; j < resultArr[i].artists.length; j++) {
-                results.artists.push(resultArr[i].artists[j]);
-                emptyResult = false;
+                results.artists.push(resultArr[i].artists[j])
+                emptyResult = false
             }
         }
         if (resultArr[i].albums) {
             for (j = 0; j < resultArr[i].albums.length; j++) {
-                results.albums.push(resultArr[i].albums[j]);
-                emptyResult = false;
+                results.albums.push(resultArr[i].albums[j])
+                emptyResult = false
             }
         }
     }
 
-    customTracklists[URI_SCHEME+':trackresultscache'] = results.tracks;
+    customTracklists[URI_SCHEME + ':trackresultscache'] = results.tracks
 
     if (emptyResult) {
-        toast('No results');
-        showLoading(false);
-        return false;
+        toast('No results')
+        showLoading(false)
+        return false
     }
 
     if (results.artists.length > 0) {
-        $("#searchartists").show();
+        $('#searchartists').show()
     }
 
     if (results.albums.length > 0) {
-        $("#searchalbums").show();
+        $('#searchalbums').show()
     }
 
     if (results.tracks.length > 0) {
-        $("#searchtracks").show();
+        $('#searchtracks').show()
     }
 
     // Returns a string where {x} in template is replaced by tokens[x].
-    function theme(template, tokens) {
-        return template.replace(/{[^}]+}/g, function(match) {
-            return tokens[match.slice(1,-1)];
-        });
+    function theme (template, tokens) {
+        return template.replace(/{[^}]+}/g, function (match) {
+            return tokens[match.slice(1, -1)]
+        })
     }
 
     // 'Show more' pattern
-    var showMorePattern = '<li onclick="$(this).hide().siblings().show(); return false;"><a>Show {count} more</a></li>';
+    var showMorePattern = '<li onclick="$(this).hide().siblings().show(); return false;"><a>Show {count} more</a></li>'
 
     // Artist results
-    var child = '';
-    var pattern = '<li><a href="#" onclick="return showArtist(this.id)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>';
-    var tokens;
+    var child = ''
+    var pattern = '<li><a href="#" onclick="return showArtist(this.id)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>'
+    var tokens
 
     for (var i = 0; i < results.artists.length; i++) {
         tokens = {
             'id': results.artists[i].uri,
             'name': results.artists[i].name,
             'class': getMediaClass(results.artists[i].uri)
-        };
+        }
 
         // Add 'Show all' item after a certain number of hits.
         if (i == 4 && results.artists.length > 5) {
-            child += theme(showMorePattern, {'count': results.artists.length - i});
-            pattern = pattern.replace('<li>', '<li class="overflow">');
+            child += theme(showMorePattern, {'count': results.artists.length - i})
+            pattern = pattern.replace('<li>', '<li class="overflow">')
         }
 
-        child += theme(pattern, tokens);
+        child += theme(pattern, tokens)
     }
 
     // Inject list items, refresh listview and hide superfluous items.
-    $(SEARCH_ARTIST_TABLE).html(child).listview('refresh').find('.overflow').hide();
+    $(SEARCH_ARTIST_TABLE).html(child).listview('refresh').find('.overflow').hide()
 
     // Album results
-    child = '';
-    pattern = '<li><a href="#" onclick="return showAlbum(this.id)" id="{albumId}">';
-    pattern += '<h5 data-role="heading"><i class="{class}"></i> {albumName}</h5>';
-    pattern += '<p data-role="desc">{artistName}</p>';
-    pattern += '</a></li>';
+    child = ''
+    pattern = '<li><a href="#" onclick="return showAlbum(this.id)" id="{albumId}">'
+    pattern += '<h5 data-role="heading"><i class="{class}"></i> {albumName}</h5>'
+    pattern += '<p data-role="desc">{artistName}</p>'
+    pattern += '</a></li>'
 
     for (var i = 0; i < results.albums.length; i++) {
         tokens = {
@@ -170,175 +170,175 @@ function processSearchResults(resultArr) {
             'artistName': '',
             'albumYear': results.albums[i].date,
             'class': getMediaClass(results.albums[i].uri)
-        };
+        }
         if (results.albums[i].artists) {
             for (var j = 0; j < results.albums[i].artists.length; j++) {
                 if (results.albums[i].artists[j].name) {
-                    tokens.artistName += results.albums[i].artists[j].name + ' ';
+                    tokens.artistName += results.albums[i].artists[j].name + ' '
                 }
             }
         }
         if (tokens.albumYear) {
-            tokens.artistName += '(' + tokens.albumYear + ')';
+            tokens.artistName += '(' + tokens.albumYear + ')'
         }
         // Add 'Show all' item after a certain number of hits.
         if (i == 4 && results.albums.length > 5) {
-            child += theme(showMorePattern, {'count': results.albums.length - i});
-            pattern = pattern.replace('<li>', '<li class="overflow">');
+            child += theme(showMorePattern, {'count': results.albums.length - i})
+            pattern = pattern.replace('<li>', '<li class="overflow">')
         }
 
-        child += theme(pattern, tokens);
+        child += theme(pattern, tokens)
     }
     // Inject list items, refresh listview and hide superfluous items.
-    $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide();
+    $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide()
 
-    $('#expandsearch').show();
+    $('#expandsearch').show()
 
     // Track results
-    resultsToTables(results.tracks, SEARCH_TRACK_TABLE, URI_SCHEME+':trackresultscache');
+    resultsToTables(results.tracks, SEARCH_TRACK_TABLE, URI_SCHEME + ':trackresultscache')
 
-    showLoading(false);
+    showLoading(false)
 }
 
-function toggleSearch() {
-    $("#albumresulttable tr").removeClass('hidden');
-    $("#artistresulttable tr").removeClass('hidden');
+function toggleSearch () {
+    $('#albumresulttable tr').removeClass('hidden')
+    $('#artistresulttable tr').removeClass('hidden')
 }
 
-/*********************************
+/** *******************************
  * Playlists & Browse
  *********************************/
 
-function getPlaylists() {
+function getPlaylists () {
     //  get playlists without tracks
-    mopidy.playlists.asList().then(processGetPlaylists, console.error);
+    mopidy.playlists.asList().then(processGetPlaylists, console.error)
 }
 
-function getBrowseDir(rootdir) {
+function getBrowseDir (rootdir) {
     //  get directory to browse
-    showLoading(true);
+    showLoading(true)
     if (!rootdir) {
-        browseStack.pop();
-        rootdir = browseStack[browseStack.length - 1];
+        browseStack.pop()
+        rootdir = browseStack[browseStack.length - 1]
     } else {
-        browseStack.push(rootdir);
+        browseStack.push(rootdir)
     }
     if (!rootdir) {
-        rootdir = null;
+        rootdir = null
     }
-    mopidy.library.browse({'uri': rootdir}).then(processBrowseDir, console.error);
+    mopidy.library.browse({'uri': rootdir}).then(processBrowseDir, console.error)
 }
 
-function getCurrentPlaylist() {
-    mopidy.tracklist.getTlTracks().then(processCurrentPlaylist, console.error);
+function getCurrentPlaylist () {
+    mopidy.tracklist.getTlTracks().then(processCurrentPlaylist, console.error)
 }
 
-/********************************************************
+/** ******************************************************
  * Show tracks of playlist
  ********************************************************/
-function togglePlaylists() {
+function togglePlaylists () {
     if ($(window).width() <= 960) {
         $('#playlisttracksdiv').toggle();
-        //Hide other div
-        ($('#playlisttracksdiv').is(":visible")) ? $('#playlistslistdiv').hide() : $('#playlistslistdiv').show();
+        // Hide other div
+        ($('#playlisttracksdiv').is(':visible')) ? $('#playlistslistdiv').hide() : $('#playlistslistdiv').show()
     } else {
-        $('#playlisttracksdiv').show();
-        $('#playlistslistdiv').show();
+        $('#playlisttracksdiv').show()
+        $('#playlistslistdiv').show()
     }
-    return true;
+    return true
 }
 
-function showTracklist(uri) {
-    $(PLAYLIST_TABLE).empty();
-    togglePlaylists();
-    var tracks = getPlaylistTracks(uri).then(function(tracks) {
-        resultsToTables(tracks, PLAYLIST_TABLE, uri);
-    });
-    showLoading(false);
-    updatePlayIcons(uri);
-    $('#playlistslist li a').each(function() {
-        $(this).removeClass("playlistactive");
+function showTracklist (uri) {
+    $(PLAYLIST_TABLE).empty()
+    togglePlaylists()
+    var tracks = getPlaylistTracks(uri).then(function (tracks) {
+        resultsToTables(tracks, PLAYLIST_TABLE, uri)
+    })
+    showLoading(false)
+    updatePlayIcons(uri)
+    $('#playlistslist li a').each(function () {
+        $(this).removeClass('playlistactive')
         if (this.id == uri) {
-            $(this).addClass('playlistactive');
+            $(this).addClass('playlistactive')
         }
-    });
-    return false;
+    })
+    return false
 }
 
-/******
+/** ****
  * Lookups
  */
 
-function showArtist(nwuri) {
-    $('#popupQueue').popup('close');
-    $('#popupTracks').popup('close');
-    $('#controlsmodal').popup('close');
-    $(ARTIST_TABLE).empty();
+function showArtist (nwuri) {
+    $('#popupQueue').popup('close')
+    $('#popupTracks').popup('close')
+    $('#controlsmodal').popup('close')
+    $(ARTIST_TABLE).empty()
 
-//TODO cache
-    $('#h_artistname').html('');
-    showLoading(true);
-    mopidy.library.lookup({'uris': [nwuri]}).then(function(resultDict) {
-        var resultArr = resultDict[nwuri];
-        resultArr.uri = nwuri;
-        processArtistResults(resultArr);
-    }, console.error);
-    switchContent('artists', nwuri);
-    scrollToTop();
-    return false;
+// TODO cache
+    $('#h_artistname').html('')
+    showLoading(true)
+    mopidy.library.lookup({'uris': [nwuri]}).then(function (resultDict) {
+        var resultArr = resultDict[nwuri]
+        resultArr.uri = nwuri
+        processArtistResults(resultArr)
+    }, console.error)
+    switchContent('artists', nwuri)
+    scrollToTop()
+    return false
 }
 
-function showAlbum(uri) {
-    $('#popupQueue').popup('close');
-    $('#popupTracks').popup('close');
-    $('#controlsmodal').popup('close');
-    $(ALBUM_TABLE).empty();
-    //fill from cache
-    var pl = getTracksFromUri(uri, true);
-    if (pl.length>0) {
-        albumTracksToTable(pl, ALBUM_TABLE, uri);
-        var albumname = getAlbum(pl);
-        var artistname = getArtist(pl);
-        $('#h_albumname').html(albumname);
-        $('#h_albumartist').html(artistname);
-        $('#coverpopupalbumname').html(albumname);
-        $('#coverpopupartist').html(artistname);
-        showLoading(false);
-        mopidy.library.lookup({'uris': [uri]}).then(function(resultDict) {
-            var resultArr = resultDict[uri];
-            resultArr.uri = uri;
-            processAlbumResults(resultArr);
-        }, console.error);
+function showAlbum (uri) {
+    $('#popupQueue').popup('close')
+    $('#popupTracks').popup('close')
+    $('#controlsmodal').popup('close')
+    $(ALBUM_TABLE).empty()
+    // fill from cache
+    var pl = getTracksFromUri(uri, true)
+    if (pl.length > 0) {
+        albumTracksToTable(pl, ALBUM_TABLE, uri)
+        var albumname = getAlbum(pl)
+        var artistname = getArtist(pl)
+        $('#h_albumname').html(albumname)
+        $('#h_albumartist').html(artistname)
+        $('#coverpopupalbumname').html(albumname)
+        $('#coverpopupartist').html(artistname)
+        showLoading(false)
+        mopidy.library.lookup({'uris': [uri]}).then(function (resultDict) {
+            var resultArr = resultDict[uri]
+            resultArr.uri = uri
+            processAlbumResults(resultArr)
+        }, console.error)
     } else {
-        showLoading(true);
-        $('#h_albumname').html('');
-        $('#h_albumartist').html('');
-        mopidy.library.lookup({'uris': [uri]}).then(function(resultDict) {
-            var resultArr = resultDict[uri];
-            resultArr.uri = uri;
-            processAlbumResults(resultArr);
-        }, console.error);
+        showLoading(true)
+        $('#h_albumname').html('')
+        $('#h_albumartist').html('')
+        mopidy.library.lookup({'uris': [uri]}).then(function (resultDict) {
+            var resultArr = resultDict[uri]
+            resultArr.uri = uri
+            processAlbumResults(resultArr)
+        }, console.error)
     }
-    //show page
-    switchContent('albums', uri);
-    scrollToTop();
-    return false;
+    // show page
+    switchContent('albums', uri)
+    scrollToTop()
+    return false
 }
 
-function getSearchSchemes() {
+function getSearchSchemes () {
     mopidy.getUriSchemes().then(
-        function(schemesArray) {
-            var humanIndex;
-            $("#selectSearchService").children().remove().end();
-            $("#selectSearchService").append(new Option('All services', 'all'));
+        function (schemesArray) {
+            var humanIndex
+            $('#selectSearchService').children().remove().end()
+            $('#selectSearchService').append(new Option('All services', 'all'))
             for (var i = 0; i < schemesArray.length; i++) {
                 for (var j = 0; j < uriHumanList.length; j++) {
-                    if (uriHumanList[j][0] == schemesArray[i].toLowerCase() ) {
-                        $("#selectSearchService").append(new Option(uriHumanList[j][1], schemesArray[i]));
+                    if (uriHumanList[j][0] == schemesArray[i].toLowerCase()) {
+                        $('#selectSearchService').append(new Option(uriHumanList[j][1], schemesArray[i]))
                     }
                 }
             }
-            $("#selectSearchService").selectmenu( "refresh", true );
+            $('#selectSearchService').selectmenu( 'refresh', true)
         }, console.error
-    );
+    )
 }
