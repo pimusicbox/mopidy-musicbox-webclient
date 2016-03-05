@@ -75,6 +75,10 @@ v2.3.0 (UNRELEASED)
 
 - Enhance build workflow to include style checks and syntax validation for HTML, CSS, and Javascript.
 
+**Fixes**
+
+- Don't create Mopidy models manually. (Fixes: `#172 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/172>`_).
+
 v2.2.0 (2016-03-01)
 -------------------
 
