@@ -164,7 +164,9 @@ function popupTracks (e, listuri, trackuri, tlid) {
         e = window.event
     }
     $('.popupTrackName').html(popupData[trackuri].name)
-    $('.popupAlbumName').html(popupData[trackuri].album.name)
+    if (popupData[trackuri].album && popupData[trackuri].album.name) {
+        $('.popupAlbumName').html(popupData[trackuri].album.name)
+    }
     var child = ''
 
     if (popupData[trackuri].artists) {

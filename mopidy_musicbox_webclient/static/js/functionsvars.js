@@ -176,185 +176,158 @@ function albumTracksToTable (pl, target, uri) {
     $(target).attr('data', uri)
 }
 
-function renderSongLi (song, liID, uri) {
-    var name
-    if (!song.name || song.name === '') {
-        name = uri.split('/')
-        name = decodeURI(name[name.length - 1])
+function renderSongLi (song, liID, uri, tlid, renderAlbumInfo) {
+    var name, iconClass
+    var tlidString = ''
+    var tlidParameter = ''
+    var onClick = ''
+    // Determine if the song line item will be rendered as part of an album.
+    if (!song.album || !song.album.name) {
+        iconClass = getMediaClass(song.uri)
     } else {
-        name = song.name
+        iconClass = 'trackname'
     }
-    songLi = '<li class="song albumli" id="' + liID + '">' +
-             '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + '\');">' +
+    // Play by tlid if available.
+    if (tlid) {
+        tlidString = '" tlid="' + tlid
+        tlidParameter = '\',\'' + tlid
+        onClick = 'return playTrackQueueByTlid(\'' + song.uri + '\',\'' + tlid + '\');'
+    } else {
+        onClick = 'return playTrackByUri(\'' + song.uri + '\',\'' + uri + '\');'
+    }
+    songLi = '<li class="song albumli" id="' + liID + tlidString + '">' +
+             '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + tlidParameter + '\');">' +
              '<i class="fa fa-ellipsis-v"></i></a>' +
-             '<a href="#" onclick="return playTrackByUri(\'' + song.uri + '\',\'' + uri + '\');">' +
-             '<h1 class="trackname">' + name + '</h1></a>' +
-             '</li>'
+             '<a href="#" onclick="' + onClick + '">' +
+             '<h1><i class="' + iconClass + '"></i>' + song.name + '</h1>'
+    if (renderAlbumInfo) {
+        songLi += '</p>'
+        songLi += renderSongLiTrackArtists(song)
+        if (song.album && song.album.name) {
+            songLi += ' - '
+            songLi += '<em>' + song.album.name + '</em></p>'
+        }
+    }
+    songLi += '</a></li>'
     return songLi
 }
 
-function renderQueueSongLi (song, liID, uri, tlid) {
-    var name
-    if (!song.name || song.name === '') {
-        name = uri.split('/')
-        name = decodeURI(name[name.length - 1])
-    } else {
-        name = song.name
+function renderSongLiTrackArtists (track) {
+    var html = ''
+    if (track.artists) {
+        for (var i = 0; i < track.artists.length; i++) {
+            html += track.artists[i].name
+            html += (i === track.artists.length - 1) ? '' : ' / '
+            // Stop after 3
+            if (i > 2) {
+                html += '...'
+                break
+            }
+        }
     }
-    songLi = '<li class="song albumli" id="' + liID + '" tlid="' + tlid + '">' +
-             '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + '\',\'' + tlid + '\');">' +
-             '<i class="fa fa-ellipsis-v"></i></a>' +
-             '<a href="#" onclick="return playTrackQueueByTlid(\'' + song.uri + '\',\'' + tlid + '\');">' +
-             '<h1 class="trackname">' + name + '</h1></a>' +
-             '</li>'
-    return songLi
+    return html
+}
+
+function isNewAlbumSection (track, previousTrack) {
+    // 'true' if album name is either not defined or has changed from the previous track.
+    return !track.album || !track.album.name || !previousTrack || !previousTrack.album || !previousTrack.album.name ||
+           track.album.name !== previousTrack.album.name
+}
+
+function isMultiTrackAlbum (track, nextTrack) {
+    // 'true' if there are more tracks of the same album after this one.
+    return nextTrack.album && nextTrack.album.name && track.album && track.album.name && track.album.name === nextTrack.album.name
+}
+
+function validateTrackName (track, trackNumber) {
+    // Create name if there is none
+    var name = ''
+    if (!track.name || track.name === '') {
+        name = track.uri.split('/')
+        name = decodeURI(name[name.length - 1]) || 'Track ' + String(trackNumber)
+    } else {
+        name = track.name
+    }
+    return name
 }
 
 function resultsToTables (results, target, uri) {
     if (!results) {
         return
     }
-    var tlids = []
-    if (target === CURRENT_PLAYLIST_TABLE) {
-        for (i = 0; i < results.length; i++) {
-            tlids[i] = results[i].tlid
-            results[i] = results[i].track
-        }
-    }
-
-    var newalbum = []
-    var newtlids = []
-    // keep a list of track URIs for retrieving of covers
-    var coversList = []
-    var nextname = ''
-    var count = 0
     $(target).html('')
-
-    // break into albums and put in tables
-    var html = ''
-    var tableid, j, artistname, alburi, name, iconClass
-    var targetmin = target.substr(1)
     $(target).attr('data', uri)
+
+    var track, previousTrack, nextTrack, tlid
+    var albumTrackSeen = 0
+    var renderAlbumInfo = true
+    var liID = ''
+    // Keep a list of track URIs for retrieving of covers
+    var coversList = []
+
+    var html = ''
+    var tableid, artistname, name, iconClass
+    var targetmin = target.substr(1)
     var length = 0 || results.length
+
+    // Break into albums and put in tables
     for (i = 0; i < length; i++) {
-        // create album if none extists
-        if (!results[i].album) {
-            results[i].album = {'__model__': 'Album'}
+        previousTrack = track
+        track = results[i]
+        tlid = ''
+        if (i < length - 1) {
+            nextTrack = results[i + 1]
         }
-        // create album uri if there is none
-        if (!results[i].album.uri) {
-            results[i].album.uri = 'x'
+        if ('tlid' in results[i]) {
+            // Get track information from TlTrack instance
+            track = results[i].track
+            tlid = results[i].tlid
+            if (i < length - 1) {
+                nextTrack = results[i + 1].track
+            }
         }
-        if (!results[i].album.name) {
-            results[i].album.name = ''
+        track.name = validateTrackName(track, i)
+        // Leave out unplayable items
+        if (track.name.substring(0, 12) === '[unplayable]') {
+            continue
         }
-        // create name if there is no one
-        if (!results[i].name || results[i].name === '') {
-            name = results[i].uri.split('/')
-            results[i].name = decodeURI(name[name.length - 1]) || 'Track ' + String(i)
+        // Streams
+        if (track.length === -1) {
+            html += '<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + ' [Stream]</h1></a></li>'
+            continue
         }
 
-        // leave out unplayable items
-        if (results[i].name.substring(0, 12) === '[unplayable]') continue
-
-        newalbum.push(results[i])
-        newtlids.push(tlids[i])
-        nextname = ''
-        if ((i < length - 1) && results[i + 1].album && results[i + 1].album.name) {
-            nextname = results[i + 1].album.name
+        if (isNewAlbumSection(track, previousTrack)) {
+            // Starting to render a new album in the list.
+            tableid = 'art' + i
+            // Render differently if part of an album
+            if (i < length - 1 && isMultiTrackAlbum(track, nextTrack)) {
+                // Large divider with album cover
+                renderAlbumInfo = false
+                html += '<li class="albumdivider">'
+                html += '<a href="#" onclick="return showAlbum(\'' + track.album.uri + '\');">' +
+                '<img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" />' +
+                '<h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.album.name + '</h1><p>'
+                html += renderSongLiTrackArtists(track)
+                html += '</p></a></li>'
+                coversList.push([track.uri, i])
+            } else {
+                renderAlbumInfo = true
+                if (i > 0) {
+                    // Small divider
+                    html += '<li class="smalldivider"> &nbsp;</li>'
+                }
+            }
+            albumTrackSeen = 0
         }
-        if (results[i].length === -1) {
-            html += '<li class="albumli"><a href="#"><h1><i class="' + iconClass + '"></i> ' + results[i].name + ' [Stream]</h1></a></li>'
-            newalbum = []
-            newtlids = []
-            nextname = ''
-        } else {
-            if ((results[i].album.name !== nextname) || (nextname === '')) {
-                tableid = 'art' + i
-                // render differently if only one track in the album
-                if (newalbum.length === 1) {
-                    var liID = ''
-                    if (i !== 0) {
-                        html += '<li class="smalldivider"> &nbsp;</li>'
-                    }
-                    iconClass = getMediaClass(newalbum[0].uri)
-                    liID = targetmin + '-' + newalbum[0].uri
-                    if (target === CURRENT_PLAYLIST_TABLE) {
-                        html += '<li class="song albumli" id="' + liID + '" tlid="' + newtlids[0] + '">' +
-                                '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\',\'' + newtlids[0] + '\');">' +
-                                '<i class="fa fa-ellipsis-v"></i></a>' +
-                                '<a href="#" onclick="return playTrackQueueByTlid(\'' + newalbum[0].uri + '\',\'' + newtlids[0] + '\');">' +
-                                '<h1><i class="' + iconClass + '"></i> ' + newalbum[0].name + '</h1><p>'
-                    } else {
-                        html += '<li class="song albumli" id="' + liID + '">' +
-                                '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + newalbum[0].uri + '\');">' +
-                                '<i class="fa fa-ellipsis-v"></i></a>' +
-                                '<a href="#" onclick="return playTrackByUri(\'' + newalbum[0].uri + '\',\'' + uri + '\');">' +
-                                '<h1><i class="' + iconClass + '"></i> ' + newalbum[0].name + '</h1><p>'
-                    }
-
-                    if (newalbum[0].artists) {
-                        for (j = 0; j < newalbum[0].artists.length; j++) {
-                            html += newalbum[0].artists[j].name
-                            html += (j === newalbum[0].artists.length - 1) ? '' : ' / '
-                            // stop after 3
-                            if (j > 2) {
-                                html += '...'
-                                break
-                            }
-                        }
-                    }
-                    if (newalbum[0].album.name !== '') {
-                        html += ' / '
-                    }
-                    html += '<em>' + newalbum[0].album.name + '</em></p>'
-                    html += '</a></li>'
-
-                    popupData[newalbum[0].uri] = newalbum[0]
-                    newalbum = []
-                    newtlids = []
-                } else { // newalbum length
-                    if (results[i].album.uri && results[i].album.name) {
-                        iconClass = getMediaClass(newalbum[0].uri)
-                        html += '<li class="albumdivider">'
-                        html += '<a href="#" onclick="return showAlbum(\'' + results[i].album.uri + '\');"><img id="' +
-                            targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" /><h1><i class="' + iconClass + '"></i> ' + results[i].album.name + '</h1><p>'
-                    }
-                    if (results[i].album.artists) {
-                        for (j = 0; j < results[i].album.artists.length; j++) {
-                            html += results[i].album.artists[j].name
-                            html += (j === results[i].album.artists.length - 1) ? '' : ' / '
-                            // stop after 3
-                            if (j > 2) {
-                                child += '...'
-                                break
-                            }
-                        }
-                    }
-                    html += '</p></a></li>'
-                    for (j = 0; j < newalbum.length; j++) {
-                        popupData[newalbum[j].uri] = newalbum[j]
-                        // hERE!
-                        liID = targetmin + '-' + newalbum[j].uri
-                        if (target === CURRENT_PLAYLIST_TABLE) {
-                            html += renderQueueSongLi(newalbum[j], liID, uri, newtlids[j])
-                        } else {
-                            html += renderSongLi(newalbum[j], liID, uri)
-                        }
-                    }
-                    newalbum = []
-                    newtlids = []
-                    if (results[i].album) {
-                        coversList.push([results[i].uri, i])
-                    }
-                } // newalbum length
-            } // albums name
-        }
+        popupData[track.uri] = track
+        liID = targetmin + '-' + track.uri
+        html += renderSongLi(track, liID, uri, tlid, renderAlbumInfo)
+        albumTrackSeen += 1
     }
     tableid = '#' + tableid
     $(target).html(html)
-    $(target).attr('data', uri)
-    // retrieve albumcovers
+    // Retrieve album covers
     for (i = 0; i < coversList.length; i++) {
         getCover(coversList[i][0], target + '-cover-' + coversList[i][1], 'small')
     }
