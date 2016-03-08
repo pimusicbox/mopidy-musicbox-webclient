@@ -56,7 +56,6 @@
 <div data-role="page" id="page" class="ui-responsive-panel" data-theme="c">
 <div data-role="panel" id="panel" data-position="left" data-theme="a" data-display="reveal" data-position-fixed="true">
 
-
     <ul class="ui-listview mainNav" data-role="listview" data-theme="a">
         <li id="navhome" data-icon="false">
             <a href="#home" onclick="switchContent('home' ); return false;">
@@ -76,11 +75,11 @@
         </li>
         <li id="navbrowse" data-icon="false">
             <a href="#browse" onclick="switchContent('browse' ); return false;">
-                <span class="navtxt"> Browse </span><i class="fa  fa-folder"></i></a>
+                <span class="navtxt"> Browse </span><i class="fa fa-folder"></i></a>
         </li>
         <li id="navstream" data-icon="false">
             <a href="#stream" onclick="switchContent('stream' ); return false;">
-                <span class="navtxt">Streams </span><i class="fa  fa-rss"></i></a>
+                <span class="navtxt">Streams </span><i class="fa fa-rss"></i></a>
         </li>
         <li id="navsearch" data-icon="false">
             <a href="#search" onclick="switchContent('search' ); return false;">
@@ -164,8 +163,7 @@
                 <a href="#" onclick="return playTrack(ADD_THIS_BOTTOM);">Add Track to Bottom of Queue</a>
             </li>
             <li class="addqueue">
-                <a href="#" onclick="return playTrack(ADD_ALL_BOTTOM);" id="liaddtobottom">Add all to Bottom of
-                    Queue</a>
+                <a href="#" onclick="return playTrack(ADD_ALL_BOTTOM);" id="liaddtobottom">Add all to Bottom of Queue</a>
             </li>
             <li>
                 <a href="#" onclick="showAlbumPopup('#popupTracks')">Show Album <span class="popupAlbumName"></span></a>
@@ -206,7 +204,6 @@
     </div>
 </div>
 
-
 <div data-role="popup" data-theme="b" id="popupSave" class="popupDialog">
     <form>
         <p>Save current queue to a playlist.
@@ -223,7 +220,6 @@
     </form>
 </div>
 <!--/save queue to playlist-->
-
 
 <div data-role="popup" data-theme="b" id="popupOverwrite" class="popupDialog">
     <form>
@@ -307,11 +303,9 @@
 </div>
 <!--/homepane-->
 
-
 <div id="nowPlayingpane" data-role="content" class="pane">
 
     <img id="controlspopupimage" src="images/default_cover.png" alt="Album cover"/>
-
 
     <div class="nowPlaying-artistInfo">
     <h3 id="modalname"></h3>
@@ -343,9 +337,6 @@
             <ul id="playlistslist" class="table"></ul>
         </div>
         <div class="ui-block-b scroll" id="playlisttracksdiv">
-            <div id="playlisttracksback" style="height: 30px; margin: 2px; padding-top: 2px; background-color: #aaa;">
-                <a style="display:block; padding: 5px;" href="#" onclick="return togglePlaylists();"><i class="fa fa-arrow-circle-left"></i> Back</a>
-            </div>
             <div>
                 <ul class="table" id="playlisttracks"></ul>
             </div>
@@ -356,8 +347,9 @@
 
 <div data-role="content" id="browsepane" class="pane">
     <h4>Browse</h4>
-    <h5 id="browsepath"></h5>
-        <ul id="browselist" class="table"></ul>
+    <div class="ui-grid">
+        <ul id="browsetable" class="table"></ul>
+    </div>
 </div>
 <!--/browsepane-->
 
@@ -385,7 +377,7 @@
 
     <h3 id="h_albumname"></h3>
     <h5 id="h_albumartist"></h5>
-    <div id="albumstable"></div>
+    <ul class="table" id="albumstable"></ul>
 
 </div>
 
@@ -477,7 +469,6 @@
     </div>
 </div>
 
-
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="normalFooter">
     <div class="footerControls">
         <div class="songinfo" id="songinfo">
@@ -492,6 +483,7 @@
         </div>
     </div>
 </div>
+
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="nowPlayingFooter">
         <div class="footerControls" style="padding-left: 10px;">
             <div style="float: left;">
@@ -507,10 +499,8 @@
                 <a href="#" onclick="doShuffle(); return false"><span id="shufflebt" title="Shuffle"><i class="fa fa-arrows-v"></i></span></a>
             </div>
         </div>
-
 </div>
 <!-- /footer -->
-
 
 </div>
 <!-- /page one -->

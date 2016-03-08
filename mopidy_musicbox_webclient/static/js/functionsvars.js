@@ -52,6 +52,7 @@ var isWebkit = /WebKit/.test(ua)
 PROGRAM_NAME = 'MusicBox'
 ARTIST_TABLE = '#artiststable'
 ALBUM_TABLE = '#albumstable'
+BROWSE_TABLE = '#browsetable'
 PLAYLIST_TABLE = '#playlisttracks'
 CURRENT_PLAYLIST_TABLE = '#currenttable'
 SEARCH_ALL_TABLE = '#allresulttable'
@@ -162,54 +163,69 @@ function artistsToString (artists, max) {
  * break up results and put them in album tables
  *********************************************************/
 function albumTracksToTable (pl, target, uri) {
-    var tmp = '<ul class="songsOfAlbum table" >'
-    var liId = ''
-    var targetmin = target.substr(1)
+    var track, previousTrack, nextTrack
     $(target).empty()
-    for (var i = 0; i < pl.length; i++) {
-        popupData[pl[i].uri] = pl[i]
-        liID = targetmin + '-' + pl[i].uri
-        tmp += renderSongLi(pl[i], liID, uri)
-    }
-    tmp += '</ul>'
-    $(target).html(tmp)
     $(target).attr('data', uri)
+    for (var i = 0; i < pl.length; i++) {
+        previousTrack = track || undefined
+        nextTrack = i < pl.length - 1 ? pl[i + 1] : undefined
+        track = pl[i]
+        popupData[track.uri] = track
+        renderSongLi(previousTrack, track, nextTrack, uri, '', ALBUM_TABLE, i, pl.length)
+    }
+    updatePlayIcons(songdata.track.uri, songdata.tlid)
 }
 
-function renderSongLi (song, liID, uri, tlid, renderAlbumInfo) {
-    var name, iconClass
-    var tlidString = ''
+function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, currentIndex, listLength) {
+    var name
     var tlidParameter = ''
     var onClick = ''
-    // Determine if the song line item will be rendered as part of an album.
-    if (!song.album || !song.album.name) {
-        iconClass = getMediaClass(song.uri)
-    } else {
-        iconClass = 'trackname'
+    var targetmin = target.substr(1)
+    track.name = validateTrackName(track, currentIndex)
+    // Leave out unplayable items
+    if (track.name.substring(0, 12) === '[unplayable]') {
+        return
+    }
+    // Streams
+    if (track.length === -1) {
+        $(target).append('<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + ' [Stream]</h1></a></li>')
+        return
     }
     // Play by tlid if available.
-    if (tlid) {
-        tlidString = '" tlid="' + tlid
+    // TODO: Need to consolidate all of the 'play...' functions
+    if (tlid && target === BROWSE_TABLE) {
+        onClick = 'return playBrowsedTracks(PLAY_ALL, ' + tlid + ');'
+    } else if (tlid) {
         tlidParameter = '\',\'' + tlid
-        onClick = 'return playTrackQueueByTlid(\'' + song.uri + '\',\'' + tlid + '\');'
+        onClick = 'return playTrackQueueByTlid(\'' + track.uri + '\',\'' + tlid + '\');'
     } else {
-        onClick = 'return playTrackByUri(\'' + song.uri + '\',\'' + uri + '\');'
+        onClick = 'return playTrackByUri(\'' + track.uri + '\',\'' + uri + '\');'
     }
-    songLi = '<li class="song albumli" id="' + liID + tlidString + '">' +
-             '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + song.uri + tlidParameter + '\');">' +
-             '<i class="fa fa-ellipsis-v"></i></a>' +
-             '<a href="#" onclick="' + onClick + '">' +
-             '<h1><i class="' + iconClass + '"></i>' + song.name + '</h1>'
-    if (renderAlbumInfo) {
-        songLi += '</p>'
-        songLi += renderSongLiTrackArtists(song)
-        if (song.album && song.album.name) {
-            songLi += ' - '
-            songLi += '<em>' + song.album.name + '</em></p>'
-        }
+    $(target).append(
+        '<li class="song albumli" id="' + getjQueryID(targetmin + '-', track.uri) + '" tlid="' + tlid + '">' +
+        '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + track.uri + tlidParameter + '\');">' +
+        '<i class="fa fa-ellipsis-v"></i></a>' +
+        '<a href="#" onclick="' + onClick + '"><h1><i></i> ' + track.name + '</h1></a></li>'
+    )
+    if (listLength === 1 || !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack)) {
+        renderSongLiAlbumInfo(track, target)
     }
-    songLi += '</a></li>'
-    return songLi
+    // TODO: remove this hard-coded condition for 'ALBUM_TABLE'
+    if (target !== ALBUM_TABLE && !hasSameAlbum(previousTrack, track)) {
+        // Starting to render a new album in the list.
+        renderSongLiDivider(track, nextTrack, currentIndex, target)
+    }
+}
+
+function renderSongLiAlbumInfo (track, target) {
+    var html = '</p>'
+    html += renderSongLiTrackArtists(track)
+    if (track.album && track.album.name) {
+        html += ' - <em>' + track.album.name + '</em></p>'
+    }
+    target = getjQueryID(target.substr(1) + '-', track.uri, true)
+    $(target).children('a').eq(1).append(html)
+    $(target + ' a h1 i').addClass(getMediaClass(track.uri))
 }
 
 function renderSongLiTrackArtists (track) {
@@ -228,15 +244,49 @@ function renderSongLiTrackArtists (track) {
     return html
 }
 
-function isNewAlbumSection (track, previousTrack) {
-    // 'true' if album name is either not defined or has changed from the previous track.
-    return !track.album || !track.album.name || !previousTrack || !previousTrack.album || !previousTrack.album.name ||
-           track.album.name !== previousTrack.album.name
+function renderSongLiDivider (track, nextTrack, currentIndex, target) {
+    targetmin = target.substr(1)
+    target = getjQueryID(targetmin + '-', track.uri, true)
+    // Render differently if part of an album
+    if (hasSameAlbum(track, nextTrack)) {
+        // Large divider with album cover
+        $(target).before(
+            '<li class="albumdivider"><a href="#" onclick="return showAlbum(\'' + track.album.uri + '\');">' +
+            '<img id="' + getjQueryID(targetmin + '-cover-', track.uri) + '" class="artistcover" width="30" height="30"/>' +
+            '<h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.album.name + '</h1><p>' +
+            renderSongLiTrackArtists(track) + '</p></a></li>'
+        )
+        // Retrieve album covers
+        getCover(track.uri, getjQueryID(targetmin + '-cover-', track.uri, true), 'small')
+    } else if (currentIndex > 0) {
+        // Small divider
+        $(target).before('<li class="smalldivider"> &nbsp;</li>')
+    }
 }
 
-function isMultiTrackAlbum (track, nextTrack) {
-    // 'true' if there are more tracks of the same album after this one.
-    return nextTrack.album && nextTrack.album.name && track.album && track.album.name && track.album.name === nextTrack.album.name
+function renderSongLiBackButton (results, target, onClick, optional) {
+    if (onClick && onClick.length > 0) {
+        if (!results || results.length === 0) {
+            $(target).empty()
+            $(target).append(
+                '<li class="song albumli"><a href="#" onclick="' + onClick + '"><h1><i></i>No tracks found...</h1></a></li>'
+            )
+        }
+        var opt = ''
+        if (optional) {
+            opt = ' backnav-optional'
+        }
+        $(target).prepend(
+            '<li class="backnav' + opt + '"><a href="#" onclick="' + onClick + '"><h1><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>'
+        )
+    }
+}
+
+function hasSameAlbum (track1, track2) {
+    // 'true' if album for each track exists and has the same name
+    var name1 = track1 ? (track1.album ? track1.album.name : undefined) : undefined
+    var name2 = track2 ? (track2.album ? track2.album.name : undefined) : undefined
+    return name1 && name2 && (name1 === name2)
 }
 
 function validateTrackName (track, trackNumber) {
@@ -251,86 +301,33 @@ function validateTrackName (track, trackNumber) {
     return name
 }
 
-function resultsToTables (results, target, uri) {
-    if (!results) {
+function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
+    $(target).empty()
+    renderSongLiBackButton(results, target, onClickBack, backIsOptional)
+    if (!results || results.length === 0) {
         return
     }
-    $(target).html('')
     $(target).attr('data', uri)
 
     var track, previousTrack, nextTrack, tlid
-    var albumTrackSeen = 0
-    var renderAlbumInfo = true
-    var liID = ''
-    // Keep a list of track URIs for retrieving of covers
-    var coversList = []
-
-    var html = ''
-    var tableid, artistname, name, iconClass
-    var targetmin = target.substr(1)
-    var length = 0 || results.length
 
     // Break into albums and put in tables
-    for (i = 0; i < length; i++) {
-        previousTrack = track
+    for (i = 0; i < results.length; i++) {
+        previousTrack = track || undefined
+        nextTrack = i < results.length - 1 ? results[i + 1] : undefined
         track = results[i]
-        tlid = ''
-        if (i < length - 1) {
-            nextTrack = results[i + 1]
-        }
-        if ('tlid' in results[i]) {
-            // Get track information from TlTrack instance
-            track = results[i].track
-            tlid = results[i].tlid
-            if (i < length - 1) {
-                nextTrack = results[i + 1].track
+        if (track) {
+            if ('tlid' in track) {
+                // Get track information from TlTrack instance
+                tlid = track.tlid
+                track = track.track
+                nextTrack = nextTrack ? nextTrack.track : undefined
             }
+            popupData[track.uri] = track
+            renderSongLi(previousTrack, track, nextTrack, uri, tlid, target, i, results.length)
         }
-        track.name = validateTrackName(track, i)
-        // Leave out unplayable items
-        if (track.name.substring(0, 12) === '[unplayable]') {
-            continue
-        }
-        // Streams
-        if (track.length === -1) {
-            html += '<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + ' [Stream]</h1></a></li>'
-            continue
-        }
-
-        if (isNewAlbumSection(track, previousTrack)) {
-            // Starting to render a new album in the list.
-            tableid = 'art' + i
-            // Render differently if part of an album
-            if (i < length - 1 && isMultiTrackAlbum(track, nextTrack)) {
-                // Large divider with album cover
-                renderAlbumInfo = false
-                html += '<li class="albumdivider">'
-                html += '<a href="#" onclick="return showAlbum(\'' + track.album.uri + '\');">' +
-                '<img id="' + targetmin + '-cover-' + i + '" class="artistcover" width="30" height="30" />' +
-                '<h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.album.name + '</h1><p>'
-                html += renderSongLiTrackArtists(track)
-                html += '</p></a></li>'
-                coversList.push([track.uri, i])
-            } else {
-                renderAlbumInfo = true
-                if (i > 0) {
-                    // Small divider
-                    html += '<li class="smalldivider"> &nbsp;</li>'
-                }
-            }
-            albumTrackSeen = 0
-        }
-        popupData[track.uri] = track
-        liID = targetmin + '-' + track.uri
-        html += renderSongLi(track, liID, uri, tlid, renderAlbumInfo)
-        albumTrackSeen += 1
     }
-    tableid = '#' + tableid
-    $(target).html(html)
-    // Retrieve album covers
-    for (i = 0; i < coversList.length; i++) {
-        getCover(coversList[i][0], target + '-cover-' + coversList[i][1], 'small')
-    }
+    updatePlayIcons(songdata.track.uri, songdata.tlid)
 }
 
 // process updated playlist to gui
@@ -518,4 +515,33 @@ function isFavouritesPlaylist (playlist) {
 function isSpotifyStarredPlaylist (playlist) {
     var starredRegex = /spotify:user:.*:starred/g
     return (starredRegex.test(playlist.uri) && playlist.name === 'Starred')
+}
+
+/**
+ * Converts a URI to a jQuery-safe identifier. jQuery identifiers need to be
+ * unique per page and cannot contain special characters.
+ *
+ * @param {string} identifier - Identifier string to prefix to the URI. Can
+ * be used to ensure that the generated ID will be unique for the page that
+ * it will be included on. Can be any string (e.g. ID of parent element).
+ *
+ * @param {string} uri - URI to encode, usually the URI of a Mopidy track.
+ *
+ * @param {boolean} includePrefix - Will prefix the generated identifier
+ * with the '#' character if set to 'true', ready to be passed to $() or
+ * jQuery().
+ *
+ * @return {string} - a string in the format '[#]identifier-encodedURI' that
+ * is safe to use as a jQuery identifier.
+ */
+function getjQueryID (identifier, uri, includePrefix) {
+    var prefix = includePrefix ? '#' : ''
+    return prefix + identifier + fixedEncodeURIComponent(uri).replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '')
+}
+
+// Strict URI encoding as per https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+function fixedEncodeURIComponent (str) {
+    return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+        return '%' + c.charCodeAt(0).toString(16)
+    })
 }

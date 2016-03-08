@@ -36,7 +36,7 @@
         margin-left: 10px;
     }
 
-    #playlisttracksback {
+    .backnav-optional {
         display: none;
     }
 
@@ -74,7 +74,7 @@
         width: 100%;
     }
 
-    #playlisttracksback {
+    .backnav-optional {
         display: block;
     }
 
@@ -293,11 +293,15 @@
     margin-left: 20px;
 }
 
-.song .moreBtn{
+.song .moreBtn {
     float: right;
     padding: 15px 18px 12px 22px;
     display: inline-block;
     line-height: 100%;
+}
+
+.backnav {
+    background-color: #ccc !important;
 }
 
 
@@ -369,12 +373,14 @@
 }
 
 #popupTracksLv li,
-#popupQueueLv li {
+#popupQueueLv li,
+#popupBrowseLv li {
     border-bottom: 1px solid #aaa;
 }
 
 #popupTracksLv,
-#popupQueueLv {
+#popupQueueLv,
+#popupBrowseLv li {
     border: 1px solid #aaa;
 }
 
