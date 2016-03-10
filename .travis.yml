@@ -8,6 +8,7 @@ python:
 env:
   - TOX_ENV=py27
   - TOX_ENV=flake8
+  - TOX_ENV=test
   - TOX_ENV=eslint
   - TOX_ENV=csslint
   - TOX_ENV=tidy
@@ -19,4 +20,6 @@ script:
   - "tox -e $TOX_ENV"
 
 after_success:
-  - "if [ $TOX_ENV == 'py27' ]; then pip install coveralls; coveralls; fi"
+  # TODO: find a way to combine .py and .js coverage reports.
+  # - "if [ $TOX_ENV == 'py27' ]; then pip install coveralls; coveralls; fi"
+  - "if [ $TOX_ENV == 'test' ]; then cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js; fi"

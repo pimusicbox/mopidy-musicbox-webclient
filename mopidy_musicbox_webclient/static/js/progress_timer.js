@@ -1,5 +1,4 @@
 var progressTimer
-var progressElement = document.getElementById('trackslider')
 var positionNode = document.createTextNode('')
 var durationNode = document.createTextNode('')
 
@@ -13,8 +12,10 @@ var syncsLeft = MAX_SYNCS
 var synced = false
 var consecutiveSyncs = 0
 
-document.getElementById('songelapsed').appendChild(positionNode)
-document.getElementById('songlength').appendChild(durationNode)
+$(document).ready(function () {
+    $('#songelapsed').append(positionNode)
+    $('#songlength').append(durationNode)
+})
 
 function timerCallback (position, duration, isRunning) {
     updateTimers(position, duration, isRunning)
