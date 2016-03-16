@@ -98,7 +98,7 @@ function processBrowseDir (resultArr) {
             uris.push(ref.uri)
 
             $(BROWSE_TABLE).append(
-                '<li class="song albumli" id="' + getjQueryID(BROWSE_TABLE.substr(1) + '-', ref.uri) + '">' +
+                '<li class="song albumli" id="' + getjQueryID(BROWSE_TABLE, ref.uri) + '">' +
                 '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + ref.uri + '\', \'' + index + '\');">' +
                 '<i class="fa fa-ellipsis-v"></i></a>' +
                 '<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, ' + index + ');">' +

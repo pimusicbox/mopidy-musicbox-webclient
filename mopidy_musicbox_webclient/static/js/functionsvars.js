@@ -180,7 +180,6 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
     var name
     var tlidParameter = ''
     var onClick = ''
-    var targetmin = target.substr(1)
     track.name = validateTrackName(track, currentIndex)
     // Leave out unplayable items
     if (track.name.substring(0, 12) === '[unplayable]') {
@@ -202,7 +201,7 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
         onClick = 'return playTrackByUri(\'' + track.uri + '\',\'' + uri + '\');'
     }
     $(target).append(
-        '<li class="song albumli" id="' + getjQueryID(targetmin + '-', track.uri) + '" tlid="' + tlid + '">' +
+        '<li class="song albumli" id="' + getjQueryID(target, track.uri) + '" tlid="' + tlid + '">' +
         '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + track.uri + tlidParameter + '\');">' +
         '<i class="fa fa-ellipsis-v"></i></a>' +
         '<a href="#" onclick="' + onClick + '"><h1><i></i> ' + track.name + '</h1></a></li>'
@@ -223,7 +222,7 @@ function renderSongLiAlbumInfo (track, target) {
     if (track.album && track.album.name) {
         html += ' - <em>' + track.album.name + '</em></p>'
     }
-    target = getjQueryID(target.substr(1) + '-', track.uri, true)
+    target = getjQueryID(target, track.uri, true)
     $(target).children('a').eq(1).append(html)
     $(target + ' a h1 i').addClass(getMediaClass(track.uri))
 }
@@ -245,19 +244,18 @@ function renderSongLiTrackArtists (track) {
 }
 
 function renderSongLiDivider (track, nextTrack, currentIndex, target) {
-    targetmin = target.substr(1)
-    target = getjQueryID(targetmin + '-', track.uri, true)
+    target = getjQueryID(target, track.uri, true)
     // Render differently if part of an album
     if (hasSameAlbum(track, nextTrack)) {
         // Large divider with album cover
         $(target).before(
             '<li class="albumdivider"><a href="#" onclick="return showAlbum(\'' + track.album.uri + '\');">' +
-            '<img id="' + getjQueryID(targetmin + '-cover-', track.uri) + '" class="artistcover" width="30" height="30"/>' +
+            '<img id="' + getjQueryID(target + '-cover', track.uri) + '" class="artistcover" width="30" height="30"/>' +
             '<h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.album.name + '</h1><p>' +
             renderSongLiTrackArtists(track) + '</p></a></li>'
         )
         // Retrieve album covers
-        getCover(track.uri, getjQueryID(targetmin + '-cover-', track.uri, true), 'small')
+        getCover(track.uri, getjQueryID(target + '-cover', track.uri, true), 'small')
     } else if (currentIndex > 0) {
         // Small divider
         $(target).before('<li class="smalldivider"> &nbsp;</li>')
@@ -523,7 +521,7 @@ function isSpotifyStarredPlaylist (playlist) {
  *
  * @param {string} identifier - Identifier string to prefix to the URI. Can
  * be used to ensure that the generated ID will be unique for the page that
- * it will be included on. Can be any string (e.g. ID of parent element).
+ * it will be included on. Also accepts jQuery identifiers starting with '#'.
  *
  * @param {string} uri - URI to encode, usually the URI of a Mopidy track.
  *
@@ -535,8 +533,12 @@ function isSpotifyStarredPlaylist (playlist) {
  * is safe to use as a jQuery identifier.
  */
 function getjQueryID (identifier, uri, includePrefix) {
-    var prefix = includePrefix ? '#' : ''
-    return prefix + identifier + fixedEncodeURIComponent(uri).replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '')
+    if (identifier.charAt(0) === '#' && !includePrefix) {
+        identifier = identifier.substr(1)
+    } else if (identifier.charAt(0) !== '#' && includePrefix) {
+        identifier = '#' + identifier
+    }
+    return identifier + '-' + fixedEncodeURIComponent(uri).replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '')
 }
 
 // Strict URI encoding as per https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent

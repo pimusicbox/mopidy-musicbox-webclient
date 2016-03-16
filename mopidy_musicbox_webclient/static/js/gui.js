@@ -629,7 +629,7 @@ function updatePlayIcons (uri, tlid) {
         if (typeof eachTlid !== 'undefined') {
             eachTlid = parseInt(eachTlid)
         }
-        if (this.id === getjQueryID(target + '-', uri) && eachTlid === tlid) {
+        if (this.id === getjQueryID(target, uri) && eachTlid === tlid) {
             $(this).addClass('currenttrack')
         } else {
             $(this).removeClass('currenttrack')
@@ -639,7 +639,7 @@ function updatePlayIcons (uri, tlid) {
     for (var i = 0; i < listviews.length; i++) {
         target = listviews[i].substr(1)
         $(listviews[i]).children('li').each(function () {
-            if (this.id === getjQueryID(target + '-', uri)) {
+            if (this.id === getjQueryID(target, uri)) {
                 $(this).addClass('currenttrack2')
             } else {
                 $(this).removeClass('currenttrack2')
