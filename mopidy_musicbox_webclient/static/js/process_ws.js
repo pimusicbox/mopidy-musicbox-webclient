@@ -76,78 +76,78 @@ function processPlaystate (data) {
  * process results of a browse list
  *********************************************************/
 function processBrowseDir (resultArr) {
-    var backHtml = '<li style="background-color:#ccc"><a href="#" onclick="return getBrowseDir();"><h1 class="trackname"><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>'
-    if ((!resultArr) || (resultArr === '') || (resultArr.length === 0)) {
-        $('#browsepath').html('No tracks found...')
-        $('#browselist').html(backHtml)
+    $(BROWSE_TABLE).empty()
+    if (browseStack.length > 0) {
+        renderSongLiBackButton(resultArr, BROWSE_TABLE, 'return getBrowseDir();')
+    }
+    if (!resultArr || resultArr.length === 0) {
         showLoading(false)
         return
     }
-
-    $('#browselist').empty()
-
-    var child = ''
-    var rooturi = ''
-    var uri = resultArr[0].uri
-
-    // check root uri
-    // find last : or / (spltting the result)
-    // do it twice, since.
-    var colonindex = uri.lastIndexOf(':')
-    var slashindex = uri.lastIndexOf('/')
-
-    var lastindex = (colonindex > slashindex) ? colonindex : slashindex
-    rooturi = uri.slice(0, lastindex)
-    if (resultArr[0].type === 'track') {
-        rooturi = rooturi.replace(':track:', ':directory:')
-    }
-    colonindex = rooturi.lastIndexOf(':')
-    slashindex = rooturi.lastIndexOf('/')
-
-    lastindex = (colonindex > slashindex) ? colonindex : slashindex
-    rooturi = rooturi.slice(0, lastindex)
-
-    if (browseStack.length > 0) {
-        child += backHtml
-    }
-
     browseTracks = []
+    uris = []
+    var ref, track, previousTrack, nextTrack
+    var uri = resultArr[0].uri
+    var length = 0 || resultArr.length
+
     for (var i = 0, index = 0; i < resultArr.length; i++) {
-        iconClass = getMediaClass(resultArr[i].uri)
         if (resultArr[i].type === 'track') {
-            // console.log(resultArr[i]);
-            mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultDict) {
-                var lookupUri = Object.keys(resultDict)[0]
-                popupData[lookupUri] = resultDict[lookupUri][0]
-                browseTracks.push(resultDict[lookupUri][0])
-            }, console.error)
-            child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
-                     '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + index + '\');">' +
-                     '<i class="fa fa-ellipsis-v"></i></a>' +
-                     '<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, ' + index + ');" id="' + resultArr[i].uri +
-                     '"><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>'
+            ref = resultArr[i]
+            popupData[ref.uri] = ref
+            browseTracks.push(ref)
+            uris.push(ref.uri)
+
+            $(BROWSE_TABLE).append(
+                '<li class="song albumli" id="' + getjQueryID(BROWSE_TABLE, ref.uri) + '">' +
+                '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + ref.uri + '\', \'' + index + '\');">' +
+                '<i class="fa fa-ellipsis-v"></i></a>' +
+                '<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, ' + index + ');">' +
+                '<h1><i></i> ' + ref.name + '</h1></a></li>'
+            )
             index++
         } else {
+            var iconClass = ''
             if (browseStack.length > 0) {
                 iconClass = 'fa fa-folder-o'
+            } else {
+                iconClass = getMediaClass(resultArr[i].uri)
             }
-            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri +
-                     '""><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>'
+            $(BROWSE_TABLE).append(
+                '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + '">' +
+                '<h1><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>'
+            )
         }
-    }
-
-    $('#browselist').html(child)
-    if (browseStack.length > 0) {
-        child = getMediaHuman(uri)
-        iconClass = getMediaClass(uri)
-        $('#browsepath').html('<i class="' + iconClass + '"></i> ' + child)
-    } else {
-        $('#browsepath').html('')
     }
 
     updatePlayIcons(songdata.track.uri, songdata.tlid)
 
-    showLoading(false)
+    if (uris.length > 0) {
+        mopidy.library.lookup({'uris': uris}).then(function (resultDict) {
+            // Break into albums and put in tables
+            var track, previousTrack, nextTrack, uri
+            $.each(resultArr, function (i, ref) {
+                if (ref.type === 'track') {
+                    previousTrack = track || undefined
+                    if (i < resultArr.length - 1 && resultDict[resultArr[i + 1].uri]) {
+                        nextTrack = resultDict[resultArr[i + 1].uri][0]
+                    } else {
+                        nextTrack = undefined
+                    }
+                    track = resultDict[ref.uri][0]
+                    if (uris.length === 1 || (previousTrack && !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {
+                        renderSongLiAlbumInfo(track, BROWSE_TABLE)
+                    }
+                    if (!hasSameAlbum(previousTrack, track)) {
+                        // Starting to render a new album in the list.
+                        renderSongLiDivider(track, nextTrack, i, BROWSE_TABLE)
+                    }
+                }
+            })
+            showLoading(false)
+        }, console.error)
+    } else {
+        showLoading(false)
+    }
 }
 
 /** ******************************************************

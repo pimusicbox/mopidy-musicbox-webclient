@@ -106,6 +106,10 @@ function processSearchResults (resultArr) {
     customTracklists[URI_SCHEME + ':trackresultscache'] = results.tracks
 
     if (emptyResult) {
+        $('#searchtracks').show()
+        $(SEARCH_TRACK_TABLE).append(
+            '<li class="song albumli"><a href="#"><h1><i></i>No tracks found...</h1></a></li>'
+        )
         toast('No results')
         showLoading(false)
         return false
@@ -193,8 +197,6 @@ function processSearchResults (resultArr) {
     // Inject list items, refresh listview and hide superfluous items.
     $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide()
 
-    $('#expandsearch').show()
-
     // Track results
     resultsToTables(results.tracks, SEARCH_TRACK_TABLE, URI_SCHEME + ':trackresultscache')
 
@@ -250,12 +252,13 @@ function togglePlaylists () {
 }
 
 function showTracklist (uri) {
+    showLoading(true)
     $(PLAYLIST_TABLE).empty()
     togglePlaylists()
     var tracks = getPlaylistTracks(uri).then(function (tracks) {
-        resultsToTables(tracks, PLAYLIST_TABLE, uri)
+        resultsToTables(tracks, PLAYLIST_TABLE, uri, 'return togglePlaylists();', true)
+        showLoading(false)
     })
-    showLoading(false)
     updatePlayIcons(uri)
     $('#playlistslist li a').each(function () {
         $(this).removeClass('playlistactive')

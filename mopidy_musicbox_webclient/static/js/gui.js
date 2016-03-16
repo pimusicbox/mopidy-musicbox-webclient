@@ -413,7 +413,6 @@ function locationHashChanged () {
             break
         case 'current':
             $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active')
-            getCurrentPlaylist()
             break
         case 'playlists':
             $('#navplaylists a').addClass('ui-state-active ui-state-persist ui-btn-active')
@@ -622,55 +621,29 @@ $(document).ready(function (event) {
 })
 
 function updatePlayIcons (uri, tlid) {
-    // update styles of listviews
-    $('#currenttable li').each(function () {
+    // Update styles of listviews
+    var listviews = [PLAYLIST_TABLE, SEARCH_TRACK_TABLE, ARTIST_TABLE, ALBUM_TABLE, BROWSE_TABLE]
+    var target = CURRENT_PLAYLIST_TABLE.substr(1)
+    $(CURRENT_PLAYLIST_TABLE).children('li').each(function () {
         var eachTlid = $(this).attr('tlid')
         if (typeof eachTlid !== 'undefined') {
             eachTlid = parseInt(eachTlid)
         }
-        if (this.id === 'currenttable-' + uri && eachTlid === tlid) {
+        if (this.id === getjQueryID(target, uri) && eachTlid === tlid) {
             $(this).addClass('currenttrack')
         } else {
             $(this).removeClass('currenttrack')
         }
     })
 
-    $('#playlisttracks li').each(function () {
-        if (this.id === 'playlisttracks-' + uri) {
-            $(this).addClass('currenttrack2')
-        } else {
-            $(this).removeClass('currenttrack2')
-        }
-    })
-
-    $('#trackresulttable li').each(function () {
-        if (this.id === 'trackresulttable-' + uri) {
-            $(this).addClass('currenttrack2')
-        } else {
-            $(this).removeClass('currenttrack2')
-        }
-    })
-
-    $('#artiststable li').each(function () {
-        if (this.id === 'artiststable-' + uri) {
-            $(this).addClass('currenttrack2')
-        } else {
-            $(this).removeClass('currenttrack2')
-        }
-    })
-
-    $('#albumstable li').each(function () {
-        if (this.id === 'albumstable-' + uri) {
-            $(this).addClass('currenttrack2')
-        } else {
-            $(this).removeClass('currenttrack2')
-        }
-    })
-    $('#browselist li').each(function () {
-        if (this.id === 'browselisttracks-' + uri) {
-            $(this).addClass('currenttrack2')
-        } else {
-            $(this).removeClass('currenttrack2')
-        }
-    })
+    for (var i = 0; i < listviews.length; i++) {
+        target = listviews[i].substr(1)
+        $(listviews[i]).children('li').each(function () {
+            if (this.id === getjQueryID(target, uri)) {
+                $(this).addClass('currenttrack2')
+            } else {
+                $(this).removeClass('currenttrack2')
+            }
+        })
+    }
 }

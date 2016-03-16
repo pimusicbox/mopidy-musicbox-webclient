@@ -77,7 +77,7 @@ function getCoverFromLastFm (track, images, size) {
                 }
             }
         }
-    })
+    }, $(images).attr('src', defUrl))
 }
 
 function getArtistImage (nwartist, image, size) {
@@ -88,5 +88,5 @@ function getArtistImage (nwartist, image, size) {
                 $(image).attr('src', data.artist.image[i]['#text'] || defUrl)
             }
         }
-    }})
+    }}, $(images).attr('src', defUrl))
 }
