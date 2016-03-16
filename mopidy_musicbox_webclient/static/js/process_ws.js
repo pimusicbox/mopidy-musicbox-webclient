@@ -220,7 +220,7 @@ function processCurrentPlaylist (resultArr) {
 function processArtistResults (resultArr) {
     if (!resultArr || (resultArr.length === 0)) {
         $('#h_artistname').text('Artist not found...')
-        getCover('', '#artistviewimage, #artistpopupimage', 'extralarge')
+        coverArt.getCover('', '#artistviewimage, #artistpopupimage', 'extralarge')
         showLoading(false)
         return
     }
@@ -239,7 +239,7 @@ function processArtistResults (resultArr) {
 function processAlbumResults (resultArr) {
     if (!resultArr || (resultArr.length === 0)) {
         $('#h_albumname').text('Album not found...')
-        getCover('', '#albumviewcover, #coverpopupimage', 'extralarge')
+        coverArt.getCover('', '#albumviewcover, #coverpopupimage', 'extralarge')
         showLoading(false)
         return
     }
@@ -252,6 +252,6 @@ function processAlbumResults (resultArr) {
     $('#h_albumartist').html(artistname)
     $('#coverpopupalbumname').html(albumname)
     $('#coverpopupartist').html(artistname)
-    getCover(resultArr[0].uri, '#albumviewcover, #coverpopupimage', 'extralarge')
+    coverArt.getCover(resultArr[0].uri, '#albumviewcover, #coverpopupimage', 'extralarge')
     showLoading(false)
 }
