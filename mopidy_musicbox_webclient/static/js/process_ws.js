@@ -78,7 +78,7 @@ function processPlaystate (data) {
 function processBrowseDir (resultArr) {
     $(BROWSE_TABLE).empty()
     if (browseStack.length > 0) {
-        renderSongLiBackButton(resultArr, BROWSE_TABLE, 'return getBrowseDir();')
+        renderSongLiBackButton(resultArr, BROWSE_TABLE, 'return library.getBrowseDir();')
     }
     if (!resultArr || resultArr.length === 0) {
         showLoading(false)
@@ -113,7 +113,7 @@ function processBrowseDir (resultArr) {
                 iconClass = getMediaClass(resultArr[i].uri)
             }
             $(BROWSE_TABLE).append(
-                '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri + '">' +
+                '<li><a href="#" onclick="return library.getBrowseDir(this.id);" id="' + resultArr[i].uri + '">' +
                 '<h1><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>'
             )
         }
@@ -163,7 +163,7 @@ function processGetPlaylists (resultArr) {
     var starred = ''
 
     for (var i = 0; i < resultArr.length; i++) {
-        var li_html = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '">'
+        var li_html = '<li><a href="#" onclick="return library.showTracklist(this.id);" id="' + resultArr[i].uri + '">'
         if (isSpotifyStarredPlaylist(resultArr[i])) {
             starred = li_html + '&#9733; Spotify Starred Tracks</a></li>' + tmp
         } else if (isFavouritesPlaylist(resultArr[i])) {

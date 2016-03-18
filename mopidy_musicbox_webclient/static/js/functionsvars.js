@@ -95,9 +95,9 @@ var uriClassList = [
 
 var uriHumanList = [
     ['spotify', 'Spotify'],
-    ['spotifytunigo', 'Spotify Browse'],
-    ['local', 'Local Files'],
-    ['m3u', 'Local Playlists'],
+    ['spotifytunigo', 'Spotify browse'],
+    ['local', 'Local files'],
+    ['m3u', 'Local playlists'],
     ['podcast', 'Podcasts'],
     ['dirble', 'Dirble'],
     ['tunein', 'TuneIn'],
@@ -249,7 +249,7 @@ function renderSongLiDivider (track, nextTrack, currentIndex, target) {
     if (hasSameAlbum(track, nextTrack)) {
         // Large divider with album cover
         $(target).before(
-            '<li class="albumdivider"><a href="#" onclick="return showAlbum(\'' + track.album.uri + '\');">' +
+            '<li class="albumdivider"><a href="#" onclick="return library.showAlbum(\'' + track.album.uri + '\');">' +
             '<img id="' + getjQueryID(target + '-cover', track.uri) + '" class="artistcover" width="30" height="30"/>' +
             '<h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.album.name + '</h1><p>' +
             renderSongLiTrackArtists(track) + '</p></a></li>'
@@ -482,11 +482,11 @@ function getMediaClass (uri) {
 function getMediaHuman (uri) {
     var scheme = getScheme(uri)
     for (var i = 0; i < uriHumanList.length; i++) {
-        if (scheme === uriHumanList[i][0]) {
+        if (scheme.toLowerCase() === uriHumanList[i][0].toLowerCase()) {
             return uriHumanList[i][1]
         }
     }
-    return ''
+    return uri
 }
 
 function isServiceUri (uri) {

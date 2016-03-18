@@ -395,14 +395,10 @@
         <div class="ui-block">
             <form>
                 <p>Search for artists, albums, or specific tracks.
-                <select id="selectSearchService"> 
-                    <!-- data-native-menu="false"> 
-                    multiple="multiple" data-native-menu="false">
-                    <option data-placeholder="true">Choose services</option> -->
-                </select>
+                <select id="selectSearchService"></select>
                 <input id="searchinput" placeholder="Search term" class="span2" data-clear-btn="true"
-                       onkeypress="return searchPressed(event.keyCode);" type="text"/>
-                <button class="btn" type="button" onclick="return initSearch(event.value);">
+                       onkeypress="return library.searchPressed(event.keyCode);" type="text"/>
+                <button class="btn" type="button" onclick="return library.initSearch(event.value);">
                     Search!
                 </button>
             </form>

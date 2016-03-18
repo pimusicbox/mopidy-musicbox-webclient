@@ -12,12 +12,6 @@ var coverArt = require('../mopidy_musicbox_webclient/static/js/images.js')
 var images
 
 before(function () {
-    html =
-        '<span id="songelapsed" class="pull-left"></span>' +
-        '<span id="songlength" class="pull-right"></span>'
-    $(document).ready(function () {
-        $(document.body).add(html)
-    })
     mopidy = sinon.stub(new Mopidy({callingConvention: 'by-position-or-by-name'}))
     images = $('<img id="img_mock">')
 })
@@ -156,7 +150,7 @@ describe('CoverArt', function () {
             var getInfoStub = sinon.stub(coverArt.lastfm.album, 'getInfo')
             getInfoStub.yieldsTo('error', 'code', 'message')
 
-            var consoleSpy = sinon.spy(console, 'log')
+            var consoleSpy = sinon.spy(console, 'error')
             coverArt.getCoverFromLastFm(track, images, '')
 
             assert(consoleSpy.calledOnce)
@@ -190,7 +184,7 @@ describe('CoverArt', function () {
             var getInfoStub = sinon.stub(coverArt.lastfm.artist, 'getInfo')
             getInfoStub.yieldsTo('error', 'code', 'message')
 
-            var consoleSpy = sinon.spy(console, 'log')
+            var consoleSpy = sinon.spy(console, 'error')
 
             coverArt.getArtistImage('mockArtist', images, 'small')
             assert(consoleSpy.calledOnce)

@@ -117,7 +117,7 @@ function setSongInfo (data) {
 
     if (data.track.artists) {
         for (var j = 0; j < data.track.artists.length; j++) {
-            artistshtml += '<a href="#" onclick="return showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>'
+            artistshtml += '<a href="#" onclick="return library.showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>'
             artiststext += data.track.artists[j].name
             if (j !== data.track.artists.length - 1) {
                 artistshtml += ', '
@@ -127,7 +127,7 @@ function setSongInfo (data) {
         arttmp = artistshtml
     }
     if (data.track.album && data.track.album.name) {
-        $('#modalalbum').html('<a href="#" onclick="return showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>')
+        $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>')
         coverArt.getCover(data.track.uri, '#infocover, #controlspopupimage', 'extralarge')
     } else {
         $('#modalalbum').html('')
@@ -171,14 +171,14 @@ function popupTracks (e, listuri, trackuri, tlid) {
 
     if (popupData[trackuri].artists) {
         if (popupData[trackuri].artists.length === 1) {
-            child = '<a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'
+            child = '<a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'
             $('.popupArtistName').html(popupData[trackuri].artists[0].name)
-            $('.popupArtistHref').attr('onclick', 'showArtist("' + popupData[trackuri].artists[0].uri + '");')
+            $('.popupArtistHref').attr('onclick', 'library.showArtist("' + popupData[trackuri].artists[0].uri + '");')
             $('.popupArtistsDiv').hide()
             $('.popupArtistsLi').show()
         } else {
             for (var j = 0; j < popupData[trackuri].artists.length; j++) {
-                child += '<li><a href="#" onclick="showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
+                child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
             }
             $('.popupArtistsLi').hide()
             $('.popupArtistsLv').html(child).show()
@@ -222,7 +222,7 @@ function popupTracks (e, listuri, trackuri, tlid) {
 
 function showAlbumPopup (popupId) {
     uri = $(popupId).data('track')
-    showAlbum(popupData[uri].album.uri)
+    library.showAlbum(popupData[uri].album.uri)
 }
 
 /** ********************
@@ -232,14 +232,14 @@ function showAlbumPopup (popupId) {
 function initSocketevents () {
     mopidy.on('state:online', function () {
         showOffline(false)
-        getCurrentPlaylist()
+        library.getCurrentPlaylist()
         updateStatusOfAll()
-        getPlaylists()
+        library.getPlaylists()
         getUriSchemes().then(function () {
             showFavourites()
         })
-        getBrowseDir()
-        getSearchSchemes()
+        library.getBrowseDir()
+        library.getSearchSchemes()
         showLoading(false)
         $(window).hashchange()
     })
@@ -258,21 +258,21 @@ function initSocketevents () {
 
     mopidy.on('event:playlistsLoaded', function (data) {
         showLoading(true)
-        getPlaylists()
+        library.getPlaylists()
     })
 
     mopidy.on('event:playlistChanged', function (data) {
         $('#playlisttracksdiv').hide()
         $('#playlistslistdiv').show()
         delete playlists[data.playlist.uri]
-        getPlaylists()
+        library.getPlaylists()
     })
 
     mopidy.on('event:playlistDeleted', function (data) {
         $('#playlisttracksdiv').hide()
         $('#playlistslistdiv').show()
         delete playlists[data.uri]
-        getPlaylists()
+        library.getPlaylists()
     })
 
     mopidy.on('event:volumeChanged', function (data) {
@@ -296,7 +296,7 @@ function initSocketevents () {
     })
 
     mopidy.on('event:tracklistChanged', function (data) {
-        getCurrentPlaylist()
+        library.getCurrentPlaylist()
     })
 
     mopidy.on('event:seeked', function (data) {
@@ -424,7 +424,7 @@ function locationHashChanged () {
             $('#navsearch a').addClass($.mobile.activeBtnClass)
             $('#searchinput').focus()
             if (customTracklists['mbw:allresultscache'] === '') {
-                initSearch($('#searchinput').val())
+                library.initSearch($('#searchinput').val())
             }
             break
         case 'stream':
@@ -432,12 +432,12 @@ function locationHashChanged () {
             break
         case 'artists':
             if (uri !== '') {
-                showArtist(uri)
+                library.showArtist(uri)
             }
             break
         case 'albums':
             if (uri !== '') {
-                showAlbum(uri)
+                library.showAlbum(uri)
             }
             break
     }
