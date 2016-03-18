@@ -77,7 +77,7 @@ var coverArt = {
                 }
             }
         }, error: function (code, message) {
-            console.log('Error retrieving album info from last.fm', code, message)
+            console.error('Error retrieving album info from last.fm', code, message)
         }})
     },
 
@@ -94,7 +94,7 @@ var coverArt = {
                 }
             }
         }, error: function (code, message) {
-            console.log('Error retrieving artist info from last.fm', code, message)
+            console.error('Error retrieving artist info from last.fm', code, message)
         }})
     }
 }
