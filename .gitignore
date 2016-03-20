@@ -8,7 +8,7 @@
 MANIFEST
 build/
 cover/
-coverage/
+.karma_coverage/
 coverage.xml
 dist/
 docs/_build/

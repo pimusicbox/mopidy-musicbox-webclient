@@ -239,9 +239,31 @@ function initSocketevents () {
             showFavourites()
         })
         library.getBrowseDir()
-        library.getSearchSchemes()
         showLoading(false)
         $(window).hashchange()
+    })
+
+    webclient.on('state:online', function () {
+        library.getSearchSchemes()
+
+        // remove buttons only for MusicBox
+        webclient.isMusicBox().then(function (isMusicBox) {
+            if (!isMusicBox) {
+                $('#navSettings').hide()
+                $('#navshutdown').hide()
+                $('#homesettings').hide()
+                $('#homeshutdown').hide()
+            }
+        })
+
+        // remove Alarm Clock if it is not present
+        webclient.hasAlarmClock().then(function (hasAlarmClock) {
+            if (!hasAlarmClock) {
+                $('#navAlarmClock').hide()
+                $('#homeAlarmClock').hide()
+                $('#homeAlarmClock').nextAll().find('.ui-block-a, .ui-block-b').toggleClass('ui-block-a').toggleClass('ui-block-b')
+            }
+        })
     })
 
     mopidy.on('state:offline', function () {
@@ -475,9 +497,14 @@ $(document).ready(function (event) {
     $(window).hashchange()
 
     // Connect to server
+    var websocketUrl = $(document.body).data('web-socket-url')
     if (websocketUrl) {
         try {
             mopidy = new Mopidy({
+                webSocketUrl: websocketUrl,
+                callingConvention: 'by-position-or-by-name'
+            })
+            webclient = new Webclient({
                 webSocketUrl: websocketUrl,
                 callingConvention: 'by-position-or-by-name'
             })
@@ -487,6 +514,7 @@ $(document).ready(function (event) {
     } else {
         try {
             mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'})
+            webclient = new Webclient({callingConvention: 'by-position-or-by-name'})
         } catch (e) {
             showOffline(true)
         }
@@ -538,21 +566,6 @@ $(document).ready(function (event) {
             document.getElementById('toggletxt').innerHTML = 'Fullscreen'
         }
     })
-
-    // remove buttons only for MusicBox
-    if (!isMusicBox) {
-        $('#navSettings').hide()
-        $('#navshutdown').hide()
-        $('#homesettings').hide()
-        $('#homeshutdown').hide()
-    }
-
-    // remove Alarm Clock if it is not present
-    if (!hasAlarmClock) {
-        $('#navAlarmClock').hide()
-        $('#homeAlarmClock').hide()
-        $('#homeAlarmClock').nextAll().find('.ui-block-a, .ui-block-b').toggleClass('ui-block-a').toggleClass('ui-block-b')
-    }
 
     // navigation stuff
 

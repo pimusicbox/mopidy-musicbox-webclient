@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# 2016-03-19:v1
+# 2016-03-21:v1
 
 NETWORK:
 *
@@ -21,12 +21,15 @@ images/loader.gif
 images/user_24x32.png
 index.html
 js/controls.js
+js/custom_scripting.js
 js/functionsvars.js
 js/gui.js
 js/images.js
 js/library.js
 js/process_ws.js
 js/progress_timer.js
+js/webclient.min.js
+js/webclient.min.js.map
 mb.appcache
 system.html
 vendors/font_awesome/css/font-awesome.css

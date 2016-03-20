@@ -322,8 +322,7 @@ var library = {
             searchScheme = 'all'
         }
         $('#selectSearchService').empty()
-        $('#selectSearchService').append(new Option('All backends', 'all'))
-        mopidy.getUriSchemes().then(function (schemesArray) {
+        webclient.getSearchSchemes().then(function (schemesArray) {
             for (var i = 0; i < schemesArray.length; i++) {
                 backendName = getMediaHuman(schemesArray[i])
                 backendName = backendName.charAt(0).toUpperCase() + backendName.slice(1)

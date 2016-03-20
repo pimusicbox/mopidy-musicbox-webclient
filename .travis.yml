@@ -20,6 +20,4 @@ script:
   - "tox -e $TOX_ENV"
 
 after_success:
-  # TODO: find a way to combine .py and .js coverage reports.
-  # - "if [ $TOX_ENV == 'py27' ]; then pip install coveralls; coveralls; fi"
-  - "if [ $TOX_ENV == 'test' ]; then cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js; fi"
+  - "if [ $TOX_ENV == 'test' ]; then pip install coveralls; coveralls --merge=./karma_coverage/coverage-final.json; fi"
