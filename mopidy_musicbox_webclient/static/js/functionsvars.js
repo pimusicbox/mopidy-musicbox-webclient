@@ -5,6 +5,7 @@
  */
 
 var mopidy
+var webclient
 
 // values for controls
 var play = false
@@ -94,6 +95,7 @@ var uriClassList = [
 ]
 
 var uriHumanList = [
+    ['all', 'All services'],
     ['spotify', 'Spotify'],
     ['spotifytunigo', 'Spotify browse'],
     ['local', 'Local files'],
