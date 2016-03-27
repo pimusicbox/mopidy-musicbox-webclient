@@ -7,7 +7,7 @@ chai.use(require('chai-jquery'))
 
 var sinon = require('sinon')
 
-var coverArt = require('../mopidy_musicbox_webclient/static/js/library.js')
+var library = require('../mopidy_musicbox_webclient/static/js/library.js')
 
 var selectID = '#selectSearchService'
 var schemesArray
@@ -19,7 +19,7 @@ before(function () {
 describe('Library', function () {
     describe('#getSearchSchemes()', function () {
         beforeEach(function () {
-            schemesArray = ['mockScheme1', 'mockScheme2', 'mockScheme3']
+            schemesArray = ['all', 'mockScheme1', 'mockScheme2', 'mockScheme3']
             mopidy = {
                 getUriSchemes: function () { return $.when(schemesArray) }
             }
@@ -30,7 +30,7 @@ describe('Library', function () {
             uriHumanList = [['mockScheme2', 'mockUriHuman2']]
 
             library.getSearchSchemes()
-            assert($(selectID).children().length === schemesArray.length + 1)
+            assert($(selectID).children().length === schemesArray.length)
             $(selectID).children(':eq(2)').should.have.text('MockUriHuman2')
         })
 

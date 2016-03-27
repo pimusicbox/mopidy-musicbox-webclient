@@ -71,9 +71,10 @@ module.exports = function (config) {
 
         coverageReporter: {
             // specify a common output directory
-            dir: 'coverage/',
+            dir: '.karma_coverage/',
             reporters: [
                 { type: 'lcov', subdir: '.' },
+                { type: 'json', subdir: '.' },
                 { type: 'text' }
             ]
         }

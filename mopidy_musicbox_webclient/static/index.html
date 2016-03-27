@@ -1,30 +1,14 @@
 <!DOCTYPE html>
 <html manifest="mb.appcache">
 <head>
-    <title>Musicbox</title>
+    <title>{{ title }}</title>
     <meta charset="utf-8">
-    <script type="text/javascript" src="vendors/jquery/jquery-1.12.0.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="vendors/jquery_mobile_flat_ui_theme/jquery.mobile.flatui.min.css"/>
-    <script>
-        //configuration
-        var isMusicBox = '{{musicbox}}' == 'True'; // Remove MusicBox only content (e.g. settings, system pages)
-        var websocketUrl = ('{{useWebsocketUrl}}' == 'True') ? '{{websocket_url}}' : ''
-        var hasAlarmClock = '{{alarmclock}}' == 'True'; // Add Alarm Clock icons
 
-        $(document).bind("mobileinit", function () {
-            $.extend($.mobile, {
-                ajaxEnabled: false,
-                hashListeningEnabled: false
-                //                    linkBindingEnabled: false
-                //                  buttonMarkup.hoverDelay: 100,
-                //                  buttonMarkup.corners: false
-            });
-        });
-/*        window.addEventListener('load', function () {
-            new FastClick(document.body);
-        }, false);
-*/
-    </script>
+    <script type="text/javascript" src="vendors/jquery/jquery-1.12.0.min.js"></script>
+    <script type="text/javascript" src="vendors/jquery_cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/custom_scripting.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="vendors/jquery_mobile_flat_ui_theme/jquery.mobile.flatui.min.css"/>
     <link rel="icon" type="image/gif" href="images/icons/musicbox32.gif" />
     <link rel="apple-touch-icon" href="images/icons/musicbox57.png" />
     <link rel="apple-touch-icon" sizes="72x72" href="images/icons/musicbox72.png" />
@@ -52,7 +36,7 @@
 
 </head>
 
-<body>
+<body data-web-socket-url="{{websocketUrl}}" data-is-musicbox="{{isMusicBox}}" data-has-alarmclock="{{hasAlarmClock}}">
 <div data-role="page" id="page" class="ui-responsive-panel" data-theme="c">
 <div data-role="panel" id="panel" data-position="left" data-theme="a" data-display="reveal" data-position-fixed="true">
 
@@ -501,7 +485,6 @@
 </div>
 <!-- /page one -->
 <script type="text/javascript" src="vendors/mopidy/mopidy.min.js"></script>
-<script type="text/javascript" src="vendors/jquery_cookie/jquery.cookie.js"></script>
 <script type="text/javascript" src="vendors/media_progress_timer/timer.js"></script>
 <script type="text/javascript" src="js/progress_timer.js"></script>
 <script type="text/javascript" src="js/controls.js"></script>

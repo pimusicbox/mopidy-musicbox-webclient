@@ -1,3 +1,5 @@
+{% autoescape None %}
+
 var library = {
 
 /** *******************************
@@ -322,16 +324,14 @@ var library = {
             searchScheme = 'all'
         }
         $('#selectSearchService').empty()
-        $('#selectSearchService').append(new Option('All backends', 'all'))
-        mopidy.getUriSchemes().then(function (schemesArray) {
-            for (var i = 0; i < schemesArray.length; i++) {
-                backendName = getMediaHuman(schemesArray[i])
-                backendName = backendName.charAt(0).toUpperCase() + backendName.slice(1)
-                $('#selectSearchService').append(new Option(backendName, schemesArray[i]))
-            }
-            $('#selectSearchService').val(searchScheme)
-            $('#selectSearchService').selectmenu('refresh', true)
-        }, console.error)
+        var schemesArray = {{ searchSchemes }}
+        for (var i = 0; i < schemesArray.length; i++) {
+            backendName = getMediaHuman(schemesArray[i])
+            backendName = backendName.charAt(0).toUpperCase() + backendName.slice(1)
+            $('#selectSearchService').append(new Option(backendName, schemesArray[i]))
+        }
+        $('#selectSearchService').val(searchScheme)
+        $('#selectSearchService').selectmenu('refresh', true)
     }
 }
 
