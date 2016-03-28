@@ -33,4 +33,4 @@ script:
   - "tox -e $TOX_ENV"
 
 after_success:
-  - "if [ $TOX_ENV == 'test' ]; then pip install coveralls; coveralls --merge=./karma_coverage/coverage-final.json; fi"
+  - "if [ $TOX_ENV == 'test' ]; then pip install coveralls; coveralls --merge=.karma_coverage/coverage-final.json; fi"
