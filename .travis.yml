@@ -28,15 +28,10 @@ before_install:
 
 install:
   - "pip install tox"
-  - "gem install coveralls-lcov"
-
-before_script:
-  - "./autogen.sh"
-  - "./configure --enable-coverage"
 
 script:
-  - "make check"
   - "tox -e $TOX_ENV"
 
 after_success:
-  - "if [ $TOX_ENV == 'py27,test' ]; then coveralls-lcov -v -n .karma_coverage/lcov.info > .karma_coverage/lcov.json; pip install coveralls; coveralls --merge=.karma_coverage/lcov.json; fi"
+  # We just use 'coveralls-lcov' to convert lcov.info to JSON format.
+  - "if [ $TOX_ENV == 'py27,test' ]; then gem install coveralls-lcov; coveralls-lcov -v -n .karma_coverage/lcov.info > .karma_coverage/lcov.json; pip install coveralls; coveralls --merge=.karma_coverage/lcov.json; fi"
