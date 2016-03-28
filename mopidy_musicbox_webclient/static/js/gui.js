@@ -475,6 +475,7 @@ $(document).ready(function (event) {
     $(window).hashchange()
 
     // Connect to server
+    var websocketUrl = $(document.body).data('websocket-url')
     if (websocketUrl) {
         try {
             mopidy = new Mopidy({
@@ -539,16 +540,16 @@ $(document).ready(function (event) {
         }
     })
 
-    // remove buttons only for MusicBox
-    if (!isMusicBox) {
+    // Remove MusicBox only content (e.g. settings, system pages)
+    if (!$(document.body).data('is-musicbox')) {
         $('#navSettings').hide()
         $('#navshutdown').hide()
         $('#homesettings').hide()
         $('#homeshutdown').hide()
     }
 
-    // remove Alarm Clock if it is not present
-    if (!hasAlarmClock) {
+    // Remove Alarm Clock icons if it is not present
+    if (!$(document.body).data('has-alarmclock')) {
         $('#navAlarmClock').hide()
         $('#homeAlarmClock').hide()
         $('#homeAlarmClock').nextAll().find('.ui-block-a, .ui-block-b').toggleClass('ui-block-a').toggleClass('ui-block-b')

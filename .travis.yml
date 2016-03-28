@@ -1,9 +1,17 @@
-sudo: false
+sudo: required
+dist: trusty
 
 language: python
 
 python:
   - "2.7_with_system_site_packages"
+
+addons:
+  apt:
+    sources:
+      - mopidy-stable
+    packages:
+      - mopidy
 
 env:
   - TOX_ENV=py27
@@ -13,6 +21,11 @@ env:
   - TOX_ENV=csslint
   - TOX_ENV=tidy
 
+before_install:
+  - "sudo sed -i '/127.0.1.1/d' /etc/hosts"  # Workaround https://github.com/tornadoweb/tornado/issues/1573
+  - "sudo apt-get update -qq"
+  - "sudo apt-get install -y gstreamer0.10-plugins-good python-gst0.10"
+
 install:
   - "pip install tox"
 
@@ -20,6 +33,4 @@ script:
   - "tox -e $TOX_ENV"
 
 after_success:
-  # TODO: find a way to combine .py and .js coverage reports.
-  # - "if [ $TOX_ENV == 'py27' ]; then pip install coveralls; coveralls; fi"
-  - "if [ $TOX_ENV == 'test' ]; then cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js; fi"
+  - "if [ $TOX_ENV == 'test' ]; then pip install coveralls; coveralls --merge=./karma_coverage/coverage-final.json; fi"

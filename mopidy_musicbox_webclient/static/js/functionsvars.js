@@ -110,6 +110,19 @@ var uriHumanList = [
     ['subsonic', 'Subsonic']
 ]
 
+// List of Mopidy URI schemes that should not be searched directly.
+// Also blacklists 'yt' in favour of using the other 'youtube' supported scheme.
+var searchBlacklist = [
+    'file',
+    'http',
+    'https',
+    'mms',
+    'rtmp',
+    'rtmps',
+    'rtsp',
+    'yt'
+]
+
 function scrollToTop () {
     var divtop = 0
     $('body,html').animate({

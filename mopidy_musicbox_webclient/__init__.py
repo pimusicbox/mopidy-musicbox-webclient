@@ -7,7 +7,7 @@ from mopidy import config, ext
 __version__ = '2.2.0'
 
 
-class MusicBoxExtension(ext.Extension):
+class Extension(ext.Extension):
 
     dist_name = 'Mopidy-MusicBox-Webclient'
     ext_name = 'musicbox_webclient'
@@ -18,7 +18,7 @@ class MusicBoxExtension(ext.Extension):
         return config.read(conf_file)
 
     def get_config_schema(self):
-        schema = super(MusicBoxExtension, self).get_config_schema()
+        schema = super(Extension, self).get_config_schema()
         schema['musicbox'] = config.Boolean(optional=True)
         schema['websocket_host'] = config.Hostname(optional=True)
         schema['websocket_port'] = config.Port(optional=True)

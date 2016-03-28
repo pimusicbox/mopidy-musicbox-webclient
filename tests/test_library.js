@@ -7,7 +7,7 @@ chai.use(require('chai-jquery'))
 
 var sinon = require('sinon')
 
-var coverArt = require('../mopidy_musicbox_webclient/static/js/library.js')
+var library = require('../mopidy_musicbox_webclient/static/js/library.js')
 
 var selectID = '#selectSearchService'
 var schemesArray
