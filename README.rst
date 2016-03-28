@@ -77,6 +77,7 @@ v2.3.0 (UNRELEASED)
 - Now displays album and artist info when browsing tracks. (Addresses: `#99 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/99>`_).
 - Now remembers which backend was searched previously, and automatically selects that backend as the default search target.
   (Addresses: `#130 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/130>`_).
+- Upgrade Media Progress Timer to version 3.0.0.
 
 **Fixes**
 

@@ -13,7 +13,6 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'mopidy_musicbox_webclient/static/vendors/**/*.js',
-            // TODO: can remove the next line once JavaScript codebase has been modularized.
             'mopidy_musicbox_webclient/static/js/**/*.js',
             'tests/**/test_*.js'
         ],

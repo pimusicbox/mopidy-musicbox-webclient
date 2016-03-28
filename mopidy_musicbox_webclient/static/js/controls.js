@@ -288,13 +288,13 @@ function setPlayState (nwplay) {
         $('#btplay >i').removeClass('fa-play').addClass('fa-pause')
         $('#btplay').attr('title', 'Pause')
         mopidy.playback.getTimePosition().then(processCurrentposition, console.error)
-        startProgressTimer()
+        syncedProgressTimer.start()
     } else {
         $('#btplayNowPlaying >i').removeClass('fa-pause').addClass('fa-play')
         $('#btplayNowPlaying').attr('title', 'Play')
         $('#btplay >i').removeClass('fa-pause').addClass('fa-play')
         $('#btplay').attr('title', 'Play')
-        progressTimer.stop()
+        syncedProgressTimer.stop()
     }
     play = nwplay
 }
@@ -396,7 +396,7 @@ function doSeekPos (value) {
 
 function setPosition (pos) {
     if (!positionChanging && $('#trackslider').val() !== pos) {
-        setProgressTimer(pos)
+        syncedProgressTimer.set(pos)
     }
 }
 

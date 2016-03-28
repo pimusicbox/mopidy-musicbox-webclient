@@ -5,6 +5,7 @@
  */
 
 var mopidy
+var syncedProgressTimer
 
 // values for controls
 var play = false
@@ -268,7 +269,7 @@ function renderSongLiDivider (track, nextTrack, currentIndex, target) {
             renderSongLiTrackArtists(track) + '</p></a></li>'
         )
         // Retrieve album covers
-        coverArt.getCover(track.uri, getjQueryID(target + '-cover', track.uri, true), 'small')
+        coverArt.getCover(track.uri, getjQueryID(target + '-cover', track.uri, true), 'small', mopidy)
     } else if (currentIndex > 0) {
         // Small divider
         $(target).before('<li class="smalldivider"> &nbsp;</li>')
