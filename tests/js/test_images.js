@@ -1,5 +1,4 @@
 var chai = require('chai')
-var should = chai.should()
 var expect = chai.expect
 var assert = chai.assert
 chai.use(require('chai-string'))
@@ -7,24 +6,20 @@ chai.use(require('chai-jquery'))
 
 var sinon = require('sinon')
 
-var coverArt = require('../mopidy_musicbox_webclient/static/js/images.js')
-
-var images
-
-before(function () {
-    mopidy = sinon.stub(new Mopidy({callingConvention: 'by-position-or-by-name'}))
-    images = $('<img id="img_mock">')
-})
+var coverArt = require('../../mopidy_musicbox_webclient/static/js/images.js')
 
 describe('CoverArt', function () {
+    var mopidy
+    var images
+    beforeEach(function () {
+        mopidy = sinon.stub(new Mopidy({callingConvention: 'by-position-or-by-name'}))
+        images = $('<img id="img_mock">')
+        $(images).removeAttr('src')
+    })
     describe('#getCover()', function () {
-        beforeEach(function () {
-            $(images).removeAttr('src')
-        })
-
         it('should use default image if no track URI is provided', function () {
-            coverArt.getCover('', images, '')
-            $(images).prop('src').should.endWith('images/default_cover.png')
+            coverArt.getCover('', images, '', mopidy)
+            expect($(images).prop('src')).to.endWith('images/default_cover.png')
         })
 
         it('should get image from Mopidy, if available', function () {
@@ -33,10 +28,10 @@ describe('CoverArt', function () {
             mopidy.library = library
 
             var getImagesSpy = sinon.spy(mopidy.library, 'getImages')
-            coverArt.getCover('mock:track:uri', images, '')
+            coverArt.getCover('mock:track:uri', images, '', mopidy)
 
-            assert(getImagesSpy.calledOnce)
-            $(images).prop('src').should.endWith('mockImageUri')
+            assert.isTrue(getImagesSpy.calledOnce)
+            expect($(images).prop('src')).to.endWith('mockImageUri')
         })
 
         it('should fall back to retrieving image from deprecated track.album.images', function () {
@@ -51,21 +46,17 @@ describe('CoverArt', function () {
             var getImagesSpy = sinon.spy(mopidy.library, 'getImages')
             var getCoverFromAlbumSpy = sinon.spy(coverArt, 'getCoverFromAlbum')
 
-            coverArt.getCover('mock:track:uri', images, '')
+            coverArt.getCover('mock:track:uri', images, '', mopidy)
 
-            assert(getImagesSpy.calledOnce)
-            assert(getCoverFromAlbumSpy.calledOnce)
+            assert.isTrue(getImagesSpy.calledOnce)
+            assert.isTrue(getCoverFromAlbumSpy.calledOnce)
         })
     })
 
     describe('#getCoverFromAlbum()', function () {
-        beforeEach(function () {
-            $(images).removeAttr('src')
-        })
-
         it('should use default image if no track URI is provided', function () {
-            coverArt.getCoverFromAlbum('', images, '')
-            $(images).prop('src').should.endWith('images/default_cover.png')
+            coverArt.getCoverFromAlbum('', images, '', mopidy)
+            expect($(images).prop('src')).to.endWith('images/default_cover.png')
         })
 
         it('should get image from Mopidy track.album.images, if available', function () {
@@ -76,10 +67,10 @@ describe('CoverArt', function () {
             mopidy.library = library
 
             var lookupSpy = sinon.spy(mopidy.library, 'lookup')
-            coverArt.getCoverFromAlbum('mock:track:uri', images, '')
+            coverArt.getCoverFromAlbum('mock:track:uri', images, '', mopidy)
 
-            assert(lookupSpy.calledOnce)
-            $(images).prop('src').should.endWith('mockAlbumImageUri')
+            assert.isTrue(lookupSpy.calledOnce)
+            expect($(images).prop('src')).to.endWith('mockAlbumImageUri')
         })
 
         it('should use default image if track.album or track.artist is not available', function () {
@@ -90,10 +81,10 @@ describe('CoverArt', function () {
             mopidy.library = library
 
             var lookupSpy = sinon.spy(mopidy.library, 'lookup')
-            coverArt.getCoverFromAlbum('mock:track:uri', images, '')
+            coverArt.getCoverFromAlbum('mock:track:uri', images, '', mopidy)
 
-            assert(lookupSpy.calledOnce)
-            $(images).prop('src').should.endWith('images/default_cover.png')
+            assert.isTrue(lookupSpy.calledOnce)
+            expect($(images).prop('src')).to.endWith('images/default_cover.png')
         })
 
         it('should fall back to retrieving image from last.fm if none provided by Mopidy', function () {
@@ -103,21 +94,18 @@ describe('CoverArt', function () {
             }
             mopidy.library = library
 
-            var getCoverFromLastFmSpy = sinon.spy(coverArt, 'getCoverFromLastFm')
-            coverArt.getCoverFromAlbum('mock:track:uri', images, '')
+            var getCoverFromLastFmStub = sinon.stub(coverArt, 'getCoverFromLastFm')
+            coverArt.getCoverFromAlbum('mock:track:uri', images, '', mopidy)
 
-            assert(getCoverFromLastFmSpy.calledOnce)
+            assert.isTrue(getCoverFromLastFmStub.calledOnce)
+            getCoverFromLastFmStub.restore()
         })
     })
 
     describe('#getCoverFromLastFm()', function () {
-        beforeEach(function () {
-            $(images).removeAttr('src')
-        })
-
         it('should use default image if no track is provided', function () {
             coverArt.getCoverFromLastFm(undefined, images, '')
-            $(images).prop('src').should.endWith('images/default_cover.png')
+            expect($(images).prop('src')).to.endWith('images/default_cover.png')
         })
 
         it('should fall back to using track artist if album artist is not available', function () {
@@ -129,7 +117,7 @@ describe('CoverArt', function () {
 
             coverArt.getCoverFromLastFm(track, images, '')
             var args = getInfoStub.args
-            assert(args[0][0].artist === 'artistMock')
+            assert.equal(args[0][0].artist, 'artistMock')
             getInfoStub.restore()
         })
 
@@ -141,7 +129,7 @@ describe('CoverArt', function () {
             getInfoStub.yieldsTo('success', getInfoResultMock)
 
             coverArt.getCoverFromLastFm(track, images, 'small')
-            $(images).prop('src').should.endWith('mockAlbumImageUri')
+            expect($(images).prop('src')).to.endWith('mockAlbumImageUri')
             getInfoStub.restore()
         })
 
@@ -150,23 +138,19 @@ describe('CoverArt', function () {
             var getInfoStub = sinon.stub(coverArt.lastfm.album, 'getInfo')
             getInfoStub.yieldsTo('error', 'code', 'message')
 
-            var consoleSpy = sinon.spy(console, 'error')
+            var consoleStub = sinon.stub(console, 'error')
             coverArt.getCoverFromLastFm(track, images, '')
 
-            assert(consoleSpy.calledOnce)
+            assert.isTrue(consoleStub.calledOnce)
             getInfoStub.restore()
-            consoleSpy.restore()
+            consoleStub.restore()
         })
     })
 
     describe('#getArtistImage()', function () {
-        beforeEach(function () {
-            $(images).removeAttr('src')
-        })
-
         it('should use default image if no artist is provided', function () {
             coverArt.getArtistImage('', images, '')
-            $(images).prop('src').should.endWith('images/user_24x32.png')
+            expect($(images).prop('src')).to.endWith('images/user_24x32.png')
         })
 
         it('should get artist info from last.fm', function () {
@@ -176,7 +160,7 @@ describe('CoverArt', function () {
             getInfoStub.yieldsTo('success', getInfoResultMock)
 
             coverArt.getArtistImage('mockArtist', images, 'small')
-            $(images).prop('src').should.endWith('mockArtistImageUri')
+            expect($(images).prop('src')).to.endWith('mockArtistImageUri')
             getInfoStub.restore()
         })
 
@@ -184,12 +168,12 @@ describe('CoverArt', function () {
             var getInfoStub = sinon.stub(coverArt.lastfm.artist, 'getInfo')
             getInfoStub.yieldsTo('error', 'code', 'message')
 
-            var consoleSpy = sinon.spy(console, 'error')
+            var consoleStub = sinon.stub(console, 'error')
 
             coverArt.getArtistImage('mockArtist', images, 'small')
-            assert(consoleSpy.calledOnce)
+            assert.isTrue(consoleStub.calledOnce)
             getInfoStub.restore()
-            consoleSpy.restore()
+            consoleStub.restore()
         })
     })
 })
