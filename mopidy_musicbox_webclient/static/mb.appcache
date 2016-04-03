@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# 2016-03-28:v1
+# 2016-04-03:v1
 
 NETWORK:
 *
@@ -26,7 +26,7 @@ js/gui.js
 js/images.js
 js/library.js
 js/process_ws.js
-js/progress_timer.js
+js/synced_timer.js
 mb.appcache
 system.html
 vendors/font_awesome/css/font-awesome.css

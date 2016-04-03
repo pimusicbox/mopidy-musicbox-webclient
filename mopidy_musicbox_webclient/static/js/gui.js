@@ -128,7 +128,7 @@ function setSongInfo (data) {
     }
     if (data.track.album && data.track.album.name) {
         $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>')
-        coverArt.getCover(data.track.uri, '#infocover, #controlspopupimage', 'extralarge')
+        coverArt.getCover(data.track.uri, '#infocover, #controlspopupimage', 'extralarge', mopidy)
     } else {
         $('#modalalbum').html('')
         $('#infocover').attr('src', 'images/default_cover.png')
@@ -139,10 +139,9 @@ function setSongInfo (data) {
 
     $('#trackslider').attr('min', 0)
     $('#trackslider').attr('max', songlength)
-    resetProgressTimer()
-    progressTimer.set(0, songlength)
+    syncedProgressTimer.reset().set(0, songlength)
     if (play) {
-        startProgressTimer()
+        syncedProgressTimer.start()
     }
 
     resizeMb()
@@ -239,7 +238,7 @@ function initSocketevents () {
             showFavourites()
         })
         library.getBrowseDir()
-        library.getSearchSchemes()
+        library.getSearchSchemes(searchBlacklist, mopidy)
         showLoading(false)
         $(window).hashchange()
     })
@@ -302,7 +301,7 @@ function initSocketevents () {
     mopidy.on('event:seeked', function (data) {
         setPosition(parseInt(data.time_position))
         if (play) {
-            startProgressTimer()
+            syncedProgressTimer.start()
         }
     })
 
@@ -496,9 +495,7 @@ $(document).ready(function (event) {
     // initialize events
     initSocketevents()
 
-    progressTimer = new ProgressTimer({
-        callback: timerCallback
-    })
+    syncedProgressTimer = new SyncedProgressTimer(8, mopidy)
 
     resetSong()
 
@@ -593,13 +590,13 @@ $(document).ready(function (event) {
     // swipe songinfo and panel
     $('#normalFooter, #nowPlayingFooter').on('swiperight', doPrevious)
     $('#normalFooter, #nowPlayingFooter').on('swipeleft', doNext)
-    $('#nowPlayingpane, .ui-body-c, #header, #panel, .pane').on('swiperight', function () {
+    $('#nowPlayingpane, .ui-body-c, #header, #panel, .pane').on('swiperight', function (event) {
         if (!$(event.target).is('#normalFooter') && !$(event.target).is('#nowPlayingFooter')) {
             $('#panel').panel('open')
             event.stopImmediatePropagation()
         }
     })
-    $('#nowPlayingpane, .ui-body-c, #header, #panel, .pane').on('swipeleft', function () {
+    $('#nowPlayingpane, .ui-body-c, #header, #panel, .pane').on('swipeleft', function (event) {
         if (!$(event.target).is('#normalFooter') && !$(event.target).is('#nowPlayingFooter')) {
             $('#panel').panel('close')
             event.stopImmediatePropagation()
@@ -607,12 +604,13 @@ $(document).ready(function (event) {
     })
 
     $('#trackslider').on('slidestart', function () {
-        progressTimer.stop()
-        $('#trackslider').on('change', function () { updatePosition($(this).val()) })
+        syncedProgressTimer.stop()
+        $('#trackslider').on('change', function () { syncedProgressTimer.updatePosition($(this).val()) })
     })
 
     $('#trackslider').on('slidestop', function () {
         $('#trackslider').off('change')
+        syncedProgressTimer.updatePosition($(this).val())
         doSeekPos($(this).val())
     })
 
