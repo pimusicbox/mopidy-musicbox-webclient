@@ -15,9 +15,15 @@
     'use strict';
 
     // Helper function to provide a reference time in milliseconds.
-    var now = typeof window.performance !== 'undefined' &&
-              typeof window.performance.now !== 'undefined' &&
-              window.performance.now.bind(window.performance) || Date.now ||
+    var now = /* Sinon does not currently support faking `window.performance`
+                 (see https://github.com/sinonjs/sinon/issues/803).
+                 Changing this to only rely on `new Date().getTime()
+                 in the interim in order to allow testing of the
+                 progress timer from MMW.
+
+                 typeof window.performance !== 'undefined' &&
+                 typeof window.performance.now !== 'undefined' &&
+                 window.performance.now.bind(window.performance) || Date.now ||*/
               function() { return new Date().getTime(); };
 
     // Helper to warn library users about deprecated features etc.
