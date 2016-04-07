@@ -78,11 +78,13 @@ v2.3.0 (UNRELEASED)
 - Now remembers which backend was searched previously, and automatically selects that backend as the default search target.
   (Addresses: `#130 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/130>`_).
 - Upgrade Media Progress Timer to version 3.0.0.
+- Now retrieves album cover and artist images using MusicBrainzID, if available.
 
 **Fixes**
 
 - Don't create Mopidy models manually. (Fixes: `#172 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/172>`_).
 - Context menu is now available for all tracks in browse pane. (Fixes: `#126 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/126>`_).
+- last.fm artist image lookups should now always return the correct image for similarly named artists.
 
 v2.2.0 (2016-03-01)
 -------------------

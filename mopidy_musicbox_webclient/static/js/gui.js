@@ -128,7 +128,7 @@ function setSongInfo (data) {
     }
     if (data.track.album && data.track.album.name) {
         $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>')
-        coverArt.getCover(data.track.uri, '#infocover, #controlspopupimage', 'extralarge', mopidy)
+        images.setAlbumImage(data.track.uri, '#infocover, #controlspopupimage', mopidy)
     } else {
         $('#modalalbum').html('')
         $('#infocover').attr('src', 'images/default_cover.png')

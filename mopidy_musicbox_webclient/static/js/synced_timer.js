@@ -189,7 +189,6 @@
     }
 
     SyncedProgressTimer.prototype.reset = function () {
-        // this._progressTimer.reset()
         this.stop()
         this.set(0, Infinity)
 
