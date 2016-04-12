@@ -153,12 +153,14 @@
 
         // TODO: Consider wrapping this in a try/catch?
         this._userCallback(userPosisition, state.duration);
-
-        if (state.position < state.duration) {
+        // Workaround for https://github.com/adamcik/media-progress-timer/issues/3
+        // Mopidy <= 1.1.2 does not always return the correct track position as
+        // track changes are being done, which can cause the timer to die unexpectedly.
+        //if (state.position < state.duration) {
             this._updateId = this._schedule(timestamp);  // Schedule update.
-        } else {
-            this._updateId = null;  // Unset since we didn't reschedule.
-        }
+        //} else {
+        //    this._updateId = null;  // Unset since we didn't reschedule.
+        //}
     };
 
     return ProgressTimer;

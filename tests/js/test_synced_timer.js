@@ -331,15 +331,6 @@ describe('SyncedTimer', function () {
             expect($('#songelapsed').text()).to.equal('0:01')
             assert.equal($('#trackslider').val(), 1000)
         })
-
-        it('should implement workaround for https://github.com/adamcik/media-progress-timer/issues/3', function () {
-            syncedProgressTimer.set(1000, 2000).start()
-
-            assert.equal(syncedProgressTimer._duration, 2000)
-            syncedProgressTimer.set(3000)
-            assert.equal(syncedProgressTimer._progressTimer._state.position, 1999, 'Expected position to be less than duration')
-            syncedProgressTimer.stop()
-        })
     })
 
     describe('#start()', function () {
@@ -508,6 +499,31 @@ describe('SyncedTimer', function () {
             expect($('#songlength').text()).to.equal('0:30')
 
             syncedProgressTimer.stop()
+        })
+    })
+
+    describe('regression tests for https://github.com/adamcik/media-progress-timer/issues/3', function () {
+        it('should not be possible to set position > duration', function () {
+            syncedProgressTimer.set(1000, 2000).start()
+
+            assert.equal(syncedProgressTimer._duration, 2000)
+            syncedProgressTimer.set(3000)
+            assert.equal(syncedProgressTimer._progressTimer._state.position, 1999, 'Expected position to be less than duration')
+            syncedProgressTimer.stop()
+        })
+
+        it('should keep timer running even if an update would cause position > duration', function () {
+            setFakeTimers()
+
+            clock.tick(0)
+            clock.tick(1000)
+            syncedProgressTimer.set(0, 1000).start()
+            clock.tick(2000)
+
+            assert.isNotNull(syncedProgressTimer._progressTimer._updateId)
+            syncedProgressTimer.stop()
+
+            restoreFakeTimers()
         })
     })
 })
