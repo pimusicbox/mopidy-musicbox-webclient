@@ -18,6 +18,7 @@ class ExtensionTests(unittest.TestCase):
         assert 'enabled = true' in config
         assert 'websocket_host =' in config
         assert 'websocket_port =' in config
+        assert 'on_track_click = PLAY_ALL' in config
 
     def test_get_config_schema(self):
         ext = Extension()
@@ -27,6 +28,7 @@ class ExtensionTests(unittest.TestCase):
         assert 'musicbox' in schema
         assert 'websocket_host' in schema
         assert 'websocket_port' in schema
+        assert 'on_track_click' in schema
 
     def test_setup(self):
         registry = mock.Mock()

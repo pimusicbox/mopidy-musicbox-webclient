@@ -243,6 +243,9 @@ describe('images', function () {
             getImagesSpy.reset()
             setDeprecatedAlbumImageSpy.reset()
         })
+        after(function () {
+            mopidy.library.getImages.restore()
+        })
 
         it('should use default image if no track URI is provided', function () {
             images.setAlbumImage('', img_element, mopidy)
@@ -302,7 +305,7 @@ describe('images', function () {
 
             assert.isTrue(lookupSpy.calledOnce)
             expect($(img_element).prop('src')).to.endWith('mockAlbumImageUri')
-            lookupSpy.restore()
+            mopidy.library.lookup.restore()
         })
 
         it('should use default image if track.album or track.artist is not available', function () {
@@ -313,7 +316,7 @@ describe('images', function () {
 
             assert.isTrue(lookupSpy.calledOnce)
             expect($(img_element).prop('src')).to.endWith(images.DEFAULT_ALBUM_URL)
-            lookupSpy.restore()
+            mopidy.library.lookup.restore()
         })
 
         it('should fall back to retrieving image from last.fm if none provided by Mopidy', function () {
@@ -414,7 +417,7 @@ describe('images', function () {
             getImagesSpy.reset()
         })
         after(function () {
-            getImagesSpy.restore()
+            mopidy.library.getImages.restore()
         })
 
         it('should use default image if no artist URI is provided', function () {

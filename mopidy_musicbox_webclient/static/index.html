@@ -36,7 +36,7 @@
 
 </head>
 
-<body data-websocket-url="{{websocketUrl}}" data-is-musicbox="{{isMusicBox}}" data-has-alarmclock="{{hasAlarmClock}}">
+<body data-websocket-url="{{websocketUrl}}" data-is-musicbox="{{isMusicBox}}" data-has-alarmclock="{{hasAlarmClock}}" data-on-track-click="{{onTrackClick}}">
 <div data-role="page" id="page" class="ui-responsive-panel" data-theme="c">
 <div data-role="panel" id="panel" data-position="left" data-theme="a" data-display="reveal" data-position-fixed="true">
 
@@ -87,7 +87,7 @@
         </li>
         <li data-icon="false">
             <div><!-- slider for volume -->
-                <a href="#" onclick="doMute(); return false;"><span title="Toggle mute"><i id="mutebt" class="fa fa-volume-up"></i></span></a>
+                <a href="#" onclick="controls.doMute(); return false;"><span title="Toggle mute"><i id="mutebt" class="fa fa-volume-up"></i></span></a>
                 <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
                 <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
                        value="0" max="100"/>
@@ -112,47 +112,28 @@
     <a href="#" onclick="closePopups();"><img id="artistpopupimage" src="" alt="Album artist"/></a>
 </div>
 
-<div data-role="popup" data-transition="none" data-theme="c" id="popupBrowse">
-    <div data-role="collapsible-set">
-        <ul data-role="listview" data-icon="false" id="popupBrowseLv">
-            <li>
-                <a href="#" onclick="return playBrowsedTracks(PLAY_ALL);">Play All</a>
-            </li>
-            <li>
-                <a href="#" onclick="return playBrowsedTracks(PLAY_NOW);">Play <span class="popupTrackName"></span></a>
-            </li>
-            <li class="addqueue">
-                <a href="#" onclick="return playBrowsedTracks(PLAY_NEXT);">Play Track Next</a>
-            </li>
-            <li class="addqueue">
-                <a href="#" onclick="return playBrowsedTracks(ADD_THIS_BOTTOM);">Add Track to Bottom of Queue</a>
-            </li>
-            <li class="addqueue">
-                <a href="#" onclick="return playBrowsedTracks(ADD_ALL_BOTTOM);">Add All to Bottom of Queue</a>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<div data-role="popup" data-transition="none" data-theme="c" id="popupTracks">
+<div data-role="popup" data-transition="none" data-theme="b" id="popupTracks">
     <div data-role="collapsible-set">
         <ul data-role="listview" data-icon="false" id="popupTracksLv">
-            <li>
-                <a href="#" onclick="return playTrack(PLAY_NOW);">Play <span class="popupTrackName"></span></a>
+            <li data-icon="playAll" data-iconshadow="false">
+                <a href="#" onclick="return controls.playTracks(PLAY_ALL, mopidy);">Play All</a>
             </li>
-            <li class="addqueue">
-                <a href="#" onclick="return playTrack(PLAY_NEXT);">Play Track Next</a>
+            <li data-icon="play">
+                <a href="#" onclick="return controls.playTracks(PLAY_NOW, mopidy);">Play <span class="popupTrackName"></span></a>
             </li>
-            <li class="addqueue">
-                <a href="#" onclick="return playTrack(ADD_THIS_BOTTOM);">Add Track to Bottom of Queue</a>
+            <li data-icon="playNext" class="addqueue">
+                <a href="#" onclick="return controls.playTracks(PLAY_NEXT, mopidy);">Play Track Next</a>
             </li>
-            <li class="addqueue">
-                <a href="#" onclick="return playTrack(ADD_ALL_BOTTOM);" id="liaddtobottom">Add all to Bottom of Queue</a>
+            <li data-icon="add" class="addqueue">
+                <a href="#" onclick="return controls.playTracks(ADD_THIS_BOTTOM, mopidy);">Add Track to Bottom of Queue</a>
             </li>
-            <li>
+            <li data-icon="addAll" class="addqueue">
+                <a href="#" onclick="return controls.playTracks(ADD_ALL_BOTTOM, mopidy);">Add All to Bottom of Queue</a>
+            </li>
+            <li class="popupAlbumLi">
                 <a href="#" onclick="showAlbumPopup('#popupTracks')">Show Album <span class="popupAlbumName"></span></a>
             </li>
-            <li id="popupArtistsLi">
+            <li class="popupArtistsLi">
                 <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                 </a>
             </li>
@@ -164,19 +145,19 @@
     </div>
 </div>
 
-<div data-role="popup" data-transition="none" data-theme="c" id="popupQueue">
+<div data-role="popup" data-transition="none" data-theme="b" id="popupQueue">
     <div data-role="collapsible-set">
         <ul data-role="listview" data-icon="false" id="popupQueueLv">
-            <li>
-                <a href="#" onclick="return playTrackQueue();">Play <span class="popupTrackName"></span></a>
+            <li data-icon="play">
+                <a href="#" onclick="return controls.playQueueTrack();">Play <span class="popupTrackName"></span></a>
             </li>
-            <li>
-                <a href="#" onclick="return removeTrack();">Remove from Queue</a>
+            <li data-icon="remove">
+                <a href="#" onclick="return controls.removeTrack();">Remove from Queue</a>
             </li>
-            <li>
+            <li class="popupAlbumLi">
                 <a href="#" onclick="showAlbumPopup('#popupQueue')">Show Album <span class="popupAlbumName"></span></a>
             </li>
-            <li id="popupArtistsLi">
+            <li class="popupArtistsLi">
                 <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                 </a>
             </li>
@@ -192,9 +173,9 @@
     <form>
         <p>Save current queue to a playlist.
         <input id="saveinput" placeholder="Playlist name" class="span2" data-clear-btn="true"
-               onkeypress="return savePressed(event.keyCode);" type="text"/>
+               onkeypress="return controls.savePressed(event.keyCode);" type="text"/>
         <div data-role="controlgroup" data-type="horizontal" align="center">
-            <button class="btn" type="button" onclick="return saveQueue();">
+            <button class="btn" type="button" onclick="return controls.saveQueue();">
                 Ok
             </button>
             <button class="btn" type="button" onclick="return $('#popupSave').popup('close');">
@@ -289,7 +270,7 @@
 
 <div id="nowPlayingpane" data-role="content" class="pane">
 
-    <img id="controlspopupimage" src="images/default_cover.png" alt="Album cover"/>
+    <img id="albumCoverImg" src="images/default_cover.png" alt="Album cover"/>
 
     <div class="nowPlaying-artistInfo">
     <h3 id="modalname"></h3>
@@ -311,7 +292,7 @@
             <h4>Playlists</h4>
         </div>
         <div align="right" class="ui-block-b" data-role="controlgroup" data-type="horizontal">
-            <button class="btn" type="button" title="Refresh playlists" onclick="return refreshPlaylists();">
+            <button class="btn" type="button" title="Refresh playlists" onclick="return controls.refreshPlaylists();">
                 <i class="fa fa-refresh"></i>
             </button>
         </div>
@@ -343,11 +324,11 @@
             <h4>Play Queue</h4>
         </div>
         <div align="right" class="ui-block-b" data-role="controlgroup" data-type="horizontal">
-            <button class="btn" type="button" title="Save queue to playlist" onclick="return showSavePopup();">
-                <i class="fa fa-floppy-o"></i>
+            <button class="btn" type="button" title="Save queue to playlist" onclick="return controls.showSavePopup();">
+                <i class="fa fa-bookmark-o"></i>
             </button>
-            <button class="btn" type="button" title="Clear queue" onclick="return clearQueue();">
-                <i class="fa fa-trash-o"></i>
+            <button class="btn" type="button" title="Clear queue" onclick="return controls.clearQueue();">
+                <i class="fa fa-times"></i>
             </button>
         </div>
     </div>
@@ -426,18 +407,18 @@
         <div class="ui-block-a" style="padding: 5px">
             <form>
                 <p>Play a specific stream/track and optionally save it to your favourites.
-                <button class="btn" type="button" onclick="return getCurrentlyPlaying();">
+                <button class="btn" type="button" onclick="return controls.getCurrentlyPlaying();">
                     Get currently playing
                 </button>
                 <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
-                       onkeypress="return streamPressed(event.keyCode);" type="text"/>
-                <button class="btn" type="button" onclick="return playStreamUri();">
+                       onkeypress="return controls.streamPressed(event.keyCode);" type="text"/>
+                <button class="btn" type="button" onclick="return controls.playStreamUri();">
                     Play
                 </button>
 
                 <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
-                       onkeypress="return streamPressed(event.keyCode);" type="text"/>
-                <button class="btn" type="button" onclick="return addFavourite();">
+                       onkeypress="return controls.streamPressed(event.keyCode);" type="text"/>
+                <button class="btn" type="button" onclick="return controls.addFavourite();">
                     Save
                 </button>
                     <br/>
@@ -459,7 +440,7 @@
             </div>
         </div>
         <div class="playicon">
-            <a href="#" onclick="doPlay(); return false"><span id="btplay" title="Play"><i class="fa fa-play"></i></span></a>
+            <a href="#" onclick="controls.doPlay(); return false"><span id="btplay" title="Play"><i class="fa fa-play"></i></span></a>
         </div>
     </div>
 </div>
@@ -467,16 +448,16 @@
 <div data-role="footer" data-tap-toggle="false" data-position="fixed" id="nowPlayingFooter">
         <div class="footerControls" style="padding-left: 10px;">
             <div style="float: left;">
-                <a href="#" onclick="doPrevious(); return false"><span id="btprev" title="Previous"><i class="fa fa-fast-backward"></i></span></a>
-                <a href="#" onclick="doPlay(); return false"><span id="btplayNowPlaying" title="Play"><i class="fa fa-play"></i></span></a>
-                <a href="#" onclick="doNext(); return false"><span id="btnext" title="Next"><i class="fa fa-fast-forward"></i></span></a>
+                <a href="#" onclick="controls.doPrevious(); return false"><span id="btprev" title="Previous"><i class="fa fa-fast-backward"></i></span></a>
+                <a href="#" onclick="controls.doPlay(); return false"><span id="btplayNowPlaying" title="Play"><i class="fa fa-play"></i></span></a>
+                <a href="#" onclick="controls.doNext(); return false"><span id="btnext" title="Next"><i class="fa fa-fast-forward"></i></span></a>
             </div>
             <div style="float: right; margin-right: 10px;">
-                <a href="#" onclick="doRandom(); return false"><span id="randombt" title="Random"><i class="fa fa-random"></i></span></a>
-                <a href="#" onclick="doRepeat(); return false"><span id="repeatbt" title="Repeat"><i class="fa fa-repeat"></i></span></a>
-                <a href="#" onclick="doConsume(); return false"><span id="consumebt" title="Consume"><i class="fa fa-cutlery"></i></span></a>
-                <a href="#" onclick="doSingle(); return false"><span id="singlebt" title="Single"><i class="fa fa-dot-circle-o"></i></span></a>
-                <a href="#" onclick="doShuffle(); return false"><span id="shufflebt" title="Shuffle"><i class="fa fa-arrows-v"></i></span></a>
+                <a href="#" onclick="controls.doRandom(); return false"><span id="randombt" title="Random"><i class="fa fa-random"></i></span></a>
+                <a href="#" onclick="controls.doRepeat(); return false"><span id="repeatbt" title="Repeat"><i class="fa fa-repeat"></i></span></a>
+                <a href="#" onclick="controls.doConsume(); return false"><span id="consumebt" title="Consume"><i class="fa fa-cutlery"></i></span></a>
+                <a href="#" onclick="controls.doSingle(); return false"><span id="singlebt" title="Single"><i class="fa fa-dot-circle-o"></i></span></a>
+                <a href="#" onclick="controls.doShuffle(); return false"><span id="shufflebt" title="Shuffle"><i class="fa fa-arrows-v"></i></span></a>
             </div>
         </div>
 </div>

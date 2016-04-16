@@ -44,3 +44,6 @@ class Webclient(object):
 
     def is_music_box(self):
         return self.ext_config.get('musicbox', False)
+
+    def get_default_click_action(self):
+        return self.ext_config.get('on_track_click', 'PLAY_ALL')

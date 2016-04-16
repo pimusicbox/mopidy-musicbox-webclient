@@ -37,6 +37,7 @@ class IndexHandler(tornado.web.RequestHandler):
             'isMusicBox': json.dumps(webclient.is_music_box()),
             'websocketUrl': webclient.get_websocket_url(self.request),
             'hasAlarmClock': json.dumps(webclient.has_alarm_clock()),
+            'onTrackClick': webclient.get_default_click_action()
         }
         self.__path = path
         self.__title = string.Template('MusicBox on $hostname')

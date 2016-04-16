@@ -7,8 +7,8 @@
  * Song Info Sreen  *
  ********************/
 function resetSong () {
-    setPlayState(false)
-    setPosition(0)
+    controls.setPlayState(false)
+    controls.setPosition(0)
     var data = {}
     data.tlid = -1
     data.track = {}
@@ -84,7 +84,7 @@ function setSongInfo (data) {
         data.track.name = decodeURI(name[name.length - 1])
     }
 
-    updatePlayIcons(data.track.uri, data.tlid)
+    updatePlayIcons(data.track.uri, data.tlid, controls.getIconForAction())
     artistshtml = ''
     artiststext = ''
 
@@ -131,7 +131,7 @@ function setSongInfo (data) {
     } else {
         $('#modalalbum').html('')
     }
-    images.setAlbumImage(data.track.uri, '#infocover, #controlspopupimage', mopidy)
+    images.setAlbumImage(data.track.uri, '#infocover, #albumCoverImg', mopidy)
 
     $('#modalartist').html(arttmp)
 
@@ -153,7 +153,6 @@ function closePopups () {
     $('#artistpopup').popup('close')
     $('#coverpopup').popup('close')
     $('#popupQueue').popup('close')
-    $('#controlspopup').popup('close')
 }
 
 function popupTracks (e, listuri, trackuri, tlid) {
@@ -163,6 +162,9 @@ function popupTracks (e, listuri, trackuri, tlid) {
     $('.popupTrackName').html(popupData[trackuri].name)
     if (popupData[trackuri].album && popupData[trackuri].album.name) {
         $('.popupAlbumName').html(popupData[trackuri].album.name)
+        $('.popupAlbumLi').show()
+    } else {
+        $('.popupAlbumLi').hide()
     }
     var child = ''
 
@@ -194,9 +196,6 @@ function popupTracks (e, listuri, trackuri, tlid) {
     if (divid === 'current') {
         $('.addqueue').hide()
         popupName = '#popupQueue'
-    } else if (divid === 'browse') {
-        $('.addqueue').show()
-        popupName = '#popupBrowse'
     } else {
         $('.addqueue').show()
         popupName = '#popupTracks'
@@ -232,8 +231,8 @@ function initSocketevents () {
         library.getCurrentPlaylist()
         updateStatusOfAll()
         library.getPlaylists()
-        getUriSchemes().then(function () {
-            showFavourites()
+        controls.getUriSchemes().then(function () {
+            controls.showFavourites()
         })
         library.getBrowseDir()
         library.getSearchSchemes(searchBlacklist, mopidy)
@@ -250,7 +249,7 @@ function initSocketevents () {
 
     mopidy.on('event:trackPlaybackStarted', function (data) {
         setSongInfo(data.tl_track)
-        setPlayState(true)
+        controls.setPlayState(true)
     })
 
     mopidy.on('event:playlistsLoaded', function (data) {
@@ -273,21 +272,21 @@ function initSocketevents () {
     })
 
     mopidy.on('event:volumeChanged', function (data) {
-        setVolume(data.volume)
+        controls.setVolume(data.volume)
     })
 
     mopidy.on('event:muteChanged', function (data) {
-        setMute(data.mute)
+        controls.setMute(data.mute)
     })
 
     mopidy.on('event:playbackStateChanged', function (data) {
         switch (data.new_state) {
             case 'paused':
             case 'stopped':
-                setPlayState(false)
+                controls.setPlayState(false)
                 break
             case 'playing':
-                setPlayState(true)
+                controls.setPlayState(true)
                 break
         }
     })
@@ -297,7 +296,7 @@ function initSocketevents () {
     })
 
     mopidy.on('event:seeked', function (data) {
-        setPosition(parseInt(data.time_position))
+        controls.setPosition(parseInt(data.time_position))
         if (play) {
             syncedProgressTimer.start()
         }
@@ -420,9 +419,7 @@ function locationHashChanged () {
         case 'search':
             $('#navsearch a').addClass($.mobile.activeBtnClass)
             $('#searchinput').focus()
-            if (customTracklists['mbw:allresultscache'] === '') {
-                library.initSearch($('#searchinput').val())
-            }
+            library.initSearch($('#searchinput').val())
             break
         case 'stream':
             $('#navstream a').addClass('ui-state-active ui-state-persist ui-btn-active')
@@ -519,7 +516,7 @@ $(document).ready(function (event) {
     $('#songinfo').click(function () {
         return switchContent('nowPlaying')
     })
-    $('#controlspopupimage').click(function () {
+    $('#albumCoverImg').click(function () {
         return switchContent('current')
     })
     $('#navToggleFullscreen').click(function () {
@@ -559,15 +556,15 @@ $(document).ready(function (event) {
             var actualkey = String.fromCharCode(unicode)
             switch (actualkey) {
                 case ' ':
-                    doPlay()
+                    controls.doPlay()
                     event.preventDefault()
                     break
                 case '>':
-                    doNext()
+                    controls.doNext()
                     event.preventDefault()
                     break
                 case '<':
-                    doPrevious()
+                    controls.doPrevious()
                     event.preventDefault()
                     break
             }
@@ -586,8 +583,8 @@ $(document).ready(function (event) {
     $.event.special.swipe.durationThreshold = 500
 
     // swipe songinfo and panel
-    $('#normalFooter, #nowPlayingFooter').on('swiperight', doPrevious)
-    $('#normalFooter, #nowPlayingFooter').on('swipeleft', doNext)
+    $('#normalFooter, #nowPlayingFooter').on('swiperight', controls.doPrevious)
+    $('#normalFooter, #nowPlayingFooter').on('swipeleft', controls.doNext)
     $('#nowPlayingpane, .ui-body-c, #header, #panel, .pane').on('swiperight', function (event) {
         if (!$(event.target).is('#normalFooter') && !$(event.target).is('#nowPlayingFooter')) {
             $('#panel').panel('open')
@@ -609,37 +606,55 @@ $(document).ready(function (event) {
     $('#trackslider').on('slidestop', function () {
         $('#trackslider').off('change')
         syncedProgressTimer.updatePosition($(this).val())
-        doSeekPos($(this).val())
+        controls.doSeekPos($(this).val())
     })
 
     $('#volumeslider').on('slidestart', function () { volumeSliding = true })
     $('#volumeslider').on('slidestop', function () { volumeSliding = false })
-    $('#volumeslider').on('change', function () { doVolume($(this).val()) })
+    $('#volumeslider').on('change', function () { controls.doVolume($(this).val()) })
 })
 
-function updatePlayIcons (uri, tlid) {
+function updatePlayIcons (uri, tlid, popupMenuIcon) {
     // Update styles of listviews
+    if (arguments.length < 3) {
+        throw new Error('Missing parameters for "updatePlayIcons" function call.')
+    }
     var listviews = [PLAYLIST_TABLE, SEARCH_TRACK_TABLE, ARTIST_TABLE, ALBUM_TABLE, BROWSE_TABLE]
     var target = CURRENT_PLAYLIST_TABLE.substr(1)
-    $(CURRENT_PLAYLIST_TABLE).children('li').each(function () {
-        var eachTlid = $(this).attr('tlid')
-        if (typeof eachTlid !== 'undefined') {
-            eachTlid = parseInt(eachTlid)
-        }
-        if (this.id === getjQueryID(target, uri) && eachTlid === tlid) {
-            $(this).addClass('currenttrack')
-        } else {
-            $(this).removeClass('currenttrack')
-        }
-    })
+    if (uri && typeof tlid === 'number' && tlid >= 0) {
+        $(CURRENT_PLAYLIST_TABLE).children('li.song.albumli').each(function () {
+            var eachTlid = $(this).attr('tlid')
+            if (typeof eachTlid !== 'undefined') {
+                eachTlid = parseInt(eachTlid)
+            }
+            if (this.id === getjQueryID(target, uri) && eachTlid === tlid) {
+                if (!$(this).hasClass('currenttrack')) {
+                    $(this).addClass('currenttrack')
+                }
+            } else if ($(this).hasClass('currenttrack')) {
+                $(this).removeClass('currenttrack')
+            }
+        })
+    }
+
+    var popupElement
 
     for (var i = 0; i < listviews.length; i++) {
         target = listviews[i].substr(1)
-        $(listviews[i]).children('li').each(function () {
-            if (this.id === getjQueryID(target, uri)) {
-                $(this).addClass('currenttrack2')
-            } else {
-                $(this).removeClass('currenttrack2')
+        $(listviews[i]).children('li.song.albumli').each(function () {
+            if (uri) {
+                if (this.id === getjQueryID(target, uri)) {
+                    $(this).addClass('currenttrack2')
+                } else {
+                    $(this).removeClass('currenttrack2')
+                }
+            }
+            if (popupMenuIcon) {
+                popupElement = $(this).children('a.moreBtn').children('i').first()
+                if (!popupElement.hasClass(popupMenuIcon)) {
+                    popupElement.removeClass()
+                    popupElement.addClass(popupMenuIcon)
+                }
             }
         })
     }
