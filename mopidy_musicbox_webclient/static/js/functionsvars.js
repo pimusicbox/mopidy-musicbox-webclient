@@ -175,6 +175,7 @@ function artistsToString (artists, max) {
  *********************************************************/
 function albumTracksToTable (pl, target, uri) {
     var track, previousTrack, nextTrack
+    var html = ''
     $(target).empty()
     $(target).attr('data', uri)
     for (var i = 0; i < pl.length; i++) {
@@ -182,8 +183,9 @@ function albumTracksToTable (pl, target, uri) {
         nextTrack = i < pl.length - 1 ? pl[i + 1] : undefined
         track = pl[i]
         popupData[track.uri] = track
-        renderSongLi(previousTrack, track, nextTrack, uri, '', target, i, pl.length)
+        html += renderSongLi(previousTrack, track, nextTrack, uri, '', target, i, pl.length)
     }
+    $(target).append(html)
     updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 }
 
@@ -191,15 +193,16 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
     var name
     var tlidParameter = ''
     var onClick = ''
+    var html = ''
     track.name = validateTrackName(track, currentIndex)
     // Leave out unplayable items
     if (track.name.substring(0, 12) === '[unplayable]') {
-        return
+        return html
     }
     // Streams
     if (track.length === -1) {
-        $(target).append('<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + ' [Stream]</h1></a></li>')
-        return
+        html += '<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + ' [Stream]</h1></a></li>'
+        return html
     }
 
     if (target === CURRENT_PLAYLIST_TABLE && typeof tlid === 'number' && tlid >= 0) {  // Current queue: Show popup menu icon. onClick plays track.
@@ -209,33 +212,33 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
         onClick = 'return controls.playTracks(\'\', mopidy, \'' + track.uri + '\', \'' + uri + '\');'
     }
 
-    $(target).append(
+    html +=
         '<li class="song albumli" id="' + getjQueryID(target, track.uri) + '" tlid="' + tlid + '">' +
         '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + track.uri + tlidParameter + '\');">' +
         '<i class="fa fa-ellipsis-v"></i></a>' +
-        '<a href="#" onclick="' + onClick + '"><h1><i></i> ' + track.name + '</h1></a></li>'
-    )
+        '<a href="#" onclick="' + onClick + '"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + '</h1>'
+
     if (listLength === 1 || !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack)) {
-        renderSongLiAlbumInfo(track, target)
+        html += renderSongLiAlbumInfo(track)
     }
-    // TODO: remove this hard-coded conditions for 'ALBUM_TABLE' and 'BROWSE_TABLE'
-    if (target !== ALBUM_TABLE && target !== BROWSE_TABLE && !hasSameAlbum(previousTrack, track)) {
-        // Starting to render a new album in the list.
-        renderSongLiDivider(track, nextTrack, currentIndex, target)
-    }
+    html += '</a></li>'
+    return html
 }
 
+/* Tracklist renderer for track artist and album name. */
 function renderSongLiAlbumInfo (track, target) {
-    var html = '</p>'
-    html += renderSongLiTrackArtists(track)
+    var html = renderSongLiTrackArtists(track)
     if (track.album && track.album.name) {
         html += ' - <em>' + track.album.name + '</em></p>'
     }
-    target = getjQueryID(target, track.uri, true)
-    $(target).children('a').eq(1).append(html)
-    $(target + ' a h1 i').addClass(getMediaClass(track.uri))
+    if (typeof target !== 'undefined' && target.length > 0) {
+        target = getjQueryID(target, track.uri, true)
+        $(target).children('a').eq(1).append(html)
+    }
+    return html
 }
 
+/* Tracklist renderer for track artist information. */
 function renderSongLiTrackArtists (track) {
     var html = ''
     if (track.artists) {
@@ -252,23 +255,28 @@ function renderSongLiTrackArtists (track) {
     return html
 }
 
-function renderSongLiDivider (track, nextTrack, currentIndex, target) {
-    target = getjQueryID(target, track.uri, true)
-    // Render differently if part of an album
-    if (hasSameAlbum(track, nextTrack)) {
-        // Large divider with album cover
-        $(target).before(
+/* Tracklist renderer to insert dividers between albums. */
+function renderSongLiDivider (previousTrack, track, nextTrack, currentIndex, target) {
+    var html = ''
+    // Render differently if part of an album.
+    if (!hasSameAlbum(previousTrack, track) && hasSameAlbum(track, nextTrack)) {
+        // Large divider with album cover.
+        html +=
             '<li class="albumdivider"><a href="#" onclick="return library.showAlbum(\'' + track.album.uri + '\');">' +
             '<img id="' + getjQueryID(target + '-cover', track.uri) + '" class="artistcover" width="30" height="30"/>' +
             '<h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.album.name + '</h1><p>' +
             renderSongLiTrackArtists(track) + '</p></a></li>'
-        )
         // Retrieve album covers
         images.setAlbumImage(track.uri, getjQueryID(target + '-cover', track.uri, true), mopidy, 'small')
-    } else if (currentIndex > 0) {
+    } else if (!hasSameAlbum(track, nextTrack) && currentIndex > 0) {
         // Small divider
-        $(target).before('<li class="smalldivider"> &nbsp;</li>')
+        html += '<li class="smalldivider"> &nbsp;</li>'
     }
+    if (typeof target !== 'undefined' && target.length > 0) {
+        target = getjQueryID(target, track.uri, true)
+        $(target).before(html)
+    }
+    return html
 }
 
 function renderSongLiBackButton (results, target, onClick, optional) {
@@ -317,6 +325,7 @@ function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
     $(target).attr('data', uri)
 
     var track, previousTrack, nextTrack, tlid
+    var html = ''
 
     // Break into albums and put in tables
     for (i = 0; i < results.length; i++) {
@@ -331,9 +340,11 @@ function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
                 nextTrack = nextTrack ? nextTrack.track : undefined
             }
             popupData[track.uri] = track
-            renderSongLi(previousTrack, track, nextTrack, uri, tlid, target, i, results.length)
+            html += renderSongLiDivider(previousTrack, track, nextTrack, i, target)
+            html += renderSongLi(previousTrack, track, nextTrack, uri, tlid, target, i, results.length)
         }
     }
+    $(target).append(html)
     updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 }
 

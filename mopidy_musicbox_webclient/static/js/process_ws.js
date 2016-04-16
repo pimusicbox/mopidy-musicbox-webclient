@@ -89,6 +89,7 @@ function processBrowseDir (resultArr) {
     var uri = resultArr[0].uri
     var length = 0 || resultArr.length
     customTracklists[BROWSE_TABLE] = []
+    var html = ''
 
     for (var i = 0, index = 0; i < resultArr.length; i++) {
         if (resultArr[i].type === 'track') {
@@ -100,7 +101,7 @@ function processBrowseDir (resultArr) {
             customTracklists[BROWSE_TABLE].push(ref)
             uris.push(ref.uri)
 
-            renderSongLi(previousRef, ref, nextRef, BROWSE_TABLE, '', BROWSE_TABLE, index, resultArr.length)
+            html += renderSongLi(previousRef, ref, nextRef, BROWSE_TABLE, '', BROWSE_TABLE, index, resultArr.length)
 
             index++
         } else {
@@ -110,12 +111,12 @@ function processBrowseDir (resultArr) {
             } else {
                 iconClass = getMediaClass(resultArr[i].uri)
             }
-            $(BROWSE_TABLE).append(
-                '<li><a href="#" onclick="return library.getBrowseDir(this.id);" id="' + resultArr[i].uri + '">' +
-                '<h1><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>'
-            )
+            html += '<li><a href="#" onclick="return library.getBrowseDir(this.id);" id="' + resultArr[i].uri + '">' +
+                    '<h1><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>'
         }
     }
+
+    $(BROWSE_TABLE).append(html)
 
     updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 
@@ -138,7 +139,7 @@ function processBrowseDir (resultArr) {
                     }
                     if (!hasSameAlbum(previousTrack, track)) {
                         // Starting to render a new album in the list.
-                        renderSongLiDivider(track, nextTrack, i, BROWSE_TABLE)
+                        renderSongLiDivider(previousTrack, track, nextTrack, i, BROWSE_TABLE)
                     }
                 }
             })
