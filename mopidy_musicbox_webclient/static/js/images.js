@@ -48,7 +48,7 @@
             var artist = images._getArtistInfo(track)
             var artistPromise = $.Deferred()
 
-            if (!track || (!track.musicbrainz_id && !track.name) || (!track.musicbrainz_id && (!artist || !artist.name))) {
+            if (!(track && (track.musicbrainz_id || (track.name && artist && artist.name)))) {
                 // Avoid expensive last.fm call if tag information is missing.
                 return artistPromise.reject('none', 'Not enough tag information available for track to make last.fm call.')
             }
@@ -77,7 +77,7 @@
             var artist = images._getArtistInfo(track)
             var albumPromise = $.Deferred()
 
-            if (!track || (!track.album || (!track.album.musicbrainz_id && !track.album.name)) || (!track.album.musicbrainz_id && (!artist || !artist.name))) {
+            if (!(track && track.album && (track.album.musicbrainz_id || (track.album.name && artist && artist.name)))) {
                 // Avoid expensive last.fm call if tag information is missing.
                 return albumPromise.reject('none', 'Not enough tag information available for album to make last.fm call.')
             }
