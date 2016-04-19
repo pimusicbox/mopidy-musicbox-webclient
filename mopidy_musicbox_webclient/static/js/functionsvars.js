@@ -269,7 +269,7 @@ function renderSongLiDivider (track, nextTrack, currentIndex, target) {
             renderSongLiTrackArtists(track) + '</p></a></li>'
         )
         // Retrieve album covers
-        coverArt.getCover(track.uri, getjQueryID(target + '-cover', track.uri, true), 'small', mopidy)
+        images.setAlbumImage(track.uri, getjQueryID(target + '-cover', track.uri, true), mopidy, 'small')
     } else if (currentIndex > 0) {
         // Small divider
         $(target).before('<li class="smalldivider"> &nbsp;</li>')

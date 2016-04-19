@@ -220,7 +220,7 @@ function processCurrentPlaylist (resultArr) {
 function processArtistResults (resultArr) {
     if (!resultArr || (resultArr.length === 0)) {
         $('#h_artistname').text('Artist not found...')
-        coverArt.getCover('', '#artistviewimage, #artistpopupimage', 'extralarge', mopidy)
+        images.setAlbumImage('', '#artistviewimage, #artistpopupimage', mopidy)
         showLoading(false)
         return
     }
@@ -229,7 +229,7 @@ function processArtistResults (resultArr) {
     resultsToTables(resultArr, ARTIST_TABLE, resultArr.uri)
     var artistname = getArtist(resultArr)
     $('#h_artistname, #artistpopupname').html(artistname)
-    getArtistImage(artistname, '#artistviewimage, #artistpopupimage', 'extralarge')
+    images.setArtistImage(resultArr.uri, resultArr[0].uri, '#artistviewimage, #artistpopupimage', mopidy)
     showLoading(false)
 }
 
@@ -239,7 +239,7 @@ function processArtistResults (resultArr) {
 function processAlbumResults (resultArr) {
     if (!resultArr || (resultArr.length === 0)) {
         $('#h_albumname').text('Album not found...')
-        coverArt.getCover('', '#albumviewcover, #coverpopupimage', 'extralarge', mopidy)
+        images.setAlbumImage('', '#albumviewcover, #coverpopupimage', mopidy)
         showLoading(false)
         return
     }
@@ -252,6 +252,6 @@ function processAlbumResults (resultArr) {
     $('#h_albumartist').html(artistname)
     $('#coverpopupalbumname').html(albumname)
     $('#coverpopupartist').html(artistname)
-    coverArt.getCover(resultArr[0].uri, '#albumviewcover, #coverpopupimage', 'extralarge')
+    images.setAlbumImage(resultArr[0].uri, '#albumviewcover, #coverpopupimage', mopidy)
     showLoading(false)
 }
