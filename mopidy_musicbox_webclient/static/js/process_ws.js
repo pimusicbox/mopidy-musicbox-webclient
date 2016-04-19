@@ -229,8 +229,7 @@ function processArtistResults (resultArr) {
     resultsToTables(resultArr, ARTIST_TABLE, resultArr.uri)
     var artistname = getArtist(resultArr)
     $('#h_artistname, #artistpopupname').html(artistname)
-    var artistUri = resultArr[0].artists[0] ? resultArr[0].artists[0].uri : ''
-    images.setArtistImage(artistUri, resultArr[0].uri, '#artistviewimage, #artistpopupimage', mopidy)
+    images.setArtistImage(resultArr.uri, resultArr[0].uri, '#artistviewimage, #artistpopupimage', mopidy)
     showLoading(false)
 }
 

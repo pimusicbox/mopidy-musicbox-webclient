@@ -521,7 +521,7 @@ describe('images', function () {
 
         it('should use default image if artist MusicBrainz ID is not available', function () {
             images._setLastFmArtistImage('', img_element)
-            expect($(img_element).prop('src')).to.endWith(images.DEFAULT_ALBUM_URL)
+            expect($(img_element).prop('src')).to.endWith(images.DEFAULT_ARTIST_URL)
         })
 
         it('should use correct size for setting album image', function () {

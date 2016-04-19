@@ -260,7 +260,7 @@
         _setLastFmArtistImage: function (mbid, img_element, size) {
             if (!mbid) {
                 // Avoid expensive last.fm call if tag information is missing.
-                $(img_element).attr('src', images.DEFAULT_ALBUM_URL)
+                $(img_element).attr('src', images.DEFAULT_ARTIST_URL)
                 return
             }
             size = size || 'extralarge'
