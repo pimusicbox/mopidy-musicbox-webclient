@@ -7,5 +7,6 @@
         "indent": [2, 4, {"SwitchCase": 1}],
         "no-undef": 0, // TODO: Set this to '2' once Javascript has been modularised.
         "no-unused-vars": 0, // TODO: Set this to '2' once Javascript has been modularised.
+        "camelcase": 1,
     }
 }

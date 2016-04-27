@@ -76,3 +76,6 @@ class WebclientTests(unittest.TestCase):
 
     def test_is_musicbox(self):
         assert not self.mmw.is_music_box()
+
+    def test_default_click_action(self):
+        assert self.mmw.get_default_click_action() == 'PLAY_ALL'

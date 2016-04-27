@@ -79,12 +79,20 @@ v2.3.0 (UNRELEASED)
   (Addresses: `#130 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/130>`_).
 - Upgrade Media Progress Timer to version 3.0.0.
 - Now retrieves album cover and artist images using MusicBrainzID, if available.
+- New configuration parameter ``on_track_click`` can be used to customize the action that is performed when the
+  user clicks on a track in a list. Valid options are: ``PLAY_NOW``, ``PLAY_NEXT``, ``ADD_THIS_BOTTOM``,
+  ``ADD_ALL_BOTTOM``, ``PLAY_ALL`` (default), and ``DYNAMIC`` (repeats last action).
+  (Addresses: `#133 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/133>`_).
+- Optimized updating of 'now playing' icons in tracklists.
+  (Addresses: `#184 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/184>`_).
 
 **Fixes**
 
 - Don't create Mopidy models manually. (Fixes: `#172 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/172>`_).
 - Context menu is now available for all tracks in browse pane. (Fixes: `#126 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/126>`_).
 - last.fm artist image lookups should now always return the correct image for similarly named artists.
+- Ensure that browsed tracks are always added to the queue using the track URI rather than the track's position in the folder.
+  (Fixes: `#124 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/124>`_).
 
 v2.2.0 (2016-03-01)
 -------------------

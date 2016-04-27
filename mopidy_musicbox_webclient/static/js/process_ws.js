@@ -16,49 +16,49 @@ function processCurrenttrack (data) {
  * process results of volume
  *********************************************************/
 function processVolume (data) {
-    setVolume(data)
+    controls.setVolume(data)
 }
 
 /** ******************************************************
  * process results of mute
  *********************************************************/
 function processMute (data) {
-    setMute(data)
+    controls.setMute(data)
 }
 
 /** ******************************************************
  * process results of a repeat
  *********************************************************/
 function processRepeat (data) {
-    setRepeat(data)
+    controls.setRepeat(data)
 }
 
 /** ******************************************************
  * process results of random
  *********************************************************/
 function processRandom (data) {
-    setRandom(data)
+    controls.setRandom(data)
 }
 
 /** ******************************************************
  * process results of consume
  *********************************************************/
 function processConsume (data) {
-    setConsume(data)
+    controls.setConsume(data)
 }
 
 /** ******************************************************
  * process results of single
  *********************************************************/
 function processSingle (data) {
-    setSingle(data)
+    controls.setSingle(data)
 }
 
 /** ******************************************************
  * process results of current position
  *********************************************************/
 function processCurrentposition (data) {
-    setPosition(parseInt(data))
+    controls.setPosition(parseInt(data))
 }
 
 /** ******************************************************
@@ -66,9 +66,9 @@ function processCurrentposition (data) {
  *********************************************************/
 function processPlaystate (data) {
     if (data === 'playing') {
-        setPlayState(true)
+        controls.setPlayState(true)
     } else {
-        setPlayState(false)
+        controls.setPlayState(false)
     }
 }
 
@@ -84,26 +84,24 @@ function processBrowseDir (resultArr) {
         showLoading(false)
         return
     }
-    browseTracks = []
     uris = []
-    var ref, track, previousTrack, nextTrack
+    var ref, previousRef, nextRef
     var uri = resultArr[0].uri
     var length = 0 || resultArr.length
+    customTracklists[BROWSE_TABLE] = []
 
     for (var i = 0, index = 0; i < resultArr.length; i++) {
         if (resultArr[i].type === 'track') {
+            previousRef = ref || undefined
+            nextRef = i < resultArr.length - 1 ? resultArr[i + 1] : undefined
             ref = resultArr[i]
+            // TODO: consolidate usage of various arrays for caching URIs, Refs, and Tracks
             popupData[ref.uri] = ref
-            browseTracks.push(ref)
+            customTracklists[BROWSE_TABLE].push(ref)
             uris.push(ref.uri)
 
-            $(BROWSE_TABLE).append(
-                '<li class="song albumli" id="' + getjQueryID(BROWSE_TABLE, ref.uri) + '">' +
-                '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + ref.uri + '\', \'' + index + '\');">' +
-                '<i class="fa fa-ellipsis-v"></i></a>' +
-                '<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, ' + index + ');">' +
-                '<h1><i></i> ' + ref.name + '</h1></a></li>'
-            )
+            renderSongLi(previousRef, ref, nextRef, BROWSE_TABLE, '', BROWSE_TABLE, index, resultArr.length)
+
             index++
         } else {
             var iconClass = ''
@@ -119,7 +117,7 @@ function processBrowseDir (resultArr) {
         }
     }
 
-    updatePlayIcons(songdata.track.uri, songdata.tlid)
+    updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 
     if (uris.length > 0) {
         mopidy.library.lookup({'uris': uris}).then(function (resultDict) {
@@ -134,6 +132,7 @@ function processBrowseDir (resultArr) {
                         nextTrack = undefined
                     }
                     track = resultDict[ref.uri][0]
+                    popupData[track.uri] = track  // Need full track info in popups in order to display albums and artists.
                     if (uris.length === 1 || (previousTrack && !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {
                         renderSongLiAlbumInfo(track, BROWSE_TABLE)
                     }
@@ -211,7 +210,7 @@ function processCurrentPlaylist (resultArr) {
     currentplaylist = resultArr
     resultsToTables(currentplaylist, CURRENT_PLAYLIST_TABLE)
     mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error)
-    updatePlayIcons(songdata.track.uri, songdata.tlid)
+    updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 }
 
 /** ******************************************************

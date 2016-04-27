@@ -223,7 +223,7 @@ describe('SyncedTimer', function () {
             clock.tick(1001)
             syncedProgressTimer._scheduleSync(1000)
             assert(clearSpy.calledWith(scheduleID))
-            clearSpy.restore()
+            window.clearTimeout.restore()
         })
     })
 
@@ -358,7 +358,7 @@ describe('SyncedTimer', function () {
 
             assert(scheduleSpy.calledWith(0))
             syncedProgressTimer.stop()
-            scheduleSpy.restore()
+            syncedProgressTimer._scheduleSync.restore()
         })
     })
 
@@ -392,7 +392,7 @@ describe('SyncedTimer', function () {
 
             assert.isFalse(syncedProgressTimer._isSyncScheduled)
             assert(cancelSpy.calledWith(syncedProgressTimer._scheduleID))
-            cancelSpy.restore()
+            window.clearTimeout.restore()
         })
     })
 
@@ -422,7 +422,7 @@ describe('SyncedTimer', function () {
 
             assert.isTrue(formatSpy.called)
             expect(syncedProgressTimer.positionNode.nodeValue).to.equal('0:01')
-            formatSpy.restore()
+            SyncedProgressTimer.format.restore()
         })
 
         it('should set position to "" if timer has not been initialized', function () {

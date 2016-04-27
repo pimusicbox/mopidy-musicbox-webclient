@@ -20,7 +20,7 @@ var volumeSliding = false
 var positionChanging
 
 var initgui = true
-var popupData = {}
+var popupData = {}  // TODO: Refactor into one shared cache
 var songlength = 0
 
 var artistshtml = ''
@@ -36,12 +36,11 @@ var STREAMS_PLAYLIST_SCHEME = 'm3u'
 var uriSchemes = {}
 
 // array of cached playlists (not only user-playlists, also search, artist, album-playlists)
-var playlists = {}
+var playlists = {}  // TODO: Refactor into one shared cache
 var currentplaylist
-var customTracklists = []
+var customTracklists = []  // TODO: Refactor into one shared cache
 
 var browseStack = []
-var browseTracks = []
 
 var ua = navigator.userAgent
 var isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua)
@@ -68,9 +67,7 @@ PLAY_NEXT = 1
 ADD_THIS_BOTTOM = 2
 ADD_ALL_BOTTOM = 3
 PLAY_ALL = 4
-PLAY_NOW_SEARCH = 5
-
-MAX_TABLEROWS = 50
+DYNAMIC = 5
 
 // the first part of Mopidy extensions which serve radio streams
 var radioExtensionsList = ['somafm', 'tunein', 'dirble', 'audioaddict']
@@ -185,9 +182,9 @@ function albumTracksToTable (pl, target, uri) {
         nextTrack = i < pl.length - 1 ? pl[i + 1] : undefined
         track = pl[i]
         popupData[track.uri] = track
-        renderSongLi(previousTrack, track, nextTrack, uri, '', ALBUM_TABLE, i, pl.length)
+        renderSongLi(previousTrack, track, nextTrack, uri, '', target, i, pl.length)
     }
-    updatePlayIcons(songdata.track.uri, songdata.tlid)
+    updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 }
 
 function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, currentIndex, listLength) {
@@ -204,16 +201,14 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
         $(target).append('<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + ' [Stream]</h1></a></li>')
         return
     }
-    // Play by tlid if available.
-    // TODO: Need to consolidate all of the 'play...' functions
-    if (tlid && target === BROWSE_TABLE) {
-        onClick = 'return playBrowsedTracks(PLAY_ALL, ' + tlid + ');'
-    } else if (tlid) {
+
+    if (target === CURRENT_PLAYLIST_TABLE && typeof tlid === 'number' && tlid >= 0) {  // Current queue: Show popup menu icon. onClick plays track.
         tlidParameter = '\',\'' + tlid
-        onClick = 'return playTrackQueueByTlid(\'' + track.uri + '\',\'' + tlid + '\');'
-    } else {
-        onClick = 'return playTrackByUri(\'' + track.uri + '\',\'' + uri + '\');'
+        onClick = 'return controls.playQueueTrack(' + tlid + ');'
+    } else {  // All other tracklist: Show default action icon. onClick performs default action
+        onClick = 'return controls.playTracks(\'\', mopidy, \'' + track.uri + '\', \'' + uri + '\');'
     }
+
     $(target).append(
         '<li class="song albumli" id="' + getjQueryID(target, track.uri) + '" tlid="' + tlid + '">' +
         '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + track.uri + tlidParameter + '\');">' +
@@ -223,8 +218,8 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
     if (listLength === 1 || !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack)) {
         renderSongLiAlbumInfo(track, target)
     }
-    // TODO: remove this hard-coded condition for 'ALBUM_TABLE'
-    if (target !== ALBUM_TABLE && !hasSameAlbum(previousTrack, track)) {
+    // TODO: remove this hard-coded conditions for 'ALBUM_TABLE' and 'BROWSE_TABLE'
+    if (target !== ALBUM_TABLE && target !== BROWSE_TABLE && !hasSameAlbum(previousTrack, track)) {
         // Starting to render a new album in the list.
         renderSongLiDivider(track, nextTrack, currentIndex, target)
     }
@@ -339,7 +334,7 @@ function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
             renderSongLi(previousTrack, track, nextTrack, uri, tlid, target, i, results.length)
         }
     }
-    updatePlayIcons(songdata.track.uri, songdata.tlid)
+    updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 }
 
 // process updated playlist to gui
@@ -397,7 +392,7 @@ function getUris (tracks) {
 
 function getTracksFromUri (uri, full_track_data) {
     var returnTracksOrUris = function (tracks) {
-        return (full_track_data || false) ? tracks : getUris(tracks)
+        return full_track_data ? tracks : getUris(tracks)
     }
     if (customTracklists[uri]) {
         return returnTracksOrUris(customTracklists[uri])
@@ -552,7 +547,7 @@ function getjQueryID (identifier, uri, includePrefix) {
     } else if (identifier.charAt(0) !== '#' && includePrefix) {
         identifier = '#' + identifier
     }
-    return identifier + '-' + fixedEncodeURIComponent(uri).replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '')
+    return identifier + '-' + fixedEncodeURIComponent(uri).replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '')  // eslint-disable-line no-useless-escape
 }
 
 // Strict URI encoding as per https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent

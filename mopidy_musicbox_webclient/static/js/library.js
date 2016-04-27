@@ -37,9 +37,6 @@
                 document.activeElement.blur()
                 $('input').blur()
 
-                delete customTracklists[URI_SCHEME + ':allresultscache']
-                delete customTracklists[URI_SCHEME + ':artistresultscache']
-                delete customTracklists[URI_SCHEME + ':albumresultscache']
                 delete customTracklists[URI_SCHEME + ':trackresultscache']
                 $('#searchartists').hide()
                 $('#searchalbums').hide()
@@ -258,7 +255,7 @@
                 resultsToTables(tracks, PLAYLIST_TABLE, uri, 'return library.togglePlaylists();', true)
                 showLoading(false)
             })
-            updatePlayIcons(uri)
+            updatePlayIcons(uri, '', controls.getIconForAction())
             $('#playlistslist li a').each(function () {
                 $(this).removeClass('playlistactive')
                 if (this.id === uri) {

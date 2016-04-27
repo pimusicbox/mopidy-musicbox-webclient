@@ -22,6 +22,13 @@ class Extension(ext.Extension):
         schema['musicbox'] = config.Boolean(optional=True)
         schema['websocket_host'] = config.Hostname(optional=True)
         schema['websocket_port'] = config.Port(optional=True)
+        schema['on_track_click'] = config.String(optional=True,
+                                                 choices=['PLAY_NOW',
+                                                          'PLAY_NEXT',
+                                                          'ADD_THIS_BOTTOM',
+                                                          'ADD_ALL_BOTTOM',
+                                                          'PLAY_ALL',
+                                                          'DYNAMIC'])
         return schema
 
     def setup(self, registry):
