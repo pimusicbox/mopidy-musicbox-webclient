@@ -129,6 +129,8 @@ v2.3.0 (UNRELEASED)
 - Added 'Folder' FontAwesome icon on the Browse pane for browsing the filesystem.
 - New icons for 'PLAY' and 'PLAY_ALL' actions. In general, icons with an empty background will perform an action only
   on the selected track, while icons with a filled background will apply the action to all tracks in the list.
+- Standardize popup dialog layout convention: Sentence fragments have no punctuation, buttons that confirm a
+  destructive action go on the left.
 
 **Fixes**
 
@@ -141,6 +143,8 @@ v2.3.0 (UNRELEASED)
   instead of waiting for the 'Search!' button to be clicked.
 - Fixed an issue where the last track in an album was not grouped properly with the rest of the results, and would have
   a small divider rendered above it. (Fixes: `#196 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/196>`_).
+- Replaced JavaScript confirmation prompt on 'Streams' pane with jQuery equivalent.
+  (Fixes: `#191 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/191>`_).
 
 v2.2.0 (2016-03-01)
 -------------------
