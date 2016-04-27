@@ -419,7 +419,6 @@ function locationHashChanged () {
         case 'search':
             $('#navsearch a').addClass($.mobile.activeBtnClass)
             $('#searchinput').focus()
-            library.initSearch($('#searchinput').val())
             break
         case 'stream':
             $('#navstream a').addClass('ui-state-active ui-state-persist ui-btn-active')

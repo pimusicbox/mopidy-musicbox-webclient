@@ -85,6 +85,7 @@ v2.3.0 (UNRELEASED)
   (Addresses: `#133 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/133>`_).
 - Optimized updating of 'now playing' icons in tracklists.
   (Addresses: `#184 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/184>`_).
+- Optimized rendering of large lists of tracks to make UI more responsive.
 
 **Fixes**
 
@@ -93,6 +94,8 @@ v2.3.0 (UNRELEASED)
 - last.fm artist image lookups should now always return the correct image for similarly named artists.
 - Ensure that browsed tracks are always added to the queue using the track URI rather than the track's position in the folder.
   (Fixes: `#124 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/124>`_).
+- Fixed an issue where searches would be performed as soon as the user switches to the 'Search' pane,
+  instead of waiting for the 'Search!' button to be clicked.
 
 v2.2.0 (2016-03-01)
 -------------------
