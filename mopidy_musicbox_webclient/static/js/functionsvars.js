@@ -76,6 +76,7 @@ var uriClassList = [
     ['spotify', 'fa-spotify'],
     ['spotifytunigo', 'fa-spotify'],
     ['local', 'fa-file-sound-o'],
+    ['file', 'fa-folder-o'],
     ['m3u', 'fa-file-sound-o'],
     ['podcast', 'fa-rss-square'],
     ['dirble', 'fa-microphone'],

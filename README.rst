@@ -86,6 +86,7 @@ v2.3.0 (UNRELEASED)
 - Optimized updating of 'now playing' icons in tracklists.
   (Addresses: `#184 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/184>`_).
 - Optimized rendering of large lists of tracks to make UI more responsive.
+- Added 'Folder' FontAwesome icon on the Browse pane for browsing the filesystem.
 
 **Fixes**
 
