@@ -137,10 +137,7 @@ function processBrowseDir (resultArr) {
                     if (uris.length === 1 || (previousTrack && !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {
                         renderSongLiAlbumInfo(track, BROWSE_TABLE)
                     }
-                    if (!hasSameAlbum(previousTrack, track)) {
-                        // Starting to render a new album in the list.
-                        renderSongLiDivider(previousTrack, track, nextTrack, i, BROWSE_TABLE)
-                    }
+                    renderSongLiDivider(previousTrack, track, nextTrack, BROWSE_TABLE)
                 }
             })
             showLoading(false)
