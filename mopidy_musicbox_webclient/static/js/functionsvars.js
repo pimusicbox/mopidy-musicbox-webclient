@@ -219,7 +219,7 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
         '<i class="fa fa-ellipsis-v"></i></a>' +
         '<a href="#" onclick="' + onClick + '"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + '</h1>'
 
-    if (listLength === 1 || !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack)) {
+    if (listLength === 1 || (!hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {
         html += renderSongLiAlbumInfo(track)
     }
     html += '</a></li>'
@@ -257,7 +257,7 @@ function renderSongLiTrackArtists (track) {
 }
 
 /* Tracklist renderer to insert dividers between albums. */
-function renderSongLiDivider (previousTrack, track, nextTrack, currentIndex, target) {
+function renderSongLiDivider (previousTrack, track, nextTrack, target) {
     var html = ''
     // Render differently if part of an album.
     if (!hasSameAlbum(previousTrack, track) && hasSameAlbum(track, nextTrack)) {
@@ -269,7 +269,7 @@ function renderSongLiDivider (previousTrack, track, nextTrack, currentIndex, tar
             renderSongLiTrackArtists(track) + '</p></a></li>'
         // Retrieve album covers
         images.setAlbumImage(track.uri, getjQueryID(target + '-cover', track.uri, true), mopidy, 'small')
-    } else if (!hasSameAlbum(track, nextTrack) && currentIndex > 0) {
+    } else if (previousTrack && !hasSameAlbum(previousTrack, track)) {
         // Small divider
         html += '<li class="smalldivider"> &nbsp;</li>'
     }
@@ -341,7 +341,7 @@ function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
                 nextTrack = nextTrack ? nextTrack.track : undefined
             }
             popupData[track.uri] = track
-            html += renderSongLiDivider(previousTrack, track, nextTrack, i, target)
+            html += renderSongLiDivider(previousTrack, track, nextTrack, target)
             html += renderSongLi(previousTrack, track, nextTrack, uri, tlid, target, i, results.length)
         }
     }
