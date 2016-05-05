@@ -117,9 +117,9 @@
 
             switch (parseInt(action)) {
                 case PLAY_ALL:
-                    return 'fa fa-fast-forward'
+                    return 'fa fa-play-circle'
                 case PLAY_NOW:
-                    return 'fa fa-play'
+                    return 'fa fa-play-circle-o'
                 case PLAY_NEXT:
                     return 'fa fa-level-down'
                 case ADD_THIS_BOTTOM:

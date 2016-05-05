@@ -216,7 +216,7 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
     html +=
         '<li class="song albumli" id="' + getjQueryID(target, track.uri) + '" tlid="' + tlid + '">' +
         '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + track.uri + tlidParameter + '\');">' +
-        '<i class="fa fa-ellipsis-v"></i></a>' +
+        '<i class="fa fa-play-circle-o"></i></a>' +
         '<a href="#" onclick="' + onClick + '"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + '</h1>'
 
     if (listLength === 1 || (!hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {

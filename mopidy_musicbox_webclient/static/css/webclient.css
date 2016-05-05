@@ -300,6 +300,11 @@
     line-height: 100%;
 }
 
+.moreBtn i {
+    color: #ddd;
+    font-size: initial;
+}
+
 .backnav {
     background-color: #ccc !important;
 }
@@ -395,11 +400,11 @@
 }
 
 .ui-icon-playAll:after {
-    content: '\f050';
+    content: '\f144';
 }
 
 .ui-icon-play:after {
-    content: '\f04b';
+    content: '\f01d';
 }
 
 .ui-icon-playNext:after {

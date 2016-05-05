@@ -217,8 +217,8 @@ describe('controls', function () {
 
     describe('#getIconForAction()', function () {
         it('should return correct FontAwesome class for each tracklist action', function () {
-            assert.equal(controls.getIconForAction(PLAY_ALL), 'fa fa-fast-forward')
-            assert.equal(controls.getIconForAction(PLAY_NOW), 'fa fa-play')
+            assert.equal(controls.getIconForAction(PLAY_ALL), 'fa fa-play-circle')
+            assert.equal(controls.getIconForAction(PLAY_NOW), 'fa fa-play-circle-o')
             assert.equal(controls.getIconForAction(PLAY_NEXT), 'fa fa-level-down')
             assert.equal(controls.getIconForAction(ADD_THIS_BOTTOM), 'fa fa-plus-square-o')
             assert.equal(controls.getIconForAction(ADD_ALL_BOTTOM), 'fa fa-plus-square')
@@ -229,11 +229,11 @@ describe('controls', function () {
         })
 
         it('should handle action identifier strings in addition to integers', function () {
-            assert.equal(controls.getIconForAction('0'), 'fa fa-play')
+            assert.equal(controls.getIconForAction('0'), 'fa fa-play-circle-o')
         })
 
         it('should use default tracklist action if no parameter is provided', function () {
-            assert.equal(controls.getIconForAction(), 'fa fa-fast-forward')
+            assert.equal(controls.getIconForAction(), 'fa fa-play-circle')
         })
     })
 
