@@ -97,6 +97,8 @@ v2.3.0 (UNRELEASED)
   (Fixes: `#124 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/124>`_).
 - Fixed an issue where searches would be performed as soon as the user switches to the 'Search' pane,
   instead of waiting for the 'Search!' button to be clicked.
+- Fixed an issue where the last track in an album was not grouped properly with the rest of the results, and would have
+  a small divider rendered above it. (Fixes: `#196 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/196>`_).
 
 v2.2.0 (2016-03-01)
 -------------------
