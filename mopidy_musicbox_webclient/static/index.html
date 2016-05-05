@@ -115,11 +115,11 @@
 <div data-role="popup" data-transition="none" data-theme="b" id="popupTracks">
     <div data-role="collapsible-set">
         <ul data-role="listview" data-icon="false" id="popupTracksLv">
-            <li data-icon="playAll" data-iconshadow="false">
-                <a href="#" onclick="return controls.playTracks(PLAY_ALL, mopidy);">Play All</a>
-            </li>
             <li data-icon="play">
                 <a href="#" onclick="return controls.playTracks(PLAY_NOW, mopidy);">Play <span class="popupTrackName"></span></a>
+            </li>
+            <li data-icon="playAll" data-iconshadow="false">
+                <a href="#" onclick="return controls.playTracks(PLAY_ALL, mopidy);">Play All</a>
             </li>
             <li data-icon="playNext" class="addqueue">
                 <a href="#" onclick="return controls.playTracks(PLAY_NEXT, mopidy);">Play Track Next</a>

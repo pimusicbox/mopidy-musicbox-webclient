@@ -87,6 +87,8 @@ v2.3.0 (UNRELEASED)
   (Addresses: `#184 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/184>`_).
 - Optimized rendering of large lists of tracks to make UI more responsive.
 - Added 'Folder' FontAwesome icon on the Browse pane for browsing the filesystem.
+- New icons for 'PLAY' and 'PLAY_ALL' actions. In general, icons with an empty background will perform an action only
+  on the selected track, while icons with a filled background will apply the action to all tracks in the list.
 
 **Fixes**
 
