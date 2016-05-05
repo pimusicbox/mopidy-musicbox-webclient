@@ -36,10 +36,10 @@ Features
 - Shows detailed track and album information during playback, with album cover retrieval from Last.fm.
 - Seek tracks during playback.
 - Support for all of the Mopidy playback controls (consume mode, repeat, shuffle, etc.)
-- Deep integration with, and additional features for the Pi Musicbox `Pi MusicBox <http://www.pimusicbox.com/>`_.
-- Fullscreen mode.:
+- Deep integration with, and additional features for, the `Pi MusicBox <http://www.pimusicbox.com/>`_.
+- Fullscreen mode.
 
-.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/master/screenshots/playlists_desktop.png
+.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/master/screenshots/queue_desktop.png
 
 Dependencies
 ============
