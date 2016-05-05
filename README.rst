@@ -22,20 +22,33 @@ Mopidy-MusicBox-Webclient
     :target: http://standardjs.com/
     :alt: JavaScript Standard Style
 
-With Mopidy MusicBox Webclient (MMW), you can play your music on your computer (`Rapsberry Pi <http://www.raspberrypi.org/>`_)
-and remotely control it using your computer, tablet or phone.
+Mopidy MusicBox Webclient (MMW) is a frontend extension and JavaScript-based web client especially written for
+`Mopidy <http://www.mopidy.com/>`_.
 
-This is a responsive webclient especially written for `Mopidy <http://www.mopidy.com/>`_: a music server that can play
-music from many different sources including Spotify, Google Music, SoundCloud, etc. or from your hard drive. The
-webclient is responsive, so it works on desktop and mobile browsers. You can browse, search and play albums, artists,
-playlists, and it has cover art from Last.fm.
+Features
+========
 
-
-If you want to run Mopidy with this webclient on a Raspberry Pi, do yourself a favor and use my custom built SD-image:
-`Pi MusicBox <http://www.pimusicbox.com/>`_.
+- Responsive design that works equally well on desktop and mobile browsers.
+- Browse content provided by any Mopidy backend extension.
+- Add one or more tracks or entire albums to the queue.
+- Save the current queue to an easily accessible playlist.
+- Search for tracks, albums, or artists from specific backends or all of Mopidy.
+- Shows detailed track and album information during playback, with album cover retrieval from Last.fm.
+- Seek tracks during playback.
+- Support for all of the Mopidy playback controls (consume mode, repeat, shuffle, etc.)
+- Deep integration with, and additional features for the Pi Musicbox `Pi MusicBox <http://www.pimusicbox.com/>`_.
+- Fullscreen mode.
 
 .. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/master/screenshots/playlists_desktop.png
 
+Dependencies
+============
+
+- MMW has been tested on the major browsers (Chrome, IE, Firefox, Safari, iOS). It *may* also work on other browsers
+  that support websockets, cookies, and JavaScript.
+
+- ``Mopidy`` >= 1.1.0. An extensible music server that plays music from local disk, Spotify, SoundCloud, Google
+  Play Music, and more.
 
 Installation
 ============
@@ -52,11 +65,38 @@ Alternatively, clone the repository and run ``sudo python setup.py install`` fro
     $ sudo python setup.py install
 
 
+Configuration
+=============
+
+MMW is shipped with default settings that should work straight out of the box for most users::
+
+    [musicbox_webclient]
+    enabled = true
+    musicbox = false
+    websocket_host =
+    websocket_port =
+    on_track_click = PLAY_ALL
+
+The following configuration values are available should you wish to customize your installation further:
+
+- ``musicbox_webclient/enabled``: If the MMW extension should be enabled or not. Defaults to ``true``.
+
+- ``musicbox_webclient/musicbox``: Set this to ``true`` if you are connecting to a Mopidy instance running on a
+  Pi Musicbox. Expands the MMW user interface to include features for rebooting the Pi, changing configuration values
+  via a web interface, etc.
+
+- ``musicbox_webclient/websocket_host``: Optional setting that can be used to specify the target host for Mopidy websocket connections.
+
+- ``musicbox_webclient/websocket_port``: Optional setting that can be used to specify the target port for Mopidy websocket connections.
+
+- ``musicbox_webclient/on_track_click``: Specifies the default action that should be performed when the user clicks on
+  a track that is displayed in the Browse pane or as part of Search results. Valid options are: ``PLAY_NOW``,
+  ``PLAY_NEXT``, ``ADD_THIS_BOTTOM``, ``ADD_ALL_BOTTOM``, ``PLAY_ALL`` (default), and ``DYNAMIC`` (repeats last action).
+
 Usage
 =====
 
-Point your (modern) browser at Mopidy-MusicBox-Webclient running on your Mopidy server e.g.
-http://localhost:6680/musicbox_webclient.
+Enter the address of the Mopidy server that you are connecting to in your browser (e.g. http://localhost:6680/musicbox_webclient)
 
 
 Project resources
