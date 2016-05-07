@@ -582,6 +582,8 @@
                         child += '<h1>' + favourites.tracks[i].name + '</h1></a></li>'
                         tmp += child
                     }
+                } else {
+                    tmp = '<span style="display:table; margin:0 auto;">Your saved favourite streams/tracks will be shown here</span>'
                 }
                 $('#streamuristable').html(tmp)
             })
