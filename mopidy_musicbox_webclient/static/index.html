@@ -171,15 +171,15 @@
 
 <div data-role="popup" data-theme="b" id="popupSave" class="popupDialog">
     <form>
-        <p>Save current queue to a playlist.
+        <p>Save Current Queue to a Playlist
         <input id="saveinput" placeholder="Playlist name" class="span2" data-clear-btn="true"
                onkeypress="return controls.savePressed(event.keyCode);" type="text"/>
         <div data-role="controlgroup" data-type="horizontal" align="center">
-            <button class="btn" type="button" onclick="return controls.saveQueue();">
-                Ok
-            </button>
             <button class="btn" type="button" onclick="return $('#popupSave').popup('close');">
                 Cancel
+            </button>
+            <button class="btn" type="button" onclick="return controls.saveQueue();">
+                Save
             </button>
         </div>
     </form>
@@ -188,10 +188,10 @@
 
 <div data-role="popup" data-theme="b" id="popupOverwrite" class="popupDialog">
     <form>
-        <p>Overwrite existing playlist with same name?
+        <p>A playlist with the same name already exists. Overwrite?
         <div data-role="controlgroup" data-type="horizontal" align="center">
             <button class="btn" type="button" id="overwriteConfirmBtn">
-                Ok
+                Overwrite
             </button>
             <button class="btn" type="button" onclick="$('#popupOverwrite').popup('close'); return $('#popupSave').popup('open');">
                 Cancel
@@ -199,6 +199,20 @@
         </div>
     </form>
 </div><!--/overwrite existing playlist-->
+
+<div data-role="popup" data-theme="b" id="popupConfirmDelete" class="popupDialog">
+    <form>
+        <p>Are you sure you want to remove <span class="popupStreamName"></span>?
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" onclick="return controls.deleteFavourite();">
+                Remove
+            </button>
+            <button class="btn" type="button" onclick="$('#popupConfirmDelete').popup('close');">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div><!--/confirm delete stream-->
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">
     <a id="headermenubtn" href="#panel"><i class="fa fa-align-justify"></i></a>

@@ -547,16 +547,26 @@
             })
         },
 
-        deleteFavourite: function (index) {
+        showDeleteStreamPopup: function (index) {
             controls.getFavourites().then(function (favourites) {
                 if (favourites && favourites.tracks && index < favourites.tracks.length) {
                     var name = favourites.tracks[index].name
-                    if (confirm("Are you sure you want to remove '" + name + "'?")) {
-                        favourites.tracks.splice(index, 1)
-                        mopidy.playlists.save({'playlist': favourites}).then(function (s) {
-                            controls.showFavourites()
-                        })
-                    }
+                    $('.popupStreamName').html(favourites.tracks[index].name)
+                    $('#popupConfirmDelete').data('index', index)
+                    $('#popupConfirmDelete').popup('open')
+                }
+            })
+        },
+
+        deleteFavourite: function (index) {
+            index = index || $('#popupConfirmDelete').data('index')
+            controls.getFavourites().then(function (favourites) {
+                if (favourites && favourites.tracks && index < favourites.tracks.length) {
+                    favourites.tracks.splice(index, 1)
+                    mopidy.playlists.save({'playlist': favourites}).then(function (s) {
+                        controls.showFavourites()
+                    })
+                    $('#popupConfirmDelete').popup('close')
                 }
             })
         },
@@ -576,7 +586,9 @@
                 if (favourites.tracks) {
                     var child = ''
                     for (var i = 0; i < favourites.tracks.length; i++) {
-                        child = '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;"><a href="#" onclick="return controls.deleteFavourite(\'' + i + '\');">&nbsp;</a></span>' +
+                        child =
+                            '<li><span class="ui-icon ui-icon-delete ui-icon-shadow" style="float:right; margin: .5em; margin-top: .8em;">' +
+                            '<a href="#" onclick="return controls.showDeleteStreamPopup(' + i + ');">&nbsp;</a></span>' +
                             '<i class="fa fa-rss" style="float: left; padding: .5em; padding-top: 1em;"></i>' +
                             ' <a style="margin-left: 20px" href="#" onclick="return controls.playStreamUri(\'' + favourites.tracks[i].uri + '\');">'
                         child += '<h1>' + favourites.tracks[i].name + '</h1></a></li>'

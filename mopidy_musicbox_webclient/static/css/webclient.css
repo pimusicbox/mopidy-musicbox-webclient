@@ -436,6 +436,7 @@
 
 .popupDialog {
     padding: 10px;
+    text-align: center;
 }
 
 /*dont hide clear buttons in text input */
