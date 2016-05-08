@@ -337,7 +337,10 @@
                 })
                 for (var i = 0; i < schemesArray.length; i++) {
                     backendName = getMediaHuman(schemesArray[i])
-                    backendName = backendName.charAt(0).toUpperCase() + backendName.slice(1)
+                    if (!backendName) {
+                        // No mapping defined, revert to just showing the scheme with first letter capitalized.
+                        backendName = schemesArray[i].charAt(0).toUpperCase() + schemesArray[i].slice(1)
+                    }
                     $('#selectSearchService').append(new Option(backendName, schemesArray[i]))
                 }
                 $('#selectSearchService').val(searchScheme)

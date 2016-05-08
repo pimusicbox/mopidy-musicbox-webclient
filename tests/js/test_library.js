@@ -17,17 +17,22 @@ describe('Library', function () {
         $(document.body).append('<select id="selectSearchService"></select>')
         $('#selectSearchService').selectmenu()
     })
+
+    beforeEach(function () {
+        uriHumanList = [
+            ['mockScheme1', 'mockUriHuman1'],
+            ['mockScheme2', 'mockUriHuman2']
+        ]
+    })
     describe('#getSearchSchemes()', function () {
         beforeEach(function () {
             $(selectID).empty()
         })
 
         it('should add human-readable options for backend schemes', function () {
-            uriHumanList = [['mockScheme2', 'mockUriHuman2']]
-
             library.getSearchSchemes([], mopidy)
             assert.equal($(selectID).children().length, schemesArray.length + 1)
-            expect($(selectID).children(':eq(2)')).to.have.text('MockUriHuman2')
+            expect($(selectID).children(':eq(2)')).to.have.text('mockUriHuman2')
         })
 
         it('should get default value from cookie', function () {
@@ -42,9 +47,9 @@ describe('Library', function () {
             expect($(selectID + ' option:selected')).to.have.value('all')
         })
 
-        it('should capitalize first character of backend schema', function () {
+        it('should capitalize first character of backend schema if no mapping is provided', function () {
             library.getSearchSchemes([], mopidy)
-            expect($(selectID).children(':eq(1)')).to.have.text('MockScheme1')
+            expect($(selectID).children(':eq(3)')).to.have.text('MockScheme3')
         })
 
         it('should blacklist services that should not be searched', function () {
