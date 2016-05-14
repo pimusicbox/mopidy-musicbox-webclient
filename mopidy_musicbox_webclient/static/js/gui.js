@@ -15,7 +15,7 @@ function resetSong () {
     data.track.name = ''
     data.track.artists = ''
     data.track.length = 0
-    data.track.uri = ' '
+    data.track.uri = ''
     setSongInfo(data)
 }
 
