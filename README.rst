@@ -145,6 +145,8 @@ v2.3.0 (UNRELEASED)
   a small divider rendered above it. (Fixes: `#196 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/196>`_).
 - Replaced JavaScript confirmation prompt on 'Streams' pane with jQuery equivalent.
   (Fixes: `#191 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/191>`_).
+- Clearing the queue should no longer trigger an album cover image lookup.
+  (Fixes: `#201 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/201>`_).
 
 v2.2.0 (2016-03-01)
 -------------------
