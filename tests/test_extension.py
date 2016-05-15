@@ -1,22 +1,39 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-from mopidy_musicbox_webclient import MusicBoxExtension
+import unittest
 
+import mock
 
-def test_get_default_config():
-    ext = MusicBoxExtension()
-
-    config = ext.get_default_config()
-
-    assert '[musicbox_webclient]' in config
-    assert 'enabled = true' in config
+from mopidy_musicbox_webclient import Extension
 
 
-def test_get_config_schema():
-    ext = MusicBoxExtension()
+class ExtensionTests(unittest.TestCase):
 
-    schema = ext.get_config_schema()
-    assert 'musicbox' in schema
+    def test_get_default_config(self):
+        ext = Extension()
 
+        config = ext.get_default_config()
 
-# TODO Write more tests
+        assert '[musicbox_webclient]' in config
+        assert 'enabled = true' in config
+        assert 'websocket_host =' in config
+        assert 'websocket_port =' in config
+        assert 'on_track_click = PLAY_ALL' in config
+
+    def test_get_config_schema(self):
+        ext = Extension()
+
+        schema = ext.get_config_schema()
+
+        assert 'musicbox' in schema
+        assert 'websocket_host' in schema
+        assert 'websocket_port' in schema
+        assert 'on_track_click' in schema
+
+    def test_setup(self):
+        registry = mock.Mock()
+
+        ext = Extension()
+        ext.setup(registry)
+        calls = [mock.call('http:app', {'name': ext.ext_name, 'factory': ext.factory})]
+        registry.add.assert_has_calls(calls, any_order=True)

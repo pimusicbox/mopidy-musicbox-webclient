@@ -8,12 +8,16 @@
 MANIFEST
 build/
 cover/
+.karma_coverage/
 coverage.xml
 dist/
 docs/_build/
 mopidy.log*
 node_modules/
 nosetests.xml
+npm-debug.log
 .project
 *.pbxproj
 *.egg-info
+.cache
+.eggs

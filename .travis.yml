@@ -1,13 +1,29 @@
-sudo: false
+sudo: required
+dist: trusty
 
 language: python
 
 python:
   - "2.7_with_system_site_packages"
 
+addons:
+  apt:
+    sources:
+      - mopidy-stable
+    packages:
+      - mopidy
+
 env:
-  - TOX_ENV=py27
+  # Need to run 'py27' and 'test' together so that we can share coverage reports.
+  - TOX_ENV=py27,test
   - TOX_ENV=flake8
+  - TOX_ENV=eslint
+  - TOX_ENV=csslint
+  - TOX_ENV=tidy
+
+before_install:
+  - "sudo sed -i '/127.0.1.1/d' /etc/hosts"  # Workaround https://github.com/tornadoweb/tornado/issues/1573
+  - "sudo apt-get update -qq"
 
 install:
   - "pip install tox"
@@ -16,4 +32,5 @@ script:
   - "tox -e $TOX_ENV"
 
 after_success:
-  - "if [ $TOX_ENV == 'py27' ]; then pip install coveralls; coveralls; fi"
+  # We just use 'coveralls-lcov' to convert lcov.info to JSON format.
+  - "if [ $TOX_ENV == 'py27,test' ]; then gem install coveralls-lcov; coveralls-lcov -v -n .karma_coverage/lcov.info > .karma_coverage/lcov.json; pip install coveralls; coveralls --merge=.karma_coverage/lcov.json; fi"

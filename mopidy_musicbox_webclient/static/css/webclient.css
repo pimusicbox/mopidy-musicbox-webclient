@@ -36,7 +36,7 @@
         margin-left: 10px;
     }
 
-    #playlisttracksback {
+    .backnav-optional {
         display: none;
     }
 
@@ -74,7 +74,7 @@
         width: 100%;
     }
 
-    #playlisttracksback {
+    .backnav-optional {
         display: block;
     }
 
@@ -244,8 +244,8 @@
 }
 
 .smalldivider {
-    font-size: 25% !important;
-    height: 5px !important;
+    font-size: 10%;
+    height: 2px;
     background-color: #ddd !important;
 }
 
@@ -293,11 +293,20 @@
     margin-left: 20px;
 }
 
-.song .moreBtn{
+.song .moreBtn {
     float: right;
     padding: 15px 18px 12px 22px;
     display: inline-block;
     line-height: 100%;
+}
+
+.moreBtn i {
+    color: #ddd;
+    font-size: initial;
+}
+
+.backnav {
+    background-color: #ccc !important;
 }
 
 
@@ -338,6 +347,11 @@
     text-decoration: none;
 }
 
+.popupArtistLi,
+.popupAlbumLi {
+    display: none
+}
+
 .popupArtistName,
 .popupTrackName,
 .popupAlbumName,
@@ -357,7 +371,7 @@
     margin-top: 10px;
 }
 
-#controlspopupimage,
+#albumCoverImg,
 #coverpopupimage,
 #artistpopupimage {
     display: block;
@@ -368,18 +382,61 @@
     max-height: 90%;
 }
 
-#popupTracksLv li,
-#popupQueueLv li {
-    border-bottom: 1px solid #aaa;
+/* Override to make buttons more visible in popups.*/
+#popupTracks .ui-btn-up-c,
+#popupQueue .ui-btn-up-c {
+    background: white;
 }
 
-#popupTracksLv,
-#popupQueueLv {
-    border: 1px solid #aaa;
+/* Custom icons for popup listviews - see http://demos.jquerymobile.com/1.3.2/#CustomIcons */
+.ui-icon-playAll:after,
+.ui-icon-play:after,
+.ui-icon-playNext:after,
+.ui-icon-add:after,
+.ui-icon-addAll:after,
+.ui-icon-remove:after {
+    color: #34495e;
+    font-family: 'FontAwesome';
+}
+
+.ui-icon-playAll:after {
+    content: '\f144';
+}
+
+.ui-icon-play:after {
+    content: '\f01d';
+}
+
+.ui-icon-playNext:after {
+    content: '\f149';
+}
+
+.ui-icon-add:after {
+    content: '\f196';
+}
+
+.ui-icon-addAll:after {
+    content: '\f0fe';
+}
+
+.ui-icon-remove:after {
+    content: '\f00d';
+}
+
+.ui-icon-playAll,
+.ui-icon-play,
+.ui-icon-playNext,
+.ui-icon-add,
+.ui-icon-addAll, 
+.ui-icon-remove {
+    background-color: unset;
+    background-image: none;
+    font-weight: normal;
 }
 
 .popupDialog {
     padding: 10px;
+    text-align: center;
 }
 
 /*dont hide clear buttons in text input */
@@ -517,7 +574,7 @@ a {
         overflow: hidden;
     }
 
-    #controlspopupimage {
+    #albumCoverImg {
         max-width: 90%;
         max-height: 90%;
         margin-bottom: 3px;

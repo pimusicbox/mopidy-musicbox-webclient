@@ -5,249 +5,250 @@
  *
  */
 
-/********************************************************
+/** ******************************************************
  * process results of a (new) currently playing track
  *********************************************************/
-function processCurrenttrack(data) {
-    setSongInfo(data);
+function processCurrenttrack (data) {
+    setSongInfo(data)
 }
 
-/********************************************************
+/** ******************************************************
  * process results of volume
  *********************************************************/
-function processVolume(data) {
-    setVolume(data);
+function processVolume (data) {
+    controls.setVolume(data)
 }
 
-/********************************************************
+/** ******************************************************
  * process results of mute
  *********************************************************/
-function processMute(data) {
-    setMute(data);
+function processMute (data) {
+    controls.setMute(data)
 }
 
-/********************************************************
+/** ******************************************************
  * process results of a repeat
  *********************************************************/
-function processRepeat(data) {
-    setRepeat(data);
+function processRepeat (data) {
+    controls.setRepeat(data)
 }
 
-/********************************************************
+/** ******************************************************
  * process results of random
  *********************************************************/
-function processRandom(data) {
-    setRandom(data);
+function processRandom (data) {
+    controls.setRandom(data)
 }
 
-/********************************************************
+/** ******************************************************
  * process results of consume
  *********************************************************/
-function processConsume(data) {
-    setConsume(data);
+function processConsume (data) {
+    controls.setConsume(data)
 }
 
-/********************************************************
+/** ******************************************************
  * process results of single
  *********************************************************/
-function processSingle(data) {
-    setSingle(data);
+function processSingle (data) {
+    controls.setSingle(data)
 }
 
-/********************************************************
+/** ******************************************************
  * process results of current position
  *********************************************************/
-function processCurrentposition(data) {
-    setPosition(parseInt(data));
+function processCurrentposition (data) {
+    controls.setPosition(parseInt(data))
 }
 
-/********************************************************
+/** ******************************************************
  * process results playstate
  *********************************************************/
-function processPlaystate(data) {
-    if (data == 'playing') {
-        setPlayState(true);
+function processPlaystate (data) {
+    if (data === 'playing') {
+        controls.setPlayState(true)
     } else {
-        setPlayState(false);
+        controls.setPlayState(false)
     }
 }
 
-/********************************************************
+/** ******************************************************
  * process results of a browse list
  *********************************************************/
-function processBrowseDir(resultArr) {
-    var backHtml = '<li style="background-color:#ccc"><a href="#" onclick="return getBrowseDir();"><h1 class="trackname"><i class="fa fa-arrow-circle-left"></i> Back</h1></a></li>';
-    if ( (!resultArr) || (resultArr === '') || (resultArr.length === 0) ) {
-        $('#browsepath').html('No tracks found...');
-        $('#browselist').html(backHtml);
-        showLoading(false);
-        return;
-    }
-
-    $('#browselist').empty();
-
-    var child = "", rooturi = "", uri = resultArr[0].uri;
-
-    //check root uri
-    //find last : or / (spltting the result)
-    //do it twice, since.
-    var colonindex = uri.lastIndexOf(':');
-    var slashindex = uri.lastIndexOf('/');
-
-    var lastindex = (colonindex > slashindex) ? colonindex : slashindex;
-    rooturi = uri.slice(0, lastindex);
-    if (resultArr[0].type == 'track' ) {
-        rooturi = rooturi.replace(":track:", ":directory:");
-    }
-    colonindex = rooturi.lastIndexOf(':');
-    slashindex = rooturi.lastIndexOf('/');
-
-    lastindex = (colonindex > slashindex) ? colonindex : slashindex;
-    rooturi = rooturi.slice(0, lastindex);
-
+function processBrowseDir (resultArr) {
+    $(BROWSE_TABLE).empty()
     if (browseStack.length > 0) {
-        child += backHtml;
+        renderSongLiBackButton(resultArr, BROWSE_TABLE, 'return library.getBrowseDir();')
     }
+    if (!resultArr || resultArr.length === 0) {
+        showLoading(false)
+        return
+    }
+    uris = []
+    var ref, previousRef, nextRef
+    var uri = resultArr[0].uri
+    var length = 0 || resultArr.length
+    customTracklists[BROWSE_TABLE] = []
+    var html = ''
 
-    browseTracks = [];
     for (var i = 0, index = 0; i < resultArr.length; i++) {
-        iconClass = getMediaClass(resultArr[i].uri);
-        if (resultArr[i].type == 'track') {
-            //console.log(resultArr[i]);
-            mopidy.library.lookup({'uris': [resultArr[i].uri]}).then(function (resultDict) {
-                var lookupUri = Object.keys(resultDict)[0];
-                popupData[lookupUri] = resultDict[lookupUri][0];
-                browseTracks.push(resultDict[lookupUri][0]);
-            }, console.error);
-            child += '<li class="song albumli" id="browselisttracks-' + resultArr[i].uri + '">' +
-                     '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\', \'' + resultArr[i].uri + '\', \'' + index + '\');">' +
-                     '<i class="fa fa-ellipsis-v"></i></a>' +
-                     '<a href="#" class="browsetrack" onclick="return playBrowsedTracks(PLAY_ALL, ' + index + ');" id="' + resultArr[i].uri +
-                     '"><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
-            index++;
+        if (resultArr[i].type === 'track') {
+            previousRef = ref || undefined
+            nextRef = i < resultArr.length - 1 ? resultArr[i + 1] : undefined
+            ref = resultArr[i]
+            // TODO: consolidate usage of various arrays for caching URIs, Refs, and Tracks
+            popupData[ref.uri] = ref
+            customTracklists[BROWSE_TABLE].push(ref)
+            uris.push(ref.uri)
+
+            html += renderSongLi(previousRef, ref, nextRef, BROWSE_TABLE, '', BROWSE_TABLE, index, resultArr.length)
+
+            index++
         } else {
+            var iconClass = ''
             if (browseStack.length > 0) {
-                iconClass="fa fa-folder-o";
+                iconClass = 'fa fa-folder-o'
+            } else {
+                iconClass = getMediaClass(resultArr[i].uri)
             }
-            child += '<li><a href="#" onclick="return getBrowseDir(this.id);" id="' + resultArr[i].uri +
-                     '""><h1 class="trackname"><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>';
+            html += '<li><a href="#" onclick="return library.getBrowseDir(this.id);" id="' + resultArr[i].uri + '">' +
+                    '<h1><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>'
         }
     }
 
-    $('#browselist').html(child);
-    if (browseStack.length > 0 ) {
-        child = getMediaHuman(uri);
-        iconClass = getMediaClass(uri);
-        $('#browsepath').html('<i class="' + iconClass + '"></i> ' + child);
+    $(BROWSE_TABLE).append(html)
+
+    updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
+
+    if (uris.length > 0) {
+        mopidy.library.lookup({'uris': uris}).then(function (resultDict) {
+            // Break into albums and put in tables
+            var track, previousTrack, nextTrack, uri
+            $.each(resultArr, function (i, ref) {
+                if (ref.type === 'track') {
+                    previousTrack = track || undefined
+                    if (i < resultArr.length - 1 && resultDict[resultArr[i + 1].uri]) {
+                        nextTrack = resultDict[resultArr[i + 1].uri][0]
+                    } else {
+                        nextTrack = undefined
+                    }
+                    track = resultDict[ref.uri][0]
+                    popupData[track.uri] = track  // Need full track info in popups in order to display albums and artists.
+                    if (uris.length === 1 || (previousTrack && !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {
+                        renderSongLiAlbumInfo(track, BROWSE_TABLE)
+                    }
+                    renderSongLiDivider(previousTrack, track, nextTrack, BROWSE_TABLE)
+                }
+            })
+            showLoading(false)
+        }, console.error)
     } else {
-        $('#browsepath').html('');
+        showLoading(false)
     }
-
-    updatePlayIcons(songdata.track.uri, songdata.tlid);
-
-    showLoading(false);
 }
 
-/********************************************************
+/** ******************************************************
  * process results of list of playlists of the user
  *********************************************************/
-function processGetPlaylists(resultArr) {
+function processGetPlaylists (resultArr) {
     if ((!resultArr) || (resultArr === '')) {
-        $('#playlistslist').empty();
-        return;
+        $('#playlistslist').empty()
+        return
     }
-    var tmp = '', favourites = '', starred = '';
+    var tmp = ''
+    var favourites = ''
+    var starred = ''
 
     for (var i = 0; i < resultArr.length; i++) {
-        var li_html = '<li><a href="#" onclick="return showTracklist(this.id);" id="' + resultArr[i].uri + '">';
-        if(isSpotifyStarredPlaylist(resultArr[i])) {
-            starred = li_html + '&#9733; Spotify Starred Tracks</a></li>' + tmp;
+        var li_html = '<li><a href="#" onclick="return library.showTracklist(this.id);" id="' + resultArr[i].uri + '">'
+        if (isSpotifyStarredPlaylist(resultArr[i])) {
+            starred = li_html + '&#9733; Spotify Starred Tracks</a></li>' + tmp
         } else if (isFavouritesPlaylist(resultArr[i])) {
-            favourites = li_html + '&hearts; Musicbox Favourites</a></li>';
+            favourites = li_html + '&hearts; Musicbox Favourites</a></li>'
         } else {
-            tmp = tmp + li_html + '<i class="' + getMediaClass(resultArr[i].uri) + '"></i> ' + resultArr[i].name + '</a></li>';
+            tmp = tmp + li_html + '<i class="' + getMediaClass(resultArr[i].uri) + '"></i> ' + resultArr[i].name + '</a></li>'
         }
     }
     // Prepend the user's Spotify "Starred" playlist and favourites to the results. (like Spotify official client).
-    tmp = favourites + starred + tmp;
-    $('#playlistslist').html(tmp);
-    scrollToTracklist();
-    showLoading(false);
+    tmp = favourites + starred + tmp
+    $('#playlistslist').html(tmp)
+    scrollToTracklist()
+    showLoading(false)
 }
 
-/********************************************************
+/** ******************************************************
  * process results of a returned list of playlist track refs
  *********************************************************/
-function processPlaylistItems(resultDict) {
+function processPlaylistItems (resultDict) {
     if (resultDict.items.length === 0) {
-        console.log('Playlist', resultDict.uri, 'is empty');
-        showLoading(false);
-        return;
+        console.log('Playlist', resultDict.uri, 'is empty')
+        showLoading(false)
+        return
     }
-    var trackUris = [];
+    var trackUris = []
     for (i = 0; i < resultDict.items.length; i++) {
-        trackUris.push(resultDict.items[i].uri);
+        trackUris.push(resultDict.items[i].uri)
     }
-    return mopidy.library.lookup({'uris': trackUris}).then(function(tracks) {
+    return mopidy.library.lookup({'uris': trackUris}).then(function (tracks) {
         // Transform from dict to list and cache result
-        var newplaylisturi = resultDict.uri;
-        playlists[newplaylisturi] = {'uri':newplaylisturi, 'tracks':[]};
+        var newplaylisturi = resultDict.uri
+        playlists[newplaylisturi] = {'uri': newplaylisturi, 'tracks': []}
         for (i = 0; i < trackUris.length; i++) {
-            playlists[newplaylisturi].tracks.push(tracks[trackUris[i]][0]);
+            playlists[newplaylisturi].tracks.push(tracks[trackUris[i]][0])
         }
-        showLoading(false);
-        return playlists[newplaylisturi].tracks;
-    });
+        showLoading(false)
+        return playlists[newplaylisturi].tracks
+    })
 }
 
-/********************************************************
+/** ******************************************************
  * process results of the queue, the current playlist
  *********************************************************/
-function processCurrentPlaylist(resultArr) {
-    currentplaylist = resultArr;
-    resultsToTables(currentplaylist, CURRENT_PLAYLIST_TABLE);
-    mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error);
-    updatePlayIcons(songdata.track.uri, songdata.tlid);
+function processCurrentPlaylist (resultArr) {
+    currentplaylist = resultArr
+    resultsToTables(currentplaylist, CURRENT_PLAYLIST_TABLE)
+    mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error)
+    updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 }
 
-/********************************************************
+/** ******************************************************
  * process results of an artist lookup
  *********************************************************/
-function processArtistResults(resultArr) {
+function processArtistResults (resultArr) {
     if (!resultArr || (resultArr.length === 0)) {
-        $('#h_artistname').text('Artist not found...');
-        getCover('', '#artistviewimage, #artistpopupimage', 'extralarge');
-        showLoading(false);
-        return;
+        $('#h_artistname').text('Artist not found...')
+        images.setAlbumImage('', '#artistviewimage, #artistpopupimage', mopidy)
+        showLoading(false)
+        return
     }
-    customTracklists[resultArr.uri] = resultArr;
+    customTracklists[resultArr.uri] = resultArr
 
-    resultsToTables(resultArr, ARTIST_TABLE, resultArr.uri);
-    var artistname = getArtist(resultArr);
-    $('#h_artistname, #artistpopupname').html(artistname);
-    getArtistImage(artistname, '#artistviewimage, #artistpopupimage', 'extralarge');
-    showLoading(false);
+    resultsToTables(resultArr, ARTIST_TABLE, resultArr.uri)
+    var artistname = getArtist(resultArr)
+    $('#h_artistname, #artistpopupname').html(artistname)
+    images.setArtistImage(resultArr.uri, resultArr[0].uri, '#artistviewimage, #artistpopupimage', mopidy)
+    showLoading(false)
 }
 
-/********************************************************
+/** ******************************************************
  * process results of an album lookup
  *********************************************************/
-function processAlbumResults(resultArr) {
+function processAlbumResults (resultArr) {
     if (!resultArr || (resultArr.length === 0)) {
-        $('#h_albumname').text('Album not found...');
-        getCover('', '#albumviewcover, #coverpopupimage', 'extralarge');
-        showLoading(false);
-        return;
+        $('#h_albumname').text('Album not found...')
+        images.setAlbumImage('', '#albumviewcover, #coverpopupimage', mopidy)
+        showLoading(false)
+        return
     }
-    customTracklists[resultArr.uri] = resultArr;
-    
-    albumTracksToTable(resultArr, ALBUM_TABLE, resultArr.uri);
-    var albumname = getAlbum(resultArr);
-    var artistname = getArtist(resultArr);
-    $('#h_albumname').html(albumname);
-    $('#h_albumartist').html(artistname);
-    $('#coverpopupalbumname').html(albumname);
-    $('#coverpopupartist').html(artistname);
-    getCover(resultArr[0].uri, '#albumviewcover, #coverpopupimage', 'extralarge');
-    showLoading(false);
+    customTracklists[resultArr.uri] = resultArr
+
+    albumTracksToTable(resultArr, ALBUM_TABLE, resultArr.uri)
+    var albumname = getAlbum(resultArr)
+    var artistname = getArtist(resultArr)
+    $('#h_albumname').html(albumname)
+    $('#h_albumartist').html(artistname)
+    $('#coverpopupalbumname').html(albumname)
+    $('#coverpopupartist').html(artistname)
+    images.setAlbumImage(resultArr[0].uri, '#albumviewcover, #coverpopupimage', mopidy)
+    showLoading(false)
 }

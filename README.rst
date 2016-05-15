@@ -10,27 +10,52 @@ Mopidy-MusicBox-Webclient
     :target: https://pypi.python.org/pypi/Mopidy-MusicBox-Webclient/
     :alt: Number of PyPI downloads
 
-With Mopidy MusicBox Webclient, you can play your music on your computer (`Rapsberry Pi <http://www.raspberrypi.org/>`_)
-and remotely control it using your computer, tablet or phone.
+.. image:: https://img.shields.io/travis/pimusicbox/mopidy-musicbox-webclient/develop.svg?style=flat
+    :target: https://travis-ci.org/pimusicbox/mopidy-musicbox-webclient
+    :alt: Travis CI build status
 
-This is a responsive webclient especially written for Mopidy, a music server. Responsive, so it works on desktop and
-mobile browsers. You can browse, search and play albums, artists, playlists, and it has cover art from Last.fm.
+.. image:: https://img.shields.io/coveralls/pimusicbox/mopidy-musicbox-webclient/develop.svg?style=flat
+   :target: https://coveralls.io/r/pimusicbox/mopidy-musicbox-webclient?branch=develop
+   :alt: Test coverage
 
-`Mopidy <http://www.mopidy.com/>`_ is a music server which can play music from Spotify, Google Music, SoundCloud, etc.
-or from your hard drive.
+.. image:: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat
+    :target: http://standardjs.com/
+    :alt: JavaScript Standard Style
 
-If you want to run Mopidy with this webclient on a Raspberry Pi, do yourself a favor and use my custom built SD-image:
-`Pi MusicBox <http://www.pimusicbox.com/>`_.
+Mopidy MusicBox Webclient (MMW) is a frontend extension and JavaScript-based web client especially written for
+`Mopidy <http://www.mopidy.com/>`_.
 
-.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/master/screenshots/playlists_desktop.png
+Features
+========
 
+- Responsive design that works equally well on desktop and mobile browsers.
+- Browse content provided by any Mopidy backend extension.
+- Add one or more tracks or entire albums to the queue.
+- Save the current queue to an easily accessible playlist.
+- Search for tracks, albums, or artists from specific backends or all of Mopidy.
+- Shows detailed track and album information during playback, with album cover retrieval from Last.fm.
+- Seek tracks during playback.
+- Support for all of the Mopidy playback controls (consume mode, repeat, shuffle, etc.)
+- Deep integration with, and additional features for, the `Pi MusicBox <http://www.pimusicbox.com/>`_.
+- Fullscreen mode.
+
+.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/develop/screenshots/queue_desktop.png
+
+Dependencies
+============
+
+- MMW has been tested on the major browsers (Chrome, IE, Firefox, Safari, iOS). It *may* also work on other browsers
+  that support websockets, cookies, and JavaScript.
+
+- ``Mopidy`` >= 1.1.0. An extensible music server that plays music from local disk, Spotify, SoundCloud, Google
+  Play Music, and more.
 
 Installation
 ============
 
 Install by running::
 
-    pip install Mopidy-MusicBox-Webclient
+    pip install mopidy-musicbox-webclient
 
 
 Alternatively, clone the repository and run ``sudo python setup.py install`` from within the project directory. e.g. ::
@@ -40,11 +65,38 @@ Alternatively, clone the repository and run ``sudo python setup.py install`` fro
     $ sudo python setup.py install
 
 
+Configuration
+=============
+
+MMW is shipped with default settings that should work straight out of the box for most users::
+
+    [musicbox_webclient]
+    enabled = true
+    musicbox = false
+    websocket_host =
+    websocket_port =
+    on_track_click = PLAY_ALL
+
+The following configuration values are available should you wish to customize your installation further:
+
+- ``musicbox_webclient/enabled``: If the MMW extension should be enabled or not. Defaults to ``true``.
+
+- ``musicbox_webclient/musicbox``: Set this to ``true`` if you are connecting to a Mopidy instance running on a
+  Pi Musicbox. Expands the MMW user interface to include features for rebooting the Pi, changing configuration values
+  via a web interface, etc.
+
+- ``musicbox_webclient/websocket_host``: Optional setting that can be used to specify the target host for Mopidy websocket connections.
+
+- ``musicbox_webclient/websocket_port``: Optional setting that can be used to specify the target port for Mopidy websocket connections.
+
+- ``musicbox_webclient/on_track_click``: Specifies the default action that should be performed when the user clicks on
+  a track that is displayed in the Browse pane or as part of Search results. Valid options are: ``PLAY_NOW``,
+  ``PLAY_NEXT``, ``ADD_THIS_BOTTOM``, ``ADD_ALL_BOTTOM``, ``PLAY_ALL`` (default), and ``DYNAMIC`` (repeats last action).
+
 Usage
 =====
 
-Point your (modern) browser at Mopidy-MusicBox-Webclient running on your Mopidy server e.g.
-http://localhost:6680/musicbox_webclient.
+Enter the address of the Mopidy server that you are connecting to in your browser (e.g. http://localhost:6680/musicbox_webclient)
 
 
 Project resources
@@ -57,6 +109,44 @@ Project resources
 
 Changelog
 =========
+
+v2.3.0 (UNRELEASED)
+-------------------
+
+- Enhance build workflow to include style checks and syntax validation for HTML, CSS, and Javascript.
+- Now displays album and artist info when browsing tracks. (Addresses: `#99 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/99>`_).
+- Now remembers which backend was searched previously, and automatically selects that backend as the default search target.
+  (Addresses: `#130 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/130>`_).
+- Upgrade Media Progress Timer to version 3.0.0.
+- Now retrieves album cover and artist images using MusicBrainzID, if available.
+- New configuration parameter ``on_track_click`` can be used to customize the action that is performed when the
+  user clicks on a track in a list. Valid options are: ``PLAY_NOW``, ``PLAY_NEXT``, ``ADD_THIS_BOTTOM``,
+  ``ADD_ALL_BOTTOM``, ``PLAY_ALL`` (default), and ``DYNAMIC`` (repeats last action).
+  (Addresses: `#133 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/133>`_).
+- Optimized updating of 'now playing' icons in tracklists.
+  (Addresses: `#184 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/184>`_).
+- Optimized rendering of large lists of tracks to make UI more responsive.
+- Added 'Folder' FontAwesome icon on the Browse pane for browsing the filesystem.
+- New icons for 'PLAY' and 'PLAY_ALL' actions. In general, icons with an empty background will perform an action only
+  on the selected track, while icons with a filled background will apply the action to all tracks in the list.
+- Standardize popup dialog layout convention: Sentence fragments have no punctuation, buttons that confirm a
+  destructive action go on the left.
+
+**Fixes**
+
+- Don't create Mopidy models manually. (Fixes: `#172 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/172>`_).
+- Context menu is now available for all tracks in browse pane. (Fixes: `#126 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/126>`_).
+- last.fm artist image lookups should now always return the correct image for similarly named artists.
+- Ensure that browsed tracks are always added to the queue using the track URI rather than the track's position in the folder.
+  (Fixes: `#124 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/124>`_).
+- Fixed an issue where searches would be performed as soon as the user switches to the 'Search' pane,
+  instead of waiting for the 'Search!' button to be clicked.
+- Fixed an issue where the last track in an album was not grouped properly with the rest of the results, and would have
+  a small divider rendered above it. (Fixes: `#196 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/196>`_).
+- Replaced JavaScript confirmation prompt on 'Streams' pane with jQuery equivalent.
+  (Fixes: `#191 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/191>`_).
+- Clearing the queue should no longer trigger an album cover image lookup.
+  (Fixes: `#201 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/201>`_).
 
 v2.2.0 (2016-03-01)
 -------------------

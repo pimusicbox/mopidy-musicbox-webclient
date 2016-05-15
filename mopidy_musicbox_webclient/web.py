@@ -1,10 +1,13 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import json
 
 import logging
+import string
 
 import tornado.web
 
-from . import MusicBoxExtension
+import mopidy_musicbox_webclient.webclient as mmw
 
 logger = logging.getLogger(__name__)
 
@@ -21,40 +24,32 @@ class StaticHandler(tornado.web.StaticFileHandler):
 
     @classmethod
     def get_version(cls, settings, path):
-        return MusicBoxExtension.version
+        return mmw.Extension.version
 
 
 class IndexHandler(tornado.web.RequestHandler):
 
     def initialize(self, config, path):
-        ext_config = config[MusicBoxExtension.ext_name]
-        host, port = ext_config['websocket_host'], ext_config['websocket_port']
-        ws_url = ''
-        if host or port:
-            if not host:
-                host = self.request.host.partition(':')[0]
-                logger.warning('Musicbox websocket_host not specified, '
-                               'using %s', host)
-            elif not port:
-                port = config['http']['port']
-                logger.warning('Musicbox websocket_port not specified, '
-                               'using %s', port)
-            protocol = 'ws'
-            if self.request.protocol == 'https':
-                protocol = 'wss'
-            ws_url = "%s://%s:%d/mopidy/ws" % (protocol, host, port)
+
+        webclient = mmw.Webclient(config)
 
         self.__dict = {
-            'version': MusicBoxExtension.version,
-            'musicbox': ext_config.get('musicbox', False),
-            'useWebsocketUrl': ws_url != '',
-            'websocket_url': ws_url,
-            'alarmclock': config.get('alarmclock', {}).get('enabled', False),
+            'isMusicBox': json.dumps(webclient.is_music_box()),
+            'websocketUrl': webclient.get_websocket_url(self.request),
+            'hasAlarmClock': json.dumps(webclient.has_alarm_clock()),
+            'onTrackClick': webclient.get_default_click_action()
         }
         self.__path = path
+        self.__title = string.Template('MusicBox on $hostname')
 
     def get(self, path):
-        return self.render('index.html', **self.__dict)
+        return self.render(path, title=self.get_title(), **self.__dict)
+
+    def get_title(self):
+        hostname, sep, port = self.request.host.rpartition(':')
+        if not sep or not port.isdigit():
+            hostname, port = self.request.host, '80'
+        return self.__title.safe_substitute(hostname=hostname, port=port)
 
     def get_template_path(self):
         return self.__path
