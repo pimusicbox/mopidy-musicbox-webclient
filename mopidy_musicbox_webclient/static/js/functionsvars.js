@@ -79,6 +79,8 @@ var uriClassList = [
     ['file', 'fa-folder-o'],
     ['m3u', 'fa-file-sound-o'],
     ['podcast', 'fa-rss-square'],
+    ['podcast+file', 'fa-rss-square'],
+    ['podcast+itunes', 'fa-apple'],
     ['dirble', 'fa-microphone'],
     ['tunein', 'fa-headphones'],
     ['soundcloud', 'fa-soundcloud'],
@@ -92,12 +94,18 @@ var uriClassList = [
     ['subsonic', 'fa-folder-open']
 ]
 
+// TODO: It should be possible to retrieve a user-friendly name for a given Mopidy scheme dynamically by
+//       calling mopidy.library.browse() on the root dir:
+//       1. each backend contained in the result will have a 'name' attribute that can be shown as-is in the UI.
+//       2. the URI prefix of the backend result should === mopidy.getUriSchemes(), which can be used for the mapping.
+//       3. only backends that cannot be 'browsed' (e.g. youtube) should have a static mapping defined here.
 var uriHumanList = [
     ['spotify', 'Spotify'],
     ['spotifytunigo', 'Spotify browse'],
     ['local', 'Local files'],
     ['m3u', 'Local playlists'],
     ['podcast', 'Podcasts'],
+    ['podcast+itunes', 'iTunes Store: Podcasts'],
     ['dirble', 'Dirble'],
     ['tunein', 'TuneIn'],
     ['soundcloud', 'SoundCloud'],
@@ -507,7 +515,7 @@ function getMediaHuman (uri) {
             return uriHumanList[i][1]
         }
     }
-    return uri
+    return ''
 }
 
 function isServiceUri (uri) {

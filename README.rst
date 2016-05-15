@@ -147,6 +147,7 @@ v2.3.0 (UNRELEASED)
   (Fixes: `#191 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/191>`_).
 - Clearing the queue should no longer trigger an album cover image lookup.
   (Fixes: `#201 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/201>`_).
+- Update icons and labels for podcast, podcast-gpodder, and podcast-itunes backends.
 
 v2.2.0 (2016-03-01)
 -------------------
