@@ -34,7 +34,6 @@ Features
 - Save the current queue to an easily accessible playlist.
 - Search for tracks, albums, or artists from specific backends or all of Mopidy.
 - Shows detailed track and album information during playback, with album cover retrieval from Last.fm.
-- Seek tracks during playback.
 - Support for all of the Mopidy playback controls (consume mode, repeat, shuffle, etc.)
 - Deep integration with, and additional features for, the `Pi MusicBox <http://www.pimusicbox.com/>`_.
 - Fullscreen mode.
@@ -82,16 +81,14 @@ The following configuration values are available should you wish to customize yo
 - ``musicbox_webclient/enabled``: If the MMW extension should be enabled or not. Defaults to ``true``.
 
 - ``musicbox_webclient/musicbox``: Set this to ``true`` if you are connecting to a Mopidy instance running on a
-  Pi Musicbox. Expands the MMW user interface to include features for rebooting the Pi, changing configuration values
-  via a web interface, etc.
+  Pi Musicbox. Expands the MMW user interface to include system control/configuration functionality.
 
-- ``musicbox_webclient/websocket_host``: Optional setting that can be used to specify the target host for Mopidy websocket connections.
+- ``musicbox_webclient/websocket_host``: Optional setting to specify the target host for Mopidy websocket connections.
 
-- ``musicbox_webclient/websocket_port``: Optional setting that can be used to specify the target port for Mopidy websocket connections.
+- ``musicbox_webclient/websocket_port``: Optional setting to specify the target port for Mopidy websocket connections.
 
-- ``musicbox_webclient/on_track_click``: Specifies the default action that should be performed when the user clicks on
-  a track that is displayed in the Browse pane or as part of Search results. Valid options are: ``PLAY_NOW``,
-  ``PLAY_NEXT``, ``ADD_THIS_BOTTOM``, ``ADD_ALL_BOTTOM``, ``PLAY_ALL`` (default), and ``DYNAMIC`` (repeats last action).
+- ``musicbox_webclient/on_track_click``: The action performed when clicking on a track. Valid options are: 
+  ``PLAY_ALL`` (default), ``PLAY_NOW``, ``PLAY_NEXT``, ``ADD_THIS_BOTTOM``, ``ADD_ALL_BOTTOM``, and ``DYNAMIC`` (repeats last action).
 
 Usage
 =====
@@ -110,7 +107,7 @@ Project resources
 Changelog
 =========
 
-v2.3.0 (UNRELEASED)
+v2.3.0 (2016-05-15)
 -------------------
 
 - Enhance build workflow to include style checks and syntax validation for HTML, CSS, and Javascript.
