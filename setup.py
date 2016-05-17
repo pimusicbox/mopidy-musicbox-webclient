@@ -14,7 +14,7 @@ def get_version(filename):
 setup(
     name='Mopidy-MusicBox-Webclient',
     version=get_version('mopidy_musicbox_webclient/__init__.py'),
-    url='https://github.com/woutervanwijk/mopidy-musicbox-webclient',
+    url='https://github.com/pimusicbox/mopidy-musicbox-webclient',
     license='Apache License, Version 2.0',
     author='Wouter van Wijk',
     author_email='woutervanwijk@gmail.com',
