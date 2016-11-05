@@ -6,10 +6,6 @@ Mopidy-MusicBox-Webclient
     :target: https://pypi.python.org/pypi/Mopidy-MusicBox-Webclient/
     :alt: Latest PyPI version
 
-.. image:: https://img.shields.io/pypi/dm/Mopidy-MusicBox-Webclient.svg?style=flat
-    :target: https://pypi.python.org/pypi/Mopidy-MusicBox-Webclient/
-    :alt: Number of PyPI downloads
-
 .. image:: https://img.shields.io/travis/pimusicbox/mopidy-musicbox-webclient/develop.svg?style=flat
     :target: https://travis-ci.org/pimusicbox/mopidy-musicbox-webclient
     :alt: Travis CI build status
