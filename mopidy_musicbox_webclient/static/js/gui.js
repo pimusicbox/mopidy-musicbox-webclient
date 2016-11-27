@@ -180,7 +180,7 @@ function popupTracks (e, listuri, trackuri, tlid) {
         } else {
             var isValidArtistURI = false
             for (var j = 0; j < popupData[trackuri].artists.length; j++) {
-                if (popupData[trackuri].artists[0].uri) {
+                if (popupData[trackuri].artists[j].uri) {
                     isValidArtistURI = true
                     child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
                 }
