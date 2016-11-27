@@ -160,7 +160,7 @@ function popupTracks (e, listuri, trackuri, tlid) {
         e = window.event
     }
     $('.popupTrackName').html(popupData[trackuri].name)
-    if (popupData[trackuri].album && popupData[trackuri].album.name) {
+    if (popupData[trackuri].album && popupData[trackuri].album.name && popupData[trackuri].album.uri) {
         $('.popupAlbumName').html(popupData[trackuri].album.name)
         $('.popupAlbumLi').show()
     } else {
@@ -168,26 +168,30 @@ function popupTracks (e, listuri, trackuri, tlid) {
     }
     var child = ''
 
+    $('.popupArtistsLi').hide()
+    $('.popupArtistsDiv').hide()
     if (popupData[trackuri].artists) {
-        if (popupData[trackuri].artists.length === 1) {
+        if (popupData[trackuri].artists.length === 1 && popupData[trackuri].artists[0].uri) {
             child = '<a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'
             $('.popupArtistName').html(popupData[trackuri].artists[0].name)
             $('.popupArtistHref').attr('onclick', 'library.showArtist("' + popupData[trackuri].artists[0].uri + '");')
             $('.popupArtistsDiv').hide()
             $('.popupArtistsLi').show()
         } else {
+            var isValidArtistURI = false
             for (var j = 0; j < popupData[trackuri].artists.length; j++) {
-                child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
+                if (popupData[trackuri].artists[0].uri) {
+                    isValidArtistURI = true
+                    child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
+                }
             }
-            $('.popupArtistsLi').hide()
-            $('.popupArtistsLv').html(child).show()
-            $('.popupArtistsDiv').show()
-            //  this makes the viewport of the window resize somehow
-            $('.popupArtistsLv').listview('refresh')
+            if (isValidArtistURI) {
+                $('.popupArtistsLv').html(child).show()
+                $('.popupArtistsDiv').show()
+                //  this makes the viewport of the window resize somehow
+                $('.popupArtistsLv').listview('refresh')
+            }
         }
-    } else {
-        $('.popupArtistsDiv').hide()
-        $('.popupArtistsLi').hide()
     }
 
     var hash = document.location.hash.split('?')

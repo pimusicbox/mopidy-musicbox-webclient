@@ -103,6 +103,14 @@ Project resources
 Changelog
 =========
 
+v2.4.0 (UNRELEASED)
+-------------------
+
+**Fixes**
+
+- Only show 'Show Album' or 'Show Artist' options in popup menus if URI's for those resources are available.
+  (Fixes: `#213 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/213>`_).
+
 v2.3.0 (2016-05-15)
 -------------------
 
