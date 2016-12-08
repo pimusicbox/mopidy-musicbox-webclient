@@ -160,6 +160,16 @@
     display: inline;
 }
 
+div.hostInfo {
+    width: 100%;
+    text-align: center;
+}
+
+span.hostInfo {
+    font-weight: normal;
+    font-size: 0.75em;
+}
+
 /********************
  *  Pages, content  *
  ********************/

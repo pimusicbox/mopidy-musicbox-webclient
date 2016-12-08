@@ -26,16 +26,16 @@ class Webclient(object):
         if host or port:
             if not host:
                 host = request.host.partition(':')[0]
-                logger.warning('Musicbox websocket_host not specified, '
+                logger.warning('Mopidy websocket_host not specified, '
                                'using %s', host)
             elif not port:
                 port = self.config['http']['port']
-                logger.warning('Musicbox websocket_port not specified, '
+                logger.warning('Mopidy websocket_port not specified, '
                                'using %s', port)
             protocol = 'ws'
             if request.protocol == 'https':
                 protocol = 'wss'
-            ws_url = "%s://%s:%d/mopidy/ws" % (protocol, host, port)
+            ws_url = '%s://%s:%d/mopidy/ws' % (protocol, host, port)
 
         return ws_url
 

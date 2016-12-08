@@ -449,8 +449,6 @@ function locationHashChanged () {
             $('#normalFooter').show()
             $('#nowPlayingFooter').hide()
     }
-    // Set the page title based on the hash.
-    document.title = PROGRAM_NAME
     return false
 }
 
