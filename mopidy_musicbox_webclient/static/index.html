@@ -98,7 +98,7 @@
                 {% if hostname == serverIP %}
                     <span class="hostInfo">{{programName}} running on {{ hostname }}:{{ serverPort}}</span>
                 {% else %}
-                    <span class="hostInfo">{{programName}} running on {{ hostname }}/{{ serverIP }}:{{ serverPort}}</span>
+                    <span class="hostInfo">{{programName}} running on {{ hostname }} at {{ serverIP }}:{{ serverPort}}</span>
                 {% end %}
             </div>
         </li>
