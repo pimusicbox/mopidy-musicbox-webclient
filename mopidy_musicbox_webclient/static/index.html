@@ -111,14 +111,14 @@
 
     <h3 id="coverpopupalbumname"></h3>
     <h4 id="coverpopupartist"></h4>
-    <a href="#" onclick="closePopups();"><img id="coverpopupimage" src="" alt="Album cover"/></a>
+    <a href="#" onclick="$('#coverpopup').popup('close');"><img id="coverpopupimage" src="" alt="Album cover"/></a>
 </div>
 
 <div id="artistpopup" data-role="popup" data-theme="c">
     <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
        class="ui-btn-right">Close</a>
     <h4 id="artistpopupname">&nbsp;</h4>
-    <a href="#" onclick="closePopups();"><img id="artistpopupimage" src="" alt="Album artist"/></a>
+    <a href="#" onclick="$('#artistpopup').popup('close');"><img id="artistpopupimage" src="" alt="Album artist"/></a>
 </div>
 
 <div data-role="popup" data-transition="none" data-theme="b" id="popupTracks">
@@ -150,6 +150,9 @@
                 <h2>Artists</h2>
                 <ul data-icon="false" data-inset="false" data-role="listview" class="popupArtistsLv"></ul>
             </div>
+            <li>
+                <a href="#" onclick="return controls.showInfoPopup('#popupTracks');">Show Track Info...</span></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -160,8 +163,11 @@
             <li data-icon="play">
                 <a href="#" onclick="return controls.playQueueTrack();">Play <span class="popupTrackName"></span></a>
             </li>
+            <li data-icon="insert">
+                <a href="#" onclick="return controls.showAddTrackPopup();">Add a Track Below <span class="popupTrackName"></span></a>
+            </li>
             <li data-icon="remove">
-                <a href="#" onclick="return controls.removeTrack();">Remove from Queue</a>
+                <a href="#" onclick="return controls.removeTrack('', mopidy);">Remove from Queue</a>
             </li>
             <li class="popupAlbumLi">
                 <a href="#" onclick="showAlbumPopup('#popupQueue')">Show Album <span class="popupAlbumName"></span></a>
@@ -174,26 +180,50 @@
                 <h2>Artists</h2>
                 <ul data-icon="false" data-inset="false" data-role="listview" class="popupArtistsLv"></ul>
             </div>
+            <li>
+                <a href="#" onclick="return controls.showInfoPopup('#popupQueue');">Show Track Info...</span></a>
+            </li>
         </ul>
     </div>
 </div>
+
+<div data-role="popup" data-theme="b" id="popupAddTrack" class="popupDialog">
+    <form>
+        <p>Add a Track to the Queue
+        <button class="btn" type="button" id="getPlayingBtn" title="Use URI of currently playing track" onclick="return controls.getCurrentlyPlaying('addTrackInput');">
+            Get Currently Playing URI
+        </button>
+        <input id="addTrackInput" placeholder="Track URI" class="span2" data-clear-btn="true"
+               onkeypress="return controls.checkDefaultButtonClick(event.keyCode, '#popupAddTrack');" type="text"/>
+        <div class="ui-field-contain">
+            <select name="select-add" id="select-add"></select>
+        </div>
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" onclick="return $('#popupAddTrack').popup('close');">
+                Cancel
+            </button>
+            <button class="btn" type="button" data-default-btn="true" onclick="return controls.addTrack($('#addTrackInput').val(), mopidy);">
+                Add
+            </button>
+        </div>
+    </form>
+</div><!--/add track to queue-->
 
 <div data-role="popup" data-theme="b" id="popupSave" class="popupDialog">
     <form>
         <p>Save Current Queue to a Playlist
         <input id="saveinput" placeholder="Playlist name" class="span2" data-clear-btn="true"
-               onkeypress="return controls.savePressed(event.keyCode);" type="text"/>
+               onkeypress="return controls.checkDefaultButtonClick(event.keyCode, '#popupSave');" type="text"/>
         <div data-role="controlgroup" data-type="horizontal" align="center">
             <button class="btn" type="button" onclick="return $('#popupSave').popup('close');">
                 Cancel
             </button>
-            <button class="btn" type="button" onclick="return controls.saveQueue();">
+            <button class="btn" type="button" data-default-btn="true" onclick="return controls.saveQueue();">
                 Save
             </button>
         </div>
     </form>
-</div>
-<!--/save queue to playlist-->
+</div><!--/save queue to playlist-->
 
 <div data-role="popup" data-theme="b" id="popupOverwrite" class="popupDialog">
     <form>
@@ -222,6 +252,50 @@
         </div>
     </form>
 </div><!--/confirm delete stream-->
+
+<div data-role="popup" data-theme="b" id="popupShowInfo" class="popupDialog">
+    <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+    <form>
+        <table data-role="table" data-mode="reflow" class="ui-responsive table-stroke info-table">
+            <thead>
+                <tr>
+                    <th data-priority="persist"></th>
+                    <th data-priority="persist"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  <td class="label">Name:</td>
+                  <td id="name-cell"></td>
+                </tr>
+                <tr id="album-row">
+                  <td class="label">Album:</td>
+                  <td id="album-cell"></td>
+                </tr>
+                <tr id="artist-row">
+                  <td class="label">Artist(s):</td>
+                  <td id="artist-cell"></td>
+                </tr>
+                <tr id="track-no-row">
+                  <td class="label">Track #:</td>
+                  <td id="track-no-cell"></td>
+                </tr>
+                <tr id="length-row">
+                  <td class="label">Length:</td>
+                  <td id="length-cell"></td>
+                </tr>
+                <tr id="bitrate-row">
+                  <td class="label">Bitrate:</td>
+                  <td id="bitrate-cell"></td>
+                </tr>
+                <tr>
+                  <td class="label label-center">URI:</td>
+                  <td><input type="text" id="uri-cell"></input></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div><!--/show track info-->
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">
     <a id="headermenubtn" href="#panel"><i class="fa fa-align-justify"></i></a>
@@ -343,16 +417,21 @@
 
 <div data-role="content" class="pane" id="currentpane">
     <div class="ui-grid-a">
-        <div class="ui-block-a">
+        <div class="ui-block-a ui-block-a-min">
             <h4>Play Queue</h4>
         </div>
-        <div align="right" class="ui-block-b" data-role="controlgroup" data-type="horizontal">
-            <button class="btn" type="button" title="Save queue to playlist" onclick="return controls.showSavePopup();">
-                <i class="fa fa-bookmark-o"></i>
-            </button>
-            <button class="btn" type="button" title="Clear queue" onclick="return controls.clearQueue();">
-                <i class="fa fa-times"></i>
-            </button>
+        <div align="right" class="ui-block-b ui-block-b-min">
+            <div data-role="controlgroup" data-type="horizontal">
+                <button class="btn" type="button" title="Add a track to the queue" onclick="return controls.showAddTrackPopup();">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <button class="btn" type="button" title="Save queue to playlist" onclick="return controls.showSavePopup();">
+                    <i class="fa fa-bookmark-o"></i>
+                </button>
+                <button class="btn" type="button" title="Clear queue" onclick="return controls.clearQueue();">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
         </div>
     </div>
     <div class="ui-grid">
@@ -430,7 +509,7 @@
         <div class="ui-block-a" style="padding: 5px">
             <form>
                 <p>Play a specific stream/track and optionally save it to your favourites.
-                <button class="btn" type="button" onclick="return controls.getCurrentlyPlaying();">
+                <button class="btn" type="button" onclick="return controls.getCurrentlyPlaying('streamuriinput', 'streamnameinput');">
                     Get currently playing
                 </button>
                 <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"

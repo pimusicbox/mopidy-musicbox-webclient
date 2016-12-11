@@ -69,6 +69,7 @@ ADD_THIS_BOTTOM = 2
 ADD_ALL_BOTTOM = 3
 PLAY_ALL = 4
 DYNAMIC = 5
+INSERT_AT_INDEX = 6
 
 // the first part of Mopidy extensions which serve radio streams
 var radioExtensionsList = ['somafm', 'tunein', 'dirble', 'audioaddict']

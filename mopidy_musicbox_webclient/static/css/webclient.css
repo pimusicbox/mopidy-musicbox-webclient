@@ -221,6 +221,17 @@ span.hostInfo {
 #homerows div i {
     font-size: 28px;
 }
+
+.ui-block-a-min {
+    float: left !important;
+    width: initial !important;
+}
+
+.ui-block-b-min {
+    float:right !important;
+    width: initial !important;
+}
+
 /***************
  *  listviews  *
  ***************/
@@ -247,6 +258,21 @@ span.hostInfo {
 
 .table li:last-child {
     border-bottom: 1px solid #CECECE;
+}
+
+.info-table td {
+    color: #555 !important;
+    padding: 2px;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+.info-table td.label {
+    font-weight: bold;
+}
+
+.info-table td.label-center {
+    vertical-align: middle;
 }
 
 .albumdivider h1, .table li h1 {
@@ -327,7 +353,6 @@ span.hostInfo {
 /**********************
  *  Now Playing area  *
  **********************/
-
 #nowPlayingFooter {
     height: 50px;
     line-height: 48px;
@@ -406,6 +431,7 @@ span.hostInfo {
 .ui-icon-playAll:after,
 .ui-icon-play:after,
 .ui-icon-playNext:after,
+.ui-icon-insert:after,
 .ui-icon-add:after,
 .ui-icon-addAll:after,
 .ui-icon-remove:after {
@@ -423,6 +449,10 @@ span.hostInfo {
 
 .ui-icon-playNext:after {
     content: '\f149';
+}
+
+.ui-icon-insert:after {
+    content: '\f177';
 }
 
 .ui-icon-add:after {
@@ -461,7 +491,6 @@ span.hostInfo {
 /****************
  *  Common use  *
  ****************/
-
 #playlistspane {
     margin: 0 !important;
 }
@@ -545,7 +574,6 @@ a {
 }
 
 /*helper*/
-
 .ui-loader h1 {
     color: #efefef;
 }
@@ -570,6 +598,7 @@ a {
         display: none;
     }
 }
+
 /*smartphones*/
 @media (max-width: 35em) {
     #nowPlayingpane {

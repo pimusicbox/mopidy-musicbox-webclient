@@ -76,7 +76,6 @@ function setSongTitle (title, refresh_ui) {
 }
 
 function setSongInfo (data) {
-//    console.log(data, songdata);
     if (!data) { return }
     if (data.tlid === songdata.tlid) { return }
     if (!data.track.name || data.track.name === '') {
@@ -148,13 +147,6 @@ function setSongInfo (data) {
 /** ****************
  * display popups *
  ******************/
-function closePopups () {
-    $('#popupTracks').popup('close')
-    $('#artistpopup').popup('close')
-    $('#coverpopup').popup('close')
-    $('#popupQueue').popup('close')
-}
-
 function popupTracks (e, listuri, trackuri, tlid) {
     if (!e) {
         e = window.event
@@ -205,6 +197,7 @@ function popupTracks (e, listuri, trackuri, tlid) {
         popupName = '#popupTracks'
     }
 
+    // Set playlist, trackUri, and tlid of clicked item.
     if (typeof tlid !== 'undefined' && tlid !== '') {
         $(popupName).data('list', listuri).data('track', trackuri).data('tlid', tlid).popup('open', {
             x: e.pageX,
@@ -216,6 +209,11 @@ function popupTracks (e, listuri, trackuri, tlid) {
             y: e.pageY
         })
     }
+
+    $(popupName).one('popupafterclose', function (event, ui) {
+        // Ensure that popup attributes are reset when the popup is closed.
+        $(this).removeData('list').removeData('track').removeData('tlid')
+    })
 
     return false
 }
@@ -252,6 +250,11 @@ function initSocketevents () {
     mopidy.on('event:optionsChanged', updateOptions)
 
     mopidy.on('event:trackPlaybackStarted', function (data) {
+        setSongInfo(data.tl_track)
+        controls.setPlayState(true)
+    })
+
+    mopidy.on('event:trackPlaybackResumed', function (data) {
         setSongInfo(data.tl_track)
         controls.setPlayState(true)
     })
@@ -297,6 +300,12 @@ function initSocketevents () {
 
     mopidy.on('event:tracklistChanged', function (data) {
         library.getCurrentPlaylist()
+        mopidy.tracklist.getTracks().then(function (tracks) {
+            if (tracks.length === 0) {
+                // Last track in queue was deleted, reset UI.
+                resetSong()
+            }
+        })
     })
 
     mopidy.on('event:seeked', function (data) {
