@@ -106,7 +106,7 @@ function processBrowseDir (resultArr) {
             index++
         } else {
             var iconClass = ''
-            if (browseStack.length > 0) {
+            if (browseStack.length > 0 && resultArr[i].type === 'directory') {
                 iconClass = 'fa fa-folder-o'
             } else {
                 iconClass = getMediaClass(resultArr[i].uri)
