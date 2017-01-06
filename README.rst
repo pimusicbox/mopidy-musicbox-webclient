@@ -112,6 +112,7 @@ v2.4.0 (UNRELEASED)
   (Fixes: `#213 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/213>`_).
 - Now shows correct hostname information in loader popup. (Fixes: `#209 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/209>`_).
 - Now shows server name/IP address and port number at the bottom of the navigation pane. (Fixes: `#67 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/67>`_).
+- Use correct icons for folders, audio, and other files when browsing local files.
 
 v2.3.0 (2016-05-15)
 -------------------

@@ -77,7 +77,7 @@ var uriClassList = [
     ['spotify', 'fa-spotify'],
     ['spotifytunigo', 'fa-spotify'],
     ['local', 'fa-file-sound-o'],
-    ['file', 'fa-folder-o'],
+    ['file', 'fa-file-o'],
     ['m3u', 'fa-file-sound-o'],
     ['podcast', 'fa-rss-square'],
     ['podcast+file', 'fa-rss-square'],
@@ -103,7 +103,7 @@ var uriClassList = [
 var uriHumanList = [
     ['spotify', 'Spotify'],
     ['spotifytunigo', 'Spotify browse'],
-    ['local', 'Local files'],
+    ['local', 'Local media'],
     ['m3u', 'Local playlists'],
     ['podcast', 'Podcasts'],
     ['podcast+itunes', 'iTunes Store: Podcasts'],
@@ -129,6 +129,34 @@ var searchBlacklist = [
     'rtmps',
     'rtsp',
     'yt'
+]
+
+// List of known audio file extensions
+// TODO: consider querying GStreamer for supported audio formats - see:https://discuss.mopidy.com/t/supported-codecs-file-formats/473
+var audioExt = [
+    'aa', 'aax',  // Audible.com
+    'aac',  // Advanced Audio Coding format
+    'aiff',  // Apple
+    'au',  // Sun Microsystems
+    'flac',  // Free Lossless Audio Codec
+    'gsm',
+    'iklax',
+    'ivs',
+    'm4a',
+    'm4b',
+    'm4p',
+    'mp3',
+    'mpc',  // Musepack
+    'ogg', 'oga', 'mogg',  // Ogg-Vorbis
+    'opus',  // Internet Engineering Task Force (IETF)
+    'ra', 'rm',  // RealAudio
+    'raw',
+    'tta',  // True Audio
+    'vox',
+    'wav',
+    'wma',  // Microsoft
+    'wv',
+    'webm'  // HTML5 video
 ]
 
 function scrollToTop () {
@@ -493,6 +521,11 @@ function getScheme (uri) {
     return uri.split(':')[0].toLowerCase()
 }
 
+function isAudioFile (uri) {
+    var ext = uri.split('.').pop().toLowerCase()
+    return $.inArray(ext, audioExt) !== -1
+}
+
 function isStreamUri (uri) {
     var a = validUri(uri)
     var b = radioExtensionsList.indexOf(getScheme(uri)) >= 0
@@ -501,6 +534,9 @@ function isStreamUri (uri) {
 
 function getMediaClass (uri) {
     var scheme = getScheme(uri)
+    if (scheme === 'file' && isAudioFile(uri)) {
+        return 'fa fa-file-sound-o'
+    }
     for (var i = 0; i < uriClassList.length; i++) {
         if (scheme === uriClassList[i][0]) {
             return 'fa ' + uriClassList[i][1]
