@@ -69,7 +69,7 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class UploadHandler(tornado.web.RequestHandler):
 
-    
+
     def initialize(self, config, path):
 
         webclient = mmw.Webclient(config)
@@ -90,14 +90,33 @@ class UploadHandler(tornado.web.RequestHandler):
             'programName': program_name,
             'hostname': url.hostname,
             'serverIP': socket.gethostbyname(url.hostname),
-            'serverPort': port
+            'serverPort': port,
+            'canUpload': webclient.has_upload_path()
 
         }
         self.__path = path
         self.__title = string.Template('{} on $hostname'.format(program_name))
+        self.__upload_path = webclient.get_upload_path()
+        self.__can_upload = webclient.has_upload_path()
 
     def get(self, path):
         return self.render(path, title=self.get_title(), **self.__dict)
+
+    def post(self, path):
+        if self.can_upload() :
+            subpath = self.get_argumen('subpath', '')
+            if subpath : subpath = subpath+"/"
+            
+            file = self.request.files['file'][0]
+
+            original_fname = file['filename']
+
+            output_file = open(self.get_upload_path()+subpath + original_fname, 'wb')
+            output_file.write(file['body'])
+
+            self.finish("file " + original_fname + " is uploaded")
+        else :
+            self.finish("cannot upload... ;( ")
 
     def get_title(self):
         url = urlparse.urlparse('%s://%s' % (self.request.protocol, self.request.host))
@@ -105,3 +124,9 @@ class UploadHandler(tornado.web.RequestHandler):
 
     def get_template_path(self):
         return self.__path
+
+    def get_upload_path(self):
+        return self.__upload_path
+
+    def can_upload(self):
+        return self.__can_upload
