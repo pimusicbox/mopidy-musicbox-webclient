@@ -69,7 +69,6 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class UploadHandler(tornado.web.RequestHandler):
 
-
     def initialize(self, config, path):
 
         webclient = mmw.Webclient(config)
