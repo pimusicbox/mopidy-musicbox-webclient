@@ -44,6 +44,7 @@
 <div data-role="content" class="pane" id="uploadpane">
   <div class="ui-grid-a pl-breakpoint">
 {% if can_upload %}
+      <h4>Uploading into: {{upload_path}}</h4>
       <div class="ui-block-a" style="padding: 5px">
         <form enctype="multipart/form-data" method="post">
           <p>

@@ -83,7 +83,7 @@ class UploadHandler(tornado.web.RequestHandler):
                 self.__upload_path += os.path.sep
 
     def get(self, path):
-        return self.render(path, can_upload=self.can_upload(), has_messages=False)
+        return self.render(path, can_upload=self.can_upload(), upload_path=self.__upload_path, has_messages=False)
 
     def post(self, path):
         messages = []
@@ -114,7 +114,7 @@ class UploadHandler(tornado.web.RequestHandler):
             logger.error('Error during uploading music', e)
             messages.append('An error has occurred! Please retry.')
 
-        return self.render(path, can_upload=self.can_upload(), has_messages=True, messages=messages)
+        return self.render(path, can_upload=self.can_upload(), upload_path=self.__upload_path, has_messages=True, messages=messages)
 
 
     def get_template_path(self):
