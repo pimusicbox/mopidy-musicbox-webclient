@@ -50,7 +50,7 @@ class Webclient(object):
 
     def has_upload_path(self):
         path = self.ext_config.get('upload_path', '')
-        if path is not '':
+        if path is not '' and path is not None:
             return True
         else :
             return False

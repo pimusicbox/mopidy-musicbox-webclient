@@ -77,9 +77,10 @@ class UploadHandler(tornado.web.RequestHandler):
         self.__path = path
 
         self.__upload_path = webclient.get_upload_path()
-        if not self.__upload_path.endswith(os.path.sep) :
-            self.__upload_path += os.path.sep
         self.__can_upload = webclient.has_upload_path()
+        if self.__can_upload :
+            if not self.__upload_path.endswith(os.path.sep) :
+                self.__upload_path += os.path.sep
 
     def get(self, path):
         return self.render(path, can_upload=self.can_upload(), has_messages=False)
