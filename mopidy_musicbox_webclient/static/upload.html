@@ -82,15 +82,12 @@
 <script type='text/javascript'>
         var f = 1;
         function addField(){
-            // Container <div> where dynamic content will be placed
             var container = document.getElementById("fields").getElementsByTagName('div')[0];
-
             var input = document.createElement("input");
             input.type = "file";
             input.name = "file" + f;
             input.className = "ui-input-text ui-body-c"
             container.appendChild(input);
-
             f = f +1;
         }
     </script>
