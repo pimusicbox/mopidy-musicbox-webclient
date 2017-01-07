@@ -6,6 +6,7 @@ import logging
 import socket
 import string
 import urlparse
+import os
 
 import tornado.web
 
@@ -76,30 +77,44 @@ class UploadHandler(tornado.web.RequestHandler):
         self.__path = path
 
         self.__upload_path = webclient.get_upload_path()
+        if not self.__upload_path.endswith(os.path.sep) :
+            self.__upload_path += os.path.sep
         self.__can_upload = webclient.has_upload_path()
 
     def get(self, path):
-        return self.render(path, title=self.get_title(), **self.__dict)
+        return self.render(path, has_messages=False)
 
     def post(self, path):
-        if self.can_upload():
-            subpath = self.get_argument('subpath', '')
-            if subpath : subpath = subpath+"/"
+        messages = []
+        try:
+            if self.can_upload():
+                subpath = self.get_argument('subpath', '')
+                if not subpath.endswith(os.path.sep) :
+                    subpath += os.path.sep
+                if subpath.startswith(os.path.sep) :
+                    subpath = subpath[1:]
 
-            file = self.request.files['file'][0]
+                if not os.path.exists(self.get_upload_path()+subpath) :
+                    messages.append("path " + subpath + " not exists and will be created")
+                    os.makedirs(self.get_upload_path()+subpath)
+                absolute_path = self.get_upload_path()+subpath
 
-            original_fname = file['filename']
+                for key in self.request.files :
+                    for file in self.request.files[key] :
+                        original_fname = file['filename']
 
-            output_file = open(self.get_upload_path()+subpath + original_fname, 'wb')
-            output_file.write(file['body'])
+                        output_file = open(absolute_path + original_fname, 'wb')
+                        output_file.write(file['body'])
 
-            self.finish("file " + original_fname + " is uploaded")
-        else :
-            self.finish("cannot upload... ;( ")
+                        messages.append("file " + original_fname + " was uploaded")
+            else :
+                messages.append("cannot upload... ;( ")
+        except Exception as e:
+            logger.error('Error during uploading music', e)
+            messages.append('An error has occurred! Please retry.')
 
-    def get_title(self):
-        url = urlparse.urlparse('%s://%s' % (self.request.protocol, self.request.host))
-        return self.__title.safe_substitute(hostname=url.hostname)
+        return self.render(path, has_messages=True, messages=messages)
+
 
     def get_template_path(self):
         return self.__path

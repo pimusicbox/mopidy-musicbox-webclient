@@ -9,8 +9,23 @@
 <form enctype="multipart/form-data" method="post">
 Subpath: <input type="text" name="subpath" />
 <br />
-File: <input type="file" name="file" />
+Files: <input type="file" name="file1" /><br />
+<input type="file" name="file2" /><br />
+<input type="file" name="file3" /><br />
+<input type="file" name="file4" /><br />
+<input type="file" name="file5" /><br />
+<input type="file" name="file6" /><br />
+<input type="file" name="file7" /><br />
+<input type="file" name="file8" /><br />
+<input type="file" name="file9" /><br />
+<input type="file" name="file10" /><br />
 <br />
 <br />
 <input type="submit" value="upload" />
 </form>
+{% if has_messages %}
+  {% for message in messages %}
+<div>{{message}}</div>
+  {% end %}
+{% end %}
+</body>
