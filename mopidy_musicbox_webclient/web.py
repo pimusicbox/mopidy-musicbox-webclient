@@ -73,27 +73,8 @@ class UploadHandler(tornado.web.RequestHandler):
 
         webclient = mmw.Webclient(config)
 
-        if webclient.is_music_box():
-            program_name = 'MusicBox'
-        else:
-            program_name = 'Mopidy'
-
-        url = urlparse.urlparse('%s://%s' % (self.request.protocol, self.request.host))
-        port = url.port or 80
-
-        self.__dict = {
-            'isMusicBox': json.dumps(webclient.is_music_box()),
-            'websocketUrl': webclient.get_websocket_url(self.request),
-            'hasAlarmClock': json.dumps(webclient.has_alarm_clock()),
-            'onTrackClick': webclient.get_default_click_action(),
-            'programName': program_name,
-            'hostname': url.hostname,
-            'serverIP': socket.gethostbyname(url.hostname),
-            'serverPort': port
-
-        }
         self.__path = path
-        self.__title = string.Template('{} on $hostname'.format(program_name))
+
         self.__upload_path = webclient.get_upload_path()
         self.__can_upload = webclient.has_upload_path()
 
@@ -101,8 +82,8 @@ class UploadHandler(tornado.web.RequestHandler):
         return self.render(path, title=self.get_title(), **self.__dict)
 
     def post(self, path):
-        if self.can_upload() :
-            subpath = self.get_argumen('subpath', '')
+        if self.can_upload():
+            subpath = self.get_argument('subpath', '')
             if subpath : subpath = subpath+"/"
 
             file = self.request.files['file'][0]
