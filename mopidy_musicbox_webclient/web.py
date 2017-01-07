@@ -82,7 +82,7 @@ class UploadHandler(tornado.web.RequestHandler):
         self.__can_upload = webclient.has_upload_path()
 
     def get(self, path):
-        return self.render(path, has_messages=False)
+        return self.render(path, can_upload=self.can_upload(), has_messages=False)
 
     def post(self, path):
         messages = []
@@ -95,7 +95,7 @@ class UploadHandler(tornado.web.RequestHandler):
                     subpath = subpath[1:]
 
                 if not os.path.exists(self.get_upload_path()+subpath) :
-                    messages.append("path " + subpath + " not exists and will be created")
+                    messages.append("subdirectory " + subpath + " not exists, it will be created")
                     os.makedirs(self.get_upload_path()+subpath)
                 absolute_path = self.get_upload_path()+subpath
 
@@ -113,7 +113,7 @@ class UploadHandler(tornado.web.RequestHandler):
             logger.error('Error during uploading music', e)
             messages.append('An error has occurred! Please retry.')
 
-        return self.render(path, has_messages=True, messages=messages)
+        return self.render(path, can_upload=self.can_upload(), has_messages=True, messages=messages)
 
 
     def get_template_path(self):

@@ -2,30 +2,95 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<script type="text/javascript" src="vendors/jquery/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="vendors/jquery_cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/custom_scripting.js"></script>
+
+<link rel="stylesheet" type="text/css" href="vendors/jquery_mobile_flat_ui_theme/jquery.mobile.flatui.min.css"/>
+<link rel="icon" type="image/gif" href="images/icons/musicbox32.gif" />
+<link rel="apple-touch-icon" href="images/icons/musicbox57.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="images/icons/musicbox72.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="images/icons/musicbox114.png" />
+<link rel="shortcut icon" type="image/x-icon" href="images/icons/musicbox32.gif" />
+
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-title" content="Upload music" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="HandheldFriendly" content="True" />
+<meta name="MobileOptimized" content="320" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta http-equiv="imagetoolbar" content="no" />
+<meta content="true" name="MSSmartTagsPreventParsing" />
+
+<meta http-equiv="cleartype" content="on" />
+
+<script src="vendors/jquery_mobile/jquery.mobile-1.3.2.min.js"></script>
+<meta name="description" content="MusicBox" />
+<meta name="author" content="Federico Barresi" />
+<meta name="copyright" content="(c) 2017 Federico Barresi" />
+<link rel="stylesheet" type="text/css" href="css/webclient.css" />
+<link rel="stylesheet" type="text/css" href="vendors/font_awesome/css/font-awesome.min.css" />
 <title>Upload Music</title>
 </head>
 <body>
-<p><h1>Upload music</h1></p>
-<form enctype="multipart/form-data" method="post">
-Subpath: <input type="text" name="subpath" />
-<br />
-Files: <input type="file" name="file1" /><br />
-<input type="file" name="file2" /><br />
-<input type="file" name="file3" /><br />
-<input type="file" name="file4" /><br />
-<input type="file" name="file5" /><br />
-<input type="file" name="file6" /><br />
-<input type="file" name="file7" /><br />
-<input type="file" name="file8" /><br />
-<input type="file" name="file9" /><br />
-<input type="file" name="file10" /><br />
-<br />
-<br />
-<input type="submit" value="upload" />
-</form>
-{% if has_messages %}
-  {% for message in messages %}
-<div>{{message}}</div>
-  {% end %}
+  <div data-role="page" id="page" class="ui-responsive-panel" data-theme="c" data-title="Upload music">
+
+    <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">
+        <h1 id="contentHeadline">Upload Music</h1>
+    </div>
+
+<div data-role="content" class="pane" id="uploadpane">
+  <div class="ui-grid-a pl-breakpoint">
+{% if can_upload %}
+      <div class="ui-block-a" style="padding: 5px">
+        <form enctype="multipart/form-data" method="post">
+          <p>
+            Subpath: <input type="text" name="subpath" />
+          </p>
+          <p>
+            Files:
+            <p id=fields>
+            <input type="file" name="file" />
+            </p>
+            <button class="btn" type="button" onclick="addField()">
+              more files
+            </button>
+          </p>
+          <button class="btn" type="submit" value="upload">
+            upload all
+          </button>
+        </form>
+      </div>
+      <div class="ui-block-b" style="padding: 5px">
+          <ul id="messages">
+            {% if has_messages %}
+              {% for message in messages %}
+                <li>{{message}}</li>
+              {% end %}
+            {% end %}
+          </ul>
+      </div>
+{% else %}
+  <h4>Upload is not active, please give an upload path in the config file</h4>
 {% end %}
+    </div>
+    </div>
+</div>
+<script type='text/javascript'>
+        var f = 1;
+        function addField(){
+            // Container <div> where dynamic content will be placed
+            var container = document.getElementById("fields").getElementsByTagName('div')[0];
+
+            var input = document.createElement("input");
+            input.type = "file";
+            input.name = "file" + f;
+            input.className = "ui-input-text ui-body-c"
+            container.appendChild(input);
+
+            f = f +1;
+        }
+    </script>
 </body>
