@@ -52,7 +52,7 @@ class Webclient(object):
         path = self.ext_config.get('upload_path', '')
         if path is not '' and path is not None:
             return True
-        else :
+        else:
             return False
 
     def get_upload_path(self):
