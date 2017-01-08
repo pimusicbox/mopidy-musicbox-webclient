@@ -260,6 +260,10 @@ span.hostInfo {
     border-bottom: 1px solid #CECECE;
 }
 
+.info-table {
+    display: table !important;
+}
+
 .info-table td {
     color: #555 !important;
     padding: 2px;
