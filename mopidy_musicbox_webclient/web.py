@@ -106,12 +106,12 @@ class UploadHandler(tornado.web.RequestHandler):
 
                         output_file = open(absolute_path + original_fname, 'wb')
                         output_file.write(file['body'])
-
+                        logger.info("Uploaded file: " + absolute_path + original_fname)
                         messages.append("file " + original_fname + " was uploaded")
             else :
                 messages.append("cannot upload... ;( ")
         except Exception as e:
-            logger.error('Error during uploading music', e)
+            logger.error('Error during uploading music', exception=e)
             messages.append('An error has occurred! Please retry.')
 
         return self.render(path, can_upload=self.can_upload(), upload_path=self.__upload_path, has_messages=True, messages=messages)
