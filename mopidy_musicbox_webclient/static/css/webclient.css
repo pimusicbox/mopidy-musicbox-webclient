@@ -1,6 +1,6 @@
 /*
  * Mopidy Webclient CSS
- * (c) Wouter van Wijk 2012-2013
+ * (c) Wouter van Wijk 2012-2017
  */
 
 /****************************
@@ -578,8 +578,9 @@ a {
     color: #efefef;
 }
 
-/* panel workaround to make it responsive wrap push on wide viewports once open */
-@media (min-width: 35em){
+/*tablets and desktop*/
+@media (min-width: 35em) {
+    /* panel workaround to make it responsive wrap push on wide viewports once open */
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push,
@@ -596,6 +597,10 @@ a {
 
     .ui-responsive-panel .ui-panel-dismiss-display-reveal {
         display: none;
+    }
+
+    .popupDialog {
+        min-width: 320px;
     }
 }
 

@@ -195,9 +195,7 @@
         </button>
         <input id="addTrackInput" placeholder="Track URI" class="span2" data-clear-btn="true"
                onkeypress="return controls.checkDefaultButtonClick(event.keyCode, '#popupAddTrack');" type="text"/>
-        <div class="ui-field-contain">
-            <select name="select-add" id="select-add"></select>
-        </div>
+        <select name="select-add" id="select-add"></select>
         <div data-role="controlgroup" data-type="horizontal" align="center">
             <button class="btn" type="button" onclick="return $('#popupAddTrack').popup('close');">
                 Cancel
@@ -254,7 +252,7 @@
 </div><!--/confirm delete stream-->
 
 <div data-role="popup" data-theme="b" id="popupShowInfo" class="popupDialog">
-    <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+    <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
     <form>
         <table data-role="table" data-mode="reflow" class="ui-responsive table-stroke info-table">
             <thead>

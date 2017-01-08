@@ -398,8 +398,11 @@
                 $('#popupShowInfo #uri-cell').val(uri)
                 showLoading(false)
                 $('#popupShowInfo').popup('open')
-                $('#popupShowInfo #uri-cell').focus()
-                $('#popupShowInfo #uri-cell').select()
+                if (!isMobile()) {
+                    // Set focus and select URI text on desktop systems (don't want the keyboard to pop up automatically on mobile devices)
+                    $('#popupShowInfo #uri-cell').focus()
+                    $('#popupShowInfo #uri-cell').select()
+                }
             }, console.error)
         },
 
