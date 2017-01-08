@@ -38,6 +38,7 @@
   <div data-role="page" id="page" class="ui-responsive-panel" data-theme="c" data-title="Upload music">
 
     <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">
+        <a id="headermenubtn" href="index.html"><i class="fa fa-chevron-left"></i></a>
         <h1 id="contentHeadline">Upload Music</h1>
     </div>
 
@@ -74,7 +75,9 @@
           </ul>
       </div>
 {% else %}
-  <h4>Upload is not enabled, please give an upload path in the config file</h4>
+      <div class="ui-block-a" style="padding: 5px">
+        <h4>Upload is not enabled, please give an upload path in the config file</h4>
+      </div>
 {% end %}
     </div>
     </div>
