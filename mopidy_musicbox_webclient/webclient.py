@@ -47,3 +47,13 @@ class Webclient(object):
 
     def get_default_click_action(self):
         return self.ext_config.get('on_track_click', 'PLAY_ALL')
+
+    def has_upload_path(self):
+        path = self.ext_config.get('upload_path', '')
+        if path is not '' and path is not None:
+            return True
+        else :
+            return False
+
+    def get_upload_path(self):
+        return self.ext_config.get('upload_path', '')

@@ -29,6 +29,7 @@ class Extension(ext.Extension):
                                                           'ADD_ALL_BOTTOM',
                                                           'PLAY_ALL',
                                                           'DYNAMIC'])
+        schema['upload_path'] = config.String(optional=True)
         return schema
 
     def setup(self, registry):
@@ -37,10 +38,12 @@ class Extension(ext.Extension):
 
     def factory(self, config, core):
         from tornado.web import RedirectHandler
-        from .web import IndexHandler, StaticHandler
+        from .web import IndexHandler, StaticHandler, UploadHandler
         path = os.path.join(os.path.dirname(__file__), 'static')
         return [
             (r'/', RedirectHandler, {'url': 'index.html'}),
+            (r'/upload', RedirectHandler, {'url': 'upload.html'}),
             (r'/(index.html)', IndexHandler, {'config': config, 'path': path}),
+            (r'/(upload.html)', UploadHandler, {'config': config, 'path': path}),
             (r'/(.*)', StaticHandler, {'path': path})
         ]
