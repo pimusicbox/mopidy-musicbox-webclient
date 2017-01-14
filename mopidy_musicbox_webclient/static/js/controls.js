@@ -352,17 +352,7 @@
                     $('#popupShowInfo #album-cell').text('(Not available)')
                 }
                 var artistNames = ''
-                if (track.album.artists && track.album.artists.length > 0) {
-                    for (i = 0; i < track.album.artists.length; i++) {
-                        if (i > 0) {
-                            artistNames = artistNames + ', '
-                        }
-                        artistNames = artistNames + track.album.artists[i].name
-                    }
-                }
-
-                // Fallback to track artists.
-                if (artistNames.length === 0 && track.artists && track.artists.length > 0) {
+                if (track.artists && track.artists.length > 0) {
                     for (var i = 0; i < track.artists.length; i++) {
                         if (i > 0) {
                             artistNames = artistNames + ', '
@@ -371,6 +361,15 @@
                     }
                 }
 
+                // Fallback to album artists.
+                if (artistNames.length === 0 && track.album.artists && track.album.artists.length > 0) {
+                    for (i = 0; i < track.album.artists.length; i++) {
+                        if (i > 0) {
+                            artistNames = artistNames + ', '
+                        }
+                        artistNames = artistNames + track.album.artists[i].name
+                    }
+                }
                 if (artistNames.length > 0) {
                     $('#popupShowInfo #artist-cell').text(artistNames)
                     $('#popupShowInfo #artist-row').show()
