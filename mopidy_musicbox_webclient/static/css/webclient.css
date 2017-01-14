@@ -1,6 +1,6 @@
 /*
  * Mopidy Webclient CSS
- * (c) Wouter van Wijk 2012-2013
+ * (c) Wouter van Wijk 2012-2017
  */
 
 /****************************
@@ -221,6 +221,17 @@ span.hostInfo {
 #homerows div i {
     font-size: 28px;
 }
+
+.ui-block-a-min {
+    float: left !important;
+    width: initial !important;
+}
+
+.ui-block-b-min {
+    float:right !important;
+    width: initial !important;
+}
+
 /***************
  *  listviews  *
  ***************/
@@ -247,6 +258,38 @@ span.hostInfo {
 
 .table li:last-child {
     border-bottom: 1px solid #CECECE;
+}
+
+.info-table {
+    display: table !important;
+}
+
+.info-table thead {
+    visibility: collapse;
+}
+
+.info-table th {
+    border-bottom: none !important;
+}
+
+.info-table tr {
+    border-bottom: 1px solid #f2f2f2
+}
+
+.info-table td {
+    color: #555 !important;
+    padding: 2px;
+    padding-right: 14px;
+    padding-left: 14px;
+    border: none !important;
+}
+
+.info-table td.label {
+    font-weight: bold;
+}
+
+.info-table td.label-center {
+    vertical-align: middle;
 }
 
 .albumdivider h1, .table li h1 {
@@ -327,7 +370,6 @@ span.hostInfo {
 /**********************
  *  Now Playing area  *
  **********************/
-
 #nowPlayingFooter {
     height: 50px;
     line-height: 48px;
@@ -406,6 +448,7 @@ span.hostInfo {
 .ui-icon-playAll:after,
 .ui-icon-play:after,
 .ui-icon-playNext:after,
+.ui-icon-insert:after,
 .ui-icon-add:after,
 .ui-icon-addAll:after,
 .ui-icon-remove:after {
@@ -423,6 +466,10 @@ span.hostInfo {
 
 .ui-icon-playNext:after {
     content: '\f149';
+}
+
+.ui-icon-insert:after {
+    content: '\f177';
 }
 
 .ui-icon-add:after {
@@ -448,9 +495,15 @@ span.hostInfo {
     font-weight: normal;
 }
 
-.popupDialog {
+.popupDialog,
+.popupDialog-full-width {
     padding: 10px;
     text-align: center;
+}
+
+.popupDialog-full-width {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 /*dont hide clear buttons in text input */
@@ -461,7 +514,6 @@ span.hostInfo {
 /****************
  *  Common use  *
  ****************/
-
 #playlistspane {
     margin: 0 !important;
 }
@@ -545,13 +597,13 @@ a {
 }
 
 /*helper*/
-
 .ui-loader h1 {
     color: #efefef;
 }
 
-/* panel workaround to make it responsive wrap push on wide viewports once open */
-@media (min-width: 35em){
+/*tablets and desktop*/
+@media (min-width: 35em) {
+    /* panel workaround to make it responsive wrap push on wide viewports once open */
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
     .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push,
@@ -569,7 +621,12 @@ a {
     .ui-responsive-panel .ui-panel-dismiss-display-reveal {
         display: none;
     }
+
+    .popupDialog {
+        min-width: 320px;
+    }
 }
+
 /*smartphones*/
 @media (max-width: 35em) {
     #nowPlayingpane {

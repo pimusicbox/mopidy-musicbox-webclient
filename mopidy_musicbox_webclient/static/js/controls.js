@@ -17,8 +17,10 @@
          * Adds tracks to current tracklist and starts playback if necessary.
          *
          * @param {string} action - The action to perform. Valid actions are:
-         *                              PLAY_NOW: add the track at 'trackIndex' and start playback.
-         *                              PLAY_NEXT: insert track after currently playing track.
+         *                              PLAY_NOW: add the track at the current queue position and
+         *                                        start playback immediately.
+         *                              PLAY_NEXT: insert track after the reference track, if 'index'
+         *                                         is provided, or after the current track otherwise.
          *                              ADD_THIS_BOTTOM: add track to bottom of tracklist.
          *                              ADD_ALL_BOTTOM: add all tracks in in the list to bottom of
          *                                              tracklist.
@@ -32,17 +34,19 @@
          * @param {string} playlistUri - (Optional) The URI of the playlist containing the tracks
          *                               to be played. If no URI is provided then the 'list' attribute
          *                               of the popup DIV is assumed to contain the playlist URI.
+         * @param {string} index - (Optional) The tracklist index of the reference track that the
+         *                         action should be performed on. Defaults to the index of the currently
+         *                         playing track.
          */
 
-        playTracks: function (action, mopidy, trackUri, playlistUri) {
-            $('#popupTracks').popup('close')
-            toast('Loading...')
+        playTracks: function (action, mopidy, trackUri, playlistUri, index) {
+            toast('Updating queue...')
 
-            trackUri = trackUri || $('#popupTracks').data('track')
+            trackUri = trackUri || $('#popupTracks').data('track') || $('#popupQueue').data('track')
             if (typeof trackUri === 'undefined') {
                 throw new Error('No track URI provided for playback.')
             }
-            playlistUri = playlistUri || $('#popupTracks').data('list')
+            playlistUri = playlistUri || $('#popupTracks').data('list') || $('#popupQueue').data('list')
             if (typeof playlistUri === 'undefined') {
                 throw new Error('No playlist URI provided for playback.')
             }
@@ -58,17 +62,16 @@
             switch (action) {
                 case PLAY_NOW:
                 case PLAY_NEXT:
-                    // Find track that is currently playing.
                     mopidy.tracklist.index().then(function (currentIndex) {
-                        // Add browsed track just below it.
-                        mopidy.tracklist.add({at_position: currentIndex + 1, uris: trackUris}).then(function (tlTracks) {
-                            if (action === PLAY_NOW) {  // Start playback immediately.
-                                mopidy.playback.stop().then(function () {
-                                    mopidy.playback.play({tlid: tlTracks[0].tlid})
-                                })
-                            }
-                        })
+                        if (currentIndex === null && action === PLAY_NEXT) {
+                            // Tracklist is empty, start playing new tracks immediately.
+                            action = PLAY_NOW
+                        }
+                        controls._addTrackAtIndex(action, mopidy, trackUris, currentIndex)
                     })
+                    break
+                case INSERT_AT_INDEX:
+                    controls._addTrackAtIndex(action, mopidy, trackUris, index)
                     break
                 case ADD_THIS_BOTTOM:
                 case ADD_ALL_BOTTOM:
@@ -87,14 +90,19 @@
                     throw new Error('Unexpected tracklist action identifier: ' + action)
             }
 
-            if (window[$(document.body).data('on-track-click')] === DYNAMIC) {
-                // Save last 'action' - will become default for future 'onClick' events
-                var previousAction = $.cookie('onTrackClick')
-                if (typeof previousAction === 'undefined' || action !== previousAction) {
-                    $.cookie('onTrackClick', action, { expires: 365 })
-                    updatePlayIcons('', '', controls.getIconForAction(action))
+            if (action !== INSERT_AT_INDEX) {  // TODO: Add support for 'INSERT_AT_INDEX' to allow user to insert tracks in any playlist.
+                if (window[$(document.body).data('on-track-click')] === DYNAMIC) {
+                    // Save last 'action' - will become default for future 'onClick' events
+                    var previousAction = $.cookie('onTrackClick')
+                    if (typeof previousAction === 'undefined' || action !== previousAction) {
+                        $.cookie('onTrackClick', action, { expires: 365 })
+                        updatePlayIcons('', '', controls.getIconForAction(action))
+                    }
                 }
             }
+
+            $('#popupTracks').popup('close')
+            $('#popupQueue').popup('close')
         },
 
         /* Getter function for 'action' variable. Also checks config settings and cookies if required. */
@@ -120,6 +128,8 @@
                     return 'fa fa-play-circle'
                 case PLAY_NOW:
                     return 'fa fa-play-circle-o'
+                case INSERT_AT_INDEX:
+                    return 'fa fa-long-arrow-left'
                 case PLAY_NEXT:
                     return 'fa fa-level-down'
                 case ADD_THIS_BOTTOM:
@@ -138,6 +148,7 @@
             switch (parseInt(action)) {
                 case PLAY_NOW:
                 case PLAY_NEXT:
+                case INSERT_AT_INDEX:
                 case ADD_THIS_BOTTOM:
                     // Process single track
                     trackUris.push(trackUri)
@@ -153,6 +164,27 @@
             return trackUris
         },
 
+        _addTrackAtIndex: function (action, mopidy, trackUris, index) {
+            if (typeof index === 'undefined' || index === '') {
+                throw new Error('No index provided for insertion.')
+            }
+
+            var pos = index
+            if (pos === null) {
+                pos = 0
+            } else {
+                pos += 1
+            }
+
+            mopidy.tracklist.add({at_position: pos, uris: trackUris}).then(function (tlTracks) {
+                if (action === PLAY_NOW) {  // Start playback immediately.
+                    mopidy.playback.stop().then(function () {
+                        mopidy.playback.play({tlid: tlTracks[0].tlid})
+                    })
+                }
+            })
+        },
+
         /** ******************************************************
          * play an uri from the queue
          *********************************************************/
@@ -165,37 +197,105 @@
         playQueueTrack: function (tlid) {
             // Stop directly, for user feedback
             mopidy.playback.stop()
-            $('#popupQueue').popup('close')
             toast('Loading...')
 
             tlid = tlid || $('#popupQueue').data('tlid')
             mopidy.playback.play({'tlid': parseInt(tlid)})
+            $('#popupQueue').popup('close')
         },
 
         /** *********************************
          *  remove a track from the queue  *
          ***********************************/
-        removeTrack: function (tlid) {
-            $('#popupQueue').popup('close')
+        removeTrack: function (tlid, mopidy) {
             toast('Deleting...')
 
             tlid = tlid || $('#popupQueue').data('tlid')
             mopidy.tracklist.remove({'tlid': [parseInt(tlid)]})
+            $('#popupQueue').popup('close')
         },
 
         clearQueue: function () {
-            mopidy.tracklist.clear().then(
-                resetSong()
-            )
+            mopidy.tracklist.clear()
             return false
         },
 
-        savePressed: function (key) {
+        checkDefaultButtonClick: function (key, parentElement) {
+            // Click the default button on parentElement when the user presses the enter key.
             if (key === 13) {
-                controls.saveQueue()
-                return false
+                $(parentElement).find('button' + '[data-default-btn="true"]').click()
             }
             return true
+        },
+
+        showAddTrackPopup: function (tlid) {
+            $('#addTrackInput').val('')
+            $('#select-add').empty()
+            tlid = tlid || $('#popupQueue').data('tlid')
+            if (typeof tlid !== 'undefined' && tlid !== '') {
+                // Store the tlid of the track after which we want to perform the insert
+                $('#popupAddTrack').data('tlid', $('#popupQueue').data('tlid'))
+                $('#popupAddTrack').one('popupafterclose', function (event, ui) {
+                    // Ensure that popup attributes are reset when the popup is closed.
+                    $(this).removeData('tlid')
+                })
+                var trackName = popupData[$('#popupQueue').data('track')].name
+                $('#select-add').append('<option value="6" selected="selected">Add Track Below \'' + trackName + '\'</option>')
+            }
+            if (typeof songdata.track.uri !== 'undefined' && songdata.track.uri !== '') {
+                $('#getPlayingBtn').button('enable')
+            } else {
+                $('#getPlayingBtn').button('disable')
+            }
+
+            $('#select-add').append('<option value="1">Play Added Track Next</option>') // PLAY_NEXT
+            $('#select-add').append('<option value="2">Add Track to Bottom of Queue</option>') // ADD_THIS_BOTTOM
+            $('#select-add').trigger('change')
+
+            $('#popupQueue').popup('close')
+            $('#popupAddTrack').popup('open')
+        },
+
+        addTrack: function (trackUri, mopidy) {
+            var selection = parseInt($('#select-add').val())
+
+            if (selection === ADD_THIS_BOTTOM) {
+                controls.addTrackToBottom(trackUri, mopidy)
+            } else if (selection === PLAY_NEXT) {
+                controls.insertTrack(trackUri, mopidy)
+            } else if (selection === INSERT_AT_INDEX) {
+                var tlid = $('#popupAddTrack').data('tlid')
+                controls.insertTrack(trackUri, mopidy, tlid)
+            } else {
+                throw new Error('Unkown tracklist action selection option: ' + selection)
+            }
+        },
+
+        insertTrack: function (trackUri, mopidy, tlid) {
+            if (typeof trackUri === 'undefined' || trackUri === '') {
+                throw new Error('No track URI provided to insert.')
+            }
+
+            if (typeof tlid !== 'undefined' && tlid !== '') {
+                mopidy.tracklist.index({tlid: parseInt(tlid)}).then(function (index) {
+                    controls.playTracks(INSERT_AT_INDEX, mopidy, trackUri, CURRENT_PLAYLIST_TABLE, index)
+                })
+            } else {
+                // No tlid provided, insert after current track.
+                controls.playTracks(PLAY_NEXT, mopidy, trackUri, CURRENT_PLAYLIST_TABLE)
+            }
+            $('#popupAddTrack').popup('close')
+            return false
+        },
+
+        addTrackToBottom: function (trackUri, mopidy) {
+            if (typeof trackUri === 'undefined' || trackUri === '') {
+                throw new Error('No track URI provided to add.')
+            }
+
+            controls.playTracks(ADD_THIS_BOTTOM, mopidy, trackUri, CURRENT_PLAYLIST_TABLE)
+            $('#popupAddTrack').popup('close')
+            return false
         },
 
         showSavePopup: function () {
@@ -236,6 +336,74 @@
                 playlist.tracks = tracks
                 mopidy.playlists.save({'playlist': playlist}).then()
             })
+        },
+
+        showInfoPopup: function (popupId) {
+            showLoading(true)
+            var uri = $(popupId).data('track')
+            $(popupId).popup('close')
+            mopidy.library.lookup({'uris': [uri]}).then(function (resultDict) {
+                var uri = Object.keys(resultDict)[0]
+                var track = resultDict[uri][0]
+                $('#popupShowInfo #name-cell').text(track.name)
+                if (track.album && track.album.name) {
+                    $('#popupShowInfo #album-cell').text(track.album.name)
+                } else {
+                    $('#popupShowInfo #album-cell').text('(Not available)')
+                }
+                var artistNames = ''
+                if (track.artists && track.artists.length > 0) {
+                    for (var i = 0; i < track.artists.length; i++) {
+                        if (i > 0) {
+                            artistNames = artistNames + ', '
+                        }
+                        artistNames = artistNames + track.artists[i].name
+                    }
+                }
+
+                // Fallback to album artists.
+                if (artistNames.length === 0 && track.album.artists && track.album.artists.length > 0) {
+                    for (i = 0; i < track.album.artists.length; i++) {
+                        if (i > 0) {
+                            artistNames = artistNames + ', '
+                        }
+                        artistNames = artistNames + track.album.artists[i].name
+                    }
+                }
+                if (artistNames.length > 0) {
+                    $('#popupShowInfo #artist-cell').text(artistNames)
+                    $('#popupShowInfo #artist-row').show()
+                } else {
+                    $('#popupShowInfo #artist-row').hide()
+                }
+                if (track.track_no) {
+                    $('#popupShowInfo #track-no-cell').text(track.track_no)
+                    $('#popupShowInfo #track-no-row').show()
+                } else {
+                    $('#popupShowInfo #track-no-row').hide()
+                }
+                if (track.length) {
+                    var duration = new Date(track.length)
+                    $('#popupShowInfo #length-cell').text(duration.getUTCMinutes() + ':' + duration.getUTCSeconds())
+                    $('#popupShowInfo #length-row').show()
+                } else {
+                    $('#popupShowInfo #length-row').hide()
+                }
+                if (track.bitrate) {
+                    $('#popupShowInfo #bitrate-cell').text(track.bitrate)
+                    $('#popupShowInfo #bitrate-row').show()
+                } else {
+                    $('#popupShowInfo #bitrate-row').hide()
+                }
+                $('#popupShowInfo #uri-cell').val(uri)
+                showLoading(false)
+                $('#popupShowInfo').popup('open')
+                if (!isMobile) {
+                    // Set focus and select URI text on desktop systems (don't want the keyboard to pop up automatically on mobile devices)
+                    $('#popupShowInfo #uri-cell').focus()
+                    $('#popupShowInfo #uri-cell').select()
+                }
+            }, console.error)
         },
 
         refreshPlaylists: function () {
@@ -448,8 +616,8 @@
             return false
         },
 
-        getCurrentlyPlaying: function () {
-            $('#streamuriinput').val(songdata.track.uri)
+        getCurrentlyPlaying: function (uriInput, nameInput) {
+            $('#' + uriInput).val(songdata.track.uri)
             var name = songdata.track.name
             if (songdata.track.artists) {
                 var artistStr = artistsToString(songdata.track.artists)
@@ -457,7 +625,7 @@
                     name = artistStr + ' - ' + name
                 }
             }
-            $('#streamnameinput').val(name)
+            $('#' + nameInput).val(name)
             return true
         },
 

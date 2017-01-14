@@ -31,10 +31,13 @@
             throw new Error('DummyTracklist.add does not support deprecated "tracks" and "uri" parameters.')
         }
 
+        var position = params.at_position
         // Add tracks to end of tracklist if no position is provided
-        params.at_position = params.at_position || this._tlTracks.length
+        if (typeof position === 'undefined') {
+            position = Math.max(0, this._tlTracks.length)
+        }
+
         var tlTrack
-        var tlTracks = []
         for (var i = 0; i < params.uris.length; i++) {
             tlTrack = {
                 tlid: this._nextTlid++,
@@ -42,16 +45,30 @@
                     uri: params.uris[i]
                 }
             }
-            tlTracks.push(tlTrack)
-            this._tlTracks.splice(params.at_position + i, 0, tlTrack)
+            this._tlTracks.splice(position++, 0, tlTrack)
         }
 
-        return $.when(tlTracks)
+        return $.when(this._tlTracks)
     }
 
     /* Clears the tracklist */
     DummyTracklist.prototype.clear = function () {
         this._tlTracks = []
+    }
+
+    /* Remove the matching tracks from the tracklist */
+    DummyTracklist.prototype.remove = function (criteria) {
+        this.filter(criteria).then( function (matches) {
+            for (var i = 0; i < matches.length; i++) {
+                for (var j = 0; j < this._tlTracks.length; j++) {
+                    if (this._tlTracks[j].track.uri === matches[i].track.uri) {
+                        this._tlTracks.splice(j, 1)
+                    }
+                }
+            }
+        }.bind(this))
+
+        return $.when(this._tlTracks)
     }
 
     /**
@@ -89,11 +106,11 @@
     /* Retuns index of the currently 'playing' track. */
     DummyTracklist.prototype.index = function (params) {
         if (!params) {
-            if (this._tlTracks.length > 1) {
-                // Always just assume that the second track is playing
-                return $.when(1)
-            } else {
+            if (this._tlTracks.length > 0) {
+                // Always just assume that the first track is playing
                 return $.when(0)
+            } else {
+                return $.when(null)
             }
         }
         for (var i = 0; i < this._tlTracks.length; i++) {
@@ -101,7 +118,17 @@
                 return $.when(i)
             }
         }
-        return $.when(0)
+        return $.when(null)
+    }
+
+    /* Returns the tracks in the tracklist */
+    DummyTracklist.prototype.get_tl_tracks = function () {
+        return $.when(this._tlTracks)
+    }
+
+    /* Returns the length of the tracklist */
+    DummyTracklist.prototype.get_length = function () {
+        return $.when(this._tlTracks.length)
     }
 
     return DummyTracklist
