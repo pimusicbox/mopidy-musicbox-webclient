@@ -90,8 +90,9 @@ function processBrowseDir (resultArr) {
     var length = 0 || resultArr.length
     customTracklists[BROWSE_TABLE] = []
     var html = ''
+    var i
 
-    for (var i = 0, index = 0; i < resultArr.length; i++) {
+    for (i = 0, index = 0; i < resultArr.length; i++) {
         if (resultArr[i].type === 'track') {
             previousRef = ref || undefined
             nextRef = i < resultArr.length - 1 ? resultArr[i + 1] : undefined
@@ -105,14 +106,8 @@ function processBrowseDir (resultArr) {
 
             index++
         } else {
-            var iconClass = ''
-            if (browseStack.length > 0 && resultArr[i].type === 'directory') {
-                iconClass = 'fa fa-folder-o'
-            } else {
-                iconClass = getMediaClass(resultArr[i].uri)
-            }
             html += '<li><a href="#" onclick="return library.getBrowseDir(this.id);" id="' + resultArr[i].uri + '">' +
-                    '<h1><i class="' + iconClass + '"></i> ' + resultArr[i].name + '</h1></a></li>'
+                    '<h1><i class="' + getMediaClass(resultArr[i]) + '"></i> ' + resultArr[i].name + '</h1></a></li>'
         }
     }
 
@@ -124,22 +119,22 @@ function processBrowseDir (resultArr) {
         mopidy.library.lookup({'uris': uris}).then(function (resultDict) {
             // Break into albums and put in tables
             var track, previousTrack, nextTrack, uri
-            $.each(resultArr, function (i, ref) {
-                if (ref.type === 'track') {
+            for (i = 0, index = 0; i < resultArr.length; i++) {
+                if (resultArr[i].type === 'track') {
                     previousTrack = track || undefined
                     if (i < resultArr.length - 1 && resultDict[resultArr[i + 1].uri]) {
                         nextTrack = resultDict[resultArr[i + 1].uri][0]
                     } else {
                         nextTrack = undefined
                     }
-                    track = resultDict[ref.uri][0]
+                    track = resultDict[resultArr[i].uri][0]
                     popupData[track.uri] = track  // Need full track info in popups in order to display albums and artists.
                     if (uris.length === 1 || (previousTrack && !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {
                         renderSongLiAlbumInfo(track, BROWSE_TABLE)
                     }
                     renderSongLiDivider(previousTrack, track, nextTrack, BROWSE_TABLE)
                 }
-            })
+            }
             showLoading(false)
         }, console.error)
     } else {
@@ -166,7 +161,7 @@ function processGetPlaylists (resultArr) {
         } else if (isFavouritesPlaylist(resultArr[i])) {
             favourites = li_html + '&hearts; Musicbox Favourites</a></li>'
         } else {
-            tmp = tmp + li_html + '<i class="' + getMediaClass(resultArr[i].uri) + '"></i> ' + resultArr[i].name + '</a></li>'
+            tmp = tmp + li_html + '<i class="' + getMediaClass(resultArr[i]) + '"></i> ' + resultArr[i].name + '</a></li>'
         }
     }
     // Prepend the user's Spotify "Starred" playlist and favourites to the results. (like Spotify official client).

@@ -111,6 +111,7 @@ v2.4.0 (UNRELEASED)
 - Add 'Show Track Info' popup which can be activated from any context menu. The popup includes the URI of the track,
   which can be inserted into various lists elsewhere in the player.
 - Updated icon set for font-awesome 4.7.0.
+- Added 'Refresh' button for refreshing libraries. (Addresses: `#75 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/75>`_).
 
 **Fixes**
 
@@ -118,9 +119,12 @@ v2.4.0 (UNRELEASED)
   (Fixes: `#213 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/213>`_).
 - Now shows correct hostname information in loader popup. (Fixes: `#209 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/209>`_).
 - Reset 'Now Playing' info when the last track in the tracklist is deleted. Fixes an issue where info of the last song played would be displayed even after the queue had been cleared.
+- Now initializes the GUI properly, even if the user is offline or the Mopidy server cannot be reached.
+- Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
 - Use correct icons for folders, audio, and other files when browsing local files.
 - Now initializes the GUI properly, even if the user is offline or the Mopidy server cannot be reached.
 - Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
+- When browsing the library using the local 'File' extension, only playable audio files will have context menu icons.
 
 v2.3.0 (2016-05-15)
 -------------------

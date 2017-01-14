@@ -75,8 +75,8 @@ var radioExtensionsList = ['somafm', 'tunein', 'dirble', 'audioaddict']
 var uriClassList = [
     ['spotify', 'fa-spotify'],
     ['spotifytunigo', 'fa-spotify'],
-    ['local', 'fa-file-sound-o'],
-    ['file', 'fa-file-o'],
+    ['local', 'fa-folder-o'],
+    ['file', 'fa-folder-o'],
     ['m3u', 'fa-file-sound-o'],
     ['podcast', 'fa-rss-square'],
     ['podcast+file', 'fa-rss-square'],
@@ -240,13 +240,9 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
     var onClick = ''
     var html = ''
     track.name = validateTrackName(track, currentIndex)
-    // Leave out unplayable items
-    if (track.name.substring(0, 12) === '[unplayable]') {
-        return html
-    }
     // Streams
     if (track.length === -1) {
-        html += '<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + ' [Stream]</h1></a></li>'
+        html += '<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track) + '"></i> ' + track.name + ' [Stream]</h1></a></li>'
         return html
     }
 
@@ -257,11 +253,13 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
         onClick = 'return controls.playTracks(\'\', mopidy, \'' + track.uri + '\', \'' + uri + '\');'
     }
 
-    html +=
-        '<li class="song albumli" id="' + getjQueryID(target, track.uri) + '" tlid="' + tlid + '">' +
-        '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + track.uri + tlidParameter + '\');">' +
-        '<i class="fa fa-play-circle-o"></i></a>' +
-        '<a href="#" onclick="' + onClick + '"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + '</h1>'
+    html += '<li class="song albumli" id="' + getjQueryID(target, track.uri) + '" tlid="' + tlid + '">'
+    if (isPlayable(track)) {
+        // Show popup icon for audio files or 'tracks' of other scheme types
+        html += '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + track.uri + tlidParameter + '\');">' +
+        '<i class="fa fa-play-circle-o"></i></a>'
+    }
+    html += '<a href="#" onclick="' + onClick + '"><h1><i class="' + getMediaClass(track) + '"></i> ' + track.name + '</h1>'
 
     if (listLength === 1 || (!hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {
         html += renderSongLiAlbumInfo(track)
@@ -309,7 +307,7 @@ function renderSongLiDivider (previousTrack, track, nextTrack, target) {
         html +=
             '<li class="albumdivider"><a href="#" onclick="return library.showAlbum(\'' + track.album.uri + '\');">' +
             '<img id="' + getjQueryID(target + '-cover', track.uri) + '" class="artistcover" width="30" height="30"/>' +
-            '<h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.album.name + '</h1><p>' +
+            '<h1>' + track.album.name + '</h1><p>' +
             renderSongLiTrackArtists(track) + '</p></a></li>'
         // Retrieve album covers
         images.setAlbumImage(track.uri, getjQueryID(target + '-cover', track.uri, true), mopidy, 'small')
@@ -317,7 +315,7 @@ function renderSongLiDivider (previousTrack, track, nextTrack, target) {
         // Small divider
         html += '<li class="smalldivider"> &nbsp;</li>'
     }
-    if (typeof target !== 'undefined' && target.length > 0) {
+    if (html.length > 0 && typeof target !== 'undefined' && target.length > 0) {
         target = getjQueryID(target, track.uri, true)
         $(target).before(html)
     }
@@ -494,26 +492,52 @@ function getScheme (uri) {
     return uri.split(':')[0].toLowerCase()
 }
 
-function isAudioFile (uri) {
-    var ext = uri.split('.').pop().toLowerCase()
-    return $.inArray(ext, audioExt) !== -1
+function isPlayable (track) {
+    if (typeof track.type === 'undefined' || track.type === 'track') {
+        if (getScheme(track.uri) === 'file') {
+            var ext = track.uri.split('.').pop().toLowerCase()
+            if ($.inArray(ext, audioExt) === -1) {
+                // Files must have the correct extension
+                return false
+            }
+        }
+        return true
+    }
+    return false
 }
 
 function isStreamUri (uri) {
-    var a = validUri(uri)
-    var b = radioExtensionsList.indexOf(getScheme(uri)) >= 0
-    return a || b
+    return validUri(uri) || radioExtensionsList.indexOf(getScheme(uri)) >= 0
 }
 
-function getMediaClass (uri) {
-    var scheme = getScheme(uri)
-    if (scheme === 'file' && isAudioFile(uri)) {
-        return 'fa fa-file-sound-o'
-    }
-    for (var i = 0; i < uriClassList.length; i++) {
-        if (scheme === uriClassList[i][0]) {
-            return 'fa ' + uriClassList[i][1]
+function getMediaClass (track) {
+    var type = track.type
+    if (typeof type === 'undefined' || type === 'track') {
+        if (isPlayable(track)) {
+            if (isStreamUri(track.uri)) {
+                return 'fa fa-rss'  // Stream
+            } else {
+                return 'fa fa-file-sound-o'  // Sound file (default)
+            }
+        } else {
+            return 'fa fa-file-o'  // Unplayable file
         }
+    } else if (type === 'directory') {
+        for (var i = 0; i < uriClassList.length; i++) {
+            if (getScheme(track.uri) === uriClassList[i][0]) {
+                return 'fa ' + uriClassList[i][1]  // Mapped service directory
+            }
+        }
+        return 'fa fa-folder-o'  // Unmapped directory
+    } else if (type === 'album') {
+        // return 'fa fa-bullseye'  // Album
+        return 'fa fa-folder-o'
+    } else if (type === 'artist') {
+        // return 'fa fa-user-circle-o'  // Artist
+        return 'fa fa-folder-o'
+    } else if (type === 'playlist') {
+        // return 'fa fa-star'  // Playlist
+        return ''
     }
     return ''
 }
