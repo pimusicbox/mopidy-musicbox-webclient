@@ -251,48 +251,46 @@
     </form>
 </div><!--/confirm delete stream-->
 
-<div data-role="popup" data-theme="b" id="popupShowInfo" class="popupDialog">
+<div data-role="popup" data-theme="b" id="popupShowInfo" class="popupDialog-full-width">
     <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-    <form>
-        <table data-role="table" data-mode="reflow" class="ui-responsive table-stroke info-table">
-            <thead>
-                <tr>
-                    <th data-priority="persist"></th>
-                    <th data-priority="persist"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                  <td class="label">Name:</td>
-                  <td id="name-cell"></td>
-                </tr>
-                <tr id="album-row">
-                  <td class="label">Album:</td>
-                  <td id="album-cell"></td>
-                </tr>
-                <tr id="artist-row">
-                  <td class="label">Artist(s):</td>
-                  <td id="artist-cell"></td>
-                </tr>
-                <tr id="track-no-row">
-                  <td class="label">Track #:</td>
-                  <td id="track-no-cell"></td>
-                </tr>
-                <tr id="length-row">
-                  <td class="label">Length:</td>
-                  <td id="length-cell"></td>
-                </tr>
-                <tr id="bitrate-row">
-                  <td class="label">Bitrate:</td>
-                  <td id="bitrate-cell"></td>
-                </tr>
-                <tr>
-                  <td class="label label-center">URI:</td>
-                  <td><input type="text" id="uri-cell"></input></td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
+    <table data-role="table" data-mode="reflow" class="ui-responsive table-stroke info-table">
+        <thead>
+            <tr>
+                <th data-priority="persist"></th>
+                <th data-priority="persist"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td class="label">Name:</td>
+              <td id="name-cell"></td>
+            </tr>
+            <tr id="album-row">
+              <td class="label">Album:</td>
+              <td id="album-cell"></td>
+            </tr>
+            <tr id="artist-row">
+              <td class="label">Artist(s):</td>
+              <td id="artist-cell"></td>
+            </tr>
+            <tr id="track-no-row">
+              <td class="label">Track #:</td>
+              <td id="track-no-cell"></td>
+            </tr>
+            <tr id="length-row">
+              <td class="label">Length:</td>
+              <td id="length-cell"></td>
+            </tr>
+            <tr id="bitrate-row">
+              <td class="label">Bitrate:</td>
+              <td id="bitrate-cell"></td>
+            </tr>
+            <tr>
+              <td class="label label-center">URI:</td>
+              <td><input type="text" id="uri-cell"></input></td>
+            </tr>
+        </tbody>
+    </table>
 </div><!--/show track info-->
 
 <div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">

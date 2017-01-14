@@ -264,11 +264,24 @@ span.hostInfo {
     display: table !important;
 }
 
+.info-table thead {
+    visibility: collapse;
+}
+
+.info-table th {
+    border-bottom: none !important;
+}
+
+.info-table tr {
+    border-bottom: 1px solid #f2f2f2
+}
+
 .info-table td {
     color: #555 !important;
     padding: 2px;
-    padding-right: 4px;
-    padding-left: 4px;
+    padding-right: 14px;
+    padding-left: 14px;
+    border: none !important;
 }
 
 .info-table td.label {
@@ -482,9 +495,15 @@ span.hostInfo {
     font-weight: normal;
 }
 
-.popupDialog {
+.popupDialog,
+.popupDialog-full-width {
     padding: 10px;
     text-align: center;
+}
+
+.popupDialog-full-width {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 /*dont hide clear buttons in text input */
