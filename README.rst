@@ -106,6 +106,7 @@ Changelog
 v2.4.0 (UNRELEASED)
 -------------------
 
+- Now shows server name/IP address and port number at the bottom of the navigation pane. (Addresses: `#67 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/67>`_).
 - Add ability to insert a track anywhere in the current queue. (Addresses: `#75 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/75>`_).
 - Add 'Show Track Info' popup which can be activated from any context menu. The popup includes the URI of the track,
   which can be inserted into various lists elsewhere in the player.
@@ -115,7 +116,6 @@ v2.4.0 (UNRELEASED)
 - Only show 'Show Album' or 'Show Artist' options in popup menus if URI's for those resources are available.
   (Fixes: `#213 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/213>`_).
 - Now shows correct hostname information in loader popup. (Fixes: `#209 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/209>`_).
-- Now shows server name/IP address and port number at the bottom of the navigation pane. (Fixes: `#67 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/67>`_).
 - Reset 'Now Playing' info when the last track in the tracklist is deleted. Fixes an issue where info of the last song played would be displayed even after the queue had been cleared.
 - Use correct icons for folders, audio, and other files when browsing local files.
 
