@@ -119,8 +119,6 @@ v2.4.0 (UNRELEASED)
   (Fixes: `#213 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/213>`_).
 - Now shows correct hostname information in loader popup. (Fixes: `#209 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/209>`_).
 - Reset 'Now Playing' info when the last track in the tracklist is deleted. Fixes an issue where info of the last song played would be displayed even after the queue had been cleared.
-- Now initializes the GUI properly, even if the user is offline or the Mopidy server cannot be reached.
-- Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
 - Use correct icons for folders, audio, and other files when browsing local files.
 - Now initializes the GUI properly, even if the user is offline or the Mopidy server cannot be reached.
 - Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
