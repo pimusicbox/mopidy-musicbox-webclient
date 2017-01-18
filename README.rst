@@ -113,6 +113,7 @@ v2.4.0 (UNRELEASED)
 
 **Fixes**
 
+- Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
 - Only show 'Show Album' or 'Show Artist' options in popup menus if URI's for those resources are available.
   (Fixes: `#213 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/213>`_).
 - Now shows correct hostname information in loader popup. (Fixes: `#209 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/209>`_).

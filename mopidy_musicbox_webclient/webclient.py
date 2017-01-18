@@ -40,7 +40,7 @@ class Webclient(object):
         return ws_url
 
     def has_alarm_clock(self):
-        return self.ext_config.get('alarmclock', {}).get('enabled', False)
+        return self.config.get('alarmclock', {}).get('enabled', False)
 
     def is_music_box(self):
         return self.ext_config.get('musicbox', False)
