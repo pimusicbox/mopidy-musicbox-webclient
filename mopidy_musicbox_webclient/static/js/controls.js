@@ -362,7 +362,7 @@
                 }
 
                 // Fallback to album artists.
-                if (artistNames.length === 0 && track.album.artists && track.album.artists.length > 0) {
+                if (artistNames.length === 0 && track.album && track.album.artists && track.album.artists.length > 0) {
                     for (i = 0; i < track.album.artists.length; i++) {
                         if (i > 0) {
                             artistNames = artistNames + ', '
@@ -404,6 +404,7 @@
                     $('#popupShowInfo #uri-cell').select()
                 }
             }, console.error)
+            return false
         },
 
         refreshPlaylists: function () {
