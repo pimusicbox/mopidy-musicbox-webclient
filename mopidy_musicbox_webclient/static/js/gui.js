@@ -465,6 +465,7 @@ function locationHashChanged () {
  * initialize software *
  ***********************/
 $(document).ready(function (event) {
+    showOffline(true)
     // check for websockets
     if (!window.WebSocket) {
         switchContent('playlists')
@@ -476,40 +477,13 @@ $(document).ready(function (event) {
     $('.ui-panel-dismiss').on('tap', function () { $('#panel').panel('close') })
     // end of workaround
 
-    $(window).hashchange()
-
-    // Connect to server
-    var websocketUrl = $(document.body).data('websocket-url')
-    if (websocketUrl) {
-        try {
-            mopidy = new Mopidy({
-                webSocketUrl: websocketUrl,
-                callingConvention: 'by-position-or-by-name'
-            })
-        } catch (e) {
-            showOffline(true)
-        }
-    } else {
-        try {
-            mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'})
-        } catch (e) {
-            showOffline(true)
-        }
-    }
-
-    // initialize events
-    initSocketevents()
-
-    syncedProgressTimer = new SyncedProgressTimer(8, mopidy)
-
-    resetSong()
-
+    window.onhashchange = locationHashChanged
     if (location.hash.length < 2) {
         switchContent('home')
     }
+    $(window).hashchange()
 
     initgui = false
-    window.onhashchange = locationHashChanged
 
     // only show backbutton if in UIWebview
     if (window.navigator.standalone) {
@@ -517,10 +491,6 @@ $(document).ready(function (event) {
     } else {
         $('#btback').hide()
     }
-
-    $(window).resize(function () {
-        resizeMb()
-    })
 
     // navigation temporary, rewrite this!
     $('#songinfo').click(function () {
@@ -622,6 +592,24 @@ $(document).ready(function (event) {
     $('#volumeslider').on('slidestart', function () { volumeSliding = true })
     $('#volumeslider').on('slidestop', function () { volumeSliding = false })
     $('#volumeslider').on('change', function () { controls.doVolume($(this).val()) })
+
+    $(window).resize(function () {
+        resizeMb()
+    })
+    resizeMb()
+
+    // Connect to server
+    var websocketUrl = $(document.body).data('websocket-url')
+    var connectOptions = {callingConvention: 'by-position-or-by-name'}
+    if (websocketUrl) {
+        connectOptions['webSocketUrl'] = websocketUrl
+    }
+
+    mopidy = new Mopidy(connectOptions)
+    // initialize events
+    initSocketevents()
+    syncedProgressTimer = new SyncedProgressTimer(8, mopidy)
+    resetSong()
 })
 
 function updatePlayIcons (uri, tlid, popupMenuIcon) {
