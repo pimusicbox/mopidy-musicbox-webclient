@@ -393,40 +393,6 @@ function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
     updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 }
 
-// process updated playlist to gui
-function playlisttotable (pl, target, uri) {
-    var tmp = ''
-    $(target).html('')
-    var targetmin = target.substr(1)
-    var child = ''
-    for (var i = 0; i < pl.length; i++) {
-        if (pl[i]) {
-            popupData[pl[i].uri] = pl[i]
-            child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">'
-            child += '<h1>' + pl[i].name + 'h1>'
-            child += '<p>'
-            child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>'
-            for (var j = 0; j < pl[i].artists.length; j++) {
-                if (pl[i].artists[j]) {
-                    child += pl[i].artists[j].name
-                    child += (j === pl[i].artists.length - 1) ? '' : ' / '
-                    // stop after 3
-                    if (j > 2) {
-                        child += '...'
-                        break
-                    }
-                }
-            }
-            child += ' / <em>' + pl[i].album.name + '</em></p>'
-            child += '</a></li>'
-            tmp += child
-        }
-    }
-
-    $(target).html(tmp)
-    $(target).attr('data', uri)
-}
-
 function getPlaylistTracks (uri) {
     if (playlists[uri] && playlists[uri].tracks) {
         return Mopidy.when(playlists[uri].tracks)
