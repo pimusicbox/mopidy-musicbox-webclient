@@ -110,17 +110,17 @@ v2.4.0 (UNRELEASED)
 - Add ability to insert a track anywhere in the current queue. (Addresses: `#75 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/75>`_).
 - Add 'Show Track Info' popup which can be activated from any context menu. The popup includes the URI of the track,
   which can be inserted into various lists elsewhere in the player.
-- Updated icon set for font-awesome 4.7.0. Now also shows specific icons for albums, artists, streams, and playlists.
+- Updated icon set for font-awesome 4.7.0.
 
 **Fixes**
 
-- Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
 - Only show 'Show Album' or 'Show Artist' options in popup menus if URI's for those resources are available.
   (Fixes: `#213 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/213>`_).
 - Now shows correct hostname information in loader popup. (Fixes: `#209 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/209>`_).
 - Reset 'Now Playing' info when the last track in the tracklist is deleted. Fixes an issue where info of the last song played would be displayed even after the queue had been cleared.
 - Use correct icons for folders, audio, and other files when browsing local files.
 - Now initializes the GUI properly, even if the user is offline or the Mopidy server cannot be reached.
+- Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
 
 v2.3.0 (2016-05-15)
 -------------------
