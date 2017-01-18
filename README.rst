@@ -110,6 +110,7 @@ v2.4.0 (UNRELEASED)
 - Add ability to insert a track anywhere in the current queue. (Addresses: `#75 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/75>`_).
 - Add 'Show Track Info' popup which can be activated from any context menu. The popup includes the URI of the track,
   which can be inserted into various lists elsewhere in the player.
+- Updated icon set for font-awesome 4.7.0. Now also shows specific icons for albums, artists, streams, and playlists.
 
 **Fixes**
 
