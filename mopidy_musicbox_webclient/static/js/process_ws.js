@@ -92,6 +92,7 @@ function processBrowseDir (resultArr) {
     var html = ''
     var i
 
+    // Render list of tracks
     for (i = 0, index = 0; i < resultArr.length; i++) {
         if (resultArr[i].type === 'track') {
             previousRef = ref || undefined
@@ -112,9 +113,13 @@ function processBrowseDir (resultArr) {
     }
 
     $(BROWSE_TABLE).append(html)
+    if (browseStack.length > 0) {
+        window.scrollTo(0, browseStack[browseStack.length - 1].scrollPos || 0)  // Restore scroll position
+    }
 
     updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 
+    // Look up track details and add album headers
     if (uris.length > 0) {
         mopidy.library.lookup({'uris': uris}).then(function (resultDict) {
             // Break into albums and put in tables
