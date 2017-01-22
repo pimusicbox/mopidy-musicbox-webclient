@@ -360,4 +360,47 @@ describe('controls', function () {
             })
         })
     })
+
+    describe('#showInfoPopup()', function () {
+        var track
+        var popup = $('<div data-role="popup" id="popupShowInfo"></div>')
+
+        before(function () {
+            track = {
+                'uri': QUEUE_TRACKS[0].uri,
+                'length': 61000
+            }
+            var library = {
+                lookup: sinon.stub()
+            }
+            mopidy.library = library
+            mopidy.library.lookup.returns($.when({'track:tlTrackMock1': [track]}))
+
+            $(document.body).append(popup)
+            $('#popupTracks').data(track, track.uri)  // Simulate selection from context menu
+            $('#popupShowInfo').popup()  // Initialize popup
+        })
+
+        afterEach(function () {
+            mopidy.library.lookup.reset()
+        })
+
+        it('should default track name', function () {
+            popup.append('<span id="name-cell"></span>')
+            controls.showInfoPopup('#popupTracks', mopidy)
+            assert.equal($('#name-cell').text(), '(Not available)')
+        })
+
+        it('should default album name', function () {
+            popup.append('<span id="album-cell"></span>')
+            controls.showInfoPopup('#popupTracks', mopidy)
+            assert.equal($('#album-cell').text(), '(Not available)')
+        })
+
+        it('should add leading zero if seconds length < 10', function () {
+            popup.append('<span id="length-cell"></span>')
+            controls.showInfoPopup('#popupTracks', mopidy)
+            assert.equal($('#length-cell').text(), '1:01')
+        })
+    })
 })

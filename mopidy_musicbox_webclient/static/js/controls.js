@@ -338,14 +338,19 @@
             })
         },
 
-        showInfoPopup: function (popupId) {
+        showInfoPopup: function (popupId, mopidy) {
             showLoading(true)
             var uri = $(popupId).data('track')
             $(popupId).popup('close')
             mopidy.library.lookup({'uris': [uri]}).then(function (resultDict) {
                 var uri = Object.keys(resultDict)[0]
                 var track = resultDict[uri][0]
-                $('#popupShowInfo #name-cell').text(track.name)
+                if (track.name) {
+                    $('#popupShowInfo #name-cell').text(track.name)
+                } else {
+                    $('#popupShowInfo #name-cell').text('(Not available)')
+                }
+
                 if (track.album && track.album.name) {
                     $('#popupShowInfo #album-cell').text(track.album.name)
                 } else {
@@ -383,8 +388,7 @@
                     $('#popupShowInfo #track-no-row').hide()
                 }
                 if (track.length) {
-                    var duration = new Date(track.length)
-                    $('#popupShowInfo #length-cell').text(duration.getUTCMinutes() + ':' + duration.getUTCSeconds())
+                    $('#popupShowInfo #length-cell').text(timeFromSeconds(track.length / 1000))
                     $('#popupShowInfo #length-row').show()
                 } else {
                     $('#popupShowInfo #length-row').hide()
