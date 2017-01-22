@@ -378,7 +378,9 @@ function locationHashChanged () {
     $('.pane').hide()  // Hide all pages
     $('#' + divid + 'pane').show()  // Switch to active pane
 
-    if (typeof pageScrollPos[divid] !== 'undefined') {  // Set scroll position
+    if (divid === 'browse' && browseStack.length > 0) {
+        window.scrollTo(0, browseStack[browseStack.length - 1].scrollPos || 0)  // Restore scroll position
+    } else if (typeof pageScrollPos[divid] !== 'undefined') {  // Set scroll position
         window.scrollTo(0, pageScrollPos[divid])
     }
 
