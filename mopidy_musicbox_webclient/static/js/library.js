@@ -145,7 +145,7 @@
                 tokens = {
                     'id': results.artists[i].uri,
                     'name': results.artists[i].name,
-                    'class': getMediaClass(results.artists[i].uri)
+                    'class': getMediaClass(results.artists[i])
                 }
 
                 // Add 'Show all' item after a certain number of hits.
@@ -173,7 +173,7 @@
                     'albumName': results.albums[i].name,
                     'artistName': '',
                     'albumYear': results.albums[i].date,
-                    'class': getMediaClass(results.albums[i].uri)
+                    'class': getMediaClass(results.albums[i])
                 }
                 if (results.albums[i].artists) {
                     for (j = 0; j < results.albums[i].artists.length; j++) {
@@ -215,14 +215,23 @@
             showLoading(true)
             if (!rootdir) {
                 browseStack.pop()
-                rootdir = browseStack[browseStack.length - 1]
+                rootdir = browseStack[browseStack.length - 1] || null
             } else {
-                browseStack.push(rootdir)
+                if (rootdir !== browseStack[browseStack.length - 1]) {
+                    browseStack.push(rootdir)
+                }
             }
-            if (!rootdir) {
-                rootdir = null
-            }
-            mopidy.library.browse({'uri': rootdir}).then(processBrowseDir, console.error)
+            mopidy.library.browse({'uri': rootdir}).then(function (resultArr) {
+                processBrowseDir(resultArr)
+                if (rootdir === null) {
+                    $('.refreshLibraryBtnDiv').hide()
+                } else {
+                    $('.refreshLibraryBtnDiv').show()
+                    $('#refreshLibraryBtn').data('url', rootdir)
+                    $('#refreshLibraryBtn').off('click')
+                    $('#refreshLibraryBtn').one('click', controls.refreshLibrary)
+                }
+            }, console.error)
         },
 
         getCurrentPlaylist: function () {

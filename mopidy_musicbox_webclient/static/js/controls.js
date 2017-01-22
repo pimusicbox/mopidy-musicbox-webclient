@@ -416,6 +416,14 @@
             return false
         },
 
+        refreshLibrary: function () {
+            var uri = $('#refreshLibraryBtn').data('url')
+            mopidy.library.refresh({'uri': uri}).then(function () {
+                library.getBrowseDir(uri)
+            })
+            return false
+        },
+
         /** ***********
          *  Buttons  *
          *************/

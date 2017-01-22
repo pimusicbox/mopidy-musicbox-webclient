@@ -118,7 +118,6 @@
 /******************
  *  Track Slider  *
  ******************/
-
 #trackslider {
     display: inline;
     width: 100%;
@@ -364,6 +363,10 @@ span.hostInfo {
 
 .backnav {
     background-color: #ccc !important;
+}
+
+.refreshLibraryBtnDiv {
+    display: none;
 }
 
 

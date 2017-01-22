@@ -404,7 +404,16 @@
 <!--/playlistspane-->
 
 <div data-role="content" id="browsepane" class="pane">
-    <h4>Browse</h4>
+    <div class="ui-grid-a">
+        <div class="ui-block-a">
+            <h4>Browse</h4>
+        </div>
+        <div align="right" class="ui-block-b refreshLibraryBtnDiv" data-role="controlgroup" data-type="horizontal">
+            <button id="refreshLibraryBtn" class="btn" type="button" title="Refresh library">
+                <i class="fa fa-refresh"></i>
+            </button>
+        </div>
+    </div>
     <div class="ui-grid">
         <ul id="browsetable" class="table"></ul>
     </div>
