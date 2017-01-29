@@ -295,6 +295,7 @@ span.hostInfo {
     color: #555;
     border: none;
     font-size: 1em;
+    width: 100%;
 }
 
 .albumdivider h1, .table li h1 {
