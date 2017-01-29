@@ -341,7 +341,9 @@
         showInfoPopup: function (uri, popupId, mopidy) {
             showLoading(true)
             var trackUri = uri || $(popupId).data('track')
-            $(popupId).popup('close')
+            if (popupId && popupId.length > 0) {
+                $(popupId).popup('close')
+            }
             $('#popupShowInfo tbody').empty()
 
             mopidy.library.lookup({'uris': [trackUri]}).then(function (resultDict) {
@@ -374,10 +376,9 @@
                 }
 
                 if (artists.length > 0) {
+                    row.label = 'Artist'
                     if (track.artists && track.artists.length > 1 || track.album && track.album.artists && track.album.artists.length > 1) {
-                        row.label = 'Artists'
-                    } else {
-                        row.label = 'Artist'
+                        row.label += 's'
                     }
                     row.text = artists
                     html += stringFromTemplate(rowTemplate, row)
@@ -385,10 +386,9 @@
 
                 var composers = artistsToString(track.composers)
                 if (composers.length > 0) {
+                    row.label = 'Composer'
                     if (track.composers.length > 1) {
-                        row.label = 'Composers'
-                    } else {
-                        row.label = 'Composer'
+                        row.label += 's'
                     }
                     row.text = composers
                     html += stringFromTemplate(rowTemplate, row)
@@ -396,10 +396,9 @@
 
                 var performers = artistsToString(track.performers)
                 if (performers.length > 0) {
+                    row.label = 'Performer'
                     if (track.performers.length > 1) {
-                        row.label = 'Performers'
-                    } else {
-                        row.label = 'Performer'
+                        row.label += 's'
                     }
                     row.text = performers
                     html += stringFromTemplate(rowTemplate, row)
