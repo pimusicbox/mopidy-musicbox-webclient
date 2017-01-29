@@ -363,12 +363,21 @@ describe('controls', function () {
 
     describe('#showInfoPopup()', function () {
         var track
-        var popup = $('<div data-role="popup" id="popupShowInfo"></div>')
+        var popup = $('<div data-role="popup" id="popupShowInfo"><table><thead><tr><th></th><th></th></tr></thead><tbody></tbody></div>')
 
         before(function () {
             track = {
                 'uri': QUEUE_TRACKS[0].uri,
-                'length': 61000
+                'length': 61000,
+                'artists': [
+                    {
+                        'uri': 'artistUri1',
+                        'name': 'nameMock1'
+                    }, {
+                        'uri': 'artistUri2',
+                        'name': 'nameMock2'
+                    }
+                ]
             }
             var library = {
                 lookup: sinon.stub()
@@ -377,7 +386,7 @@ describe('controls', function () {
             mopidy.library.lookup.returns($.when({'track:tlTrackMock1': [track]}))
 
             $(document.body).append(popup)
-            $('#popupTracks').data(track, track.uri)  // Simulate selection from context menu
+            $('#popupShowInfo').data(track, track.uri)  // Simulate selection from context menu
             $('#popupShowInfo').popup()  // Initialize popup
         })
 
@@ -386,21 +395,23 @@ describe('controls', function () {
         })
 
         it('should default track name', function () {
-            popup.append('<span id="name-cell"></span>')
-            controls.showInfoPopup('#popupTracks', mopidy)
-            assert.equal($('#name-cell').text(), '(Not available)')
+            controls.showInfoPopup('', '#popupShowInfo', mopidy)
+            assert.equal($('td:contains("Name:")').siblings('td').text(), '(Not available)')
         })
 
         it('should default album name', function () {
-            popup.append('<span id="album-cell"></span>')
-            controls.showInfoPopup('#popupTracks', mopidy)
-            assert.equal($('#album-cell').text(), '(Not available)')
+            controls.showInfoPopup('', '#popupShowInfo', mopidy)
+            assert.equal($('td:contains("Album:")').siblings('td').text(), '(Not available)')
         })
 
         it('should add leading zero if seconds length < 10', function () {
-            popup.append('<span id="length-cell"></span>')
-            controls.showInfoPopup('#popupTracks', mopidy)
-            assert.equal($('#length-cell').text(), '1:01')
+            controls.showInfoPopup('', '#popupShowInfo', mopidy)
+            assert.equal($('td:contains("Length:")').siblings('td').text(), '1:01')
+        })
+
+        it('should show plural for artist name', function () {
+            controls.showInfoPopup('', '#popupShowInfo', mopidy)
+            assert.isOk($('td:contains("Artists:")'))
         })
     })
 })

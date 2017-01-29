@@ -338,74 +338,130 @@
             })
         },
 
-        showInfoPopup: function (popupId, mopidy) {
+        showInfoPopup: function (uri, popupId, mopidy) {
             showLoading(true)
-            var uri = $(popupId).data('track')
+            var trackUri = uri || $(popupId).data('track')
             $(popupId).popup('close')
-            mopidy.library.lookup({'uris': [uri]}).then(function (resultDict) {
+            $('#popupShowInfo tbody').empty()
+
+            mopidy.library.lookup({'uris': [trackUri]}).then(function (resultDict) {
                 var uri = Object.keys(resultDict)[0]
                 var track = resultDict[uri][0]
+                var html = ''
+                var rowTemplate = '<tr><td class="label">{label}:</td><td id="{label}-cell">{text}</td></tr>'
+                var row = {'label': '', 'text': ''}
+
+                row.label = 'Name'
                 if (track.name) {
-                    $('#popupShowInfo #name-cell').text(track.name)
+                    row.text = track.name
                 } else {
-                    $('#popupShowInfo #name-cell').text('(Not available)')
+                    row.text = '(Not available)'
                 }
+                html += stringFromTemplate(rowTemplate, row)
 
+                row.label = 'Album'
                 if (track.album && track.album.name) {
-                    $('#popupShowInfo #album-cell').text(track.album.name)
+                    row.text = track.album.name
                 } else {
-                    $('#popupShowInfo #album-cell').text('(Not available)')
+                    row.text = '(Not available)'
                 }
-                var artistNames = ''
-                if (track.artists && track.artists.length > 0) {
-                    for (var i = 0; i < track.artists.length; i++) {
-                        if (i > 0) {
-                            artistNames = artistNames + ', '
-                        }
-                        artistNames = artistNames + track.artists[i].name
-                    }
+                html += stringFromTemplate(rowTemplate, row)
+
+                var artists = artistsToString(track.artists)
+                // Fallback to album artists.
+                if (artists.length === 0 && track.album && track.album.artists) {
+                    artists = artistsToString(track.album.artists)
                 }
 
-                // Fallback to album artists.
-                if (artistNames.length === 0 && track.album && track.album.artists && track.album.artists.length > 0) {
-                    for (i = 0; i < track.album.artists.length; i++) {
-                        if (i > 0) {
-                            artistNames = artistNames + ', '
-                        }
-                        artistNames = artistNames + track.album.artists[i].name
+                if (artists.length > 0) {
+                    if (track.artists && track.artists.length > 1 || track.album && track.album.artists && track.album.artists.length > 1) {
+                        row.label = 'Artists'
+                    } else {
+                        row.label = 'Artist'
                     }
+                    row.text = artists
+                    html += stringFromTemplate(rowTemplate, row)
                 }
-                if (artistNames.length > 0) {
-                    $('#popupShowInfo #artist-cell').text(artistNames)
-                    $('#popupShowInfo #artist-row').show()
-                } else {
-                    $('#popupShowInfo #artist-row').hide()
+
+                var composers = artistsToString(track.composers)
+                if (composers.length > 0) {
+                    if (track.composers.length > 1) {
+                        row.label = 'Composers'
+                    } else {
+                        row.label = 'Composer'
+                    }
+                    row.text = composers
+                    html += stringFromTemplate(rowTemplate, row)
                 }
+
+                var performers = artistsToString(track.performers)
+                if (performers.length > 0) {
+                    if (track.performers.length > 1) {
+                        row.label = 'Performers'
+                    } else {
+                        row.label = 'Performer'
+                    }
+                    row.text = performers
+                    html += stringFromTemplate(rowTemplate, row)
+                }
+
+                if (track.genre) {
+                    row = {'label': 'Genre', 'text': track.genre}
+                    html += stringFromTemplate(rowTemplate, row)
+                }
+
                 if (track.track_no) {
-                    $('#popupShowInfo #track-no-cell').text(track.track_no)
-                    $('#popupShowInfo #track-no-row').show()
-                } else {
-                    $('#popupShowInfo #track-no-row').hide()
+                    row = {'label': 'Track #', 'text': track.track_no}
+                    html += stringFromTemplate(rowTemplate, row)
                 }
+
+                if (track.disc_no) {
+                    row = {'label': 'Disc #', 'text': track.disc_no}
+                    html += stringFromTemplate(rowTemplate, row)
+                }
+
+                if (track.date) {
+                    row = {'label': 'Date', 'text': new Date(track.date)}
+                    html += stringFromTemplate(rowTemplate, row)
+                }
+
                 if (track.length) {
-                    $('#popupShowInfo #length-cell').text(timeFromSeconds(track.length / 1000))
-                    $('#popupShowInfo #length-row').show()
-                } else {
-                    $('#popupShowInfo #length-row').hide()
+                    row = {'label': 'Length', 'text': timeFromSeconds(track.length / 1000)}
+                    html += stringFromTemplate(rowTemplate, row)
                 }
+
                 if (track.bitrate) {
-                    $('#popupShowInfo #bitrate-cell').text(track.bitrate)
-                    $('#popupShowInfo #bitrate-row').show()
-                } else {
-                    $('#popupShowInfo #bitrate-row').hide()
+                    row = {'label': 'Bitrate', 'text': track.bitrate}
+                    html += stringFromTemplate(rowTemplate, row)
                 }
-                $('#popupShowInfo #uri-cell').val(uri)
+
+                if (track.comment) {
+                    row = {'label': 'Comment', 'text': track.comment}
+                    html += stringFromTemplate(rowTemplate, row)
+                }
+
+                if (track.musicbrainz_id) {
+                    row = {'label': 'MusicBrainz ID', 'text': track.musicbrainz_id}
+                    html += stringFromTemplate(rowTemplate, row)
+                }
+
+                if (track.last_modified) {
+                    row = {'label': 'Modified', 'text': track.last_modified}
+                    html += stringFromTemplate(rowTemplate, row)
+                }
+
+                rowTemplate = '<tr><td class="label label-center">{label}:</td><td><input type="text" id="uri-input" value="{text}"></input></td></tr>'
+                row = {'label': 'URI', 'text': uri}
+                html += stringFromTemplate(rowTemplate, row)
+
+                $('#popupShowInfo tbody').append(html)
+
                 showLoading(false)
                 $('#popupShowInfo').popup('open')
                 if (!isMobile) {
                     // Set focus and select URI text on desktop systems (don't want the keyboard to pop up automatically on mobile devices)
-                    $('#popupShowInfo #uri-cell').focus()
-                    $('#popupShowInfo #uri-cell').select()
+                    $('#popupShowInfo #uri-input').focus()
+                    $('#popupShowInfo #uri-input').select()
                 }
             }, console.error)
             return false
