@@ -204,12 +204,14 @@ function getAlbum (pl) {
 function artistsToString (artists, max) {
     var result = ''
     max = max || 3
-    for (var i = 0; i < artists.length && i < max; i++) {
-        if (artists[i].name) {
-            if (i > 0) {
-                result += ', '
+    if (artists && artists.length > 0) {
+        for (var i = 0; i < artists.length && i < max; i++) {
+            if (artists[i].name) {
+                if (i > 0) {
+                    result += ', '
+                }
+                result += artists[i].name
             }
-            result += artists[i].name
         }
     }
     return result
@@ -576,6 +578,13 @@ function isFavouritesPlaylist (playlist) {
 function isSpotifyStarredPlaylist (playlist) {
     var starredRegex = /spotify:user:.*:starred/g
     return (starredRegex.test(playlist.uri) && playlist.name === 'Starred')
+}
+
+// Returns a string where {x} in template is replaced by tokens[x].
+function stringFromTemplate (template, tokens) {
+    return template.replace(/{[^}]+}/g, function (match) {
+        return tokens[match.slice(1, -1)]
+    })
 }
 
 /**

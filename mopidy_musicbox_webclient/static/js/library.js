@@ -126,19 +126,12 @@
                 $('#searchtracks').show()
             }
 
-            // Returns a string where {x} in template is replaced by tokens[x].
-            function theme (template, tokens) {
-                return template.replace(/{[^}]+}/g, function (match) {
-                    return tokens[match.slice(1, -1)]
-                })
-            }
-
-            // 'Show more' pattern
-            var showMorePattern = '<li onclick="$(this).hide().siblings().show(); return false;"><a>Show {count} more</a></li>'
+            // 'Show more' template
+            var showMoreTemplate = '<li onclick="$(this).hide().siblings().show(); return false;"><a>Show {count} more</a></li>'
 
             // Artist results
             var child = ''
-            var pattern = '<li><a href="#" onclick="return library.showArtist(this.id)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>'
+            var template = '<li><a href="#" onclick="return library.showArtist(this.id)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>'
             var tokens
 
             for (i = 0; i < results.artists.length; i++) {
@@ -150,11 +143,11 @@
 
                 // Add 'Show all' item after a certain number of hits.
                 if (i === 4 && results.artists.length > 5) {
-                    child += theme(showMorePattern, {'count': results.artists.length - i})
-                    pattern = pattern.replace('<li>', '<li class="overflow">')
+                    child += stringFromTemplate(showMoreTemplate, {'count': results.artists.length - i})
+                    template = template.replace('<li>', '<li class="overflow">')
                 }
 
-                child += theme(pattern, tokens)
+                child += stringFromTemplate(template, tokens)
             }
 
             // Inject list items, refresh listview and hide superfluous items.
@@ -162,10 +155,10 @@
 
             // Album results
             child = ''
-            pattern = '<li><a href="#" onclick="return library.showAlbum(this.id)" id="{albumId}">'
-            pattern += '<h5 data-role="heading"><i class="{class}"></i> {albumName}</h5>'
-            pattern += '<p data-role="desc">{artistName}</p>'
-            pattern += '</a></li>'
+            template = '<li><a href="#" onclick="return library.showAlbum(this.id)" id="{albumId}">'
+            template += '<h5 data-role="heading"><i class="{class}"></i> {albumName}</h5>'
+            template += '<p data-role="desc">{artistName}</p>'
+            template += '</a></li>'
 
             for (i = 0; i < results.albums.length; i++) {
                 tokens = {
@@ -187,11 +180,11 @@
                 }
                 // Add 'Show all' item after a certain number of hits.
                 if (i === 4 && results.albums.length > 5) {
-                    child += theme(showMorePattern, {'count': results.albums.length - i})
-                    pattern = pattern.replace('<li>', '<li class="overflow">')
+                    child += stringFromTemplate(showMoreTemplate, {'count': results.albums.length - i})
+                    template = template.replace('<li>', '<li class="overflow">')
                 }
 
-                child += theme(pattern, tokens)
+                child += stringFromTemplate(template, tokens)
             }
             // Inject list items, refresh listview and hide superfluous items.
             $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide()
