@@ -108,8 +108,9 @@ v2.4.0 (UNRELEASED)
 
 - Now shows server name/IP address and port number at the bottom of the navigation pane. (Addresses: `#67 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/67>`_).
 - Add ability to insert a track anywhere in the current queue. (Addresses: `#75 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/75>`_).
-- Add 'Show Track Info' popup which can be activated from any context menu or by clicking the 'info' icon next to the album cover on the
-  'Now Playing' pane. The popup includes the URI of the track, which can be inserted into various lists elsewhere in the player.
+- Add 'Show Track Info' popup which can be activated from any context menu or by clicking on either the 'info' icon next
+  to the album cover or the track's title text on the 'Now Playing' pane. The popup includes the URI of the track, which
+  can be inserted into various lists elsewhere in the player.
 - Updated icon set for font-awesome 4.7.0.
 - Added 'Refresh' button for refreshing libraries. (Addresses: `#75 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/75>`_).
 

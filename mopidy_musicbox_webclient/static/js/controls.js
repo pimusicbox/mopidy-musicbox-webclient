@@ -420,7 +420,7 @@
                 }
 
                 if (track.date) {
-                    row = {'label': 'Date', 'text': new Date(track.date)}
+                    row = {'label': 'Date', 'text': new Date(track.date).toLocaleString()}
                     html += stringFromTemplate(rowTemplate, row)
                 }
 
