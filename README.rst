@@ -123,6 +123,7 @@ v2.4.0 (UNRELEASED)
 - Now initializes the GUI properly, even if the user is offline or the Mopidy server cannot be reached.
 - Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
 - When browsing the library using the local 'File' extension, only playable audio files will have context menu icons.
+- Playlists will now list tracks even if they are no longer available in the library. (Fixes: `#226 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/226>`_).
 
 v2.3.0 (2016-05-15)
 -------------------

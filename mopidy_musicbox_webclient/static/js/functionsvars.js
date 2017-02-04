@@ -479,9 +479,9 @@ function showOffline (on) {
 }
 
 // from http://dzone.com/snippets/validate-url-regexp
-function validUri (str) {
+function validUri (uri) {
     var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-    return regexp.test(str)
+    return regexp.test(uri)
 }
 
 function validServiceUri (str) {
@@ -494,7 +494,7 @@ function getScheme (uri) {
 
 function isPlayable (track) {
     if (typeof track.type === 'undefined' || track.type === 'track') {
-        if (getScheme(track.uri) === 'file') {
+        if (track.uri && getScheme(track.uri) === 'file') {
             var ext = track.uri.split('.').pop().toLowerCase()
             if ($.inArray(ext, audioExt) === -1) {
                 // Files must have the correct extension

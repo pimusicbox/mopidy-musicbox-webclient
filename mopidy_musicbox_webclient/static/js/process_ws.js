@@ -187,9 +187,11 @@ function processPlaylistItems (resultDict) {
     return mopidy.library.lookup({'uris': trackUris}).then(function (tracks) {
         // Transform from dict to list and cache result
         var newplaylisturi = resultDict.uri
+        var track
         playlists[newplaylisturi] = {'uri': newplaylisturi, 'tracks': []}
         for (i = 0; i < trackUris.length; i++) {
-            playlists[newplaylisturi].tracks.push(tracks[trackUris[i]][0])
+            track = tracks[trackUris[i]][0] || resultDict.items[i]  // Fall back to using track Ref if lookup failed.
+            playlists[newplaylisturi].tracks.push(track)
         }
         showLoading(false)
         return playlists[newplaylisturi].tracks
