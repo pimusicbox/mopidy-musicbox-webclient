@@ -35,6 +35,7 @@ Features
 - Fullscreen mode.
 
 .. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/develop/screenshots/queue_desktop.png
+.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/develop/screenshots/mobile_overview.png
 
 Dependencies
 ============
