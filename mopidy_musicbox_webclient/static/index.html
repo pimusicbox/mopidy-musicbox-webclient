@@ -130,13 +130,13 @@
             <li data-icon="playAll" data-iconshadow="false">
                 <a href="#" onclick="return controls.playTracks(PLAY_ALL, mopidy);">Play All</a>
             </li>
-            <li data-icon="playNext" class="addqueue">
+            <li data-icon="playNext">
                 <a href="#" onclick="return controls.playTracks(PLAY_NEXT, mopidy);">Play Track Next</a>
             </li>
-            <li data-icon="add" class="addqueue">
+            <li data-icon="add">
                 <a href="#" onclick="return controls.playTracks(ADD_THIS_BOTTOM, mopidy);">Add Track to Bottom of Queue</a>
             </li>
-            <li data-icon="addAll" class="addqueue">
+            <li data-icon="addAll">
                 <a href="#" onclick="return controls.playTracks(ADD_ALL_BOTTOM, mopidy);">Add All to Bottom of Queue</a>
             </li>
             <li class="popupAlbumLi">
@@ -151,7 +151,7 @@
                 <ul data-icon="false" data-inset="false" data-role="listview" class="popupArtistsLv"></ul>
             </div>
             <li>
-                <a href="#" onclick="return controls.showInfoPopup('#popupTracks', mopidy);">Show Track Info...</span></a>
+                <a href="#" onclick="return controls.showInfoPopup('', '#popupTracks', mopidy);">Show Track Info...</span></a>
             </li>
         </ul>
     </div>
@@ -181,7 +181,7 @@
                 <ul data-icon="false" data-inset="false" data-role="listview" class="popupArtistsLv"></ul>
             </div>
             <li>
-                <a href="#" onclick="return controls.showInfoPopup('#popupQueue', mopidy);">Show Track Info...</span></a>
+                <a href="#" onclick="return controls.showInfoPopup('', '#popupQueue', mopidy);">Show Track Info...</span></a>
             </li>
         </ul>
     </div>
@@ -260,36 +260,7 @@
                 <th data-priority="persist"></th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-              <td class="label">Name:</td>
-              <td id="name-cell"></td>
-            </tr>
-            <tr id="album-row">
-              <td class="label">Album:</td>
-              <td id="album-cell"></td>
-            </tr>
-            <tr id="artist-row">
-              <td class="label">Artist(s):</td>
-              <td id="artist-cell"></td>
-            </tr>
-            <tr id="track-no-row">
-              <td class="label">Track #:</td>
-              <td id="track-no-cell"></td>
-            </tr>
-            <tr id="length-row">
-              <td class="label">Length:</td>
-              <td id="length-cell"></td>
-            </tr>
-            <tr id="bitrate-row">
-              <td class="label">Bitrate:</td>
-              <td id="bitrate-cell"></td>
-            </tr>
-            <tr>
-              <td class="label label-center">URI:</td>
-              <td><input type="text" id="uri-cell"></input></td>
-            </tr>
-        </tbody>
+        <tbody></tbody>
     </table>
 </div><!--/show track info-->
 
@@ -363,10 +334,12 @@
 
 <div id="nowPlayingpane" data-role="content" class="pane">
 
-    <img id="albumCoverImg" src="images/default_cover.png" alt="Album cover"/>
+    <div id="modalinfo">
+        <img id="albumCoverImg" src="images/default_cover.png" alt="Album cover"/>
+    </div>
 
     <div class="nowPlaying-artistInfo">
-    <h3 id="modalname"></h3>
+        <h3 id="modalname"></h3>
         <p class="artistAlbumLine"><span id="modalartist"></span> - <span id="modalalbum"></span></p>
     </div>
 

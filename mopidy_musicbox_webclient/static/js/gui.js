@@ -67,9 +67,9 @@ function resizeMb () {
 */
 }
 
-function setSongTitle (title, refresh_ui) {
-    songdata.track.name = title
-    $('#modalname').html(title)
+function setSongTitle (track, refresh_ui) {
+    songdata.track.name = track.name
+    $('#modalname').html('<a href="#" onclick="return controls.showInfoPopup(\'' + track.uri + '\', \'\', mopidy);">' + track.name + '</span></a>')
     if (refresh_ui) {
         resizeMb()
     }
@@ -98,7 +98,7 @@ function setSongInfo (data) {
 
     songdata = data
 
-    setSongTitle(data.track.name, false)
+    setSongTitle(data.track, false)
     songlength = Infinity
 
     if (!data.track.length || data.track.length === 0) {
@@ -131,6 +131,12 @@ function setSongInfo (data) {
         $('#modalalbum').html('')
     }
     images.setAlbumImage(data.track.uri, '#infocover, #albumCoverImg', mopidy)
+    if (data.track.uri) {
+        // Add 'Show Info' icon to album image
+        $('#modalinfo').append(
+            '<a href="#" class="infoBtn" onclick="return controls.showInfoPopup(\'' + data.track.uri + '\', \'undefined\', mopidy);">' +
+            '<i class="fa fa-info-circle"></i></a>')
+    }
 
     $('#modalartist').html(arttmp)
 
@@ -190,10 +196,8 @@ function popupTracks (e, listuri, trackuri, tlid) {
     var divid = hash[0].substr(1)
     var popupName = ''
     if (divid === 'current') {
-        $('.addqueue').hide()
         popupName = '#popupQueue'
     } else {
-        $('.addqueue').show()
         popupName = '#popupTracks'
     }
 
@@ -316,7 +320,8 @@ function initSocketevents () {
     })
 
     mopidy.on('event:streamTitleChanged', function (data) {
-        setSongTitle(data.title, true)
+        // Update all track info.
+        mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error)
     })
 }
 

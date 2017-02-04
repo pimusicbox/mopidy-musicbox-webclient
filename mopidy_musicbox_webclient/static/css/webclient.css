@@ -291,6 +291,13 @@ span.hostInfo {
     vertical-align: middle;
 }
 
+.info-table input {
+    color: #555;
+    border: none;
+    font-size: 1em;
+    width: 100%;
+}
+
 .albumdivider h1, .table li h1 {
     font-size: 120% !important;
 }
@@ -361,6 +368,21 @@ span.hostInfo {
     font-size: initial;
 }
 
+.infoBtn {
+    top: 0;
+    width: 90%;
+    position: absolute;
+}
+
+.infoBtn i {
+    font-size: 1.33em;
+    color: #ddd;
+    background: white;
+    border-radius: 50%;
+    height: 1em;
+    width: 1em;
+}
+
 .backnav {
     background-color: #ccc !important;
 }
@@ -401,9 +423,15 @@ span.hostInfo {
 /************
  *  Popups  *
  ************/
-#modalalbum a, #modalartist a {
+#modalalbum a, #modalartist a, #modalname a {
     color: #444;
     text-decoration: none;
+}
+
+#modalinfo {
+    position: relative;
+    display: inline-block;
+    padding-top: .5em;
 }
 
 .popupArtistLi,
