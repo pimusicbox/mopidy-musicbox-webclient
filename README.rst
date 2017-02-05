@@ -34,8 +34,9 @@ Features
 - Deep integration with, and additional features for, the `Pi MusicBox <http://www.pimusicbox.com/>`_.
 - Fullscreen mode.
 
-.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/develop/screenshots/queue_desktop.png
-.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/develop/screenshots/mobile_overview.png
+.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/develop/screenshots/overview.png
+    :width: 1312
+    :height: 723
 
 Dependencies
 ============
