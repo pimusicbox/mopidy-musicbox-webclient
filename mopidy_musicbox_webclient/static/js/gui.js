@@ -23,48 +23,10 @@ function resizeMb () {
     $('#infoname').html(songdata.track.name)
     $('#infoartist').html(artiststext)
 
-    if ($(window).width() <= 960) {
-//        $('#playlisttracksdiv').hide();
-//        $('#playlistslistdiv').show();
-    } else {
+    if ($(window).width() > 960) {
         $('#playlisttracksdiv').show()
         $('#playlistslistdiv').show()
     }
-//    //set height of playlist scrollers
-/*    if ($(window).width() > 960) {
-        $('#playlisttracksdiv').show();
-        $('#playlistslistdiv').show();
-        $('.scroll').removeClass('height').removeClass('width');
-        $('#playlistspane').removeClass('height').removeClass('width');
-    } else {
-        if ( $('#playlisttracksdiv').is(':visible') == $('#playlistslistdiv').is(':visible')) {
-            $('#playlisttracksdiv').hide();
-            $('#playlistslistdiv').show();
-            $('.scroll').addClass('height', '99%').addClass('width', '99%');
-            $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
-        }
-    }
-
-    if ($('#playlisttracksdiv').is(':visible') && !$('#playlisttracksback').is(':visible') ) {
-        $('.scroll').height($(window).height() - 96);
-        //jqm added something which it shouldnt (at least in this case) I guess
-        //        $('#playlistspane').removeClass('height').height($(window).height() - 110);
-        $('.scroll').removeClass('height').removeClass('width');
-        $('#playlistspane').removeClass('height').removeClass('width');
-        $('#playlisttracksdiv').show();
-        $('#playlistslistdiv').show();
-    } else {
-        $('.scroll').addClass('height', '99%').addClass('width', '99%');
-        $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
-        $('#playlisttracksdiv').show();
-        $('#playlistslistdiv').show();
-    }
-
-    if (isMobileWebkit && ($(window).width() > 480)) {
-        playlistslistScroll.refresh();
-        playlisttracksScroll.refresh();
-    }
-*/
 }
 
 function setSongTitle (track, refresh_ui) {
@@ -405,41 +367,35 @@ function locationHashChanged () {
     var hash = document.location.hash.split('?')
     // remove #
     var divid = hash[0].substr(1)
+    var uri = hash[1]
+
     setHeadline(divid)
 
-    var uri = hash[1]
-    $('.mainNav a').removeClass('ui-state-active ui-state-persist ui-btn-active')
-    // i don't know why some li elements have those classes, but they do, so we need to remove them
-    $('.mainNav li').removeClass('ui-state-active ui-state-persist ui-btn-active')
     if ($(window).width() < 560) {
         $('#panel').panel('close')
     }
-    $('.pane').hide()
 
-    $('#' + divid + 'pane').show()
+    $('.mainNav a').removeClass($.mobile.activeBtnClass)
+    // i don't know why some li elements have those classes, but they do, so we need to remove them
+    $('.mainNav li').removeClass($.mobile.activeBtnClass)
+    $('#nav' + divid + ' a').addClass($.mobile.activeBtnClass)  // Update navigation pane
+
+    $('.pane').hide()  // Hide all pages
+    $('#' + divid + 'pane').show()  // Switch to active pane
+
+    if (divid === 'browse' && browseStack.length > 0) {
+        window.scrollTo(0, browseStack[browseStack.length - 1].scrollPos || 0)  // Restore scroll position - browsing library.
+    } else if (typeof pageScrollPos[divid] !== 'undefined') {  // Restore scroll position - pages
+        window.scrollTo(0, pageScrollPos[divid])
+    }
 
     switch (divid) {
-        case 'home':
-            $('#navhome a').addClass('ui-state-active ui-state-persist ui-btn-active')
-            break
-        case 'nowPlaying':
-            $('#navnowPlaying a').addClass('ui-state-active ui-state-persist ui-btn-active')
-            break
-        case 'current':
-            $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active')
-            break
-        case 'playlists':
-            $('#navplaylists a').addClass('ui-state-active ui-state-persist ui-btn-active')
-            break
-        case 'browse':
-            $('#navbrowse a').addClass('ui-state-active ui-state-persist ui-btn-active')
+        case 'nowPlaying':  // Show 'now playing' footer
+            $('#normalFooter').hide()
+            $('#nowPlayingFooter').show()
             break
         case 'search':
-            $('#navsearch a').addClass($.mobile.activeBtnClass)
             $('#searchinput').focus()
-            break
-        case 'stream':
-            $('#navstream a').addClass('ui-state-active ui-state-persist ui-btn-active')
             break
         case 'artists':
             if (uri !== '') {
@@ -451,15 +407,7 @@ function locationHashChanged () {
                 library.showAlbum(uri)
             }
             break
-    }
-
-    // switch the footer
-    switch (divid) {
-        case 'nowPlaying':
-            $('#normalFooter').hide()
-            $('#nowPlayingFooter').show()
-            break
-        default:
+        default:  // Default footer
             $('#normalFooter').show()
             $('#nowPlayingFooter').hide()
     }
@@ -487,6 +435,16 @@ $(document).ready(function (event) {
         switchContent('home')
     }
     $(window).hashchange()
+
+    // Remember scroll position for each page and browsed folder
+    $(window).scrollEnd(function () {
+        var divid = document.location.hash.split('?')[0].substr(1)
+        if (divid === 'browse' && browseStack.length > 0) {
+            browseStack[browseStack.length - 1].scrollPos = window.pageYOffset
+        } else {
+            pageScrollPos[divid] = window.pageYOffset
+        }
+    }, 250)
 
     initgui = false
 

@@ -127,6 +127,8 @@ v2.4.0 (UNRELEASED)
 - Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
 - When browsing the library using the local 'File' extension, only playable audio files will have context menu icons.
 - Show all available track information in the 'Show Track Info...' popup. (Fixes: `#227 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/227>`_). 
+- The last scroll position is now always saved when navigating between pages or browsing the library.
+  (Fixes: `#73 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/73>`_, `#93 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/93>`_).
 
 v2.3.0 (2016-05-15)
 -------------------

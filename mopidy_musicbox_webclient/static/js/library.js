@@ -208,16 +208,18 @@
             showLoading(true)
             if (!rootdir) {
                 browseStack.pop()
-                rootdir = browseStack[browseStack.length - 1] || null
-            } else {
-                if (rootdir !== browseStack[browseStack.length - 1]) {
-                    browseStack.push(rootdir)
+                if (browseStack.length > 0) {
+                    rootdir = browseStack[browseStack.length - 1].uri  // Navigated one level up
+                } else {
+                    rootdir = null  // Navigated to top of library
                 }
+            } else if (browseStack.length === 0 || rootdir !== browseStack[browseStack.length - 1].uri) {
+                browseStack.push({'uri': rootdir, 'scrollPos': 0})  // Navigated one level down
             }
             mopidy.library.browse({'uri': rootdir}).then(function (resultArr) {
                 processBrowseDir(resultArr)
                 if (rootdir === null) {
-                    $('.refreshLibraryBtnDiv').hide()
+                    $('.refreshLibraryBtnDiv').hide()  // Mopidy does not support refreshing list of backends.
                 } else {
                     $('.refreshLibraryBtnDiv').show()
                     $('#refreshLibraryBtn').data('url', rootdir)

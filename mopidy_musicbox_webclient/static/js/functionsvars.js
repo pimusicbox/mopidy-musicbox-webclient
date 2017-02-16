@@ -28,8 +28,7 @@ var artiststext = ''
 var songname = ''
 var songdata = {'track': {}, 'tlid': -1}
 
-var playlisttracksScroll
-var playlistslistScroll
+var pageScrollPos = {}
 
 var STREAMS_PLAYLIST_NAME = '[Radio Streams]'
 var STREAMS_PLAYLIST_SCHEME = 'm3u'
@@ -159,9 +158,8 @@ var audioExt = [
 ]
 
 function scrollToTop () {
-    var divtop = 0
     $('body,html').animate({
-        scrollTop: divtop
+        scrollTop: 0
     }, 250)
 }
 
