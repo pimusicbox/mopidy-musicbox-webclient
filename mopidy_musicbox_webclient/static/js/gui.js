@@ -20,6 +20,12 @@ function resetSong () {
 }
 
 function resizeMb () {
+    if ($(window).width() < 560) {
+        $('#panel').panel('close')
+    } else {
+        $('#panel').panel('open')
+    }
+
     $('#infoname').html(songdata.track.name)
     $('#infoartist').html(artiststext)
 
@@ -287,10 +293,6 @@ function initSocketevents () {
     })
 }
 
-$(document).bind('pageinit', function () {
-    resizeMb()
-})
-
 /** ************
  * gui stuff  *
  **************/
@@ -370,10 +372,6 @@ function locationHashChanged () {
     var uri = hash[1]
 
     setHeadline(divid)
-
-    if ($(window).width() < 560) {
-        $('#panel').panel('close')
-    }
 
     $('.mainNav a').removeClass($.mobile.activeBtnClass)
     // i don't know why some li elements have those classes, but they do, so we need to remove them
@@ -515,12 +513,6 @@ $(document).ready(function (event) {
         }
     })
 
-    if ($(window).width() < 980) {
-        $('#panel').panel('close')
-    } else {
-        $('#panel').panel('open')
-    }
-
     $.event.special.swipe.horizontalDistanceThreshold = 125 // (default: 30px)  Swipe horizontal displacement must be more than this.
     $.event.special.swipe.verticalDistanceThreshold = 50 // (default: 75px)  Swipe vertical displacement must be less than this.
     $.event.special.swipe.durationThreshold = 500
@@ -556,10 +548,7 @@ $(document).ready(function (event) {
     $('#volumeslider').on('slidestop', function () { volumeSliding = false })
     $('#volumeslider').on('change', function () { controls.doVolume($(this).val()) })
 
-    $(window).resize(function () {
-        resizeMb()
-    })
-    resizeMb()
+    $(window).resize(resizeMb).resize()
 
     // Connect to server
     var websocketUrl = $(document.body).data('websocket-url')
