@@ -130,6 +130,7 @@ v2.4.0 (UNRELEASED)
 - The last scroll position is now always saved when navigating between pages or browsing the library.
   (Fixes: `#73 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/73>`_, `#93 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/93>`_).
 - Playlists will now list tracks even if they are no longer available in the library. (Fixes: `#226 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/226>`_).
+- Fixed an issue on Safari where the first page to load would be too wide to fit on the screen.
 
 v2.3.0 (2016-05-15)
 -------------------
