@@ -648,14 +648,14 @@ a {
     .ui-responsive-panel.ui-page-panel .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
         margin: 0 0 0 17em;
     }
-
-    .ui-responsive-panel .ui-panel-dismiss-display-reveal {
-        display: none;
-    }
 }
 
 /*tablets and desktop*/
 @media (min-width: 35em) {
+    .ui-responsive-panel .ui-panel-dismiss-display-reveal {
+        display: none;
+    }
+
     .popupDialog {
         min-width: 320px;
     }
