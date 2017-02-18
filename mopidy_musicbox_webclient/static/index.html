@@ -140,10 +140,10 @@
                 <a href="#" onclick="return controls.playTracks(ADD_ALL_BOTTOM, mopidy);">Add All to Bottom of Queue</a>
             </li>
             <li class="popupAlbumLi">
-                <a href="#" onclick="showAlbumPopup('#popupTracks')">Show Album <span class="popupAlbumName"></span></a>
+                <a href="#" onclick="showAlbumPopup('#popupTracks', mopidy)">Show Album <span class="popupAlbumName"></span></a>
             </li>
             <li class="popupArtistsLi">
-                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
+                <a href="#" onclick="library.showArtist(null, mopidy)" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                 </a>
             </li>
             <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">
@@ -170,10 +170,10 @@
                 <a href="#" onclick="return controls.removeTrack('', mopidy);">Remove from Queue</a>
             </li>
             <li class="popupAlbumLi">
-                <a href="#" onclick="showAlbumPopup('#popupQueue')">Show Album <span class="popupAlbumName"></span></a>
+                <a href="#" onclick="showAlbumPopup('#popupQueue', mopidy)">Show Album <span class="popupAlbumName"></span></a>
             </li>
             <li class="popupArtistsLi">
-                <a href="#" onclick="showArtist()" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
+                <a href="#" onclick="library.showArtist(null, mopidy)" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
                 </a>
             </li>
             <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">

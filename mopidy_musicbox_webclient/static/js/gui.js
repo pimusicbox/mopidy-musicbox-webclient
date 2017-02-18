@@ -78,7 +78,7 @@ function setSongInfo (data) {
 
     if (data.track.artists) {
         for (var j = 0; j < data.track.artists.length; j++) {
-            artistshtml += '<a href="#" onclick="return library.showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>'
+            artistshtml += '<a href="#" onclick="return library.showArtist(\'' + data.track.artists[j].uri + '\', mopidy);">' + data.track.artists[j].name + '</a>'
             artiststext += data.track.artists[j].name
             if (j !== data.track.artists.length - 1) {
                 artistshtml += ', '
@@ -88,7 +88,7 @@ function setSongInfo (data) {
         arttmp = artistshtml
     }
     if (data.track.album && data.track.album.name) {
-        $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>')
+        $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\', mopidy);">' + data.track.album.name + '</a>')
     } else {
         $('#modalalbum').html('')
     }
@@ -132,9 +132,9 @@ function popupTracks (e, listuri, trackuri, tlid) {
     $('.popupArtistsDiv').hide()
     if (popupData[trackuri].artists) {
         if (popupData[trackuri].artists.length === 1 && popupData[trackuri].artists[0].uri) {
-            child = '<a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'
+            child = '<a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\', mopidy);">Show Artist</a>'
             $('.popupArtistName').html(popupData[trackuri].artists[0].name)
-            $('.popupArtistHref').attr('onclick', 'library.showArtist("' + popupData[trackuri].artists[0].uri + '");')
+            $('.popupArtistHref').attr('onclick', 'library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\', mopidy);')
             $('.popupArtistsDiv').hide()
             $('.popupArtistsLi').show()
         } else {
@@ -142,7 +142,7 @@ function popupTracks (e, listuri, trackuri, tlid) {
             for (var j = 0; j < popupData[trackuri].artists.length; j++) {
                 if (popupData[trackuri].artists[j].uri) {
                     isValidArtistURI = true
-                    child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
+                    child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\', mopidy);"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
                 }
             }
             if (isValidArtistURI) {
@@ -186,7 +186,7 @@ function popupTracks (e, listuri, trackuri, tlid) {
 
 function showAlbumPopup (popupId) {
     uri = $(popupId).data('track')
-    library.showAlbum(popupData[uri].album.uri)
+    library.showAlbum(popupData[uri].album.uri, mopidy)
 }
 
 /** ********************
@@ -364,6 +364,13 @@ function updateStatusOfAll () {
 }
 
 function locationHashChanged () {
+    if (!mopidy) {
+        // Mopidy connection not yet established. User probably clicked 'Refresh' in their
+        // browser and the page is still loading. We can safely ignore this call as it will
+        // be invoked again later when the page has finished loading and $(document).ready()
+        // is triggered.
+        return false
+    }
     var hash = document.location.hash.split('?')
     // remove #
     var divid = hash[0].substr(1)
@@ -399,12 +406,12 @@ function locationHashChanged () {
             break
         case 'artists':
             if (uri !== '') {
-                library.showArtist(uri)
+                library.showArtist(uri, mopidy)
             }
             break
         case 'albums':
             if (uri !== '') {
-                library.showAlbum(uri)
+                library.showAlbum(uri, mopidy)
             }
             break
         default:  // Default footer
