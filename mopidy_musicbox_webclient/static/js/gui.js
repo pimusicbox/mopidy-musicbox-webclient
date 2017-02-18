@@ -373,6 +373,10 @@ function locationHashChanged () {
 
     setHeadline(divid)
 
+    if ($(window).width() < 560) {
+        $('#panel').panel('close')
+    }
+
     $('.mainNav a').removeClass($.mobile.activeBtnClass)
     // i don't know why some li elements have those classes, but they do, so we need to remove them
     $('.mainNav li').removeClass($.mobile.activeBtnClass)
