@@ -366,13 +366,6 @@ function updateStatusOfAll () {
 }
 
 function locationHashChanged () {
-    if (!mopidy) {
-        // Mopidy connection not yet established. User probably clicked 'Refresh' in their
-        // browser and the page is still loading. We can safely ignore this call as it will
-        // be invoked again later when the page has finished loading and $(document).ready()
-        // is triggered.
-        return false
-    }
     var hash = document.location.hash.split('?')
     // remove #
     var divid = hash[0].substr(1)
@@ -404,12 +397,20 @@ function locationHashChanged () {
             break
         case 'artists':
             if (uri !== '') {
-                library.showArtist(uri, mopidy)
+                if (mopidy) {
+                    library.showArtist(uri, mopidy)
+                } else {
+                    showOffline(true)  // Page refreshed - wait for mopidy object to be initialized.
+                }
             }
             break
         case 'albums':
             if (uri !== '') {
-                library.showAlbum(uri, mopidy)
+                if (mopidy) {
+                    library.showAlbum(uri, mopidy)
+                } else {
+                    showOffline(true)  // Page refreshed - wait for mopidy object to be initialized.
+                }
             }
             break
         default:  // Default footer
