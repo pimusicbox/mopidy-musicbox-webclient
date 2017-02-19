@@ -20,7 +20,7 @@ function resetSong () {
 }
 
 function resizeMb () {
-    if ($(window).width() < 560) {
+    if ($(window).width() < 880) {
         $('#panel').panel('close')
     } else {
         $('#panel').panel('open')
@@ -373,7 +373,7 @@ function locationHashChanged () {
 
     setHeadline(divid)
 
-    if ($(window).width() < 560) {
+    if ($(window).width() < 880) {
         $('#panel').panel('close')
     }
 
