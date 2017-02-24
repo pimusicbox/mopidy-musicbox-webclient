@@ -640,6 +640,7 @@ a {
     .ui-responsive-panel.ui-page-panel .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push,
     .ui-responsive-panel.ui-page-panel .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal {
         margin-right: 17em;
+        width: auto;
     }
 
     .ui-responsive-panel.ui-page-panel .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-push.ui-panel-content-fixed-toolbar-position-right,
