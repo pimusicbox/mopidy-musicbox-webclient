@@ -20,7 +20,7 @@ function resetSong () {
 }
 
 function resizeMb () {
-    if ($(window).width() < 560) {
+    if ($(window).width() < 880) {
         $('#panel').panel('close')
     } else {
         $('#panel').panel('open')
@@ -372,6 +372,10 @@ function locationHashChanged () {
     var uri = hash[1]
 
     setHeadline(divid)
+
+    if ($(window).width() < 880) {
+        $('#panel').panel('close')
+    }
 
     $('.mainNav a').removeClass($.mobile.activeBtnClass)
     // i don't know why some li elements have those classes, but they do, so we need to remove them
