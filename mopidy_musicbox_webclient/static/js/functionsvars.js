@@ -513,7 +513,7 @@ function isStreamUri (uri) {
 }
 
 function getMediaClass (track) {
-    var default_icon = 'fa-file-sound-o'
+    var defaultIcon = 'fa-file-sound-o'
     var type = track.type
     if (typeof type === 'undefined' || type === 'track') {
         if (!isPlayable(track)) {
@@ -525,13 +525,12 @@ function getMediaClass (track) {
         return 'fa fa-folder-o'
     } else if (type === 'album') {
         // return 'fa fa-bullseye'  // Album
-        default_icon = 'fa-folder-o'
+        defaultIcon = 'fa-folder-o'
     } else if (type === 'artist') {
         // return 'fa fa-user-circle-o'  // Artist
-        default_icon = 'fa-folder-o'
+        defaultIcon = 'fa-folder-o'
     } else if (type === 'playlist') {
         // return 'fa fa-star'  // Playlist
-        //return ''
     }
     if (track.uri) {
         var scheme = getScheme(track.uri)
@@ -540,7 +539,7 @@ function getMediaClass (track) {
                 return 'fa ' + uriClassList[i][1]
             }
         }
-        return 'fa ' + default_icon
+        return 'fa ' + defaultIcon
     }
     return ''
 }
