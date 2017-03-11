@@ -75,8 +75,8 @@ var uriClassList = [
     ['spotify', 'fa-spotify'],
     ['spotifytunigo', 'fa-spotify'],
     ['spotifyweb', 'fa-spotify'],
-    ['local', 'fa-folder-o'],
-    ['file', 'fa-folder-o'],
+    ['local', 'fa-file-sound-o'],
+    ['file', 'fa-file-sound-o'],
     ['m3u', 'fa-file-sound-o'],
     ['podcast', 'fa-rss-square'],
     ['podcast+file', 'fa-rss-square'],
@@ -513,33 +513,34 @@ function isStreamUri (uri) {
 }
 
 function getMediaClass (track) {
+    var default_icon = 'fa-file-sound-o'
     var type = track.type
     if (typeof type === 'undefined' || type === 'track') {
-        if (isPlayable(track)) {
-            if (isStreamUri(track.uri)) {
-                return 'fa fa-rss'  // Stream
-            } else {
-                return 'fa fa-file-sound-o'  // Sound file (default)
-            }
-        } else {
+        if (!isPlayable(track)) {
             return 'fa fa-file-o'  // Unplayable file
+        } else if (isStreamUri(track.uri)) {
+            return 'fa fa-rss'  // Stream
         }
     } else if (type === 'directory') {
-        for (var i = 0; i < uriClassList.length; i++) {
-            if (getScheme(track.uri) === uriClassList[i][0]) {
-                return 'fa ' + uriClassList[i][1]  // Mapped service directory
-            }
-        }
-        return 'fa fa-folder-o'  // Unmapped directory
+        return 'fa fa-folder-o'
     } else if (type === 'album') {
         // return 'fa fa-bullseye'  // Album
-        return 'fa fa-folder-o'
+        default_icon = 'fa-folder-o'
     } else if (type === 'artist') {
         // return 'fa fa-user-circle-o'  // Artist
-        return 'fa fa-folder-o'
+        default_icon = 'fa-folder-o'
     } else if (type === 'playlist') {
         // return 'fa fa-star'  // Playlist
-        return ''
+        //return ''
+    }
+    if (track.uri) {
+        var scheme = getScheme(track.uri)
+        for (var i = 0; i < uriClassList.length; i++) {
+            if (scheme === uriClassList[i][0]) {
+                return 'fa ' + uriClassList[i][1]
+            }
+        }
+        return 'fa ' + default_icon
     }
     return ''
 }
