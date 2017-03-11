@@ -84,7 +84,7 @@ function setSongInfo (data) {
 
     if (data.track.artists) {
         for (var j = 0; j < data.track.artists.length; j++) {
-            artistshtml += '<a href="#" onclick="return library.showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>'
+            artistshtml += '<a href="#" onclick="return library.showArtist(\'' + data.track.artists[j].uri + '\', mopidy);">' + data.track.artists[j].name + '</a>'
             artiststext += data.track.artists[j].name
             if (j !== data.track.artists.length - 1) {
                 artistshtml += ', '
@@ -94,7 +94,7 @@ function setSongInfo (data) {
         arttmp = artistshtml
     }
     if (data.track.album && data.track.album.name) {
-        $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>')
+        $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\', mopidy);">' + data.track.album.name + '</a>')
     } else {
         $('#modalalbum').html('')
     }
@@ -138,9 +138,9 @@ function popupTracks (e, listuri, trackuri, tlid) {
     $('.popupArtistsDiv').hide()
     if (popupData[trackuri].artists) {
         if (popupData[trackuri].artists.length === 1 && popupData[trackuri].artists[0].uri) {
-            child = '<a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'
+            child = '<a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\', mopidy);">Show Artist</a>'
             $('.popupArtistName').html(popupData[trackuri].artists[0].name)
-            $('.popupArtistHref').attr('onclick', 'library.showArtist("' + popupData[trackuri].artists[0].uri + '");')
+            $('.popupArtistHref').attr('onclick', 'library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\', mopidy);')
             $('.popupArtistsDiv').hide()
             $('.popupArtistsLi').show()
         } else {
@@ -148,7 +148,7 @@ function popupTracks (e, listuri, trackuri, tlid) {
             for (var j = 0; j < popupData[trackuri].artists.length; j++) {
                 if (popupData[trackuri].artists[j].uri) {
                     isValidArtistURI = true
-                    child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
+                    child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\', mopidy);"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
                 }
             }
             if (isValidArtistURI) {
@@ -192,7 +192,7 @@ function popupTracks (e, listuri, trackuri, tlid) {
 
 function showAlbumPopup (popupId) {
     uri = $(popupId).data('track')
-    library.showAlbum(popupData[uri].album.uri)
+    library.showAlbum(popupData[uri].album.uri, mopidy)
 }
 
 /** ********************
@@ -401,12 +401,20 @@ function locationHashChanged () {
             break
         case 'artists':
             if (uri !== '') {
-                library.showArtist(uri)
+                if (mopidy) {
+                    library.showArtist(uri, mopidy)
+                } else {
+                    showOffline(true)  // Page refreshed - wait for mopidy object to be initialized.
+                }
             }
             break
         case 'albums':
             if (uri !== '') {
-                library.showAlbum(uri)
+                if (mopidy) {
+                    library.showAlbum(uri, mopidy)
+                } else {
+                    showOffline(true)  // Page refreshed - wait for mopidy object to be initialized.
+                }
             }
             break
         default:  // Default footer

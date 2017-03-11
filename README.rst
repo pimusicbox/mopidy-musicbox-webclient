@@ -131,6 +131,7 @@ v2.4.0 (UNRELEASED)
   (Fixes: `#73 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/73>`_, `#93 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/93>`_).
 - Playlists will now list tracks even if they are no longer available in the library. (Fixes: `#226 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/226>`_).
 - Fixed an issue on Safari where the first page to load would be too wide to fit on the screen.
+- Refreshing album or artist info pages no longer raises an exception. (Fixes: `#230 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/230>`_).
 
 v2.3.0 (2016-05-15)
 -------------------

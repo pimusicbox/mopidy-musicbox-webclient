@@ -131,7 +131,7 @@
 
             // Artist results
             var child = ''
-            var template = '<li><a href="#" onclick="return library.showArtist(this.id)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>'
+            var template = '<li><a href="#" onclick="return library.showArtist(\'this.id\', mopidy)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>'
             var tokens
 
             for (i = 0; i < results.artists.length; i++) {
@@ -155,7 +155,7 @@
 
             // Album results
             child = ''
-            template = '<li><a href="#" onclick="return library.showAlbum(this.id)" id="{albumId}">'
+            template = '<li><a href="#" onclick="return library.showAlbum(\'this.id\', mopidy)" id="{albumId}">'
             template += '<h5 data-role="heading"><i class="{class}"></i> {albumName}</h5>'
             template += '<p data-role="desc">{artistName}</p>'
             template += '</a></li>'
@@ -269,7 +269,7 @@
             return false
         },
 
-        showArtist: function (nwuri) {
+        showArtist: function (nwuri, mopidy) {
             $('#popupQueue').popup('close')
             $('#popupTracks').popup('close')
             $('#controlsmodal').popup('close')
@@ -288,7 +288,7 @@
             return false
         },
 
-        showAlbum: function (uri) {
+        showAlbum: function (uri, mopidy) {
             $('#popupQueue').popup('close')
             $('#popupTracks').popup('close')
             $('#controlsmodal').popup('close')

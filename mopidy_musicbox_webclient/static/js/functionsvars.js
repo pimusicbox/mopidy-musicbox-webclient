@@ -305,7 +305,7 @@ function renderSongLiDivider (previousTrack, track, nextTrack, target) {
     if (!hasSameAlbum(previousTrack, track) && hasSameAlbum(track, nextTrack)) {
         // Large divider with album cover.
         html +=
-            '<li class="albumdivider"><a href="#" onclick="return library.showAlbum(\'' + track.album.uri + '\');">' +
+            '<li class="albumdivider"><a href="#" onclick="return library.showAlbum(\'' + track.album.uri + '\', mopidy);">' +
             '<img id="' + getjQueryID(target + '-cover', track.uri) + '" class="artistcover" width="30" height="30"/>' +
             '<h1>' + track.album.name + '</h1><p>' +
             renderSongLiTrackArtists(track) + '</p></a></li>'
