@@ -74,6 +74,7 @@ var radioExtensionsList = ['somafm', 'tunein', 'dirble', 'audioaddict']
 var uriClassList = [
     ['spotify', 'fa-spotify'],
     ['spotifytunigo', 'fa-spotify'],
+    ['spotifyweb', 'fa-spotify'],
     ['local', 'fa-folder-o'],
     ['file', 'fa-folder-o'],
     ['m3u', 'fa-file-sound-o'],
@@ -101,6 +102,7 @@ var uriClassList = [
 var uriHumanList = [
     ['spotify', 'Spotify'],
     ['spotifytunigo', 'Spotify browse'],
+    ['spotifyweb', 'Spotify browse'],
     ['local', 'Local media'],
     ['m3u', 'Local playlists'],
     ['podcast', 'Podcasts'],
