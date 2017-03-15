@@ -105,7 +105,7 @@ Project resources
 Changelog
 =========
 
-v2.4.0 (UNRELEASED)
+v2.4.0 (2017-03-15)
 -------------------
 
 - Now shows server name/IP address and port number at the bottom of the navigation pane. (Addresses: `#67 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/67>`_).
@@ -122,10 +122,9 @@ v2.4.0 (UNRELEASED)
   (Fixes: `#213 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/213>`_).
 - Now shows correct hostname information in loader popup. (Fixes: `#209 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/209>`_).
 - Reset 'Now Playing' info when the last track in the tracklist is deleted. Fixes an issue where info of the last song played would be displayed even after the queue had been cleared.
-- Use correct icons for folders, audio, and other files when browsing local files.
 - Now initializes the GUI properly, even if the user is offline or the Mopidy server cannot be reached.
 - Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
-- When browsing the library using the local 'File' extension, only playable audio files will have context menu icons.
+- Unplayable files are shown with a different icon in track lists.
 - Show all available track information in the 'Show Track Info...' popup. (Fixes: `#227 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/227>`_). 
 - The last scroll position is now always saved when navigating between pages or browsing the library.
   (Fixes: `#73 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/73>`_, `#93 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/93>`_).
