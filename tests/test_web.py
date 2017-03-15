@@ -46,13 +46,13 @@ class RedirectHandlerTest(BaseTest):
         response.headers['Location'].endswith('index.html')
 
 
-class IndexHandlerTest(BaseTest):
+class IndexHandlerTestMusicBox(BaseTest):
 
     def test_index_handler(self):
         response = self.fetch('/index.html', method='GET')
         assert response.code == 200
 
-    def test_get_title(self):
+    def test_get_title_musicbox(self):
         response = self.fetch('/index.html', method='GET')
         body = tornado.escape.to_unicode(response.body)
 
@@ -65,3 +65,32 @@ class IndexHandlerTest(BaseTest):
         assert 'data-is-musicbox="true"' in body
         assert 'data-has-alarmclock="false"' in body
         assert 'data-websocket-url=""' in body
+        assert 'data-on-track-click="' in body
+        assert 'data-program-name="' in body
+        assert 'data-hostname="' in body
+
+
+class IndexHandlerTestMopidy(BaseTest):
+
+    def get_app(self):
+        extension = Extension()
+        self.config = config.Proxy({'musicbox_webclient': {
+            'enabled': True,
+            'musicbox': False,
+            'websocket_host': '',
+            'websocket_port': '',
+            }
+        })
+        return tornado.web.Application(extension.factory(self.config, mock.Mock()))
+
+    def test_initialize_sets_dictionary_objects(self):
+        response = self.fetch('/index.html', method='GET')
+        body = tornado.escape.to_unicode(response.body)
+
+        assert 'data-is-musicbox="false"' in body
+
+    def test_get_title_mopidy(self):
+        response = self.fetch('/index.html', method='GET')
+        body = tornado.escape.to_unicode(response.body)
+
+        assert '<title>Mopidy on localhost</title>' in body

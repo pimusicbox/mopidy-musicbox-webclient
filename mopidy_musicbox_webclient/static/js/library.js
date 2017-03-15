@@ -126,35 +126,28 @@
                 $('#searchtracks').show()
             }
 
-            // Returns a string where {x} in template is replaced by tokens[x].
-            function theme (template, tokens) {
-                return template.replace(/{[^}]+}/g, function (match) {
-                    return tokens[match.slice(1, -1)]
-                })
-            }
-
-            // 'Show more' pattern
-            var showMorePattern = '<li onclick="$(this).hide().siblings().show(); return false;"><a>Show {count} more</a></li>'
+            // 'Show more' template
+            var showMoreTemplate = '<li onclick="$(this).hide().siblings().show(); return false;"><a>Show {count} more</a></li>'
 
             // Artist results
             var child = ''
-            var pattern = '<li><a href="#" onclick="return library.showArtist(this.id)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>'
+            var template = '<li><a href="#" onclick="return library.showArtist(this.id, mopidy)" id={id}><i class="{class}"></i> <strong>{name}</strong></a></li>'
             var tokens
 
             for (i = 0; i < results.artists.length; i++) {
                 tokens = {
                     'id': results.artists[i].uri,
                     'name': results.artists[i].name,
-                    'class': getMediaClass(results.artists[i].uri)
+                    'class': getMediaClass(results.artists[i])
                 }
 
                 // Add 'Show all' item after a certain number of hits.
                 if (i === 4 && results.artists.length > 5) {
-                    child += theme(showMorePattern, {'count': results.artists.length - i})
-                    pattern = pattern.replace('<li>', '<li class="overflow">')
+                    child += stringFromTemplate(showMoreTemplate, {'count': results.artists.length - i})
+                    template = template.replace('<li>', '<li class="overflow">')
                 }
 
-                child += theme(pattern, tokens)
+                child += stringFromTemplate(template, tokens)
             }
 
             // Inject list items, refresh listview and hide superfluous items.
@@ -162,10 +155,10 @@
 
             // Album results
             child = ''
-            pattern = '<li><a href="#" onclick="return library.showAlbum(this.id)" id="{albumId}">'
-            pattern += '<h5 data-role="heading"><i class="{class}"></i> {albumName}</h5>'
-            pattern += '<p data-role="desc">{artistName}</p>'
-            pattern += '</a></li>'
+            template = '<li><a href="#" onclick="return library.showAlbum(this.id, mopidy)" id="{albumId}">'
+            template += '<h5 data-role="heading"><i class="{class}"></i> {albumName}</h5>'
+            template += '<p data-role="desc">{artistName}</p>'
+            template += '</a></li>'
 
             for (i = 0; i < results.albums.length; i++) {
                 tokens = {
@@ -173,7 +166,7 @@
                     'albumName': results.albums[i].name,
                     'artistName': '',
                     'albumYear': results.albums[i].date,
-                    'class': getMediaClass(results.albums[i].uri)
+                    'class': getMediaClass(results.albums[i])
                 }
                 if (results.albums[i].artists) {
                     for (j = 0; j < results.albums[i].artists.length; j++) {
@@ -187,11 +180,11 @@
                 }
                 // Add 'Show all' item after a certain number of hits.
                 if (i === 4 && results.albums.length > 5) {
-                    child += theme(showMorePattern, {'count': results.albums.length - i})
-                    pattern = pattern.replace('<li>', '<li class="overflow">')
+                    child += stringFromTemplate(showMoreTemplate, {'count': results.albums.length - i})
+                    template = template.replace('<li>', '<li class="overflow">')
                 }
 
-                child += theme(pattern, tokens)
+                child += stringFromTemplate(template, tokens)
             }
             // Inject list items, refresh listview and hide superfluous items.
             $(SEARCH_ALBUM_TABLE).html(child).listview('refresh').find('.overflow').hide()
@@ -215,14 +208,25 @@
             showLoading(true)
             if (!rootdir) {
                 browseStack.pop()
-                rootdir = browseStack[browseStack.length - 1]
-            } else {
-                browseStack.push(rootdir)
+                if (browseStack.length > 0) {
+                    rootdir = browseStack[browseStack.length - 1].uri  // Navigated one level up
+                } else {
+                    rootdir = null  // Navigated to top of library
+                }
+            } else if (browseStack.length === 0 || rootdir !== browseStack[browseStack.length - 1].uri) {
+                browseStack.push({'uri': rootdir, 'scrollPos': 0})  // Navigated one level down
             }
-            if (!rootdir) {
-                rootdir = null
-            }
-            mopidy.library.browse({'uri': rootdir}).then(processBrowseDir, console.error)
+            mopidy.library.browse({'uri': rootdir}).then(function (resultArr) {
+                processBrowseDir(resultArr)
+                if (rootdir === null) {
+                    $('.refreshLibraryBtnDiv').hide()  // Mopidy does not support refreshing list of backends.
+                } else {
+                    $('.refreshLibraryBtnDiv').show()
+                    $('#refreshLibraryBtn').data('url', rootdir)
+                    $('#refreshLibraryBtn').off('click')
+                    $('#refreshLibraryBtn').one('click', controls.refreshLibrary)
+                }
+            }, console.error)
         },
 
         getCurrentPlaylist: function () {
@@ -265,7 +269,7 @@
             return false
         },
 
-        showArtist: function (nwuri) {
+        showArtist: function (nwuri, mopidy) {
             $('#popupQueue').popup('close')
             $('#popupTracks').popup('close')
             $('#controlsmodal').popup('close')
@@ -284,7 +288,7 @@
             return false
         },
 
-        showAlbum: function (uri) {
+        showAlbum: function (uri, mopidy) {
             $('#popupQueue').popup('close')
             $('#popupTracks').popup('close')
             $('#controlsmodal').popup('close')

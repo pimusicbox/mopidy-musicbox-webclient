@@ -6,10 +6,6 @@ Mopidy-MusicBox-Webclient
     :target: https://pypi.python.org/pypi/Mopidy-MusicBox-Webclient/
     :alt: Latest PyPI version
 
-.. image:: https://img.shields.io/pypi/dm/Mopidy-MusicBox-Webclient.svg?style=flat
-    :target: https://pypi.python.org/pypi/Mopidy-MusicBox-Webclient/
-    :alt: Number of PyPI downloads
-
 .. image:: https://img.shields.io/travis/pimusicbox/mopidy-musicbox-webclient/develop.svg?style=flat
     :target: https://travis-ci.org/pimusicbox/mopidy-musicbox-webclient
     :alt: Travis CI build status
@@ -38,7 +34,9 @@ Features
 - Deep integration with, and additional features for, the `Pi MusicBox <http://www.pimusicbox.com/>`_.
 - Fullscreen mode.
 
-.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/develop/screenshots/queue_desktop.png
+.. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/develop/screenshots/overview.png
+    :width: 1312
+    :height: 723
 
 Dependencies
 ============
@@ -106,6 +104,33 @@ Project resources
 
 Changelog
 =========
+
+v2.4.0 (2017-03-15)
+-------------------
+
+- Now shows server name/IP address and port number at the bottom of the navigation pane. (Addresses: `#67 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/67>`_).
+- Add ability to insert a track anywhere in the current queue. (Addresses: `#75 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/75>`_).
+- Add 'Show Track Info' popup which can be activated from any context menu or by clicking on either the 'info' icon next
+  to the album cover or the track's title text on the 'Now Playing' pane. The popup includes the URI of the track, which
+  can be inserted into various lists elsewhere in the player.
+- Updated icon set for font-awesome 4.7.0.
+- Added 'Refresh' button for refreshing libraries. (Addresses: `#75 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/75>`_).
+
+**Fixes**
+
+- Only show 'Show Album' or 'Show Artist' options in popup menus if URI's for those resources are available.
+  (Fixes: `#213 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/213>`_).
+- Now shows correct hostname information in loader popup. (Fixes: `#209 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/209>`_).
+- Reset 'Now Playing' info when the last track in the tracklist is deleted. Fixes an issue where info of the last song played would be displayed even after the queue had been cleared.
+- Now initializes the GUI properly, even if the user is offline or the Mopidy server cannot be reached.
+- Fixed `Alarm Clock <https://pypi.python.org/pypi/Mopidy-AlarmClock/>`_ detection.
+- Unplayable files are shown with a different icon in track lists.
+- Show all available track information in the 'Show Track Info...' popup. (Fixes: `#227 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/227>`_). 
+- The last scroll position is now always saved when navigating between pages or browsing the library.
+  (Fixes: `#73 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/73>`_, `#93 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/93>`_).
+- Playlists will now list tracks even if they are no longer available in the library. (Fixes: `#226 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/226>`_).
+- Fixed an issue on Safari where the first page to load would be too wide to fit on the screen.
+- Refreshing album or artist info pages no longer raises an exception. (Fixes: `#230 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/230>`_).
 
 v2.3.0 (2016-05-15)
 -------------------

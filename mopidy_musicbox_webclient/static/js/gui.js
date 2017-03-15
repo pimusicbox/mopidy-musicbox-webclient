@@ -20,63 +20,30 @@ function resetSong () {
 }
 
 function resizeMb () {
+    if ($(window).width() < 880) {
+        $('#panel').panel('close')
+    } else {
+        $('#panel').panel('open')
+    }
+
     $('#infoname').html(songdata.track.name)
     $('#infoartist').html(artiststext)
 
-    if ($(window).width() <= 960) {
-//        $('#playlisttracksdiv').hide();
-//        $('#playlistslistdiv').show();
-    } else {
+    if ($(window).width() > 960) {
         $('#playlisttracksdiv').show()
         $('#playlistslistdiv').show()
     }
-//    //set height of playlist scrollers
-/*    if ($(window).width() > 960) {
-        $('#playlisttracksdiv').show();
-        $('#playlistslistdiv').show();
-        $('.scroll').removeClass('height').removeClass('width');
-        $('#playlistspane').removeClass('height').removeClass('width');
-    } else {
-        if ( $('#playlisttracksdiv').is(':visible') == $('#playlistslistdiv').is(':visible')) {
-            $('#playlisttracksdiv').hide();
-            $('#playlistslistdiv').show();
-            $('.scroll').addClass('height', '99%').addClass('width', '99%');
-            $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
-        }
-    }
-
-    if ($('#playlisttracksdiv').is(':visible') && !$('#playlisttracksback').is(':visible') ) {
-        $('.scroll').height($(window).height() - 96);
-        //jqm added something which it shouldnt (at least in this case) I guess
-        //        $('#playlistspane').removeClass('height').height($(window).height() - 110);
-        $('.scroll').removeClass('height').removeClass('width');
-        $('#playlistspane').removeClass('height').removeClass('width');
-        $('#playlisttracksdiv').show();
-        $('#playlistslistdiv').show();
-    } else {
-        $('.scroll').addClass('height', '99%').addClass('width', '99%');
-        $('#playlistspane').addClass('height', '99%').addClass('width', '99%');
-        $('#playlisttracksdiv').show();
-        $('#playlistslistdiv').show();
-    }
-
-    if (isMobileWebkit && ($(window).width() > 480)) {
-        playlistslistScroll.refresh();
-        playlisttracksScroll.refresh();
-    }
-*/
 }
 
-function setSongTitle (title, refresh_ui) {
-    songdata.track.name = title
-    $('#modalname').html(title)
+function setSongTitle (track, refresh_ui) {
+    songdata.track.name = track.name
+    $('#modalname').html('<a href="#" onclick="return controls.showInfoPopup(\'' + track.uri + '\', \'\', mopidy);">' + track.name + '</span></a>')
     if (refresh_ui) {
         resizeMb()
     }
 }
 
 function setSongInfo (data) {
-//    console.log(data, songdata);
     if (!data) { return }
     if (data.tlid === songdata.tlid) { return }
     if (!data.track.name || data.track.name === '') {
@@ -99,7 +66,7 @@ function setSongInfo (data) {
 
     songdata = data
 
-    setSongTitle(data.track.name, false)
+    setSongTitle(data.track, false)
     songlength = Infinity
 
     if (!data.track.length || data.track.length === 0) {
@@ -117,7 +84,7 @@ function setSongInfo (data) {
 
     if (data.track.artists) {
         for (var j = 0; j < data.track.artists.length; j++) {
-            artistshtml += '<a href="#" onclick="return library.showArtist(\'' + data.track.artists[j].uri + '\');">' + data.track.artists[j].name + '</a>'
+            artistshtml += '<a href="#" onclick="return library.showArtist(\'' + data.track.artists[j].uri + '\', mopidy);">' + data.track.artists[j].name + '</a>'
             artiststext += data.track.artists[j].name
             if (j !== data.track.artists.length - 1) {
                 artistshtml += ', '
@@ -127,11 +94,17 @@ function setSongInfo (data) {
         arttmp = artistshtml
     }
     if (data.track.album && data.track.album.name) {
-        $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\');">' + data.track.album.name + '</a>')
+        $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\', mopidy);">' + data.track.album.name + '</a>')
     } else {
         $('#modalalbum').html('')
     }
     images.setAlbumImage(data.track.uri, '#infocover, #albumCoverImg', mopidy)
+    if (data.track.uri) {
+        // Add 'Show Info' icon to album image
+        $('#modalinfo').append(
+            '<a href="#" class="infoBtn" onclick="return controls.showInfoPopup(\'' + data.track.uri + '\', \'undefined\', mopidy);">' +
+            '<i class="fa fa-info-circle"></i></a>')
+    }
 
     $('#modalartist').html(arttmp)
 
@@ -148,19 +121,12 @@ function setSongInfo (data) {
 /** ****************
  * display popups *
  ******************/
-function closePopups () {
-    $('#popupTracks').popup('close')
-    $('#artistpopup').popup('close')
-    $('#coverpopup').popup('close')
-    $('#popupQueue').popup('close')
-}
-
 function popupTracks (e, listuri, trackuri, tlid) {
     if (!e) {
         e = window.event
     }
     $('.popupTrackName').html(popupData[trackuri].name)
-    if (popupData[trackuri].album && popupData[trackuri].album.name) {
+    if (popupData[trackuri].album && popupData[trackuri].album.name && popupData[trackuri].album.uri) {
         $('.popupAlbumName').html(popupData[trackuri].album.name)
         $('.popupAlbumLi').show()
     } else {
@@ -168,39 +134,42 @@ function popupTracks (e, listuri, trackuri, tlid) {
     }
     var child = ''
 
+    $('.popupArtistsLi').hide()
+    $('.popupArtistsDiv').hide()
     if (popupData[trackuri].artists) {
-        if (popupData[trackuri].artists.length === 1) {
-            child = '<a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\');">Show Artist</a>'
+        if (popupData[trackuri].artists.length === 1 && popupData[trackuri].artists[0].uri) {
+            child = '<a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\', mopidy);">Show Artist</a>'
             $('.popupArtistName').html(popupData[trackuri].artists[0].name)
-            $('.popupArtistHref').attr('onclick', 'library.showArtist("' + popupData[trackuri].artists[0].uri + '");')
+            $('.popupArtistHref').attr('onclick', 'library.showArtist(\'' + popupData[trackuri].artists[0].uri + '\', mopidy);')
             $('.popupArtistsDiv').hide()
             $('.popupArtistsLi').show()
         } else {
+            var isValidArtistURI = false
             for (var j = 0; j < popupData[trackuri].artists.length; j++) {
-                child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\');"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
+                if (popupData[trackuri].artists[j].uri) {
+                    isValidArtistURI = true
+                    child += '<li><a href="#" onclick="library.showArtist(\'' + popupData[trackuri].artists[j].uri + '\', mopidy);"><span class="popupArtistName">' + popupData[trackuri].artists[j].name + '</span></a></li>'
+                }
             }
-            $('.popupArtistsLi').hide()
-            $('.popupArtistsLv').html(child).show()
-            $('.popupArtistsDiv').show()
-            //  this makes the viewport of the window resize somehow
-            $('.popupArtistsLv').listview('refresh')
+            if (isValidArtistURI) {
+                $('.popupArtistsLv').html(child).show()
+                $('.popupArtistsDiv').show()
+                //  this makes the viewport of the window resize somehow
+                $('.popupArtistsLv').listview('refresh')
+            }
         }
-    } else {
-        $('.popupArtistsDiv').hide()
-        $('.popupArtistsLi').hide()
     }
 
     var hash = document.location.hash.split('?')
     var divid = hash[0].substr(1)
     var popupName = ''
     if (divid === 'current') {
-        $('.addqueue').hide()
         popupName = '#popupQueue'
     } else {
-        $('.addqueue').show()
         popupName = '#popupTracks'
     }
 
+    // Set playlist, trackUri, and tlid of clicked item.
     if (typeof tlid !== 'undefined' && tlid !== '') {
         $(popupName).data('list', listuri).data('track', trackuri).data('tlid', tlid).popup('open', {
             x: e.pageX,
@@ -213,12 +182,17 @@ function popupTracks (e, listuri, trackuri, tlid) {
         })
     }
 
+    $(popupName).one('popupafterclose', function (event, ui) {
+        // Ensure that popup attributes are reset when the popup is closed.
+        $(this).removeData('list').removeData('track').removeData('tlid')
+    })
+
     return false
 }
 
 function showAlbumPopup (popupId) {
     uri = $(popupId).data('track')
-    library.showAlbum(popupData[uri].album.uri)
+    library.showAlbum(popupData[uri].album.uri, mopidy)
 }
 
 /** ********************
@@ -248,6 +222,11 @@ function initSocketevents () {
     mopidy.on('event:optionsChanged', updateOptions)
 
     mopidy.on('event:trackPlaybackStarted', function (data) {
+        setSongInfo(data.tl_track)
+        controls.setPlayState(true)
+    })
+
+    mopidy.on('event:trackPlaybackResumed', function (data) {
         setSongInfo(data.tl_track)
         controls.setPlayState(true)
     })
@@ -293,6 +272,12 @@ function initSocketevents () {
 
     mopidy.on('event:tracklistChanged', function (data) {
         library.getCurrentPlaylist()
+        mopidy.tracklist.getTracks().then(function (tracks) {
+            if (tracks.length === 0) {
+                // Last track in queue was deleted, reset UI.
+                resetSong()
+            }
+        })
     })
 
     mopidy.on('event:seeked', function (data) {
@@ -303,13 +288,10 @@ function initSocketevents () {
     })
 
     mopidy.on('event:streamTitleChanged', function (data) {
-        setSongTitle(data.title, true)
+        // Update all track info.
+        mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error)
     })
 }
-
-$(document).bind('pageinit', function () {
-    resizeMb()
-})
 
 /** ************
  * gui stuff  *
@@ -387,66 +369,58 @@ function locationHashChanged () {
     var hash = document.location.hash.split('?')
     // remove #
     var divid = hash[0].substr(1)
+    var uri = hash[1]
+
     setHeadline(divid)
 
-    var uri = hash[1]
-    $('.mainNav a').removeClass('ui-state-active ui-state-persist ui-btn-active')
-    // i don't know why some li elements have those classes, but they do, so we need to remove them
-    $('.mainNav li').removeClass('ui-state-active ui-state-persist ui-btn-active')
-    if ($(window).width() < 560) {
+    if ($(window).width() < 880) {
         $('#panel').panel('close')
     }
-    $('.pane').hide()
 
-    $('#' + divid + 'pane').show()
+    $('.mainNav a').removeClass($.mobile.activeBtnClass)
+    // i don't know why some li elements have those classes, but they do, so we need to remove them
+    $('.mainNav li').removeClass($.mobile.activeBtnClass)
+    $('#nav' + divid + ' a').addClass($.mobile.activeBtnClass)  // Update navigation pane
+
+    $('.pane').hide()  // Hide all pages
+    $('#' + divid + 'pane').show()  // Switch to active pane
+
+    if (divid === 'browse' && browseStack.length > 0) {
+        window.scrollTo(0, browseStack[browseStack.length - 1].scrollPos || 0)  // Restore scroll position - browsing library.
+    } else if (typeof pageScrollPos[divid] !== 'undefined') {  // Restore scroll position - pages
+        window.scrollTo(0, pageScrollPos[divid])
+    }
 
     switch (divid) {
-        case 'home':
-            $('#navhome a').addClass('ui-state-active ui-state-persist ui-btn-active')
-            break
-        case 'nowPlaying':
-            $('#navnowPlaying a').addClass('ui-state-active ui-state-persist ui-btn-active')
-            break
-        case 'current':
-            $('#navcurrent a').addClass('ui-state-active ui-state-persist ui-btn-active')
-            break
-        case 'playlists':
-            $('#navplaylists a').addClass('ui-state-active ui-state-persist ui-btn-active')
-            break
-        case 'browse':
-            $('#navbrowse a').addClass('ui-state-active ui-state-persist ui-btn-active')
+        case 'nowPlaying':  // Show 'now playing' footer
+            $('#normalFooter').hide()
+            $('#nowPlayingFooter').show()
             break
         case 'search':
-            $('#navsearch a').addClass($.mobile.activeBtnClass)
             $('#searchinput').focus()
-            break
-        case 'stream':
-            $('#navstream a').addClass('ui-state-active ui-state-persist ui-btn-active')
             break
         case 'artists':
             if (uri !== '') {
-                library.showArtist(uri)
+                if (mopidy) {
+                    library.showArtist(uri, mopidy)
+                } else {
+                    showOffline(true)  // Page refreshed - wait for mopidy object to be initialized.
+                }
             }
             break
         case 'albums':
             if (uri !== '') {
-                library.showAlbum(uri)
+                if (mopidy) {
+                    library.showAlbum(uri, mopidy)
+                } else {
+                    showOffline(true)  // Page refreshed - wait for mopidy object to be initialized.
+                }
             }
             break
-    }
-
-    // switch the footer
-    switch (divid) {
-        case 'nowPlaying':
-            $('#normalFooter').hide()
-            $('#nowPlayingFooter').show()
-            break
-        default:
+        default:  // Default footer
             $('#normalFooter').show()
             $('#nowPlayingFooter').hide()
     }
-    // Set the page title based on the hash.
-    document.title = PROGRAM_NAME
     return false
 }
 
@@ -454,6 +428,7 @@ function locationHashChanged () {
  * initialize software *
  ***********************/
 $(document).ready(function (event) {
+    showOffline(true)
     // check for websockets
     if (!window.WebSocket) {
         switchContent('playlists')
@@ -465,40 +440,23 @@ $(document).ready(function (event) {
     $('.ui-panel-dismiss').on('tap', function () { $('#panel').panel('close') })
     // end of workaround
 
-    $(window).hashchange()
-
-    // Connect to server
-    var websocketUrl = $(document.body).data('websocket-url')
-    if (websocketUrl) {
-        try {
-            mopidy = new Mopidy({
-                webSocketUrl: websocketUrl,
-                callingConvention: 'by-position-or-by-name'
-            })
-        } catch (e) {
-            showOffline(true)
-        }
-    } else {
-        try {
-            mopidy = new Mopidy({callingConvention: 'by-position-or-by-name'})
-        } catch (e) {
-            showOffline(true)
-        }
-    }
-
-    // initialize events
-    initSocketevents()
-
-    syncedProgressTimer = new SyncedProgressTimer(8, mopidy)
-
-    resetSong()
-
+    window.onhashchange = locationHashChanged
     if (location.hash.length < 2) {
         switchContent('home')
     }
+    $(window).hashchange()
+
+    // Remember scroll position for each page and browsed folder
+    $(window).scrollEnd(function () {
+        var divid = document.location.hash.split('?')[0].substr(1)
+        if (divid === 'browse' && browseStack.length > 0) {
+            browseStack[browseStack.length - 1].scrollPos = window.pageYOffset
+        } else {
+            pageScrollPos[divid] = window.pageYOffset
+        }
+    }, 250)
 
     initgui = false
-    window.onhashchange = locationHashChanged
 
     // only show backbutton if in UIWebview
     if (window.navigator.standalone) {
@@ -506,10 +464,6 @@ $(document).ready(function (event) {
     } else {
         $('#btback').hide()
     }
-
-    $(window).resize(function () {
-        resizeMb()
-    })
 
     // navigation temporary, rewrite this!
     $('#songinfo').click(function () {
@@ -571,12 +525,6 @@ $(document).ready(function (event) {
         }
     })
 
-    if ($(window).width() < 980) {
-        $('#panel').panel('close')
-    } else {
-        $('#panel').panel('open')
-    }
-
     $.event.special.swipe.horizontalDistanceThreshold = 125 // (default: 30px)  Swipe horizontal displacement must be more than this.
     $.event.special.swipe.verticalDistanceThreshold = 50 // (default: 75px)  Swipe vertical displacement must be less than this.
     $.event.special.swipe.durationThreshold = 500
@@ -611,6 +559,21 @@ $(document).ready(function (event) {
     $('#volumeslider').on('slidestart', function () { volumeSliding = true })
     $('#volumeslider').on('slidestop', function () { volumeSliding = false })
     $('#volumeslider').on('change', function () { controls.doVolume($(this).val()) })
+
+    $(window).resize(resizeMb).resize()
+
+    // Connect to server
+    var websocketUrl = $(document.body).data('websocket-url')
+    var connectOptions = {callingConvention: 'by-position-or-by-name'}
+    if (websocketUrl) {
+        connectOptions['webSocketUrl'] = websocketUrl
+    }
+
+    mopidy = new Mopidy(connectOptions)
+    // initialize events
+    initSocketevents()
+    syncedProgressTimer = new SyncedProgressTimer(8, mopidy)
+    resetSong()
 })
 
 function updatePlayIcons (uri, tlid, popupMenuIcon) {

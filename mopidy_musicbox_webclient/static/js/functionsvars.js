@@ -28,8 +28,7 @@ var artiststext = ''
 var songname = ''
 var songdata = {'track': {}, 'tlid': -1}
 
-var playlisttracksScroll
-var playlistslistScroll
+var pageScrollPos = {}
 
 var STREAMS_PLAYLIST_NAME = '[Radio Streams]'
 var STREAMS_PLAYLIST_SCHEME = 'm3u'
@@ -42,14 +41,13 @@ var customTracklists = []  // TODO: Refactor into one shared cache
 
 var browseStack = []
 
-var ua = navigator.userAgent
+var ua = navigator.userAgent || navigator.vendor || window.opera
 var isMobileSafari = /Mac/.test(ua) && /Mobile/.test(ua)
-var isMobileWebkit = /WebKit/.test(ua) && /Mobile/.test(ua)
-var isMobile = /Mobile/.test(ua)
-var isWebkit = /WebKit/.test(ua)
+var isMobile = isMobileAll()
 
 // constants
-PROGRAM_NAME = 'MusicBox'
+PROGRAM_NAME = $(document.body).data('program-name')
+HOSTNAME = $(document.body).data('hostname')
 ARTIST_TABLE = '#artiststable'
 ALBUM_TABLE = '#albumstable'
 BROWSE_TABLE = '#browsetable'
@@ -68,6 +66,7 @@ ADD_THIS_BOTTOM = 2
 ADD_ALL_BOTTOM = 3
 PLAY_ALL = 4
 DYNAMIC = 5
+INSERT_AT_INDEX = 6
 
 // the first part of Mopidy extensions which serve radio streams
 var radioExtensionsList = ['somafm', 'tunein', 'dirble', 'audioaddict']
@@ -75,8 +74,9 @@ var radioExtensionsList = ['somafm', 'tunein', 'dirble', 'audioaddict']
 var uriClassList = [
     ['spotify', 'fa-spotify'],
     ['spotifytunigo', 'fa-spotify'],
+    ['spotifyweb', 'fa-spotify'],
     ['local', 'fa-file-sound-o'],
-    ['file', 'fa-folder-o'],
+    ['file', 'fa-file-sound-o'],
     ['m3u', 'fa-file-sound-o'],
     ['podcast', 'fa-rss-square'],
     ['podcast+file', 'fa-rss-square'],
@@ -102,7 +102,8 @@ var uriClassList = [
 var uriHumanList = [
     ['spotify', 'Spotify'],
     ['spotifytunigo', 'Spotify browse'],
-    ['local', 'Local files'],
+    ['spotifyweb', 'Spotify browse'],
+    ['local', 'Local media'],
     ['m3u', 'Local playlists'],
     ['podcast', 'Podcasts'],
     ['podcast+itunes', 'iTunes Store: Podcasts'],
@@ -130,10 +131,37 @@ var searchBlacklist = [
     'yt'
 ]
 
+// List of known audio file extensions
+// TODO: consider querying GStreamer for supported audio formats - see:https://discuss.mopidy.com/t/supported-codecs-file-formats/473
+var audioExt = [
+    'aa', 'aax',  // Audible.com
+    'aac',  // Advanced Audio Coding format
+    'aiff',  // Apple
+    'au',  // Sun Microsystems
+    'flac',  // Free Lossless Audio Codec
+    'gsm',
+    'iklax',
+    'ivs',
+    'm4a',
+    'm4b',
+    'm4p',
+    'mp3',
+    'mpc',  // Musepack
+    'ogg', 'oga', 'mogg',  // Ogg-Vorbis
+    'opus',  // Internet Engineering Task Force (IETF)
+    'ra', 'rm',  // RealAudio
+    'raw',
+    'tta',  // True Audio
+    'vox',
+    'wav',
+    'wma',  // Microsoft
+    'wv',
+    'webm'  // HTML5 video
+]
+
 function scrollToTop () {
-    var divtop = 0
     $('body,html').animate({
-        scrollTop: divtop
+        scrollTop: 0
     }, 250)
 }
 
@@ -142,6 +170,14 @@ function scrollToTracklist () {
     $('body,html').animate({
         scrollTop: divtop
     }, 250)
+}
+
+function isMobileAll () {
+    // Checks for known mobile and tablet devices - see http://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
+    var regexpMobile = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i
+    var regexpTablet = /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i
+    var uaString = ua.substr(0, 4)
+    return isMobileSafari || regexpMobile.test(uaString) || regexpTablet.test(uaString)
 }
 
 // A hack to find the name of the first artist of a playlist. this is not yet returned by mopidy
@@ -168,12 +204,14 @@ function getAlbum (pl) {
 function artistsToString (artists, max) {
     var result = ''
     max = max || 3
-    for (var i = 0; i < artists.length && i < max; i++) {
-        if (artists[i].name) {
-            if (i > 0) {
-                result += ', '
+    if (artists && artists.length > 0) {
+        for (var i = 0; i < artists.length && i < max; i++) {
+            if (artists[i].name) {
+                if (i > 0) {
+                    result += ', '
+                }
+                result += artists[i].name
             }
-            result += artists[i].name
         }
     }
     return result
@@ -204,13 +242,9 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
     var onClick = ''
     var html = ''
     track.name = validateTrackName(track, currentIndex)
-    // Leave out unplayable items
-    if (track.name.substring(0, 12) === '[unplayable]') {
-        return html
-    }
     // Streams
     if (track.length === -1) {
-        html += '<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + ' [Stream]</h1></a></li>'
+        html += '<li class="albumli"><a href="#"><h1><i class="' + getMediaClass(track) + '"></i> ' + track.name + ' [Stream]</h1></a></li>'
         return html
     }
 
@@ -221,11 +255,13 @@ function renderSongLi (previousTrack, track, nextTrack, uri, tlid, target, curre
         onClick = 'return controls.playTracks(\'\', mopidy, \'' + track.uri + '\', \'' + uri + '\');'
     }
 
-    html +=
-        '<li class="song albumli" id="' + getjQueryID(target, track.uri) + '" tlid="' + tlid + '">' +
-        '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + track.uri + tlidParameter + '\');">' +
-        '<i class="fa fa-play-circle-o"></i></a>' +
-        '<a href="#" onclick="' + onClick + '"><h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.name + '</h1>'
+    html += '<li class="song albumli" id="' + getjQueryID(target, track.uri) + '" tlid="' + tlid + '">'
+    if (isPlayable(track)) {
+        // Show popup icon for audio files or 'tracks' of other scheme types
+        html += '<a href="#" class="moreBtn" onclick="return popupTracks(event, \'' + uri + '\',\'' + track.uri + tlidParameter + '\');">' +
+        '<i class="fa fa-play-circle-o"></i></a>'
+    }
+    html += '<a href="#" onclick="' + onClick + '"><h1><i class="' + getMediaClass(track) + '"></i> ' + track.name + '</h1>'
 
     if (listLength === 1 || (!hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {
         html += renderSongLiAlbumInfo(track)
@@ -271,9 +307,9 @@ function renderSongLiDivider (previousTrack, track, nextTrack, target) {
     if (!hasSameAlbum(previousTrack, track) && hasSameAlbum(track, nextTrack)) {
         // Large divider with album cover.
         html +=
-            '<li class="albumdivider"><a href="#" onclick="return library.showAlbum(\'' + track.album.uri + '\');">' +
+            '<li class="albumdivider"><a href="#" onclick="return library.showAlbum(\'' + track.album.uri + '\', mopidy);">' +
             '<img id="' + getjQueryID(target + '-cover', track.uri) + '" class="artistcover" width="30" height="30"/>' +
-            '<h1><i class="' + getMediaClass(track.uri) + '"></i> ' + track.album.name + '</h1><p>' +
+            '<h1>' + track.album.name + '</h1><p>' +
             renderSongLiTrackArtists(track) + '</p></a></li>'
         // Retrieve album covers
         images.setAlbumImage(track.uri, getjQueryID(target + '-cover', track.uri, true), mopidy, 'small')
@@ -281,7 +317,7 @@ function renderSongLiDivider (previousTrack, track, nextTrack, target) {
         // Small divider
         html += '<li class="smalldivider"> &nbsp;</li>'
     }
-    if (typeof target !== 'undefined' && target.length > 0) {
+    if (html.length > 0 && typeof target !== 'undefined' && target.length > 0) {
         target = getjQueryID(target, track.uri, true)
         $(target).before(html)
     }
@@ -357,40 +393,6 @@ function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
     updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 }
 
-// process updated playlist to gui
-function playlisttotable (pl, target, uri) {
-    var tmp = ''
-    $(target).html('')
-    var targetmin = target.substr(1)
-    var child = ''
-    for (var i = 0; i < pl.length; i++) {
-        if (pl[i]) {
-            popupData[pl[i].uri] = pl[i]
-            child = '<li id="' + targetmin + '-' + pl[i].uri + '"><a href="#" onclick="return popupTracks(event, \'' + uri + '\',\'' + pl[i].uri + '\');">'
-            child += '<h1>' + pl[i].name + 'h1>'
-            child += '<p>'
-            child += '<span style="float: right;">' + timeFromSeconds(pl[i].length / 1000) + '</span>'
-            for (var j = 0; j < pl[i].artists.length; j++) {
-                if (pl[i].artists[j]) {
-                    child += pl[i].artists[j].name
-                    child += (j === pl[i].artists.length - 1) ? '' : ' / '
-                    // stop after 3
-                    if (j > 2) {
-                        child += '...'
-                        break
-                    }
-                }
-            }
-            child += ' / <em>' + pl[i].album.name + '</em></p>'
-            child += '</a></li>'
-            tmp += child
-        }
-    }
-
-    $(target).html(tmp)
-    $(target).attr('data', uri)
-}
-
 function getPlaylistTracks (uri) {
     if (playlists[uri] && playlists[uri].tracks) {
         return Mopidy.when(playlists[uri].tracks)
@@ -456,7 +458,7 @@ function showLoading (on) {
     if (on) {
         $('body').css('cursor', 'progress')
         $.mobile.loading('show', {
-            text: 'Loading data from ' + PROGRAM_NAME + '. Please wait...',
+            text: 'Loading data from ' + PROGRAM_NAME + ' on ' + HOSTNAME + '. Please wait...',
             textVisible: true,
             theme: 'a'
         })
@@ -469,7 +471,7 @@ function showLoading (on) {
 function showOffline (on) {
     if (on) {
         $.mobile.loading('show', {
-            text: 'Trying to reach ' + PROGRAM_NAME + '. Please wait...',
+            text: 'Trying to reach ' + PROGRAM_NAME + ' on ' + HOSTNAME + '. Please wait...',
             textVisible: true,
             theme: 'a'
         })
@@ -479,9 +481,9 @@ function showOffline (on) {
 }
 
 // from http://dzone.com/snippets/validate-url-regexp
-function validUri (str) {
+function validUri (uri) {
     var regexp = /^(mms|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-    return regexp.test(str)
+    return regexp.test(uri)
 }
 
 function validServiceUri (str) {
@@ -492,18 +494,52 @@ function getScheme (uri) {
     return uri.split(':')[0].toLowerCase()
 }
 
-function isStreamUri (uri) {
-    var a = validUri(uri)
-    var b = radioExtensionsList.indexOf(getScheme(uri)) >= 0
-    return a || b
+function isPlayable (track) {
+    if (typeof track.type === 'undefined' || track.type === 'track') {
+        if (track.uri && getScheme(track.uri) === 'file') {
+            var ext = track.uri.split('.').pop().toLowerCase()
+            if ($.inArray(ext, audioExt) === -1) {
+                // Files must have the correct extension
+                return false
+            }
+        }
+        return true
+    }
+    return false
 }
 
-function getMediaClass (uri) {
-    var scheme = getScheme(uri)
-    for (var i = 0; i < uriClassList.length; i++) {
-        if (scheme === uriClassList[i][0]) {
-            return 'fa ' + uriClassList[i][1]
+function isStreamUri (uri) {
+    return validUri(uri) || radioExtensionsList.indexOf(getScheme(uri)) >= 0
+}
+
+function getMediaClass (track) {
+    var defaultIcon = 'fa-file-sound-o'
+    var type = track.type
+    if (typeof type === 'undefined' || type === 'track') {
+        if (!isPlayable(track)) {
+            return 'fa fa-file-o'  // Unplayable file
+        } else if (isStreamUri(track.uri)) {
+            return 'fa fa-rss'  // Stream
         }
+    } else if (type === 'directory') {
+        return 'fa fa-folder-o'
+    } else if (type === 'album') {
+        // return 'fa fa-bullseye'  // Album
+        defaultIcon = 'fa-folder-o'
+    } else if (type === 'artist') {
+        // return 'fa fa-user-circle-o'  // Artist
+        defaultIcon = 'fa-folder-o'
+    } else if (type === 'playlist') {
+        // return 'fa fa-star'  // Playlist
+    }
+    if (track.uri) {
+        var scheme = getScheme(track.uri)
+        for (var i = 0; i < uriClassList.length; i++) {
+            if (scheme === uriClassList[i][0]) {
+                return 'fa ' + uriClassList[i][1]
+            }
+        }
+        return 'fa ' + defaultIcon
     }
     return ''
 }
@@ -542,6 +578,13 @@ function isFavouritesPlaylist (playlist) {
 function isSpotifyStarredPlaylist (playlist) {
     var starredRegex = /spotify:user:.*:starred/g
     return (starredRegex.test(playlist.uri) && playlist.name === 'Starred')
+}
+
+// Returns a string where {x} in template is replaced by tokens[x].
+function stringFromTemplate (template, tokens) {
+    return template.replace(/{[^}]+}/g, function (match) {
+        return tokens[match.slice(1, -1)]
+    })
 }
 
 /**

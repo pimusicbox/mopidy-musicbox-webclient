@@ -1,6 +1,6 @@
 /*
  * Mopidy Webclient CSS
- * (c) Wouter van Wijk 2012-2013
+ * (c) Wouter van Wijk 2012-2017
  */
 
 /****************************
@@ -118,7 +118,6 @@
 /******************
  *  Track Slider  *
  ******************/
-
 #trackslider {
     display: inline;
     width: 100%;
@@ -158,6 +157,20 @@
 
 #volumeslider {
     display: inline;
+}
+
+div.hostInfo {
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+span.hostInfo {
+    font-weight: normal;
+    font-size: 0.75em;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /********************
@@ -207,6 +220,17 @@
 #homerows div i {
     font-size: 28px;
 }
+
+.ui-block-a-min {
+    float: left !important;
+    width: initial !important;
+}
+
+.ui-block-b-min {
+    float:right !important;
+    width: initial !important;
+}
+
 /***************
  *  listviews  *
  ***************/
@@ -233,6 +257,45 @@
 
 .table li:last-child {
     border-bottom: 1px solid #CECECE;
+}
+
+.info-table {
+    display: table !important;
+}
+
+.info-table thead {
+    visibility: collapse;
+}
+
+.info-table th {
+    border-bottom: none !important;
+}
+
+.info-table tr {
+    border-bottom: 1px solid #f2f2f2
+}
+
+.info-table td {
+    color: #555 !important;
+    padding: 2px;
+    padding-right: 14px;
+    padding-left: 14px;
+    border: none !important;
+}
+
+.info-table td.label {
+    font-weight: bold;
+}
+
+.info-table td.label-center {
+    vertical-align: middle;
+}
+
+.info-table input {
+    color: #555;
+    border: none;
+    font-size: 1em;
+    width: 100%;
 }
 
 .albumdivider h1, .table li h1 {
@@ -305,15 +368,33 @@
     font-size: initial;
 }
 
+.infoBtn {
+    top: 0;
+    width: 90%;
+    position: absolute;
+}
+
+.infoBtn i {
+    font-size: 1.33em;
+    color: #ddd;
+    background: white;
+    border-radius: 50%;
+    height: 1em;
+    width: 1em;
+}
+
 .backnav {
     background-color: #ccc !important;
+}
+
+.refreshLibraryBtnDiv {
+    display: none;
 }
 
 
 /**********************
  *  Now Playing area  *
  **********************/
-
 #nowPlayingFooter {
     height: 50px;
     line-height: 48px;
@@ -342,9 +423,15 @@
 /************
  *  Popups  *
  ************/
-#modalalbum a, #modalartist a {
+#modalalbum a, #modalartist a, #modalname a {
     color: #444;
     text-decoration: none;
+}
+
+#modalinfo {
+    position: relative;
+    display: inline-block;
+    padding-top: .5em;
 }
 
 .popupArtistLi,
@@ -392,6 +479,7 @@
 .ui-icon-playAll:after,
 .ui-icon-play:after,
 .ui-icon-playNext:after,
+.ui-icon-insert:after,
 .ui-icon-add:after,
 .ui-icon-addAll:after,
 .ui-icon-remove:after {
@@ -409,6 +497,10 @@
 
 .ui-icon-playNext:after {
     content: '\f149';
+}
+
+.ui-icon-insert:after {
+    content: '\f177';
 }
 
 .ui-icon-add:after {
@@ -434,9 +526,15 @@
     font-weight: normal;
 }
 
-.popupDialog {
+.popupDialog,
+.popupDialog-full-width {
     padding: 10px;
     text-align: center;
+}
+
+.popupDialog-full-width {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 /*dont hide clear buttons in text input */
@@ -447,7 +545,6 @@
 /****************
  *  Common use  *
  ****************/
-
 #playlistspane {
     margin: 0 !important;
 }
@@ -531,31 +628,40 @@ a {
 }
 
 /*helper*/
-
 .ui-loader h1 {
     color: #efefef;
 }
 
-/* panel workaround to make it responsive wrap push on wide viewports once open */
-@media (min-width: 35em){
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal {
+/*desktop*/
+@media (min-width: 55em) {
+    /* panel workaround to make it responsive wrap push on wide viewports once open */
+    .ui-responsive-panel.ui-page-panel .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
+    .ui-responsive-panel.ui-page-panel .ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
+    .ui-responsive-panel.ui-page-panel .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push,
+    .ui-responsive-panel.ui-page-panel .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal {
         margin-right: 17em;
+        width: auto;
     }
 
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-push.ui-panel-content-fixed-toolbar-position-right,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-reveal.ui-panel-content-fixed-toolbar-position-right,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
-    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
+    .ui-responsive-panel.ui-page-panel .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-push.ui-panel-content-fixed-toolbar-position-right,
+    .ui-responsive-panel.ui-page-panel .ui-panel-content-fixed-toolbar-open.ui-panel-content-wrap-display-reveal.ui-panel-content-fixed-toolbar-position-right,
+    .ui-responsive-panel.ui-page-panel .ui-panel-content-wrap-open.ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
+    .ui-responsive-panel.ui-page-panel .ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
         margin: 0 0 0 17em;
     }
+}
 
+/*tablets and desktop*/
+@media (min-width: 35em) {
     .ui-responsive-panel .ui-panel-dismiss-display-reveal {
         display: none;
     }
+
+    .popupDialog {
+        min-width: 320px;
+    }
 }
+
 /*smartphones*/
 @media (max-width: 35em) {
     #nowPlayingpane {

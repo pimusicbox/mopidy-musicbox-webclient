@@ -20,7 +20,10 @@ class WebclientTests(unittest.TestCase):
                     'musicbox': False,
                     'websocket_host': 'host_mock',
                     'websocket_port': 999,
-                    }
+                    },
+                'alarmclock': {
+                    'enabled': True,
+                }
             })
 
         self.ext = Extension()
@@ -72,7 +75,7 @@ class WebclientTests(unittest.TestCase):
         assert self.mmw.get_websocket_url(request_mock) == 'wss://127.0.0.1:999/mopidy/ws'
 
     def test_has_alarmclock(self):
-        assert not self.mmw.has_alarm_clock()
+        assert self.mmw.has_alarm_clock()
 
     def test_is_musicbox(self):
         assert not self.mmw.is_music_box()

@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# 2016-05-15:v1
+# 2017-02-26:v1
 
 NETWORK:
 *
@@ -48,6 +48,7 @@ vendors/font_awesome/less/list.less
 vendors/font_awesome/less/mixins.less
 vendors/font_awesome/less/path.less
 vendors/font_awesome/less/rotated-flipped.less
+vendors/font_awesome/less/screen-reader.less
 vendors/font_awesome/less/stacked.less
 vendors/font_awesome/less/variables.less
 vendors/font_awesome/scss/_animated.scss
@@ -60,6 +61,7 @@ vendors/font_awesome/scss/_list.scss
 vendors/font_awesome/scss/_mixins.scss
 vendors/font_awesome/scss/_path.scss
 vendors/font_awesome/scss/_rotated-flipped.scss
+vendors/font_awesome/scss/_screen-reader.scss
 vendors/font_awesome/scss/_stacked.scss
 vendors/font_awesome/scss/_variables.scss
 vendors/font_awesome/scss/font-awesome.scss
