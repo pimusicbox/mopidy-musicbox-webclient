@@ -33,6 +33,7 @@ Features
 - Support for all of the Mopidy playback controls (consume mode, repeat, shuffle, etc.)
 - Deep integration with, and additional features for, the `Pi MusicBox <http://www.pimusicbox.com/>`_.
 - Fullscreen mode.
+- Upload music in your library from any browser
 
 .. image:: https://github.com/pimusicbox/mopidy-musicbox-webclient/raw/develop/screenshots/overview.png
     :width: 1312
@@ -73,6 +74,7 @@ MMW is shipped with default settings that should work straight out of the box fo
     websocket_host =
     websocket_port =
     on_track_click = PLAY_ALL
+    upload_path =
 
 The following configuration values are available should you wish to customize your installation further:
 
@@ -85,8 +87,10 @@ The following configuration values are available should you wish to customize yo
 
 - ``musicbox_webclient/websocket_port``: Optional setting to specify the target port for Mopidy websocket connections.
 
-- ``musicbox_webclient/on_track_click``: The action performed when clicking on a track. Valid options are: 
+- ``musicbox_webclient/on_track_click``: The action performed when clicking on a track. Valid options are:
   ``PLAY_ALL`` (default), ``PLAY_NOW``, ``PLAY_NEXT``, ``ADD_THIS_BOTTOM``, ``ADD_ALL_BOTTOM``, and ``DYNAMIC`` (repeats last action).
+
+- ``musicbox_webclient/upload_path``: Optinal setting to specify the target path for uploads. If empty the upload function is deactivated.
 
 Usage
 =====
@@ -272,7 +276,7 @@ v1.0.4 (2014-11-24)
 - Added AudioAddict icon.
 - Bugfixes of course.
 
-v1.0.2 
+v1.0.2
 ------
 
 - A friendlier welcome with a home page with buttons to the most used functions.
