@@ -4,7 +4,10 @@ dist: trusty
 language: python
 
 python:
-  - "2.7_with_system_site_packages"
+  - "2.7.9"
+
+virtualenv:
+  system_site_packages: true
 
 addons:
   apt:
@@ -22,7 +25,6 @@ env:
   - TOX_ENV=tidy
 
 before_install:
-  - "sudo sed -i '/127.0.1.1/d' /etc/hosts"  # Workaround https://github.com/tornadoweb/tornado/issues/1573
   - "sudo apt-get update -qq"
 
 install:
