@@ -308,10 +308,10 @@ function renderSongLiDivider (previousTrack, track, nextTrack, target) {
         // Large divider with album cover.
         showAlbum = ''
         if (typeof track.album.uri !== 'undefined') {
-            showAlbum = 'onclick="return library.showAlbum(\'' + track.album.uri + '\', mopidy);'
+            showAlbum = 'onclick="return library.showAlbum(\'' + track.album.uri + '\', mopidy);"'
         }
         html +=
-            '<li class="albumdivider"><a href="#" ' + showAlbum +
+            '<li class="albumdivider"><a href="#" ' + showAlbum + '>' +
             '<img id="' + getjQueryID(target + '-cover', track.uri) + '" class="artistcover" width="30" height="30"/>' +
             '<h1>' + track.album.name + '</h1><p>' +
             renderSongLiTrackArtists(track) + '</p></a></li>'
