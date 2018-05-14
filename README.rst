@@ -108,11 +108,13 @@ Changelog
 (UNRELEASED)
 ------------
 
+- Detect additional stream formats (rtmp, rtmps, rtsp).
+- Include details of currently selected page in HTML title tag. (Addresses: `#243 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/243>`_).
+
 **Fixes**
 
-- Detect additional stream formats (rtmp, rtmps, rtsp).
 - Prevent excessive calls to the Mopidy server while buffering. (Fixes: `#237 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/237>`_).
-- Include details of currently selected page in HTML title tag. (Addresses: `#243 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/243>`_).
+- Only allow browsing tracks by album if a URI is available for that album.  (Fixes: `#250 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/250>`_).
 
 v2.4.0 (2017-03-15)
 -------------------
