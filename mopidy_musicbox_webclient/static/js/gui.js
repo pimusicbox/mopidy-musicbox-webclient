@@ -338,11 +338,12 @@ function switchContent (divid, uri) {
 
 function setHeadline (site) {
     site = site.trim()
-    str = $('.mainNav').find('a[href$=' + site + ']').text()
-    if (str === '') {
-        str = site.charAt(0).toUpperCase() + site.slice(1)
+    headline = $('.mainNav').find('a[href$=' + site + ']').text()
+    if (headline === '') {
+        headline = site.charAt(0).toUpperCase() + site.slice(1)
     }
-    $('#contentHeadline').html('<a href="#home" onclick="switchContent(\'home\'); return false;">' + str + '</a>')
+    $('#contentHeadline').html('<a href="#home" onclick="switchContent(\'home\'); return false;">' + headline + '</a>')
+    return headline
 }
 
 // update tracklist options.
@@ -371,7 +372,8 @@ function locationHashChanged () {
     var divid = hash[0].substr(1)
     var uri = hash[1]
 
-    setHeadline(divid)
+    headline = setHeadline(divid)
+    updateDocumentTitle(headline)
 
     if ($(window).width() < 880) {
         $('#panel').panel('close')
@@ -620,4 +622,9 @@ function updatePlayIcons (uri, tlid, popupMenuIcon) {
             }
         })
     }
+}
+
+function updateDocumentTitle (headline) {
+    headline = headline || $('#contentHeadline').text()
+    document.title = headline + ' | ' + $(document.body).data('title')
 }

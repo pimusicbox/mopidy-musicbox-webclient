@@ -106,7 +106,9 @@
         // check in the timeout callback than doing another function call.
         clearTimeout(this._scheduleID)
         this._isSyncScheduled = false
-        this._scheduleID = setTimeout($.proxy(function () { this._isSyncScheduled = true }, this), milliseconds)
+        if (milliseconds >= 0) {
+            this._scheduleID = setTimeout($.proxy(function () { this._isSyncScheduled = true }, this), milliseconds)
+        }
     }
 
     SyncedProgressTimer.prototype._doSync = function (position, duration) {
@@ -115,6 +117,8 @@
             // Don't try to sync if progress timer has not been initialized yet.
             return
         }
+
+        this._scheduleSync(-1) // Ensure that only one sync process is active at a time.
 
         var _this = this
         _this._mopidy.playback.getTimePosition().then(function (targetPosition) {
@@ -179,8 +183,7 @@
 
     SyncedProgressTimer.prototype.stop = function () {
         this._progressTimer.stop()
-        clearTimeout(this._scheduleID)
-        this._isSyncScheduled = false
+        this._scheduleSync(-1)
         if (this.syncState !== SyncedProgressTimer.SYNC_STATE.SYNCED && this._previousSyncPosition) {
             // Timer was busy trying to sync when it was stopped, fallback to displaying the last synced position on screen.
             this.positionNode.nodeValue = SyncedProgressTimer.format(this._previousSyncPosition)

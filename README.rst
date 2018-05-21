@@ -52,7 +52,7 @@ Installation
 
 Install by running::
 
-    pip install mopidy-musicbox-webclient
+    sudo pip install mopidy-musicbox-webclient
 
 
 Alternatively, clone the repository and run ``sudo python setup.py install`` from within the project directory. e.g. ::
@@ -104,6 +104,17 @@ Project resources
 
 Changelog
 =========
+
+v2.5.0 (2017-05-22)
+------------
+
+- Detect additional stream formats (rtmp, rtmps, rtsp).
+- Include details of currently selected page in HTML title tag. (Addresses: `#243 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/243>`_).
+
+**Fixes**
+
+- Prevent excessive calls to the Mopidy server while buffering. (Fixes: `#237 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/237>`_).
+- Only allow browsing tracks by album if a URI is available for that album. (Fixes: `#250 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/250>`_).
 
 v2.4.0 (2017-03-15)
 -------------------
