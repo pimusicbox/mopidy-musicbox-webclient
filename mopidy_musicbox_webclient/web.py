@@ -50,7 +50,8 @@ class IndexHandler(tornado.web.RequestHandler):
             'programName': program_name,
             'hostname': url.hostname,
             'serverIP': socket.gethostbyname(url.hostname),
-            'serverPort': port
+            'serverPort': port,
+            'version' : webclient.get_PMB_version()
 
         }
         self.__path = path

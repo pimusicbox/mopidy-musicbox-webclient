@@ -47,3 +47,9 @@ class Webclient(object):
 
     def get_default_click_action(self):
         return self.ext_config.get('on_track_click', 'PLAY_ALL')
+
+    def get_PMB_version(self):
+        f = open("/etc/issue", "r")
+        version = f.readline()
+        f.close()
+        return version
