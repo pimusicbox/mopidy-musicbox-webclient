@@ -632,6 +632,11 @@ a {
     color: #efefef;
 }
 
+#version-label {
+    position: fixed;
+    bottom: 0;
+}
+
 /*desktop*/
 @media (min-width: 55em) {
     /* panel workaround to make it responsive wrap push on wide viewports once open */

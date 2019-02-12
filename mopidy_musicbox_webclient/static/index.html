@@ -100,8 +100,11 @@
                 {% else %}
                     <span class="hostInfo">{{programName}} running on {{ hostname }} at {{ serverIP }}:{{ serverPort}}</span>
                 {% end %}
-                <br /><br />
-                <span class="hostInfo">{{version}}</span>
+            </div>
+            <div id="version-label">
+                <p>
+                    <span class="hostInfo">{{version}}</span>
+                </p>
             </div>
         </li>
     </ul>
