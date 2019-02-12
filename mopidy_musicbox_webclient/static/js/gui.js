@@ -16,7 +16,23 @@ function resetSong () {
     data.track.artists = ''
     data.track.length = 0
     data.track.uri = ''
+    data.stream = ''
     setSongInfo(data)
+}
+
+function setSongTitle (data) {
+    var name = data.track.name
+    if (data.stream) {
+        name = data.stream + '  ||  ' + data.track.name
+        console.log('Setting name %s', name)
+    }
+    $('#modalname').html('<a href="#" onclick="return controls.showInfoPopup(\'' + data.track.uri + '\', \'\', mopidy);">' + name + '</span></a>')
+    $('#infoname').html(name)
+}
+
+function setStreamTitle (title) {
+    songdata.stream = title
+    setSongTitle(songdata)
 }
 
 function resizeMb () {
@@ -26,20 +42,12 @@ function resizeMb () {
         $('#panel').panel('open')
     }
 
-    $('#infoname').html(songdata.track.name)
+    setSongTitle(songdata)
     $('#infoartist').html(artiststext)
 
     if ($(window).width() > 960) {
         $('#playlisttracksdiv').show()
         $('#playlistslistdiv').show()
-    }
-}
-
-function setSongTitle (track, refresh_ui) {
-    songdata.track.name = track.name
-    $('#modalname').html('<a href="#" onclick="return controls.showInfoPopup(\'' + track.uri + '\', \'\', mopidy);">' + track.name + '</span></a>')
-    if (refresh_ui) {
-        resizeMb()
     }
 }
 
@@ -63,10 +71,7 @@ function setSongInfo (data) {
             }
         }
     }
-
     songdata = data
-
-    setSongTitle(data.track, false)
     songlength = Infinity
 
     if (!data.track.length || data.track.length === 0) {
@@ -282,8 +287,9 @@ function initSocketevents () {
     })
 
     mopidy.on('event:streamTitleChanged', function (data) {
-        // Update all track info.
-        mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error)
+        // The stream title is separate from the current track.
+        setStreamTitle(data.title)
+        controls.setPlayState(true)
     })
 }
 
