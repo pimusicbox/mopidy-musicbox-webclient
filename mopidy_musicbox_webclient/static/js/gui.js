@@ -20,19 +20,41 @@ function resetSong () {
     setSongInfo(data)
 }
 
-function setSongTitle (data) {
+/* Name:    Use stream title if we have it, else track name.
+ * Detail:  If we don't know artist and it's a stream then show track name instead.
+ *          If we know both artist and album show them, otherwise just show artist if we know it.
+ */
+function showSongInfo (data) {
     var name = data.track.name
     if (data.stream) {
-        name = data.stream + '  ||  ' + data.track.name
-        console.log('Setting name %s', name)
+        name = data.stream
     }
     $('#modalname').html('<a href="#" onclick="return controls.showInfoPopup(\'' + data.track.uri + '\', \'\', mopidy);">' + name + '</span></a>')
+    if (!artistsHtml && data.stream) {
+        $('#modaldetail').html(data.track.name)
+    } else if (artistsHtml.length) {
+        if (albumHtml.length) {
+            $('#modaldetail').html(albumHtml + ' - ' + artistsHtml)
+        } else {
+            $('#modaldetail').html(artistsHtml)
+        }
+    }
+
     $('#infoname').html(name)
+    if (!artistsText && data.stream) {
+        $('#infodetail').html(data.track.name)
+    } else if (artistsText.length) {
+        if (albumText.length) {
+            $('#infodetail').html(albumText + ' - ' + artistsText)
+        } else {
+            $('#infodetail').html(artistsText)
+        }
+    }
 }
 
 function setStreamTitle (title) {
     songdata.stream = title
-    setSongTitle(songdata)
+    showSongInfo(songdata)
 }
 
 function resizeMb () {
@@ -42,8 +64,7 @@ function resizeMb () {
         $('#panel').panel('open')
     }
 
-    setSongTitle(songdata)
-    $('#infoartist').html(artiststext)
+    showSongInfo(songdata)
 
     if ($(window).width() > 960) {
         $('#playlisttracksdiv').show()
@@ -60,8 +81,6 @@ function setSongInfo (data) {
     }
 
     updatePlayIcons(data.track.uri, data.tlid, controls.getIconForAction())
-    artistshtml = ''
-    artiststext = ''
 
     if (validUri(data.track.name)) {
         for (var key in streamUris) {
@@ -72,9 +91,9 @@ function setSongInfo (data) {
         }
     }
     songdata = data
-    songlength = Infinity
 
     if (!data.track.length || data.track.length === 0) {
+        songlength = Infinity
         $('#trackslider').next().find('.ui-slider-handle').hide()
         $('#trackslider').slider('disable')
         // $('#streamnameinput').val(data.track.name);
@@ -85,24 +104,26 @@ function setSongInfo (data) {
         $('#trackslider').next().find('.ui-slider-handle').show()
     }
 
-    var arttmp = ''
-
+    artistsHtml = ''
+    artistsText = ''
     if (data.track.artists) {
         for (var j = 0; j < data.track.artists.length; j++) {
-            artistshtml += '<a href="#" onclick="return library.showArtist(\'' + data.track.artists[j].uri + '\', mopidy);">' + data.track.artists[j].name + '</a>'
-            artiststext += data.track.artists[j].name
+            var artistName = data.track.artists[j].name
             if (j !== data.track.artists.length - 1) {
-                artistshtml += ', '
-                artiststext += ', '
+                artistName += ', '
             }
+            artistsHtml += '<a href="#" onclick="return library.showArtist(\'' + data.track.artists[j].uri + '\', mopidy);">' + artistName + '</a>'
+            artistsText += artistName
         }
-        arttmp = artistshtml
     }
+
+    albumHtml = ''
+    albumText = ''
     if (data.track.album && data.track.album.name) {
-        $('#modalalbum').html('<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\', mopidy);">' + data.track.album.name + '</a>')
-    } else {
-        $('#modalalbum').html('')
+        albumHtml = '<a href="#" onclick="return library.showAlbum(\'' + data.track.album.uri + '\', mopidy);">' + data.track.album.name + '</a>'
+        albumText = data.track.album.name
     }
+
     images.setAlbumImage(data.track.uri, '#infocover, #albumCoverImg', mopidy)
     if (data.track.uri) {
         // Add 'Show Info' icon to album image
@@ -110,8 +131,6 @@ function setSongInfo (data) {
             '<a href="#" class="infoBtn" onclick="return controls.showInfoPopup(\'' + data.track.uri + '\', \'undefined\', mopidy);">' +
             '<i class="fa fa-info-circle"></i></a>')
     }
-
-    $('#modalartist').html(arttmp)
 
     $('#trackslider').attr('min', 0)
     $('#trackslider').attr('max', songlength)
