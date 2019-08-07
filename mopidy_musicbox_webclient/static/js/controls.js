@@ -11,33 +11,33 @@
 
     var controls = {
 
-         /**
-         * 'onClick' handler for tracks that are rendered in a list.
-         *
-         * Adds tracks to current tracklist and starts playback if necessary.
-         *
-         * @param {string} action - The action to perform. Valid actions are:
-         *                              PLAY_NOW: add the track at the current queue position and
-         *                                        start playback immediately.
-         *                              PLAY_NEXT: insert track after the reference track, if 'index'
-         *                                         is provided, or after the current track otherwise.
-         *                              ADD_THIS_BOTTOM: add track to bottom of tracklist.
-         *                              ADD_ALL_BOTTOM: add all tracks in in the list to bottom of
-         *                                              tracklist.
-         *                              PLAY_ALL: clear tracklist and start playback of the track
-         *                                        with URI provided in 'trackUri'.
-         * @param {object} mopidy - The Mopidy.js object that should be used to communicate with the
-         *                          Mopidy server.
-         * @param {string} trackUri - (Optional) The URI of the specific track that the action should
-         *                            be performed on. If no URI is provided then the 'data' attribute
-         *                            of the popup DIV is assumed to contain the track URI.
-         * @param {string} playlistUri - (Optional) The URI of the playlist containing the tracks
-         *                               to be played. If no URI is provided then the 'list' attribute
-         *                               of the popup DIV is assumed to contain the playlist URI.
-         * @param {string} index - (Optional) The tracklist index of the reference track that the
-         *                         action should be performed on. Defaults to the index of the currently
-         *                         playing track.
-         */
+        /**
+        * 'onClick' handler for tracks that are rendered in a list.
+        *
+        * Adds tracks to current tracklist and starts playback if necessary.
+        *
+        * @param {string} action - The action to perform. Valid actions are:
+        *                              PLAY_NOW: add the track at the current queue position and
+        *                                        start playback immediately.
+        *                              PLAY_NEXT: insert track after the reference track, if 'index'
+        *                                         is provided, or after the current track otherwise.
+        *                              ADD_THIS_BOTTOM: add track to bottom of tracklist.
+        *                              ADD_ALL_BOTTOM: add all tracks in in the list to bottom of
+        *                                              tracklist.
+        *                              PLAY_ALL: clear tracklist and start playback of the track
+        *                                        with URI provided in 'trackUri'.
+        * @param {object} mopidy - The Mopidy.js object that should be used to communicate with the
+        *                          Mopidy server.
+        * @param {string} trackUri - (Optional) The URI of the specific track that the action should
+        *                            be performed on. If no URI is provided then the 'data' attribute
+        *                            of the popup DIV is assumed to contain the track URI.
+        * @param {string} playlistUri - (Optional) The URI of the playlist containing the tracks
+        *                               to be played. If no URI is provided then the 'list' attribute
+        *                               of the popup DIV is assumed to contain the playlist URI.
+        * @param {string} index - (Optional) The tracklist index of the reference track that the
+        *                         action should be performed on. Defaults to the index of the currently
+        *                         playing track.
+        */
 
         playTracks: function (action, mopidy, trackUri, playlistUri, index) {
             toast('Updating queue...')
@@ -737,14 +737,16 @@
         },
 
         getFavourites: function () {
-            return controls.getPlaylistByName(STREAMS_PLAYLIST_NAME,
-                                     STREAMS_PLAYLIST_SCHEME,
-                                     true).then(function (playlist) {
-                                         if (playlist) {
-                                             return controls.getPlaylistFull(playlist.uri)
-                                         }
-                                         return Mopidy.when(false)
-                                     })
+            return controls.getPlaylistByName(
+                STREAMS_PLAYLIST_NAME,
+                STREAMS_PLAYLIST_SCHEME,
+                true
+            ).then(function (playlist) {
+                if (playlist) {
+                    return controls.getPlaylistFull(playlist.uri)
+                }
+                return Mopidy.when(false)
+            })
         },
 
         addToFavourites: function (newTracks) {
