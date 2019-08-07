@@ -78,7 +78,7 @@
                 case PLAY_ALL:
                     mopidy.tracklist.add({uris: trackUris}).then(function (tlTracks) {
                         if (action === PLAY_ALL) {  // Start playback of selected track immediately.
-                            mopidy.tracklist.filter({uri: [trackUri]}).then(function (tlTracks) {
+                            mopidy.tracklist.filter({criteria: {uri: [trackUri]}}).then(function (tlTracks) {
                                 mopidy.playback.stop().then(function () {
                                     mopidy.playback.play({tlid: tlTracks[0].tlid})
                                 })
@@ -211,7 +211,7 @@
             toast('Deleting...')
 
             tlid = tlid || $('#popupQueue').data('tlid')
-            mopidy.tracklist.remove({'tlid': [parseInt(tlid)]})
+            mopidy.tracklist.remove({criteria: {'tlid': [parseInt(tlid)]}})
             $('#popupQueue').popup('close')
         },
 
@@ -629,7 +629,7 @@
         doVolume: function (value) {
             if (!volumeChanging) {
                 volumeChanging = value
-                mopidy.playback.setVolume({'volume': parseInt(volumeChanging)}).then(function () {
+                mopidy.mixer.setVolume({'volume': parseInt(volumeChanging)}).then(function () {
                     volumeChanging = null
                 })
             }

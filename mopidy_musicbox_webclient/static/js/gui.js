@@ -362,7 +362,7 @@ function updateStatusOfAll () {
 
     updateOptions()
 
-    mopidy.playback.getVolume().then(processVolume, console.error)
+    mopidy.mixer.getVolume().then(processVolume, console.error)
     mopidy.mixer.getMute().then(processMute, console.error)
 }
 
@@ -505,7 +505,7 @@ $(document).ready(function (event) {
     // navigation stuff
 
     $(document).keypress(function (event) {
-	// console.log('kp:    '+event);
+        // console.log('kp:    '+event);
         if (event.target.tagName !== 'INPUT') {
             var unicode = event.keyCode ? event.keyCode : event.charCode
             var actualkey = String.fromCharCode(unicode)
