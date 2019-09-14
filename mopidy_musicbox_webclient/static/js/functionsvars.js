@@ -402,8 +402,8 @@ function getPlaylistTracks (uri) {
         return Mopidy.when(playlists[uri].tracks)
     } else {
         showLoading(true)
-        return mopidy.playlists.getItems({'uri': uri}).then(function (refs) {
-            return processPlaylistItems({'uri': uri, 'items': refs})
+        return mopidy.playlists.lookup({'uri': uri}).then(function (playlist) {
+            return processPlaylistItems({'uri': uri, 'playlist': playlist})
         }, console.error)
     }
 }
