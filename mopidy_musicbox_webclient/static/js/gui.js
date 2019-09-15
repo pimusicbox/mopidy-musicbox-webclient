@@ -272,12 +272,6 @@ function initSocketevents () {
 
     mopidy.on('event:tracklistChanged', function (data) {
         library.getCurrentPlaylist()
-        mopidy.tracklist.getTracks().then(function (tracks) {
-            if (tracks.length === 0) {
-                // Last track in queue was deleted, reset UI.
-                resetSong()
-            }
-        })
     })
 
     mopidy.on('event:seeked', function (data) {

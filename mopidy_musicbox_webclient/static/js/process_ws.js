@@ -222,6 +222,10 @@ function processCurrentPlaylist (resultArr) {
     resultsToTables(currentplaylist, CURRENT_PLAYLIST_TABLE)
     mopidy.playback.getCurrentTlTrack().then(processCurrenttrack, console.error)
     updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
+    if (resultArr.length === 0) {
+        // Last track in queue was deleted, reset UI.
+        resetSong()
+    }
 }
 
 /** ******************************************************
