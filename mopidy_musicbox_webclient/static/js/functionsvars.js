@@ -391,9 +391,9 @@ function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
                 nextTrack = nextTrack ? nextTrack.track : undefined
             }
             popupData[track.uri] = track
-            var [dividerHtml, imageID] = renderSongLiDivider(previousTrack, track, nextTrack, target)
-            html += dividerHtml + renderSongLi(previousTrack, track, nextTrack, uri, tlid, target, i, results.length)
-            requiredImages[track.uri] = imageID
+            var divider = renderSongLiDivider(previousTrack, track, nextTrack, target)
+            html += divider[0] + renderSongLi(previousTrack, track, nextTrack, uri, tlid, target, i, results.length)
+            requiredImages[track.uri] = divider[1]
         }
     }
     $(target).append(html)
