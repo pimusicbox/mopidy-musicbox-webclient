@@ -1,10 +1,10 @@
-sudo: required
-dist: trusty
-
 language: python
 
 python:
-  - "2.7_with_system_site_packages"
+  - "2.7"
+
+virtualenv:
+  system_site_packages: true
 
 addons:
   apt:
@@ -20,9 +20,6 @@ env:
   - TOX_ENV=eslint
   - TOX_ENV=csslint
   - TOX_ENV=tidy
-
-before_install:
-  - "sudo apt-get update -qq"
 
 install:
   - "pip install tox"
