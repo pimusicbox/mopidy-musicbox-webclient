@@ -147,6 +147,25 @@
             })
         },
 
+        setImages: function (img_elements, mopidy, size) {
+            var uris = []
+            // Set default immediately while we're busy retrieving actual image.
+            Object.keys(img_elements).forEach(function (uri) {
+                if (img_elements[uri]) {
+                    $(img_elements[uri]).attr('src', images.DEFAULT_ALBUM_URL)
+                    uris.push(uri)
+                }
+            })
+            size = size || 'extralarge'
+            mopidy.library.getImages({'uris': uris}).then(function (imageResults) {
+                Object.keys(imageResults).forEach(function (uri) {
+                    if (imageResults[uri].length > 0) {
+                        $(img_elements[uri]).attr('src', imageResults[uri][0].uri)
+                    }
+                })
+            })
+        },
+
         // Note that this approach has been deprecated in Mopidy
         // TODO: Remove when Mopidy no longer supports retrieving images
         //       from 'album.images'.

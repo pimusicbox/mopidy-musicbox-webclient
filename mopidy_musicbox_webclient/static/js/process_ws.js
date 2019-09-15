@@ -123,6 +123,7 @@ function processBrowseDir (resultArr) {
     if (uris.length > 0) {
         mopidy.library.lookup({'uris': uris}).then(function (resultDict) {
             // Break into albums and put in tables
+            var requiredImages = {}
             var track, previousTrack, nextTrack, uri
             for (i = 0, index = 0; i < resultArr.length; i++) {
                 if (resultArr[i].type === 'track') {
@@ -137,10 +138,11 @@ function processBrowseDir (resultArr) {
                     if (uris.length === 1 || (previousTrack && !hasSameAlbum(previousTrack, track) && !hasSameAlbum(track, nextTrack))) {
                         renderSongLiAlbumInfo(track, BROWSE_TABLE)
                     }
-                    renderSongLiDivider(previousTrack, track, nextTrack, BROWSE_TABLE)
+                    requiredImages[track.uri] = renderSongLiDivider(previousTrack, track, nextTrack, BROWSE_TABLE)[1]
                 }
             }
             showLoading(false)
+            images.setImages(requiredImages, mopidy, 'small')
         }, console.error)
     } else {
         showLoading(false)
