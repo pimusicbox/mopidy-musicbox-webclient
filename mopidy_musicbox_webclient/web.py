@@ -1,10 +1,8 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import json
 import logging
 import socket
 import string
-import urlparse
+import urllib.parse
 
 import tornado.web
 
@@ -21,7 +19,7 @@ class StaticHandler(tornado.web.StaticFileHandler):
             logger.debug('Get static resource for %s?v=%s', path, version)
         else:
             logger.debug('Get static resource for %s', path)
-        return super(StaticHandler, self).get(path, *args, **kwargs)
+        return super().get(path, *args, **kwargs)
 
     @classmethod
     def get_version(cls, settings, path):
@@ -39,7 +37,7 @@ class IndexHandler(tornado.web.RequestHandler):
         else:
             program_name = 'Mopidy'
 
-        url = urlparse.urlparse('%s://%s' % (self.request.protocol, self.request.host))
+        url = urllib.parse.urlparse(f'{self.request.protocol}://{self.request.host}')
         port = url.port or 80
         try:
             ip = socket.getaddrinfo(url.hostname, port)[0][4][0]
@@ -58,13 +56,13 @@ class IndexHandler(tornado.web.RequestHandler):
 
         }
         self.__path = path
-        self.__title = string.Template('{} on $hostname'.format(program_name))
+        self.__title = string.Template(f'{program_name} on $hostname')
 
     def get(self, path):
         return self.render(path, title=self.get_title(), **self.__dict)
 
     def get_title(self):
-        url = urlparse.urlparse('%s://%s' % (self.request.protocol, self.request.host))
+        url = urllib.parse.urlparse(f'{self.request.protocol}://{self.request.host}')
         return self.__title.safe_substitute(hostname=url.hostname)
 
     def get_template_path(self):
