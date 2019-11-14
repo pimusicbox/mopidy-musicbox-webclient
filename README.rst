@@ -105,8 +105,18 @@ Project resources
 Changelog
 =========
 
-v2.5.0 (2017-05-22)
-------------
+v2.6.0 (UNRELEASED)
+-------------------
+
+- Update for compatibility with upccomming Mopidy v3.0.
+- Improved performance when fetching playlist track metadata.
+
+**Fixes**
+
+- Support for IPv6 address.
+
+v2.5.0 (2018-05-22)
+-------------------
 
 - Detect additional stream formats (rtmp, rtmps, rtsp).
 - Include details of currently selected page in HTML title tag. (Addresses: `#243 <https://github.com/pimusicbox/mopidy-musicbox-webclient/issues/243>`_).
