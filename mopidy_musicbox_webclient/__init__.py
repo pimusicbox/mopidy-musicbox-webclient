@@ -2,9 +2,11 @@ from __future__ import unicode_literals
 
 import os
 
+import pkg_resources
+
 from mopidy import config, ext
 
-__version__ = '2.6.0'
+__version__ = pkg_resources.get_distribution("Mopidy-MusicBox-Webclient").version
 
 
 class Extension(ext.Extension):
