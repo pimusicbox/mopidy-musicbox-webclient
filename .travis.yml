@@ -15,7 +15,8 @@ addons:
 
 env:
   # Need to run 'py27' and 'test' together so that we can share coverage reports.
-  - TOX_ENV=py27,test
+  - TOX_ENV=py27
+  #- TOX_ENV=test
   - TOX_ENV=flake8
   - TOX_ENV=eslint
   - TOX_ENV=csslint
