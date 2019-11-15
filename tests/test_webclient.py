@@ -16,7 +16,7 @@ class WebclientTests(unittest.TestCase):
                     "websocket_host": "host_mock",
                     "websocket_port": 999,
                 },
-                "alarmclock": {"enabled": True,},
+                "alarmclock": {"enabled": True},
             }
         )
 
