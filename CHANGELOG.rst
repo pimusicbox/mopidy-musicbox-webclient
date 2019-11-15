@@ -6,7 +6,7 @@ Changelog
 v2.6.0 (2019-11-15)
 ===================
 
-- Update for compatibility with upccomming Mopidy v3.0.
+- Update for compatibility with upcoming Mopidy v3.0.
 - Improved performance when fetching playlist track metadata.
 - Fixed support for IPv6 address.
 
