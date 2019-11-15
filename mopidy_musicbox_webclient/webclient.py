@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import logging
 
 from mopidy_musicbox_webclient import Extension
@@ -7,7 +5,7 @@ from mopidy_musicbox_webclient import Extension
 logger = logging.getLogger(__name__)
 
 
-class Webclient(object):
+class Webclient:
 
     def __init__(self, config):
         self.config = config

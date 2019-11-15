@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import os
 
 import pkg_resources
@@ -20,7 +18,7 @@ class Extension(ext.Extension):
         return config.read(conf_file)
 
     def get_config_schema(self):
-        schema = super(Extension, self).get_config_schema()
+        schema = super().get_config_schema()
         schema['musicbox'] = config.Boolean(optional=True)
         schema['websocket_host'] = config.Hostname(optional=True)
         schema['websocket_port'] = config.Port(optional=True)
