@@ -1,4 +1,4 @@
-import os
+import pathlib
 
 import pkg_resources
 
@@ -16,8 +16,7 @@ class Extension(ext.Extension):
     version = __version__
 
     def get_default_config(self):
-        conf_file = os.path.join(os.path.dirname(__file__), "ext.conf")
-        return config.read(conf_file)
+        return config.read(pathlib.Path(__file__).parent / "ext.conf")
 
     def get_config_schema(self):
         schema = super().get_config_schema()
@@ -46,7 +45,7 @@ class Extension(ext.Extension):
         from tornado.web import RedirectHandler
         from .web import IndexHandler, StaticHandler
 
-        path = os.path.join(os.path.dirname(__file__), "static")
+        path = pathlib.Path(__file__).parent / "static"
         return [
             (r"/", RedirectHandler, {"url": "index.html"}),
             (r"/(index.html)", IndexHandler, {"config": config, "path": path}),
