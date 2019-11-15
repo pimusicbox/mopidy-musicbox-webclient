@@ -1,6 +1,5 @@
 import unittest
-
-import mock
+from unittest import mock
 
 from mopidy_musicbox_webclient import Extension
 

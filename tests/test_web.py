@@ -1,4 +1,5 @@
-import mock
+from unittest import mock
+
 import tornado.testing
 import tornado.web
 import tornado.websocket
