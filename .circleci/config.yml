@@ -13,9 +13,9 @@ workflows:
       - check-manifest
       - flake8
       #- jstest
-      #- eslint
-      #- csslint
-      #- jstidy
+      - eslint
+      - csslint
+      - jstidy
 
 jobs:
   py38: &test-template
@@ -53,3 +53,11 @@ jobs:
   check-manifest: *test-template
 
   flake8: *test-template
+
+  jstest: *test-template
+
+  eslint: *test-template
+
+  csslint: *test-template
+
+  jstidy: *test-template
