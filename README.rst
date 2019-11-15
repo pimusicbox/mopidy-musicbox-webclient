@@ -105,7 +105,7 @@ Project resources
 Changelog
 =========
 
-v2.6.0 (UNRELEASED)
+v2.6.0 (2019-11-15)
 -------------------
 
 - Update for compatibility with upccomming Mopidy v3.0.
