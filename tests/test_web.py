@@ -1,11 +1,9 @@
 import mock
-
-import mopidy.config as config
-
 import tornado.testing
 import tornado.web
 import tornado.websocket
 
+import mopidy.config as config
 from mopidy_musicbox_webclient import Extension
 from mopidy_musicbox_webclient.web import StaticHandler
 

@@ -3,7 +3,6 @@ import unittest
 import mock
 
 import mopidy.config as mopidy_config
-
 from mopidy_musicbox_webclient import Extension
 from mopidy_musicbox_webclient.webclient import Webclient
 
