@@ -21,3 +21,4 @@ npm-debug.log
 *.egg-info
 .cache
 .eggs
+xunit-py27.xml

@@ -272,12 +272,6 @@ function initSocketevents () {
 
     mopidy.on('event:tracklistChanged', function (data) {
         library.getCurrentPlaylist()
-        mopidy.tracklist.getTracks().then(function (tracks) {
-            if (tracks.length === 0) {
-                // Last track in queue was deleted, reset UI.
-                resetSong()
-            }
-        })
     })
 
     mopidy.on('event:seeked', function (data) {
@@ -362,7 +356,7 @@ function updateStatusOfAll () {
 
     updateOptions()
 
-    mopidy.playback.getVolume().then(processVolume, console.error)
+    mopidy.mixer.getVolume().then(processVolume, console.error)
     mopidy.mixer.getMute().then(processMute, console.error)
 }
 
@@ -505,7 +499,7 @@ $(document).ready(function (event) {
     // navigation stuff
 
     $(document).keypress(function (event) {
-	// console.log('kp:    '+event);
+        // console.log('kp:    '+event);
         if (event.target.tagName !== 'INPUT') {
             var unicode = event.keyCode ? event.keyCode : event.charCode
             var actualkey = String.fromCharCode(unicode)

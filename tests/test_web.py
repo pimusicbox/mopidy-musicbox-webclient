@@ -56,7 +56,7 @@ class IndexHandlerTestMusicBox(BaseTest):
         response = self.fetch('/index.html', method='GET')
         body = tornado.escape.to_unicode(response.body)
 
-        assert '<title>MusicBox on localhost</title>' in body
+        assert '<title>MusicBox on 127.0.0.1</title>' in body
 
     def test_initialize_sets_dictionary_objects(self):
         response = self.fetch('/index.html', method='GET')
@@ -93,4 +93,4 @@ class IndexHandlerTestMopidy(BaseTest):
         response = self.fetch('/index.html', method='GET')
         body = tornado.escape.to_unicode(response.body)
 
-        assert '<title>Mopidy on localhost</title>' in body
+        assert '<title>Mopidy on 127.0.0.1</title>' in body

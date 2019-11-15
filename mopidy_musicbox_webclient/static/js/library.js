@@ -11,9 +11,9 @@
 
     var library = {
 
-    /** *******************************
-     * Search
-     *********************************/
+        /** *******************************
+         * Search
+         *********************************/
         searchPressed: function (key) {
             var value = $('#searchinput').val()
             switchContent('search')
@@ -67,9 +67,9 @@
             }
         },
 
-    /** ******************************************************
-     * process results of a search
-     *********************************************************/
+        /** ******************************************************
+         * process results of a search
+         *********************************************************/
         processSearchResults: function (resultArr) {
             $(SEARCH_TRACK_TABLE).empty()
             $(SEARCH_ARTIST_TABLE).empty()
@@ -195,9 +195,9 @@
             showLoading(false)
         },
 
-    /** *******************************
-     * Playlists & Browse
-     *********************************/
+        /** *******************************
+         * Playlists & Browse
+         *********************************/
         getPlaylists: function () {
             //  get playlists without tracks
             mopidy.playlists.asList().then(processGetPlaylists, console.error)
@@ -233,9 +233,9 @@
             mopidy.tracklist.getTlTracks().then(processCurrentPlaylist, console.error)
         },
 
-    /** ******************************************************
-     * Show tracks of playlist
-     ********************************************************/
+        /** ******************************************************
+         * Show tracks of playlist
+         ********************************************************/
         togglePlaylists: function () {
             if ($(window).width() <= 960) {
                 $('#playlisttracksdiv').toggle();
@@ -248,9 +248,9 @@
             return true
         },
 
-    /** **********
-     * Lookups
-     ************/
+        /** **********
+         * Lookups
+         ************/
         showTracklist: function (uri) {
             showLoading(true)
             $(PLAYLIST_TABLE).empty()
@@ -275,7 +275,7 @@
             $('#controlsmodal').popup('close')
             $(ARTIST_TABLE).empty()
 
-        // TODO cache
+            // TODO cache
             $('#h_artistname').html('')
             showLoading(true)
             mopidy.library.lookup({'uris': [nwuri]}).then(function (resultDict) {

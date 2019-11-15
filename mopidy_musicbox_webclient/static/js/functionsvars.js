@@ -303,6 +303,7 @@ function renderSongLiTrackArtists (track) {
 /* Tracklist renderer to insert dividers between albums. */
 function renderSongLiDivider (previousTrack, track, nextTrack, target) {
     var html = ''
+    var imageID
     // Render differently if part of an album.
     if (!hasSameAlbum(previousTrack, track) && hasSameAlbum(track, nextTrack)) {
         // Large divider with album cover.
@@ -315,8 +316,8 @@ function renderSongLiDivider (previousTrack, track, nextTrack, target) {
             '<img id="' + getjQueryID(target + '-cover', track.uri) + '" class="artistcover" width="30" height="30"/>' +
             '<h1>' + track.album.name + '</h1><p>' +
             renderSongLiTrackArtists(track) + '</p></a></li>'
-        // Retrieve album covers
-        images.setAlbumImage(track.uri, getjQueryID(target + '-cover', track.uri, true), mopidy, 'small')
+        // The element ID to populate with an album cover.
+        imageID = getjQueryID(target + '-cover', track.uri, true)
     } else if (previousTrack && !hasSameAlbum(previousTrack, track)) {
         // Small divider
         html += '<li class="smalldivider"> &nbsp;</li>'
@@ -325,7 +326,7 @@ function renderSongLiDivider (previousTrack, track, nextTrack, target) {
         target = getjQueryID(target, track.uri, true)
         $(target).before(html)
     }
-    return html
+    return [html, imageID]
 }
 
 function renderSongLiBackButton (results, target, onClick, optional) {
@@ -375,6 +376,7 @@ function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
 
     var track, previousTrack, nextTrack, tlid
     var html = ''
+    var requiredImages = {}
 
     // Break into albums and put in tables
     for (i = 0; i < results.length; i++) {
@@ -389,12 +391,14 @@ function resultsToTables (results, target, uri, onClickBack, backIsOptional) {
                 nextTrack = nextTrack ? nextTrack.track : undefined
             }
             popupData[track.uri] = track
-            html += renderSongLiDivider(previousTrack, track, nextTrack, target)
-            html += renderSongLi(previousTrack, track, nextTrack, uri, tlid, target, i, results.length)
+            var divider = renderSongLiDivider(previousTrack, track, nextTrack, target)
+            html += divider[0] + renderSongLi(previousTrack, track, nextTrack, uri, tlid, target, i, results.length)
+            requiredImages[track.uri] = divider[1]
         }
     }
     $(target).append(html)
     updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
+    images.setImages(requiredImages, mopidy, 'small')
 }
 
 function getPlaylistTracks (uri) {
@@ -402,8 +406,8 @@ function getPlaylistTracks (uri) {
         return Mopidy.when(playlists[uri].tracks)
     } else {
         showLoading(true)
-        return mopidy.playlists.getItems({'uri': uri}).then(function (refs) {
-            return processPlaylistItems({'uri': uri, 'items': refs})
+        return mopidy.playlists.lookup({'uri': uri}).then(function (playlist) {
+            return processPlaylistItems({'uri': uri, 'playlist': playlist})
         }, console.error)
     }
 }
