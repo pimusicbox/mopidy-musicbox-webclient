@@ -3,6 +3,13 @@ Changelog
 *********
 
 
+v3.0.0rc1 (2019-11-18)
+======================
+
+- Require Mopidy >= 3.0.0a4. (PR: #268)
+- Require Python >= 3.7. (PR: #268)
+- Update project setup. (PR: #268)
+
 v2.6.0 (2019-11-15)
 ===================
 
