@@ -3,6 +3,11 @@ Changelog
 *********
 
 
+v3.0.1 (2019-12-22)
+===================
+
+- Fix dependency on final release of Mopidy 3.0.0.
+
 v3.0.0 (2019-12-22)
 ===================
 
