@@ -52,7 +52,7 @@ Installation
 
 Install by running::
 
-    python3 -m pip install Mopidy-MusicBox-Webclient
+    sudo python3 -m pip install Mopidy-MusicBox-Webclient
 
 Or, if available, install the Debian/Ubuntu package from
 `apt.mopidy.com <https://apt.mopidy.com/>`_.
