@@ -3,6 +3,12 @@ Changelog
 *********
 
 
+v3.1.0 (2020-03-22)
+===================
+
+- Display stream title when available. (PR: #261)
+- Fixed loading artist/album info forever when uri is missing.
+
 v3.0.1 (2019-12-22)
 ===================
 
