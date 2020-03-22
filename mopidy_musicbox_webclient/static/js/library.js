@@ -275,7 +275,12 @@
             $('#controlsmodal').popup('close')
             $(ARTIST_TABLE).empty()
 
+            if (!nwuri.length || nwuri === 'undefined') {
+                return false
+            }
+
             // TODO cache
+
             $('#h_artistname').html('')
             showLoading(true)
             mopidy.library.lookup({'uris': [nwuri]}).then(function (resultDict) {
@@ -293,6 +298,11 @@
             $('#popupTracks').popup('close')
             $('#controlsmodal').popup('close')
             $(ALBUM_TABLE).empty()
+
+            if (!uri.length || uri === 'undefined') {
+                return false
+            }
+
             // fill from cache
             var pl = getTracksFromUri(uri, true)
             if (pl.length > 0) {
