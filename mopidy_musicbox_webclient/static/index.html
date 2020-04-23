@@ -22,8 +22,8 @@
     <meta name="MobileOptimized" content="320" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="MSSmartTagsPreventParsing" content="true" />
     <meta http-equiv="imagetoolbar" content="no" />
-    <meta content="true" name="MSSmartTagsPreventParsing" />
 
     <meta http-equiv="cleartype" content="on" />
 
@@ -34,6 +34,9 @@
     <link rel="stylesheet" type="text/css" href="css/webclient.css" />
     <link rel="stylesheet" type="text/css" href="vendors/font_awesome/css/font-awesome.min.css" />
 
+
+    <!-- plugins -->
+    <meta name="media-controllable" content="true">
 </head>
 
 <body data-websocket-url="{{ websocketUrl }}" data-is-musicbox="{{ isMusicBox }}" data-has-alarmclock="{{ hasAlarmClock }}" data-on-track-click="{{ onTrackClick }}" data-program-name="{{ programName }}" data-hostname="{{ hostname }}" data-title="{{ title }}">
