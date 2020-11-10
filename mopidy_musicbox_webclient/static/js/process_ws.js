@@ -116,9 +116,6 @@ function processBrowseDir (resultArr) {
     }
 
     $(BROWSE_TABLE).append(html)
-    if (browseStack.length > 0) {
-        window.scrollTo(0, browseStack[browseStack.length - 1].scrollPos || 0)  // Restore scroll position
-    }
 
     updatePlayIcons(songdata.track.uri, songdata.tlid, controls.getIconForAction())
 
@@ -143,6 +140,9 @@ function processBrowseDir (resultArr) {
                     }
                     requiredImages[track.uri] = renderSongLiDivider(previousTrack, track, nextTrack, BROWSE_TABLE)[1]
                 }
+            }
+            if (browseStack.length > 0) {
+                window.scrollTo(0, browseStack[browseStack.length - 1].scrollPos || 0)  // Restore scroll position
             }
             showLoading(false)
             images.setImages(requiredImages, mopidy, 'small')
