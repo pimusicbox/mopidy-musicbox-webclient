@@ -526,7 +526,12 @@
             }
             controls.setPlayState(!play)
         },
-
+        
+        doStop: function () {
+                toast('Stopping current track...')
+                mopidy.playback.stop()
+        },
+        
         doPrevious: function () {
             toast('Playing previous track...')
             mopidy.playback.previous()
