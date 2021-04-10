@@ -528,9 +528,9 @@
         },
         
         doStop: function () {
-		    toast('Stopping current track...')
-		    mopidy.playback.stop()
-	    },
+                toast('Stopping current track...')
+                mopidy.playback.stop()
+        },
         
         doPrevious: function () {
             toast('Playing previous track...')
