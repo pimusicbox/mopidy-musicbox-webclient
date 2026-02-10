@@ -8,7 +8,7 @@ from mopidy_musicbox_webclient.webclient import Webclient
 
 class WebclientTests(unittest.TestCase):
     def setUp(self):
-        config = mopidy_config.Proxy(
+        config = mopidy_config.Config(
             {
                 "musicbox_webclient": {
                     "enabled": True,
@@ -33,7 +33,7 @@ class WebclientTests(unittest.TestCase):
         )
 
     def test_get_websocket_url_uses_request_host(self):
-        config = mopidy_config.Proxy(
+        config = mopidy_config.Config(
             {
                 "musicbox_webclient": {
                     "enabled": True,
@@ -55,7 +55,7 @@ class WebclientTests(unittest.TestCase):
         )
 
     def test_get_websocket_url_uses_http_port(self):
-        config = mopidy_config.Proxy(
+        config = mopidy_config.Config(
             {
                 "http": {"port": 999},
                 "musicbox_webclient": {

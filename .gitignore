@@ -1,12 +1,12 @@
-*.pyc
+*.egg-info/
+/*.lock
+/.*_cache/
 /.coverage
-/.mypy_cache/
-/.pytest_cache/
 /.tox/
-/*.egg-info
+/.venv/
 /build/
 /dist/
-/MANIFEST
+__pycache__/
 /.karma_coverage
 /node_modules
 package-lock.json

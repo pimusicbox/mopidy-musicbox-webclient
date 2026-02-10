@@ -1,17 +1,13 @@
 import pathlib
-
-import pkg_resources
+from importlib.metadata import version
 
 from mopidy import config, ext
 
-__version__ = pkg_resources.get_distribution(
-    "Mopidy-MusicBox-Webclient"
-).version
+__version__ = version("mopidy-musicbox-webclient")
 
 
 class Extension(ext.Extension):
-
-    dist_name = "Mopidy-MusicBox-Webclient"
+    dist_name = "mopidy-musicbox_webclient"
     ext_name = "musicbox_webclient"
     version = __version__
 
