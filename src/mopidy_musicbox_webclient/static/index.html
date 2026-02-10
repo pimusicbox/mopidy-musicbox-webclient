@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html manifest="mb.appcache">
+<head>
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+
+    <script type="text/javascript" src="vendors/jquery/jquery-1.12.0.min.js"></script>
+    <script type="text/javascript" src="vendors/jquery_cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/custom_scripting.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="vendors/jquery_mobile_flat_ui_theme/jquery.mobile.flatui.min.css"/>
+    <link rel="icon" type="image/gif" href="images/icons/musicbox32.gif" />
+    <link rel="apple-touch-icon" href="images/icons/musicbox57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="images/icons/musicbox72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="images/icons/musicbox114.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="images/icons/musicbox32.gif" />
+
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="{{ title }}" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="MSSmartTagsPreventParsing" content="true" />
+    <meta http-equiv="imagetoolbar" content="no" />
+
+    <meta http-equiv="cleartype" content="on" />
+
+    <script src="vendors/jquery_mobile/jquery.mobile-1.3.2.min.js"></script>
+    <meta name="description" content="MusicBox" />
+    <meta name="author" content="Wouter van Wijk" />
+    <meta name="copyright" content="(c) 2012-2016 Wouter van Wijk" />
+    <link rel="stylesheet" type="text/css" href="css/webclient.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/font_awesome/css/font-awesome.min.css" />
+
+
+    <!-- plugins -->
+    <meta name="media-controllable" content="true">
+</head>
+
+<body data-websocket-url="{{ websocketUrl }}" data-is-musicbox="{{ isMusicBox }}" data-has-alarmclock="{{ hasAlarmClock }}" data-on-track-click="{{ onTrackClick }}" data-program-name="{{ programName }}" data-hostname="{{ hostname }}" data-title="{{ title }}">
+<div data-role="page" id="page" class="ui-responsive-panel" data-theme="c" data-title="{{ title }}">
+<div data-role="panel" id="panel" data-position="left" data-theme="a" data-display="reveal" data-position-fixed="true">
+
+    <ul class="ui-listview mainNav" data-role="listview" data-theme="a">
+        <li id="navhome" data-icon="false">
+            <a href="#home" onclick="switchContent('home' ); return false;">
+                <span class="navtxt"> Home </span><i class="fa fa-home"></i></a>
+        </li>
+        <li id="navnowPlaying" data-icon="false">
+            <a href="#nowPlaying" onclick="switchContent('nowPlaying' ); return false;">
+                <span class="navtxt"> Now Playing </span><i class="fa fa-music"></i></a>
+        </li>
+        <li id="navcurrent" data-icon="false">
+            <a href="#current" onclick="switchContent('current' ); return false;">
+                <span class="navtxt">Queue </span><i class="fa fa-bars"></i></a>
+        </li>
+        <li id="navplaylists" data-icon="false">
+            <a href="#playlists" onclick="switchContent('playlists' ); return false;">
+                <span class="navtxt"> Playlists </span><i class="fa  fa-star"></i></a>
+        </li>
+        <li id="navbrowse" data-icon="false">
+            <a href="#browse" onclick="switchContent('browse' ); return false;">
+                <span class="navtxt"> Browse </span><i class="fa fa-folder"></i></a>
+        </li>
+        <li id="navstream" data-icon="false">
+            <a href="#stream" onclick="switchContent('stream' ); return false;">
+                <span class="navtxt">Streams </span><i class="fa fa-rss"></i></a>
+        </li>
+        <li id="navsearch" data-icon="false">
+            <a href="#search" onclick="switchContent('search' ); return false;">
+                <span class="navtxt">Search </span><i class="fa fa-search"></i></a>
+        </li>
+        <li id="navAlarmClock" data-icon="false">
+                <a href="/alarmclock/">
+                <span class="navtxt"> Alarm Clock </span><i class="fa fa-clock-o"></i></a>
+        </li>
+        <li id="navToggleFullscreen" data-icon="false">
+                <a href="#">
+                <span class="navtxt" id="toggletxt"> Fullscreen </span><i class="fa fa-desktop"></i></a>
+        </li>
+        <li id="navSettings" data-icon="false">
+                <a href="/settings/">
+                <span class="navtxt"> Settings </span><i class="fa fa-cog"></i></a>
+        </li>
+        <li id="navshutdown" data-icon="false">
+            <a href="system.html">
+                <span class="navtxt">System </span><i class="fa fa-power-off"></i></a>
+        </li>
+        <li data-icon="false">
+            <div><!-- slider for volume -->
+                <a href="#" onclick="controls.doMute(); return false;"><span title="Toggle mute"><i id="mutebt" class="fa fa-volume-up"></i></span></a>
+                <label for="volumeslider" class="ui-hidden-accessible">Volume</label>
+                <input id="volumeslider" data-highlight="true" name="volumeslider" data-mini="true" type="range" min="0"
+                       value="0" max="100"/>
+            </div>
+        </li>
+        <li data-icon="false">
+            <div class="hostInfo">
+                {% if hostname == serverIP %}
+                    <span class="hostInfo">{{programName}} running on {{ hostname }}:{{ serverPort}}</span>
+                {% else %}
+                    <span class="hostInfo">{{programName}} running on {{ hostname }} at {{ serverIP }}:{{ serverPort}}</span>
+                {% end %}
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div id="coverpopup" data-role="popup" data-theme="c">
+    <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
+       class="ui-btn-right">Close</a>
+
+    <h3 id="coverpopupalbumname"></h3>
+    <h4 id="coverpopupartist"></h4>
+    <a href="#" onclick="$('#coverpopup').popup('close');"><img id="coverpopupimage" src="" alt="Album cover"/></a>
+</div>
+
+<div id="artistpopup" data-role="popup" data-theme="c">
+    <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext"
+       class="ui-btn-right">Close</a>
+    <h4 id="artistpopupname">&nbsp;</h4>
+    <a href="#" onclick="$('#artistpopup').popup('close');"><img id="artistpopupimage" src="" alt="Album artist"/></a>
+</div>
+
+<div data-role="popup" data-transition="none" data-theme="b" id="popupTracks">
+    <div data-role="collapsible-set">
+        <ul data-role="listview" data-icon="false" id="popupTracksLv">
+            <li data-icon="play">
+                <a href="#" onclick="return controls.playTracks(PLAY_NOW, mopidy);">Play <span class="popupTrackName"></span></a>
+            </li>
+            <li data-icon="playAll" data-iconshadow="false">
+                <a href="#" onclick="return controls.playTracks(PLAY_ALL, mopidy);">Play All</a>
+            </li>
+            <li data-icon="playNext">
+                <a href="#" onclick="return controls.playTracks(PLAY_NEXT, mopidy);">Play Track Next</a>
+            </li>
+            <li data-icon="add">
+                <a href="#" onclick="return controls.playTracks(ADD_THIS_BOTTOM, mopidy);">Add Track to Bottom of Queue</a>
+            </li>
+            <li data-icon="addAll">
+                <a href="#" onclick="return controls.playTracks(ADD_ALL_BOTTOM, mopidy);">Add All to Bottom of Queue</a>
+            </li>
+            <li class="popupAlbumLi">
+                <a href="#" onclick="showAlbumPopup('#popupTracks', mopidy)">Show Album <span class="popupAlbumName"></span></a>
+            </li>
+            <li class="popupArtistsLi">
+                <a href="#" onclick="library.showArtist(null, mopidy)" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
+                </a>
+            </li>
+            <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">
+                <h2>Artists</h2>
+                <ul data-icon="false" data-inset="false" data-role="listview" class="popupArtistsLv"></ul>
+            </div>
+            <li>
+                <a href="#" onclick="return controls.showInfoPopup('', '#popupTracks', mopidy);">Show Track Info...</span></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div data-role="popup" data-transition="none" data-theme="b" id="popupQueue">
+    <div data-role="collapsible-set">
+        <ul data-role="listview" data-icon="false" id="popupQueueLv">
+            <li data-icon="play">
+                <a href="#" onclick="return controls.playQueueTrack();">Play <span class="popupTrackName"></span></a>
+            </li>
+            <li data-icon="insert">
+                <a href="#" onclick="return controls.showAddTrackPopup();">Add a Track Below <span class="popupTrackName"></span></a>
+            </li>
+            <li data-icon="remove">
+                <a href="#" onclick="return controls.removeTrack('', mopidy);">Remove from Queue</a>
+            </li>
+            <li class="popupAlbumLi">
+                <a href="#" onclick="showAlbumPopup('#popupQueue', mopidy)">Show Album <span class="popupAlbumName"></span></a>
+            </li>
+            <li class="popupArtistsLi">
+                <a href="#" onclick="library.showArtist(null, mopidy)" class="popupArtistHref">Show Artist <span class="popupArtistName"></span>
+                </a>
+            </li>
+            <div data-role="collapsible" data-icon="false" data-inset="false" class="popupArtistsDiv">
+                <h2>Artists</h2>
+                <ul data-icon="false" data-inset="false" data-role="listview" class="popupArtistsLv"></ul>
+            </div>
+            <li>
+                <a href="#" onclick="return controls.showInfoPopup('', '#popupQueue', mopidy);">Show Track Info...</span></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div data-role="popup" data-theme="b" id="popupAddTrack" class="popupDialog">
+    <form>
+        <p>Add a Track to the Queue
+        <button class="btn" type="button" id="getPlayingBtn" title="Use URI of currently playing track" onclick="return controls.getCurrentlyPlaying('addTrackInput');">
+            Get Currently Playing URI
+        </button>
+        <input id="addTrackInput" placeholder="Track URI" class="span2" data-clear-btn="true"
+               onkeypress="return controls.checkDefaultButtonClick(event.keyCode, '#popupAddTrack');" type="text"/>
+        <select name="select-add" id="select-add"></select>
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" onclick="return $('#popupAddTrack').popup('close');">
+                Cancel
+            </button>
+            <button class="btn" type="button" data-default-btn="true" onclick="return controls.addTrack($('#addTrackInput').val(), mopidy);">
+                Add
+            </button>
+        </div>
+    </form>
+</div><!--/add track to queue-->
+
+<div data-role="popup" data-theme="b" id="popupSave" class="popupDialog">
+    <form>
+        <p>Save Current Queue to a Playlist
+        <input id="saveinput" placeholder="Playlist name" class="span2" data-clear-btn="true"
+               onkeypress="return controls.checkDefaultButtonClick(event.keyCode, '#popupSave');" type="text"/>
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" onclick="return $('#popupSave').popup('close');">
+                Cancel
+            </button>
+            <button class="btn" type="button" data-default-btn="true" onclick="return controls.saveQueue();">
+                Save
+            </button>
+        </div>
+    </form>
+</div><!--/save queue to playlist-->
+
+<div data-role="popup" data-theme="b" id="popupOverwrite" class="popupDialog">
+    <form>
+        <p>A playlist with the same name already exists. Overwrite?
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" id="overwriteConfirmBtn">
+                Overwrite
+            </button>
+            <button class="btn" type="button" onclick="$('#popupOverwrite').popup('close'); return $('#popupSave').popup('open');">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div><!--/overwrite existing playlist-->
+
+<div data-role="popup" data-theme="b" id="popupConfirmDelete" class="popupDialog">
+    <form>
+        <p>Are you sure you want to remove <span class="popupStreamName"></span>?
+        <div data-role="controlgroup" data-type="horizontal" align="center">
+            <button class="btn" type="button" onclick="return controls.deleteFavourite();">
+                Remove
+            </button>
+            <button class="btn" type="button" onclick="$('#popupConfirmDelete').popup('close');">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div><!--/confirm delete stream-->
+
+<div data-role="popup" data-theme="b" id="popupShowInfo" class="popupDialog-full-width">
+    <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+    <table data-role="table" data-mode="reflow" class="ui-responsive table-stroke info-table">
+        <thead>
+            <tr>
+                <th data-priority="persist"></th>
+                <th data-priority="persist"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div><!--/show track info-->
+
+<div data-role="header" data-tap-toggle="false" id="header" data-position="fixed" class="header-breakpoint headerbtn">
+    <a id="headermenubtn" href="#panel"><i class="fa fa-align-justify"></i></a>
+    <h1 id="contentHeadline"></h1>
+    <a id="headersearchbtn" href="#" onclick="switchContent('search' ); return false;" title="Search"><i class="fa fa-search"></i></a>
+</div>
+<!-- /header -->
+
+<div data-role="content" id="homepane" class="pane">
+    <div id="homerows" class="ui-grid-a ui-responsive">
+        <a href="#nowPlaying" onclick="switchContent('nowPlaying' ); return false;">
+            <div class="ui-block-a">
+                <i class="fa fa-music"></i>
+                <h4>Now Playing</h4>
+            </div>
+        </a>
+        <a href="#current" onclick="switchContent('current' ); return false;">
+            <div class="ui-block-b">
+                <i class="fa fa-bars"></i>
+                <h4>Queue</h4>
+            </div>
+        </a>
+        <a href="#playlists" onclick="switchContent('playlists' ); return false;">
+            <div class="ui-block-a">
+                <i class="fa fa-star"></i>
+                <h4>Playlists</h4>
+            </div>
+        </a>
+        <a href="#browse" onclick="switchContent('browse' ); return false;">
+            <div class="ui-block-b">
+                <i class="fa fa-folder"></i>
+                <h4>Browse</h4>
+            </div>
+        </a>
+        <a href="#stream" onclick="switchContent('stream' ); return false;">
+            <div class="ui-block-a">
+                <i class="fa fa-rss"></i>
+                <h4>Streams</h4>
+            </div>
+        </a>
+        <a href="#search" onclick="switchContent('search' ); return false;">
+            <div class="ui-block-b">
+                <i class="fa fa-search"></i>
+                <h4>Search</h4>
+            </div>
+        </a>
+        <a id="homeAlarmClock" href="/alarmclock/">
+            <div class="ui-block-a">
+                <i class="fa fa-clock-o"></i>
+                <h4>Alarm Clock</h4>
+            </div>
+        </a>
+        <a id="homesettings" href="/settings/">
+            <div class="ui-block-b">
+                <i class="fa fa-gear"></i>
+                <h4>Settings</h4>
+            </div>
+        </a>
+        <a id="homeshutdown" href="system.html">
+            <div class="ui-block-a">
+                <i class="fa fa-power-off"></i>
+                <h4>System</h4>
+            </div>
+        </a>
+
+    </div>
+</div>
+<!--/homepane-->
+
+<div id="nowPlayingpane" data-role="content" class="pane">
+
+    <div id="modalinfo">
+        <img id="albumCoverImg" src="images/default_cover.png" alt="Album cover"/>
+    </div>
+
+    <div class="nowPlaying-artistInfo">
+        <h3 id="modalname"></h3>
+        <p class="artistAlbumLine"><span id="modaldetail"></span></p>
+    </div>
+
+    <div id="slidercontainer"><!-- slider for track position -->
+        <span id="songelapsed" class="pull-left"></span>
+        <span id="songlength" class="pull-right"></span>
+        <label for="trackslider" disabled="disabled" class="ui-hidden-accessible">Position</label>
+        <input id="trackslider" name="trackslider" data-mini="true" type="range" />
+    </div>
+</div>
+<!-- /nowplaying -->
+
+<div data-role="content" id="playlistspane" class="pane">
+    <div class="ui-grid-a">
+        <div class="ui-block-a">
+            <h4>Playlists</h4>
+        </div>
+        <div align="right" class="ui-block-b" data-role="controlgroup" data-type="horizontal">
+            <button class="btn" type="button" title="Refresh playlists" onclick="return controls.refreshPlaylists();">
+                <i class="fa fa-refresh"></i>
+            </button>
+        </div>
+    </div>
+    <div class="ui-grid-a pl-breakpoint">
+        <div class="ui-block-a scroll" id="playlistslistdiv">
+            <ul id="playlistslist" class="table"></ul>
+        </div>
+        <div class="ui-block-b scroll" id="playlisttracksdiv">
+            <div>
+                <ul class="table" id="playlisttracks"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/playlistspane-->
+
+<div data-role="content" id="browsepane" class="pane">
+    <div class="ui-grid-a">
+        <div class="ui-block-a">
+            <h4>Browse</h4>
+        </div>
+        <div align="right" class="ui-block-b refreshLibraryBtnDiv" data-role="controlgroup" data-type="horizontal">
+            <button id="refreshLibraryBtn" class="btn" type="button" title="Refresh library">
+                <i class="fa fa-refresh"></i>
+            </button>
+        </div>
+    </div>
+    <div class="ui-grid">
+        <ul id="browsetable" class="table"></ul>
+    </div>
+</div>
+<!--/browsepane-->
+
+<div data-role="content" class="pane" id="currentpane">
+    <div class="ui-grid-a">
+        <div class="ui-block-a ui-block-a-min">
+            <h4>Play Queue</h4>
+        </div>
+        <div align="right" class="ui-block-b ui-block-b-min">
+            <div data-role="controlgroup" data-type="horizontal">
+                <button class="btn" type="button" title="Add a track to the queue" onclick="return controls.showAddTrackPopup();">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <button class="btn" type="button" title="Save queue to playlist" onclick="return controls.showSavePopup();">
+                    <i class="fa fa-bookmark-o"></i>
+                </button>
+                <button class="btn" type="button" title="Clear queue" onclick="return controls.clearQueue();">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="ui-grid">
+        <ul class="table" id="currenttable"></ul>
+    </div>
+</div>
+
+<div data-role="content" class="pane" id="albumspane">
+    <a href="#coverpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="albumviewcover" alt="Album cover"/></a>
+
+    <h3 id="h_albumname"></h3>
+    <h5 id="h_albumartist"></h5>
+    <ul class="table" id="albumstable"></ul>
+
+</div>
+
+<div data-role="content" class="pane" id="artistspane">
+    <a href="#artistpopup" data-position-to="window" data-rel="popup"><img height="90" src="" id="artistviewimage" alt="Album artist"/></a>
+
+    <h3 id="h_artistname"></h3>
+    <ul class="table" id="artiststable"></ul>
+</div>
+
+<div data-role="content" class="pane" id="searchpane">
+    <h4>Search</h4>
+
+    <div class="ui-grid pl-breakpoint">
+        <div class="ui-block">
+            <form>
+                <p>Search for artists, albums, or specific tracks.
+                <select id="selectSearchService"></select>
+                <input id="searchinput" placeholder="Search term" class="span2" data-clear-btn="true"
+                       onkeypress="return library.searchPressed(event.keyCode);" type="text"/>
+                <button class="btn" type="button" onclick="return library.initSearch(event.value);">
+                    Search!
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="ui-grid-a srch-breakpoint">
+        <div class="ui-block-a" id="searchartists">
+            <div data-role="listview" data-inset="true">
+                <div data-role="header">
+                    <h4>Artists</h4>
+                </div>
+                <div data-role="content">
+                    <ul data-role="listview" id="artistresulttable"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="ui-block-b" id="searchalbums">
+            <div data-role="listview" data-inset="true">
+                <div data-role="header">
+                    <h4>Albums</h4>
+                </div>
+                <div data-role="content">
+                    <ul data-role="listview" id="albumresulttable"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="" id="searchtracks">
+        <h4>Tracks</h4>
+        <ul id="trackresulttable" class="table"></ul>
+    </div>
+</div>
+<!-- search div -->
+
+<div data-role="content" class="pane" id="streampane">
+    <h4>Streams</h4>
+
+    <div class="ui-grid-a pl-breakpoint">
+        <div class="ui-block-a" style="padding: 5px">
+            <form>
+                <p>Play a specific stream/track and optionally save it to your favourites.
+                <button class="btn" type="button" onclick="return controls.getCurrentlyPlaying('streamuriinput', 'streamnameinput');">
+                    Get currently playing
+                </button>
+                <input id="streamuriinput" placeholder="URI" class="span2" data-clear-btn="true"
+                       onkeypress="return controls.streamPressed(event.keyCode);" type="text"/>
+                <button class="btn" type="button" onclick="return controls.playStreamUri();">
+                    Play
+                </button>
+
+                <input id="streamnameinput" placeholder="Name" class="span2" data-clear-btn="true"
+                       onkeypress="return controls.streamPressed(event.keyCode);" type="text"/>
+                <button class="btn" type="button" onclick="return controls.addFavourite();">
+                    Save
+                </button>
+                    <br/>
+            </form>
+        </div>
+        <div class="ui-block-b" style="padding: 5px">
+            <ul id="streamuristable" class="table"></ul>
+        </div>
+    </div>
+</div>
+
+<div data-role="footer" data-tap-toggle="false" data-position="fixed" id="normalFooter">
+    <div class="footerControls">
+        <div class="songinfo" id="songinfo">
+            <a href="#"><div style="float: left"><img id="infocover" src="images/default_cover.png" alt="Album cover"/></div></a>
+            <div class="songinfo-text">
+                <div id="infoname"></div>
+                <div id="infodetail"></div>
+            </div>
+        </div>
+        <div class="playicon">
+            <a href="#" onclick="controls.doPlay(); return false"><span id="btplay" title="Play"><i class="fa fa-play"></i></span></a>
+        </div>
+    </div>
+</div>
+
+<div data-role="footer" data-tap-toggle="false" data-position="fixed" id="nowPlayingFooter">
+        <div class="footerControls" style="padding-left: 10px;">
+            <div style="float: left;">
+                <a href="#" onclick="controls.doPrevious(); return false"><span id="btprev" title="Previous"><i class="fa fa-fast-backward"></i></span></a>
+                <a href="#" onclick="controls.doPlay(); return false"><span id="btplayNowPlaying" title="Play"><i class="fa fa-play"></i></span></a>
+                <a href="#" onclick="controls.doNext(); return false"><span id="btnext" title="Next"><i class="fa fa-fast-forward"></i></span></a>
+            </div>
+            <div style="float: right; margin-right: 10px;">
+                <a href="#" onclick="controls.doRandom(); return false"><span id="randombt" title="Random"><i class="fa fa-random"></i></span></a>
+                <a href="#" onclick="controls.doRepeat(); return false"><span id="repeatbt" title="Repeat"><i class="fa fa-repeat"></i></span></a>
+                <a href="#" onclick="controls.doConsume(); return false"><span id="consumebt" title="Consume"><i class="fa fa-cutlery"></i></span></a>
+                <a href="#" onclick="controls.doSingle(); return false"><span id="singlebt" title="Single"><i class="fa fa-dot-circle-o"></i></span></a>
+                <a href="#" onclick="controls.doShuffle(); return false"><span id="shufflebt" title="Shuffle"><i class="fa fa-arrows-v"></i></span></a>
+            </div>
+        </div>
+</div>
+<!-- /footer -->
+
+</div>
+<!-- /page one -->
+<script type="text/javascript" src="vendors/mopidy/mopidy.min.js"></script>
+<script type="text/javascript" src="vendors/media_progress_timer/timer.js"></script>
+<script type="text/javascript" src="js/synced_timer.js"></script>
+<script type="text/javascript" src="js/controls.js"></script>
+<script type="text/javascript" src="js/library.js"></script>
+<script type="text/javascript" src="js/functionsvars.js"></script>
+<script type="text/javascript" src="js/process_ws.js"></script>
+
+<!-- use lastfm -->
+<script type="text/javascript" src="vendors/lastfm/lastfm.api.md5.js"></script>
+<script type="text/javascript" src="vendors/lastfm/lastfm.api.js"></script>
+<script type="text/javascript" src="vendors/lastfm/lastfm.api.cache.js"></script>
+
+<script type="text/javascript" src="js/images.js"></script>
+
+<script type="text/javascript" src="js/gui.js"></script>
+
+<!-- load plugins -->
+<script type="text/javascript" src="plugins/plugin-loader.js"></script>
+</body>
+</html>

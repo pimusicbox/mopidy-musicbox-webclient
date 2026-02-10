@@ -12,7 +12,7 @@ from mopidy_musicbox_webclient.web import StaticHandler
 class BaseTest(tornado.testing.AsyncHTTPTestCase):
     def get_app(self):
         extension = Extension()
-        self.config = config.Proxy(
+        self.config = config.Config(
             {
                 "musicbox_webclient": {
                     "enabled": True,
@@ -34,7 +34,7 @@ class StaticFileHandlerTest(BaseTest):
         assert response.code == 200
 
     def test_get_version(self):
-        assert StaticHandler.get_version(None, None) == Extension.version
+        assert StaticHandler.get_version(mock.Mock(), mock.Mock()) == Extension.version
 
 
 class RedirectHandlerTest(BaseTest):
@@ -71,7 +71,7 @@ class IndexHandlerTestMusicBox(BaseTest):
 class IndexHandlerTestMopidy(BaseTest):
     def get_app(self):
         extension = Extension()
-        self.config = config.Proxy(
+        self.config = config.Config(
             {
                 "musicbox_webclient": {
                     "enabled": True,
